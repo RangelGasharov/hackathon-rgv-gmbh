@@ -1,0 +1,116 @@
+{
+ "case_id": "case:P16",
+ "set": "practice",
+ "type": "raw_material",
+ "title": "Sheet S235JR 3 mm, hot rolled, cut to size: Price basis and surcharge clause for the coming period",
+ "briefing": "Raw Material: Price basis and surcharge clause for the coming period. You buy part:370020 for Hollerau Pumpenwerke from Stahlhandel Rupprecht-Kessel GmbH. Need: 5510 a year for 2 years. Category goal: leverage.",
+ "trigger_doc": "doc:20260916-70720-P16",
+ "parts": [
+  "part:370020"
+ ],
+ "suppliers": [
+  "sup:70720"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "index_clause",
+  "contract_months"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 10,
+  "volume_per_year": 5510,
+  "incoterm": "DAP",
+  "tooling_eur": 0,
+  "effective_date": "2027-01-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24
+  ],
+  "index_clause": [
+   null,
+   {
+    "series": "PPI-C241",
+    "material_share": 0.45,
+    "deadband_pct": 0,
+    "base_month": "2026-09"
+   },
+   {
+    "series": "PPI-C241",
+    "material_share": 0.45,
+    "deadband_pct": 3,
+    "base_month": "2026-09"
+   },
+   {
+    "series": "PPI-C241",
+    "material_share": 0.8,
+    "deadband_pct": 3,
+    "base_month": "2026-09"
+   }
+  ]
+ },
+ "buyer": {
+  "need_per_year": 5510,
+  "horizon_years": 2,
+  "current_unit_price": 84.34,
+  "fallback_unit_price": 96.99,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 10,
+  "category_goal": "leverage",
+  "fallback_risk_pct": 3,
+  "index_risk_pct": 1,
+  "late_cost_per_day": 200,
+  "cost_per_defect": 50,
+  "freight_eur_per_unit": {
+   "EXW": 2.53,
+   "FCA": 1.69,
+   "DAP": 0.0
+  },
+  "index_paths": {
+   "PPI-C241": 0.033
+  },
+  "must_haves": [],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7200016",
+   "terms": {
+    "unit_price": 96.37,
+    "payment_days": 30,
+    "lead_time_days": 14,
+    "incoterm": "DAP",
+    "volume_per_year": 5510,
+    "contract_months": 24,
+    "index_clause": null,
+    "tooling_eur": 0,
+    "effective_date": "2027-01-01"
+   }
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260916-70720-P16",
+  "ctr:4600070720",
+  "sc:70720@2026Q3",
+  "idx:PPI-C241@2025-08",
+  "idx:PPI-C241@2026-08",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": null,
+  "reference_price": 84.34
+ }
+}

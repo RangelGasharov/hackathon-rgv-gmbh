@@ -1,0 +1,100 @@
+{
+ "case_id": "case:P14",
+ "set": "practice",
+ "type": "renewal",
+ "title": "Motor cable: base price and copper clause for 2027",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Kabelwerk Rhönsberg GmbH. Motor cable: base price and copper clause for 2027. Need: 3420 x 100 m a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 14 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: none. Prepare from the data package.",
+ "trigger_doc": "doc:20260910-70560-P14",
+ "parts": [
+  "part:350040"
+ ],
+ "suppliers": [
+  "sup:70560"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "contract_months",
+  "index_clause"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 14,
+  "volume_per_year": 3420,
+  "effective_date": "2027-01-01",
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ],
+  "index_clause": [
+   null,
+   {
+    "series": "CU-NOTATION",
+    "material_share": 0.55,
+    "deadband_pct": 0,
+    "base_month": "2026-08"
+   },
+   {
+    "series": "CU-NOTATION",
+    "material_share": 0.55,
+    "deadband_pct": 3,
+    "base_month": "2026-08"
+   },
+   {
+    "series": "CU-NOTATION",
+    "material_share": 0.55,
+    "deadband_pct": 5,
+    "base_month": "2026-08"
+   }
+  ]
+ },
+ "buyer": {
+  "need_per_year": 3420,
+  "horizon_years": 2,
+  "current_unit_price": 316.35,
+  "fallback_unit_price": 338.49,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 14,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "index_risk_pct": 4,
+  "late_cost_per_day": 180,
+  "cost_per_defect": 48,
+  "sustainable_margin_pct": 4,
+  "relationship_eur_per_point": 16230,
+  "freight_eur_per_unit": {
+   "EXW": 0.81,
+   "FCA": 0.7,
+   "DAP": 0.0
+  },
+  "index_paths": {
+   "CU-NOTATION": 0.05
+  },
+  "must_haves": [],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260910-70560-P14",
+  "ctr:4600070560",
+  "sc:70560@2026Q3",
+  "fc:350040@2026-09"
+ ],
+ "hosted": false
+}

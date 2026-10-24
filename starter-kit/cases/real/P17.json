@@ -1,0 +1,76 @@
+{
+ "case_id": "case:P17",
+ "set": "practice",
+ "type": "price_increase",
+ "title": "Platinenwerk Lausitz: component costs for the HB control board",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Platinenwerk Lausitz GmbH. Platinenwerk Lausitz: component costs for the HB control board. Need: 19900 pc a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 59 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: none. Prepare from the data package.",
+ "trigger_doc": "doc:20260919-70550-P17",
+ "parts": [
+  "part:350030"
+ ],
+ "suppliers": [
+  "sup:70550"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "volume_per_year"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 56,
+  "contract_months": 12,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "volume_per_year": [
+   15920,
+   19900,
+   23880
+  ]
+ },
+ "buyer": {
+  "need_per_year": 19900,
+  "horizon_years": 1.0,
+  "current_unit_price": 34.35,
+  "fallback_unit_price": 37.1,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 59,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "index_risk_pct": 4,
+  "late_cost_per_day": 840,
+  "cost_per_defect": 192,
+  "sustainable_margin_pct": 0.5,
+  "relationship_eur_per_point": 10250,
+  "freight_eur_per_unit": {
+   "EXW": 0.01,
+   "FCA": 0.01,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260919-70550-P17",
+  "ctr:4600070550",
+  "sc:70550@2026Q3"
+ ],
+ "hosted": false
+}

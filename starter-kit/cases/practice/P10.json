@@ -1,0 +1,97 @@
+{
+ "case_id": "case:P10",
+ "set": "practice",
+ "type": "capacity",
+ "title": "Mechanical seal 24 mm, SiC/carbon, EPDM: Capacity situation and delivery dates",
+ "briefing": "Capacity: Capacity situation and delivery dates. You buy part:340010 for Hollerau Pumpenwerke from Dichtungswerk Ravensteiner GmbH. Need: 21310 a year for 2 years. Category goal: secure_supply.",
+ "trigger_doc": "doc:20260918-70410-P10",
+ "parts": [
+  "part:340010"
+ ],
+ "suppliers": [
+  "sup:70410"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "volume_per_year",
+  "contract_months",
+  "lead_time_days"
+ ],
+ "fixed_terms": {
+  "incoterm": "DAP",
+  "index_clause": null,
+  "tooling_eur": 0,
+  "effective_date": "2027-01-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "volume_per_year": [
+   17050.0,
+   19180.0,
+   21310
+  ],
+  "contract_months": [
+   12,
+   24
+  ],
+  "lead_time_days": [
+   42,
+   56,
+   70,
+   84
+  ]
+ },
+ "buyer": {
+  "need_per_year": 21310,
+  "horizon_years": 2,
+  "current_unit_price": 29.89,
+  "fallback_unit_price": 34.37,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 56,
+  "category_goal": "secure_supply",
+  "fallback_risk_pct": 12,
+  "index_risk_pct": 4,
+  "late_cost_per_day": 600,
+  "cost_per_defect": 80,
+  "freight_eur_per_unit": {
+   "EXW": 0.9,
+   "FCA": 0.6,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "sustainable_margin_pct": 8,
+  "relationship_eur_per_point": 25500.0
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260918-70410-P10",
+  "ctr:4600070410",
+  "sc:70410@2026Q3",
+  "cost:340010",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06",
+  "idx:PPI-C2219@2025-08",
+  "idx:PPI-C2219@2026-08"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": 24.31,
+  "reference_price": 29.89
+ }
+}

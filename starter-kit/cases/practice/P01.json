@@ -1,0 +1,102 @@
+{
+ "case_id": "case:P01",
+ "set": "practice",
+ "type": "price_increase",
+ "title": "Volute casing HN 50-200: Price adjustment from 01 November 2026",
+ "briefing": "Price Increase: Price adjustment from 01 November 2026. You buy part:310010 for Hollerau Pumpenwerke from Gießerei Brandlhuber GmbH & Co. KG. Need: 8150 a year for 2 years. Category goal: stabilise.",
+ "trigger_doc": "doc:20260911-70110-P01",
+ "parts": [
+  "part:310010"
+ ],
+ "suppliers": [
+  "sup:70110"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "effective_date",
+  "contract_months"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 42,
+  "volume_per_year": 8150,
+  "incoterm": "FCA",
+  "index_clause": null,
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "effective_date": [
+   "2026-11-01",
+   "2027-01-01",
+   "2027-04-01"
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ]
+ },
+ "buyer": {
+  "need_per_year": 8150,
+  "horizon_years": 2,
+  "current_unit_price": 126.53,
+  "fallback_unit_price": 145.51,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 42,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "index_risk_pct": 4,
+  "late_cost_per_day": 400,
+  "cost_per_defect": 80,
+  "freight_eur_per_unit": {
+   "EXW": 3.8,
+   "FCA": 2.53,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7200001",
+   "terms": {
+    "unit_price": 143.22,
+    "payment_days": 60,
+    "lead_time_days": 56,
+    "incoterm": "FCA",
+    "volume_per_year": 8150,
+    "contract_months": 24,
+    "index_clause": null,
+    "tooling_eur": 0,
+    "effective_date": "2027-01-01"
+   }
+  },
+  "sustainable_margin_pct": 8,
+  "relationship_eur_per_point": 41200.0
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260911-70110-P01",
+  "ctr:4600070110",
+  "sc:70110@2026Q3",
+  "cost:310010",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06",
+  "idx:PPI-C241@2025-08",
+  "idx:PPI-C241@2026-08"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": 132.64,
+  "reference_price": 126.53
+ }
+}

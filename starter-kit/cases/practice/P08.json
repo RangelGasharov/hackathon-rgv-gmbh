@@ -1,0 +1,116 @@
+{
+ "case_id": "case:P08",
+ "set": "practice",
+ "type": "raw_material",
+ "title": "Round bar 1.4404 dia 30 mm, peeled: Price basis and surcharge clause for the coming period",
+ "briefing": "Raw Material: Price basis and surcharge clause for the coming period. You buy part:370010 for Hollerau Pumpenwerke from Edelstahl-Service Donautal GmbH. Need: 118500 a year for 2 years. Category goal: leverage.",
+ "trigger_doc": "doc:20260912-70710-P08",
+ "parts": [
+  "part:370010"
+ ],
+ "suppliers": [
+  "sup:70710"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "index_clause",
+  "contract_months"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 10,
+  "volume_per_year": 118500,
+  "incoterm": "DAP",
+  "tooling_eur": 0,
+  "effective_date": "2027-01-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24
+  ],
+  "index_clause": [
+   null,
+   {
+    "series": "AS-14404",
+    "material_share": 0.45,
+    "deadband_pct": 0,
+    "base_month": "2026-09"
+   },
+   {
+    "series": "AS-14404",
+    "material_share": 0.45,
+    "deadband_pct": 3,
+    "base_month": "2026-09"
+   },
+   {
+    "series": "AS-14404",
+    "material_share": 0.8,
+    "deadband_pct": 3,
+    "base_month": "2026-09"
+   }
+  ]
+ },
+ "buyer": {
+  "need_per_year": 118500,
+  "horizon_years": 2,
+  "current_unit_price": 5.45,
+  "fallback_unit_price": 6.27,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 10,
+  "category_goal": "leverage",
+  "fallback_risk_pct": 3,
+  "index_risk_pct": 1,
+  "late_cost_per_day": 200,
+  "cost_per_defect": 50,
+  "freight_eur_per_unit": {
+   "EXW": 0.16,
+   "FCA": 0.11,
+   "DAP": 0.0
+  },
+  "index_paths": {
+   "AS-14404": 0.03
+  },
+  "must_haves": [],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7200008",
+   "terms": {
+    "unit_price": 6.06,
+    "payment_days": 30,
+    "lead_time_days": 14,
+    "incoterm": "DAP",
+    "volume_per_year": 118500,
+    "contract_months": 24,
+    "index_clause": null,
+    "tooling_eur": 0,
+    "effective_date": "2027-01-01"
+   }
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260912-70710-P08",
+  "ctr:4600070710",
+  "sc:70710@2026Q3",
+  "idx:AS-14404@2025-09",
+  "idx:AS-14404@2026-09",
+  "idx:PPI-C2431@2025-08",
+  "idx:PPI-C2431@2026-08"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": null,
+  "reference_price": 5.45
+ }
+}

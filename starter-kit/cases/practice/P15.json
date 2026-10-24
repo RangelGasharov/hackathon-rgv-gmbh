@@ -1,0 +1,104 @@
+{
+ "case_id": "case:P15",
+ "set": "practice",
+ "type": "bundling",
+ "title": "Kit: One supplier for the kit",
+ "briefing": "Bundling: One supplier for the kit. You buy part:340020, part:340030, part:340040 for Hollerau Pumpenwerke from Elasto-Dicht Hermannsdorfer GmbH. Need: 25000 a year for 2 years. Category goal: routine.",
+ "trigger_doc": "doc:20260913-70430-P15",
+ "parts": [
+  "part:340020",
+  "part:340030",
+  "part:340040"
+ ],
+ "suppliers": [
+  "sup:70430"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "contract_months",
+  "incoterm"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 7,
+  "volume_per_year": 25000,
+  "index_clause": null,
+  "tooling_eur": 0,
+  "effective_date": "2027-01-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ],
+  "incoterm": [
+   "FCA",
+   "DAP"
+  ]
+ },
+ "buyer": {
+  "need_per_year": 25000,
+  "horizon_years": 2,
+  "current_unit_price": 5.56,
+  "fallback_unit_price": 6.39,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 7,
+  "category_goal": "routine",
+  "fallback_risk_pct": 5,
+  "index_risk_pct": 2,
+  "late_cost_per_day": 150,
+  "cost_per_defect": 30,
+  "freight_eur_per_unit": {
+   "EXW": 0.17,
+   "FCA": 0.11,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "current_contract",
+   "ref": null,
+   "terms": {
+    "unit_price": 5.78,
+    "payment_days": 30,
+    "lead_time_days": 7,
+    "incoterm": "DAP",
+    "volume_per_year": 25000,
+    "contract_months": 24,
+    "index_clause": null,
+    "tooling_eur": 0,
+    "effective_date": "2027-01-01"
+   }
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260913-70430-P15",
+  "ctr:4600070430",
+  "sc:70430@2026Q3",
+  "idx:PPI-C2219@2025-08",
+  "idx:PPI-C2219@2026-08",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": [
+   2,
+   1,
+   2
+  ],
+  "should_cost": null,
+  "reference_price": 5.56
+ }
+}

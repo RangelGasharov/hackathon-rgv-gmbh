@@ -1,0 +1,89 @@
+{
+ "case_id": "case:P06",
+ "set": "practice",
+ "type": "rfq",
+ "title": "RFQ: volute casing for the new HX series",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Eisengießerei Velkenreith GmbH, Tarsevi Döküm Sanayi A.Ş.. RFQ: volute casing for the new HX series. Need: 4200 pc a year. Category goal: stabilise a strategic supply: a healthy supplier and stable prices count, not only the lowest price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 56 days). There is no fallback supplier: without a deal the demand is bought at the fallback price. Must-haves: lead_time_days <= 84. Prepare from the data package.",
+ "trigger_doc": "doc:20260926-70120-P06",
+ "parts": [
+  "part:310070"
+ ],
+ "suppliers": [
+  "sup:70120",
+  "sup:70150"
+ ],
+ "negotiable": [
+  "unit_price",
+  "tooling_eur",
+  "payment_days",
+  "lead_time_days"
+ ],
+ "fixed_terms": {
+  "volume_per_year": 4200,
+  "contract_months": 24,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "DAP"
+ },
+ "term_options": {
+  "tooling_eur": [
+   0,
+   7500,
+   15000
+  ],
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "lead_time_days": [
+   49,
+   56,
+   70,
+   84
+  ]
+ },
+ "buyer": {
+  "need_per_year": 4200,
+  "horizon_years": 2.0,
+  "current_unit_price": 253.19,
+  "fallback_unit_price": 253.19,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 56,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "index_risk_pct": 4,
+  "late_cost_per_day": 480,
+  "cost_per_defect": 216,
+  "sustainable_margin_pct": 3,
+  "relationship_eur_per_point": 15950,
+  "freight_eur_per_unit": {
+   "EXW": 12.14,
+   "FCA": 10.56,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "lead_time_days",
+    "op": "<=",
+    "value": 84
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260926-70120-P06",
+  "sc:70120@2026Q3",
+  "sc:70150@2026Q3"
+ ],
+ "hosted": false
+}

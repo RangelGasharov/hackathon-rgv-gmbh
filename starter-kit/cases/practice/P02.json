@@ -1,0 +1,101 @@
+{
+ "case_id": "case:P02",
+ "set": "practice",
+ "type": "price_increase",
+ "title": "Motor IE3 7.5 kW, 4-pole: Price adjustment from 01 January 2027",
+ "briefing": "Price Increase: Price adjustment from 01 January 2027. You buy part:350011 for Hollerau Pumpenwerke from Antriebstechnik Nordmark AG. Need: 6110 a year for 2 years. Category goal: stabilise.",
+ "trigger_doc": "doc:20260914-70510-P02",
+ "parts": [
+  "part:350011"
+ ],
+ "suppliers": [
+  "sup:70510"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "effective_date",
+  "contract_months"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 35,
+  "volume_per_year": 6110,
+  "incoterm": "DAP",
+  "index_clause": null,
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "effective_date": [
+   "2027-01-01",
+   "2027-04-01"
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ]
+ },
+ "buyer": {
+  "need_per_year": 6110,
+  "horizon_years": 2,
+  "current_unit_price": 348.32,
+  "fallback_unit_price": 400.57,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 35,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "index_risk_pct": 4,
+  "late_cost_per_day": 400,
+  "cost_per_defect": 80,
+  "freight_eur_per_unit": {
+   "EXW": 10.45,
+   "FCA": 6.97,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7200002",
+   "terms": {
+    "unit_price": 421.06,
+    "payment_days": 30,
+    "lead_time_days": 42,
+    "incoterm": "DAP",
+    "volume_per_year": 6110,
+    "contract_months": 24,
+    "index_clause": null,
+    "tooling_eur": 0,
+    "effective_date": "2027-01-01"
+   }
+  },
+  "sustainable_margin_pct": 8,
+  "relationship_eur_per_point": 85100.0
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260914-70510-P02",
+  "ctr:4600070510",
+  "sc:70510@2026Q3",
+  "cost:350011",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06",
+  "idx:CU-NOTATION@2025-09",
+  "idx:CU-NOTATION@2026-09"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": 374.95,
+  "reference_price": 348.32
+ }
+}

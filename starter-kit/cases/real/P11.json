@@ -1,0 +1,94 @@
+{
+ "case_id": "case:P11",
+ "set": "practice",
+ "type": "quality",
+ "title": "Kalwisz: bearing brackets in red",
+ "briefing": "You negotiate for Hollerau Pumpenwerke with Odlewnia Kalwisz Sp. z o.o.. Kalwisz: bearing brackets in red. Need: 15900 pc a year. Category goal: quality first: defects and late deliveries cost more than a few cents of price. Score: the lowest total cost C as defined in the rules, valued with this case's rates (need lead time 58 days). Fallback if you walk away: the second-source quote quote:7200011. Must-haves: ppm_commitment <= 1500. Prepare from the data package.",
+ "trigger_doc": "doc:20260921-70140-P11",
+ "parts": [
+  "part:310020"
+ ],
+ "suppliers": [
+  "sup:70140"
+ ],
+ "negotiable": [
+  "ppm_commitment",
+  "chargeback_eur_per_complaint",
+  "unit_price"
+ ],
+ "fixed_terms": {
+  "payment_days": 60,
+  "lead_time_days": 56,
+  "volume_per_year": 15900,
+  "contract_months": 12,
+  "effective_date": "2027-01-01",
+  "index_clause": null,
+  "incoterm": "FCA",
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "ppm_commitment": [
+   300,
+   800,
+   1500,
+   2500
+  ],
+  "chargeback_eur_per_complaint": [
+   0,
+   150,
+   300,
+   500
+  ]
+ },
+ "buyer": {
+  "need_per_year": 15900,
+  "horizon_years": 1.0,
+  "current_unit_price": 45.15,
+  "fallback_unit_price": 47.86,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 58,
+  "category_goal": "quality_first",
+  "fallback_risk_pct": 8,
+  "index_risk_pct": 2,
+  "late_cost_per_day": 300,
+  "cost_per_defect": 450,
+  "freight_eur_per_unit": {
+   "EXW": 1.77,
+   "FCA": 1.54,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "ppm_commitment",
+    "op": "<=",
+    "value": 1500
+   }
+  ],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7200011",
+   "terms": {
+    "unit_price": 53.56,
+    "payment_days": 30,
+    "lead_time_days": 56,
+    "volume_per_year": 15900,
+    "contract_months": 12,
+    "effective_date": "2027-01-01",
+    "index_clause": null,
+    "incoterm": "FCA",
+    "tooling_eur": 7500,
+    "ppm_commitment": 715
+   }
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260921-70140-P11",
+  "ctr:4600070140",
+  "sc:70140@2026Q3",
+  "quote:7200011"
+ ],
+ "hosted": true
+}

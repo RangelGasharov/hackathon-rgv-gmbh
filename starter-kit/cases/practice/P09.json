@@ -1,0 +1,107 @@
+{
+ "case_id": "case:P09",
+ "set": "practice",
+ "type": "capacity",
+ "title": "Flange DN 65 PN 16, machined: Capacity situation and delivery dates",
+ "briefing": "Capacity: Capacity situation and delivery dates. You buy part:320030 for Hollerau Pumpenwerke from CNC-Technik Obermaier & Huber GmbH. Need: 10780 a year for 2 years. Category goal: secure_supply.",
+ "trigger_doc": "doc:20260915-70220-P09",
+ "parts": [
+  "part:320030"
+ ],
+ "suppliers": [
+  "sup:70220"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "volume_per_year",
+  "contract_months",
+  "lead_time_days"
+ ],
+ "fixed_terms": {
+  "incoterm": "EXW",
+  "index_clause": null,
+  "tooling_eur": 0,
+  "effective_date": "2027-01-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "volume_per_year": [
+   8620.0,
+   9700.0,
+   10780
+  ],
+  "contract_months": [
+   12,
+   24
+  ],
+  "lead_time_days": [
+   35,
+   49,
+   63,
+   77
+  ]
+ },
+ "buyer": {
+  "need_per_year": 10780,
+  "horizon_years": 2,
+  "current_unit_price": 16.02,
+  "fallback_unit_price": 18.42,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 49,
+  "category_goal": "secure_supply",
+  "fallback_risk_pct": 12,
+  "index_risk_pct": 4,
+  "late_cost_per_day": 600,
+  "cost_per_defect": 80,
+  "freight_eur_per_unit": {
+   "EXW": 0.48,
+   "FCA": 0.32,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7200009",
+   "terms": {
+    "unit_price": 16.33,
+    "payment_days": 45,
+    "lead_time_days": 42,
+    "incoterm": "FCA",
+    "volume_per_year": 10780,
+    "contract_months": 24,
+    "index_clause": null,
+    "tooling_eur": 0,
+    "effective_date": "2027-01-01"
+   }
+  },
+  "sustainable_margin_pct": 8,
+  "relationship_eur_per_point": 6900.0
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260915-70220-P09",
+  "ctr:4600070220",
+  "sc:70220@2026Q3",
+  "cost:320030",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06",
+  "idx:PPI-C2431@2025-08",
+  "idx:PPI-C2431@2026-08"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": 15.4,
+  "reference_price": 16.02
+ }
+}

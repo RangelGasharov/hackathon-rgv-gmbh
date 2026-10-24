@@ -1,0 +1,110 @@
+{
+ "case_id": "case:P11",
+ "set": "practice",
+ "type": "quality",
+ "title": "Bearing bracket HN: Escalation: delivery and quality performance",
+ "briefing": "Quality: Escalation: delivery and quality performance. You buy part:310020 for Hollerau Pumpenwerke from Odlewnia Kalwisz Sp. z o.o.. Need: 15930 a year for 2 years. Category goal: quality_first.",
+ "trigger_doc": "doc:20260921-70140-P11",
+ "parts": [
+  "part:310020"
+ ],
+ "suppliers": [
+  "sup:70140"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "ppm_commitment",
+  "chargeback_eur_per_complaint"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 56,
+  "volume_per_year": 15930,
+  "incoterm": "FCA",
+  "contract_months": 24,
+  "index_clause": null,
+  "tooling_eur": 0,
+  "effective_date": "2027-01-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "ppm_commitment": [
+   500,
+   1000,
+   1500,
+   2500,
+   4000
+  ],
+  "chargeback_eur_per_complaint": [
+   0,
+   50,
+   150,
+   300
+  ]
+ },
+ "buyer": {
+  "need_per_year": 15930,
+  "horizon_years": 2,
+  "current_unit_price": 45.15,
+  "fallback_unit_price": 51.92,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 56,
+  "category_goal": "quality_first",
+  "fallback_risk_pct": 6,
+  "index_risk_pct": 2,
+  "late_cost_per_day": 300,
+  "cost_per_defect": 200,
+  "freight_eur_per_unit": {
+   "EXW": 1.35,
+   "FCA": 0.9,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "ppm_commitment",
+    "op": "<=",
+    "value": 1500
+   }
+  ],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7200011",
+   "terms": {
+    "unit_price": 53.56,
+    "payment_days": 30,
+    "lead_time_days": 42,
+    "incoterm": "FCA",
+    "volume_per_year": 15930,
+    "contract_months": 24,
+    "index_clause": null,
+    "tooling_eur": 0,
+    "effective_date": "2027-01-01"
+   }
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260921-70140-P11",
+  "ctr:4600070140",
+  "sc:70140@2026Q3",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06",
+  "idx:PPI-C241@2025-08",
+  "idx:PPI-C241@2026-08"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": null,
+  "reference_price": 45.15
+ }
+}

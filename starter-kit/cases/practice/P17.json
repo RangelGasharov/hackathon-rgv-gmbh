@@ -1,0 +1,91 @@
+{
+ "case_id": "case:P17",
+ "set": "practice",
+ "type": "price_increase",
+ "title": "Control board HB smart pump (PCBA): Price adjustment from 01 January 2027",
+ "briefing": "Price Increase: Price adjustment from 01 January 2027. You buy part:350030 for Hollerau Pumpenwerke from Platinenwerk Lausitz GmbH. Need: 19920 a year for 2 years. Category goal: stabilise.",
+ "trigger_doc": "doc:20260919-70550-P17",
+ "parts": [
+  "part:350030"
+ ],
+ "suppliers": [
+  "sup:70550"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "effective_date",
+  "contract_months"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 56,
+  "volume_per_year": 19920,
+  "incoterm": "DAP",
+  "index_clause": null,
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "effective_date": [
+   "2027-01-01",
+   "2027-04-01"
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ]
+ },
+ "buyer": {
+  "need_per_year": 19920,
+  "horizon_years": 2,
+  "current_unit_price": 34.35,
+  "fallback_unit_price": 39.5,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 56,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "index_risk_pct": 4,
+  "late_cost_per_day": 400,
+  "cost_per_defect": 80,
+  "freight_eur_per_unit": {
+   "EXW": 1.03,
+   "FCA": 0.69,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "sustainable_margin_pct": 8,
+  "relationship_eur_per_point": 27400.0
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260919-70550-P17",
+  "ctr:4600070550",
+  "sc:70550@2026Q3",
+  "cost:350030",
+  "idx:PPI-C2611@2025-08",
+  "idx:PPI-C2611@2026-08",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": 37.24,
+  "reference_price": 34.35
+ }
+}

@@ -1,0 +1,12 @@
+# secrets and local state: never commit
+.env
+*.env
+!.env.example
+runs/
+starter-kit/data/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.DS_Store

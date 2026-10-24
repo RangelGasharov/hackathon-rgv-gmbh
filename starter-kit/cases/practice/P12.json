@@ -1,0 +1,100 @@
+{
+ "case_id": "case:P12",
+ "set": "practice",
+ "type": "quality",
+ "title": "Base frame HN 50/65, welded, painted: Escalation: delivery and quality performance",
+ "briefing": "Quality: Escalation: delivery and quality performance. You buy part:330010 for Hollerau Pumpenwerke from Blechtechnik Aichbauer GmbH. Need: 8980 a year for 2 years. Category goal: quality_first.",
+ "trigger_doc": "doc:20260924-70310-P12",
+ "parts": [
+  "part:330010"
+ ],
+ "suppliers": [
+  "sup:70310"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "ppm_commitment",
+  "chargeback_eur_per_complaint"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 21,
+  "volume_per_year": 8980,
+  "incoterm": "DAP",
+  "contract_months": 24,
+  "index_clause": null,
+  "tooling_eur": 0,
+  "effective_date": "2027-01-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "ppm_commitment": [
+   500,
+   1000,
+   1500,
+   2500,
+   4000
+  ],
+  "chargeback_eur_per_complaint": [
+   0,
+   50,
+   150,
+   300
+  ]
+ },
+ "buyer": {
+  "need_per_year": 8980,
+  "horizon_years": 2,
+  "current_unit_price": 100.14,
+  "fallback_unit_price": 115.16,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 21,
+  "category_goal": "quality_first",
+  "fallback_risk_pct": 6,
+  "index_risk_pct": 2,
+  "late_cost_per_day": 300,
+  "cost_per_defect": 200,
+  "freight_eur_per_unit": {
+   "EXW": 3.0,
+   "FCA": 2.0,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "ppm_commitment",
+    "op": "<=",
+    "value": 1500
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260924-70310-P12",
+  "ctr:4600070310",
+  "sc:70310@2026Q3",
+  "idx:PPI-C241@2025-08",
+  "idx:PPI-C241@2026-08",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": null,
+  "reference_price": 100.14
+ }
+}

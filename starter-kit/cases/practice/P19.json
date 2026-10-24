@@ -1,0 +1,99 @@
+{
+ "case_id": "case:P19",
+ "set": "practice",
+ "type": "renewal",
+ "title": "Deep groove ball bearing 6306-2Z C3: Renewal of framework agreement 4600070640",
+ "briefing": "Renewal: Renewal of framework agreement 4600070640. You buy part:360020 for Hollerau Pumpenwerke from Kugellager-Vertrieb Inntal GmbH. Need: 28600 a year for 2 years. Category goal: routine.",
+ "trigger_doc": "doc:20260925-70640-P19",
+ "parts": [
+  "part:360020"
+ ],
+ "suppliers": [
+  "sup:70640"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "contract_months",
+  "incoterm"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 10,
+  "volume_per_year": 28600,
+  "tooling_eur": 0,
+  "effective_date": "2027-01-01",
+  "index_clause": null
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ],
+  "incoterm": [
+   "EXW",
+   "FCA",
+   "DAP"
+  ]
+ },
+ "buyer": {
+  "need_per_year": 28600,
+  "horizon_years": 2,
+  "current_unit_price": 4.2,
+  "fallback_unit_price": 4.83,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 10,
+  "category_goal": "routine",
+  "fallback_risk_pct": 5,
+  "index_risk_pct": 2,
+  "late_cost_per_day": 150,
+  "cost_per_defect": 30,
+  "freight_eur_per_unit": {
+   "EXW": 0.13,
+   "FCA": 0.08,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7200019",
+   "terms": {
+    "unit_price": 4.63,
+    "payment_days": 30,
+    "lead_time_days": 7,
+    "incoterm": "DAP",
+    "volume_per_year": 28600,
+    "contract_months": 24,
+    "index_clause": null,
+    "tooling_eur": 0,
+    "effective_date": "2027-01-01"
+   }
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260925-70640-P19",
+  "ctr:4600070640",
+  "sc:70640@2026Q3",
+  "idx:PPI-C2815@2025-08",
+  "idx:PPI-C2815@2026-08",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": null,
+  "reference_price": 4.2
+ }
+}

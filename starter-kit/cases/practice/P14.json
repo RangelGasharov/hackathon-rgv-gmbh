@@ -1,0 +1,109 @@
+{
+ "case_id": "case:P14",
+ "set": "practice",
+ "type": "renewal",
+ "title": "Motor cable H07RN-F 4G2.5: Renewal of framework agreement 4600070560",
+ "briefing": "Renewal: Renewal of framework agreement 4600070560. You buy part:350040 for Hollerau Pumpenwerke from Kabelwerk Rhönsberg GmbH. Need: 3420 a year for 2 years. Category goal: stabilise.",
+ "trigger_doc": "doc:20260910-70560-P14",
+ "parts": [
+  "part:350040"
+ ],
+ "suppliers": [
+  "sup:70560"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "contract_months",
+  "incoterm",
+  "index_clause"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 14,
+  "volume_per_year": 3420,
+  "tooling_eur": 0,
+  "effective_date": "2027-01-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ],
+  "incoterm": [
+   "EXW",
+   "FCA",
+   "DAP"
+  ],
+  "index_clause": [
+   null,
+   {
+    "series": "CU-NOTATION",
+    "material_share": 0.55,
+    "deadband_pct": 0,
+    "base_month": "2026-09"
+   },
+   {
+    "series": "CU-NOTATION",
+    "material_share": 0.55,
+    "deadband_pct": 5,
+    "base_month": "2026-09"
+   }
+  ]
+ },
+ "buyer": {
+  "need_per_year": 3420,
+  "horizon_years": 2,
+  "current_unit_price": 316.35,
+  "fallback_unit_price": 363.8,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 14,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "index_risk_pct": 4,
+  "late_cost_per_day": 400,
+  "cost_per_defect": 80,
+  "freight_eur_per_unit": {
+   "EXW": 9.49,
+   "FCA": 6.33,
+   "DAP": 0.0
+  },
+  "index_paths": {
+   "CU-NOTATION": 0.239
+  },
+  "must_haves": [],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "sustainable_margin_pct": 8,
+  "relationship_eur_per_point": 43300.0
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260910-70560-P14",
+  "ctr:4600070560",
+  "sc:70560@2026Q3",
+  "cost:350040",
+  "idx:CU-NOTATION@2025-09",
+  "idx:CU-NOTATION@2026-09",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": 304.49,
+  "reference_price": 316.35
+ }
+}

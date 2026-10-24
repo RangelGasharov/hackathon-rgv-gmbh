@@ -1,0 +1,99 @@
+{
+ "case_id": "case:P13",
+ "set": "practice",
+ "type": "price_increase",
+ "title": "Coupling hub: Price adjustment from 01 November 2026",
+ "briefing": "Price Increase: Price adjustment from 01 November 2026. You buy part:320060 for Hollerau Pumpenwerke from Präzisionsteile Lindlbauer KG. Need: 17910 a year for 2 years. Category goal: leverage.",
+ "trigger_doc": "doc:20260927-70230-P13",
+ "parts": [
+  "part:320060"
+ ],
+ "suppliers": [
+  "sup:70230"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "effective_date",
+  "contract_months"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 28,
+  "volume_per_year": 17910,
+  "incoterm": "EXW",
+  "index_clause": null,
+  "tooling_eur": 0
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "effective_date": [
+   "2026-11-01",
+   "2027-01-01",
+   "2027-04-01"
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ]
+ },
+ "buyer": {
+  "need_per_year": 17910,
+  "horizon_years": 2,
+  "current_unit_price": 16.3,
+  "fallback_unit_price": 18.75,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 28,
+  "category_goal": "leverage",
+  "fallback_risk_pct": 3,
+  "index_risk_pct": 1,
+  "late_cost_per_day": 200,
+  "cost_per_defect": 50,
+  "freight_eur_per_unit": {
+   "EXW": 0.49,
+   "FCA": 0.33,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "quote",
+   "ref": "quote:7200013",
+   "terms": {
+    "unit_price": 17.87,
+    "payment_days": 30,
+    "lead_time_days": 28,
+    "incoterm": "EXW",
+    "volume_per_year": 17910,
+    "contract_months": 24,
+    "index_clause": null,
+    "tooling_eur": 0,
+    "effective_date": "2027-01-01"
+   }
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260927-70230-P13",
+  "ctr:4600070230",
+  "sc:70230@2026Q3",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06",
+  "idx:PPI-C2431@2025-08",
+  "idx:PPI-C2431@2026-08"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": null,
+  "reference_price": 16.3
+ }
+}

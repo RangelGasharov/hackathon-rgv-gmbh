@@ -1,0 +1,106 @@
+{
+ "case_id": "case:P06",
+ "set": "practice",
+ "type": "rfq",
+ "title": "Volute casing HX 80-200: Request for quotation: Volute casing HX 80-200",
+ "briefing": "Rfq: Request for quotation: Volute casing HX 80-200. You buy part:310070 for Hollerau Pumpenwerke from Eisengießerei Velkenreith GmbH, Tarsevi Döküm Sanayi A.Ş.. Need: 4200 a year for 2 years. Category goal: stabilise.",
+ "trigger_doc": "doc:20260926-70120-P06",
+ "parts": [
+  "part:310070"
+ ],
+ "suppliers": [
+  "sup:70120",
+  "sup:70150"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "lead_time_days",
+  "incoterm",
+  "tooling_eur"
+ ],
+ "fixed_terms": {
+  "volume_per_year": 4200,
+  "contract_months": 24,
+  "index_clause": null,
+  "effective_date": "2027-03-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "lead_time_days": [
+   28,
+   35,
+   42,
+   56,
+   70
+  ],
+  "incoterm": [
+   "EXW",
+   "FCA",
+   "DAP"
+  ],
+  "tooling_eur": [
+   0,
+   6000,
+   12000
+  ]
+ },
+ "buyer": {
+  "need_per_year": 4200,
+  "horizon_years": 2,
+  "current_unit_price": null,
+  "fallback_unit_price": 262.14,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 42,
+  "category_goal": "stabilise",
+  "fallback_risk_pct": 10,
+  "index_risk_pct": 4,
+  "late_cost_per_day": 400,
+  "cost_per_defect": 80,
+  "freight_eur_per_unit": {
+   "EXW": 6.87,
+   "FCA": 4.58,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "lead_time_days",
+    "op": "<=",
+    "value": 56
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  },
+  "sustainable_margin_pct": 8,
+  "relationship_eur_per_point": 38500.0
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260926-70120-P06",
+  "ctr:4600070120",
+  "sc:70120@2026Q3",
+  "cost:310070",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06",
+  "idx:PPI-C241@2025-08",
+  "idx:PPI-C241@2026-08"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": 194.18,
+  "reference_price": 229.13
+ }
+}

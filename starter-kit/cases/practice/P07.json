@@ -1,0 +1,106 @@
+{
+ "case_id": "case:P07",
+ "set": "practice",
+ "type": "bundling",
+ "title": "Kit: One supplier for the kit",
+ "briefing": "Bundling: One supplier for the kit. You buy part:360010, part:360011, part:360012, part:360030 for Hollerau Pumpenwerke from Schraubenhandel Leitner & Sohn GmbH. Need: 30000 a year for 2 years. Category goal: routine.",
+ "trigger_doc": "doc:20260909-70610-P07",
+ "parts": [
+  "part:360010",
+  "part:360011",
+  "part:360012",
+  "part:360030"
+ ],
+ "suppliers": [
+  "sup:70610"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "contract_months",
+  "incoterm"
+ ],
+ "fixed_terms": {
+  "lead_time_days": 5,
+  "volume_per_year": 30000,
+  "index_clause": null,
+  "tooling_eur": 0,
+  "effective_date": "2027-01-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "contract_months": [
+   12,
+   24,
+   36
+  ],
+  "incoterm": [
+   "FCA",
+   "DAP"
+  ]
+ },
+ "buyer": {
+  "need_per_year": 30000,
+  "horizon_years": 2,
+  "current_unit_price": 5.95,
+  "fallback_unit_price": 6.84,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 5,
+  "category_goal": "routine",
+  "fallback_risk_pct": 5,
+  "index_risk_pct": 2,
+  "late_cost_per_day": 150,
+  "cost_per_defect": 30,
+  "freight_eur_per_unit": {
+   "EXW": 0.18,
+   "FCA": 0.12,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [],
+  "alternative": {
+   "kind": "current_contract",
+   "ref": null,
+   "terms": {
+    "unit_price": 6.19,
+    "payment_days": 30,
+    "lead_time_days": 5,
+    "incoterm": "DAP",
+    "volume_per_year": 30000,
+    "contract_months": 24,
+    "index_clause": null,
+    "tooling_eur": 0,
+    "effective_date": "2027-01-01"
+   }
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260909-70610-P07",
+  "ctr:4600070610",
+  "sc:70610@2026Q3",
+  "idx:PPI-C2594@2025-08",
+  "idx:PPI-C2594@2026-08",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": [
+   19,
+   6,
+   21,
+   23
+  ],
+  "should_cost": null,
+  "reference_price": 5.95
+ }
+}

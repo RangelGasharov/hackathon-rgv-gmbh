@@ -1,0 +1,105 @@
+{
+ "case_id": "case:P05",
+ "set": "practice",
+ "type": "rfq",
+ "title": "Pump shaft HX: Request for quotation: Pump shaft HX",
+ "briefing": "Rfq: Request for quotation: Pump shaft HX. You buy part:320070 for Hollerau Pumpenwerke from Zerspanung Dralveck GmbH, Strojírna Hrvelec s.r.o., Drehteile Fuchsreiter GmbH. Need: 4200 a year for 2 years. Category goal: leverage.",
+ "trigger_doc": "doc:20260923-70210-P05",
+ "parts": [
+  "part:320070"
+ ],
+ "suppliers": [
+  "sup:70210",
+  "sup:70240",
+  "sup:70250"
+ ],
+ "negotiable": [
+  "unit_price",
+  "payment_days",
+  "lead_time_days",
+  "incoterm",
+  "tooling_eur"
+ ],
+ "fixed_terms": {
+  "volume_per_year": 4200,
+  "contract_months": 24,
+  "index_clause": null,
+  "effective_date": "2027-03-01"
+ },
+ "term_options": {
+  "payment_days": [
+   14,
+   30,
+   45,
+   60,
+   90
+  ],
+  "lead_time_days": [
+   28,
+   35,
+   42,
+   56,
+   70
+  ],
+  "incoterm": [
+   "EXW",
+   "FCA",
+   "DAP"
+  ],
+  "tooling_eur": [
+   0,
+   6000,
+   12000
+  ]
+ },
+ "buyer": {
+  "need_per_year": 4200,
+  "horizon_years": 2,
+  "current_unit_price": null,
+  "fallback_unit_price": 49.77,
+  "interest_rate": 0.08,
+  "reference_payment_days": 60,
+  "need_lead_time_days": 42,
+  "category_goal": "leverage",
+  "fallback_risk_pct": 3,
+  "index_risk_pct": 1,
+  "late_cost_per_day": 200,
+  "cost_per_defect": 50,
+  "freight_eur_per_unit": {
+   "EXW": 1.31,
+   "FCA": 0.87,
+   "DAP": 0.0
+  },
+  "index_paths": {},
+  "must_haves": [
+   {
+    "field": "lead_time_days",
+    "op": "<=",
+    "value": 56
+   }
+  ],
+  "alternative": {
+   "kind": "none",
+   "ref": null,
+   "terms": {}
+  }
+ },
+ "round_limit": 10,
+ "refs": [
+  "doc:20260923-70210-P05",
+  "ctr:4600070210",
+  "sc:70210@2026Q3",
+  "cost:320070",
+  "idx:LCI-C@2025-06",
+  "idx:LCI-C@2026-06",
+  "idx:PPI-C2431@2025-08",
+  "idx:PPI-C2431@2026-08"
+ ],
+ "facts": {},
+ "hosted": true,
+ "local_meta": {
+  "kit": null,
+  "should_cost": 36.87,
+  "reference_price": 43.51
+ }
+}
