@@ -23,7 +23,7 @@ LATE_ARG = 0.005  # share of its opening value an argument counted after its fir
 # estimate (generic should-cost 15 % -> 7.5 %), and SIGMA_OWN for the should-cost of its own plant (the charges of 17
 # real deals in P01, P02 and P03 put the full cost at 0.977-0.979 x it, to 0.1 %). Five equal-weight quintile nodes.
 SIGMA_K = 0.5
-SIGMA_OWN = 0.02
+SIGMA_OWN = 0.01
 Z5 = (-1.2816, -0.5244, 0.0, 0.5244, 1.2816)  # medians of the five quintiles of a standard normal
 
 
@@ -611,8 +611,19 @@ class Planner:
 
     def _clause_pair(self, best, c0):
         """The best sheet with the clause, at the price where it costs us what the best does; where no price does
-        (the best sits low on a relationship charge) the price less the clause's cost share, if that stays close."""
+        (the best sits low on a relationship charge) the price less the clause's cost share, if that stays close.
+        With the relationship charge in, at the clause package's cheapest price: below it C only rises, and above
+        it the price follows how far the clause-free haggling has got, not what the clause is worth (arena P02:
+        clause sheets at 362.08-366.04 were all taken at once, 0.61-0.73, where C is lowest at ~361)."""
         t = {**best, "index_clause": self.pref_clause}
+        if self.relationship and self.est.rel_weight >= 1:
+            rest = {f: v for f, v in t.items() if f != PRICE}
+            same_terms = lambda p: {f: v for f, v in self._complete(p.combo).items() if f != PRICE} == rest  # noqa: E731
+            pkg = next((p for p in self.packages if same_terms(p)), None)
+            if pkg:
+                p = max(pkg.p_opt, self.frozen or 0.0)
+                same = self._no_step_back({**t, PRICE: round(p, 2)})
+                return same if 0.85 * best[PRICE] <= same[PRICE] <= 1.15 * best[PRICE] else None
         same = self.reprice_to_cost(t, c0)
         if not same:
             b = self.case["buyer"]
