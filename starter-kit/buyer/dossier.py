@@ -58,6 +58,13 @@ NEWS_TRAITS = {
 }
 COUNTRY_COST = {"DE": 1.0, "AT": 1.05, "CH": 1.1, "CZ": 0.83, "PL": 0.83, "HU": 0.83, "TR": 0.75, "CN": 0.7}
 OWNER_MARGIN = {"group": 0.12, "private": 0.10, "family": 0.09, "founder": 0.08}
+# what a supplier's hedge note says it bought forward -> the index series that no longer reach its costs
+HEDGED_SERIES = [
+    (r"nickel|alloy", ("AS-",)),
+    (r"copper", ("CU-",)),
+    (r"steel", ("PPI-C24",)),
+    (r"energy|electricity|power|gas", ("PPI-D35", "SMARD", "WB-NGEU")),
+]
 HEDGE_UNTIL = re.compile(r"until (January|March|June|December) (\d{4})")
 MONTHS = {"January": 1, "March": 3, "June": 6, "December": 12}
 BEST_WINDOW_SLACK = 0  # index windows may end up to this many months before the latest month (None: 12 months only)
@@ -410,6 +417,12 @@ class Dossier:
                 if BEST_WINDOW_SLACK is not None:  # and the most favourable recent window of any length
                     windows.append(self.w.index_best_window(r[0], BEST_WINDOW_SLACK))
                 windows = [w for w in windows if w]
+                raw = self.case.get("type") == "raw_material"
+                if raw and windows and min(w[0] for w in windows) >= 0 and (old := self.w.index_best_window(r[0], 11)):
+                    # raw material: nothing fell in a window ending now, so a fall in one ending within the last 12
+                    # months of the data (the arena's rule; P07: a window ending 5 months back came back `verified`).
+                    # Each series counts once (P18: two index arguments and the forecast took its limit to 5.45)
+                    windows.append(old)
                 if windows:
                     weights.setdefault(r[0], []).append(r[1])
                     best[r[0]] = min(windows + ([best[r[0]]] if r[0] in best else []), key=lambda w: w[0])
@@ -444,6 +457,14 @@ class Dossier:
             ):
                 return r["id"], r["date"]
         return None
+
+    def hedge_covers(self, series):
+        """Whether its hedge shields it from this index series. Its own note names what it bought forward (P08:
+        "our nickel and alloys requirement is covered at fixed prices"): labour and processing indices still reach
+        its costs. A hedge we only know from the news, or one that names nothing we can map, covers every series."""
+        text = self.w.doc_text(self.hedge_doc[0]).lower() if self.hedge_doc else ""
+        named = [pre for words, pre in HEDGED_SERIES if re.search(words, text)]
+        return not named or any(series.startswith(p) for pres in named for p in pres)
 
     def schedule_csv(self):
         """Our latest monthly demand forecast per part, as a CSV a supplier can read (true data, no IDs)."""

@@ -96,10 +96,14 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
         weight = 0.9
         if d.has("stale_costing"):
             weight = 1.0  # arena: "we did not know that - a fair point"
-        if hedged:
+        if hedged and d.hedge_covers(series):
             weight = 0.05  # arena P08: "that is not our reality: our material is covered at fixed prices"
+        elif hedged:
+            weight *= 0.6  # a series its hedge does not name (P08: labour, bar drawing): untested, no harm seen
         elif d.has("cash_short", strong=True):
             weight *= 0.3  # "we see your figures, but we cannot give up margin right now"
+        if m1 < world.series_last.get(series, m1):
+            weight *= 0.85  # an older window: after the current ones, so P18's forecast still goes in round 1
         label = series_label(world, series)
         idx_claims.append(
             Claim(

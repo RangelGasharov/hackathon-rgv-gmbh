@@ -192,6 +192,13 @@ class BuyerAgent:
             # delivery record that did not); the strategist's "counted" can undo it (`phrase_dead`)
             ts.phrase_dead = {c.kind for c in ts.last_claims if c.kind in no_change_kinds(body)}
             ts.d.dead_kinds.update(ts.phrase_dead)
+            if len(ts.plan.asks) >= 2:  # after its first counter: what it counts now is not in the limit estimate yet
+                shrug = bool(re.search(r"not our reality|confirm our case|does not change our calculation", body, re.I))
+                for r in m.get("claim_results") or []:
+                    i = r.get("index")
+                    c = ts.last_claims[i] if isinstance(i, int) and 0 <= i < len(ts.last_claims) else None
+                    if r.get("result") == "verified" and c and c.kind in ("idx", "fc") and not shrug:
+                        ts.plan.late_args += 1
             if self.clause_series and any(s in body for s in self.clause_series):
                 ts.plan.want_clause()  # its costs follow the clause's own series (P02: "CU-NOTATION rose 47.7 %")
             ts.plan.second_step = bool(

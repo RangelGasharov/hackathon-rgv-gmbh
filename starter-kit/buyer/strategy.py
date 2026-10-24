@@ -18,6 +18,7 @@ from arena_kit.cost import RELATIONSHIP_GOALS, _soft, _years, closing_terms, mus
 
 PRICE = "unit_price"
 CLAUSE_VALUE = 0.015  # share of the price an index clause is worth to a supplier that wants one (arena P02: >= 1.6 %)
+LATE_ARG = 0.005  # share of its opening value an argument counted after its first counter takes off its limit
 # Our belief about a supplier's full cost, for the relationship charge: one sigma = SIGMA_K x the error band of the
 # estimate (generic should-cost 15 % -> 7.5 %), and SIGMA_OWN for the should-cost of its own plant (the charges of 17
 # real deals in P01, P02 and P03 put the full cost at 0.977-0.979 x it, to 0.1 %). Five equal-weight quintile nodes.
@@ -276,6 +277,7 @@ class Planner:
         self.min_date = None  # the earliest effective date it has since offered in every sheet: ours now
         self.open_lead = None  # the lead time of its first quote
         self.second_step = False  # it said it will come back on price (the RFQ two-step): move minimally
+        self.late_args = 0  # index or forecast arguments it took into account after its first counter
         # bounds on non-price terms we have won or must keep: field -> (op, value). Not the company's EUR 150
         # chargeback standard (company.md): it costs the supplier at its real defect rate but is worth less to
         # us at the committed one, so forcing it raised C on the twin (P12 0.351 -> 0.325); MESO still offers it.
@@ -676,7 +678,9 @@ class Planner:
         # and never above 2 % under its first counter: in 47 real sessions no supplier gave more than 2.6 % of
         # its opening after round 1, and one that barely moved at first (a committee, b4 P02: 0.4 %) still
         # has that room - the 75 % rule alone put its limit at its ask, we offered that, and it agreed at once
-        return min(v0 - max(0.0, v0 - a1) / rho, a1 - 0.02 * v0)
+        # an index or forecast argument it counted after that first counter is not in it yet: about 0.5 % of its
+        # opening each (real P18: a third counted argument took its limit from above 5.45 to 5.45 or below)
+        return min(v0 - max(0.0, v0 - a1) / rho, a1 - 0.02 * v0) - LATE_ARG * self.late_args * v0
 
     def near_floor(self):
         """Its ask is within 15 % of the room above our floor estimate: take it."""

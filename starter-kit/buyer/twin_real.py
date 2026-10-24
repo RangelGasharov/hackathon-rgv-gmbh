@@ -53,6 +53,7 @@ from arena_kit.cost import (
 )
 from arena_kit.sim import ID_RE, Fail, Sim, create_app, load_cases, pdf, structured
 
+from .dossier import HEDGED_SERIES
 from .twin import LEAK, THREAT, LocalClient, Twin, World, _labels, supplier_profile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -72,7 +73,7 @@ PATIENCE = 2  # after a final offer: the second push below it ends the thread
 MAX_ROUNDS = 6  # final offer at the latest after this many buyer messages with term sheets
 DELTA = 0.005  # a verified argument that "we took into account": ask and limit -0.5 % of the opening
 DELTA_FAIR = 0.0075  # "We did not know that - a fair point" (stale costing): -0.75 %
-MAX_CLAIMS = 3
+MAX_CLAIMS = 3  # arguments counted per message (real P01: three in round 1 and a fourth, the forecast, in round 2)
 RIVAL_FAR = 0.10  # a rival price this much below its own: the two-step (half now, the rest next round)
 LAM = 0.45  # generic limit: this share of the way from the opening value to the floor (the data block sets the fit)
 LAM_CT = 0.10  # capacity-tight suppliers give much less (P10, P05 70240)
@@ -322,6 +323,10 @@ def real_profile(world, case, sup, calib=None, seed=0):
         "hedge_until": base["hedge_until"], "approval": base["approval"],
         "stale": "stale_costing" in traits,
         "not_strategic": bool(re.search(NOT_STRATEGIC, world.evidence(sup)[0], re.I)),
+        # what its hedge note says it bought forward (P08: "nickel and alloys"); labour and processing still reach it.
+        # Untested on the arena: only the alloy index was ever cited to a hedged supplier ("not our reality")
+        "hedged": tuple(x for words, pre in HEDGED_SERIES if re.search(words, world.evidence(sup)[0], re.I)
+                        for x in pre),
     }  # fmt: skip
     if opening is None:
         price = generic_opening(world, case, sup, base)
@@ -459,7 +464,7 @@ class TwinReal(Twin):
         if kind in ("news", "own", "orders"):
             return 0.0, None
         if kind == "index":
-            if "hedged_material" in tr:
+            if "hedged_material" in tr and (not p["hedged"] or info["series"].startswith(p["hedged"])):
                 return (
                     0.0,
                     f"That is not our reality: our material is covered at fixed prices until {p['hedge_until']}.",
@@ -499,7 +504,7 @@ class TwinReal(Twin):
         plain = ID_RE.sub(" ", body)
         why, say = [], []
         results, found = self._claims(s, th, msg)
-        shift = 0.0
+        shift, counted = 0.0, 0
         if rt.get("rest") and not rt["final"]:  # "Checked: give the rest of the step" (arena P05 back office)
             shift += rt.pop("rest")
             say.append("We have clarified this internally and can move further on the price.")
@@ -527,9 +532,10 @@ class TwinReal(Twin):
                 say.append("We need to clarify this internally - we will come back to you on price.")
             elif res == "verified" and info and not rt["final"]:
                 d, line = self._claim_moves(p, case, info, th["stated"].get("unit_price") or math.inf)
-                if d and rt["claims"] < MAX_CLAIMS:
+                if d and counted < MAX_CLAIMS:
                     shift += d * v0
                     rt["claims"] += 1
+                    counted += 1
                     say.append(f"We checked the {info['type']} data you cited; it holds and we took it into account.")
                 elif line is None:
                     say.append(f"We checked the {info['type']} data you cited; it holds, but it does not change "

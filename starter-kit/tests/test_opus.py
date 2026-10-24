@@ -213,6 +213,29 @@ def test_code_arguments_fill_the_slots_the_strategist_leaves(world):
     assert "fc:" not in agent.write(agent.decide(threads, sid)["message"])["body"]
 
 
+def test_an_argument_counted_after_its_first_counter_lowers_the_limit_estimate(world):
+    agent = BuyerAgent(world, read_timeout_s=0)
+    sid = "sup:70740"
+    opening = msg(6.10, payment_days=30, contract_months=12, index_clause=None)
+    threads = {sid: [opening]}
+    agent.start(case("P18"), threads)
+    clause = {"series": "AS-14404", "material_share": 0.45, "deadband_pct": 5, "base_month": "2026-08"}
+    counter = msg(5.60, payment_days=90, contract_months=36, index_clause=clause)
+    agent.ingest(sid, [opening, BUYER, counter])
+    plan = agent.t[sid].plan
+    before = plan.limit_hat
+    agent.t[sid].last_claims = [c for c in candidates(world, agent.t[sid].d, case("P18")) if c.kind == "idx"][:1]
+    took = {**msg(5.50, payment_days=90, contract_months=36, index_clause=clause,
+                  body="We checked the index change data you cited; it holds and we took it into account."),
+            "claim_results": [{"index": 0, "result": "verified"}]}  # fmt: skip
+    agent.ingest(sid, [opening, BUYER, counter, BUYER, took])
+    assert plan.late_args == 1 and plan.limit_hat < before - 0.004 * plan.asks[0]
+    shrug = {**took, "body": "We checked the index change data you cited; it holds, but it does not change our "
+             "calculation."}  # fmt: skip
+    agent.ingest(sid, [opening, BUYER, counter, BUYER, took, BUYER, shrug])
+    assert plan.late_args == 1  # no effect, no lower limit
+
+
 def test_no_attachment_when_the_strategist_attaches_none(world):
     c = case("P01")
     agent = BuyerAgent(world, writer=StrategistWriter(fake_strategist({"attach": []})), read_timeout_s=0)

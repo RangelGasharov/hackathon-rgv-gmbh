@@ -270,6 +270,29 @@ Hosted, after the fix (24 Oct, evening):
 
 With the forecast sent, one real session reached €5.45. More needs a mechanism this supplier has not shown.
 
+### More arguments for P08 and P18
+
+Across the 9 real P18 sessions, each counted argument took about €0.03 (0.5 % of the opening) off where
+Blankstahl stopped. With none it ended at €5.50 at 60 days. With two it refused €5.45 and €5.48. With three it
+agreed €5.45. Arguments also count after round 1: P01 counted a fourth in round 2. Each index series counts
+once. Both suppliers name the same three drivers in their opening: AS-14404 45 %, PPI-C2431 38 %, LCI-C 5 %.
+
+- Raw-material cases (P08, P16, P18) cite a fall in a window that ends within the last 12 months, when nothing
+  fell in one ending now. The arena accepts such windows (P07: one ending 5 months back came back `verified`).
+  For P18 this adds LCI-C −0.3 % (2025-10 to 2026-03), sent in round 2 after the three current arguments.
+  The other cases are unchanged.
+- A hedge mutes only the series its note names. Donautal (P08) covered "nickel and alloys", so AS-14404 is
+  "not our reality" for it, but PPI-C2431 and LCI-C go out with the forecast. Untested on the arena; the one
+  answer it gave so far ("not our reality") cost nothing.
+- An index or forecast argument the supplier takes into account after its first counter lowers the agent's
+  limit estimate by 0.5 % of the opening. "Not our reality" and "does not change our calculation" do not.
+- Twin: at most 3 counted arguments per message, not per thread (the P01 replay loss fell from 0.0053 to
+  0.0045). A hedge covers only the series its note names. The overall replay loss is unchanged (0.0166).
+
+On the twin, previous vs new agent against the same suppliers: P18 0.467 → 0.509 (€5.50 → €5.40 at 60 days),
+P08 0.505 → 0.570 (€5.51 → €5.45). The other 8 hosted cases are identical. The P08 gain depends on the
+untested hedge assumption.
+
 ## Not yet done
 
 - Relationship-goal cases with only a generic cost estimate (e.g. P06): the agent can squeeze below the

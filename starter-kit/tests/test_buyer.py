@@ -81,6 +81,31 @@ def test_hedged_supplier_gets_no_index_argument(world):
     assert all(c.kind != "idx" or c.weight < 0.2 for c in candidates(world, d, case))
 
 
+def test_hedge_mutes_only_the_series_it_names(world):
+    # P08: "our nickel and alloys requirement is covered at fixed prices" - the alloy index is not its reality,
+    # labour and bar drawing still reach its costs
+    case = json.loads(Path("cases/real/P08.json").read_text())
+    d = Dossier(world, case, "sup:70710")
+    assert d.hedge_covers("AS-14404") and not d.hedge_covers("PPI-C2431") and not d.hedge_covers("LCI-C")
+    sent = [i for c in ration(candidates(world, d, case), set(), 0) for i in c.ids]
+    assert "fc:370010@2026-09" in sent and "idx:PPI-C2431@2026-06" in sent and "idx:AS-14404@2026-06" not in sent
+
+
+def test_raw_material_cites_an_older_fall_after_the_current_ones(world):
+    # P18: LCI-C peaks in its latest month, but fell from 2025-10 to 2026-03; it goes out after the three current
+    # arguments, and only in raw-material cases (P01's supplier, also on LCI-C, hears the same as before)
+    case = json.loads(Path("cases/real/P18.json").read_text())
+    d = Dossier(world, case, "sup:70740")
+    cl = candidates(world, d, case)
+    lci = next(c for c in cl if c.meta.get("series") == "LCI-C")
+    assert check(world, lci) and lci.figure < 0 and lci.ids[1] < f"idx:LCI-C@{world.series_last['LCI-C']}"
+    first = ration(cl, set(), 0)
+    assert lci not in first
+    assert ration(cl, {i for c in first for i in c.ids}, 1, {kind_key(c) for c in first}) == [lci]
+    case = json.loads(Path("cases/real/P01.json").read_text())
+    assert all(c.meta.get("series") != "LCI-C" for c in candidates(world, Dossier(world, case, "sup:70110"), case))
+
+
 def test_small_forecast_rise_goes_out_unless_we_are_not_strategic(world):
     # arena P18: +1.9 % "we took it into account" from a supplier reviewing small accounts; P04's supplier, which
     # calls us "not strategic", answered every forecast with "does not change our calculation"
