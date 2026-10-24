@@ -119,6 +119,24 @@ Run on commit f6767e8 with the Opus writer: `starter-kit/runs/play-1792878476.js
   (5.40/90d, 0.532) and new argument kinds in later rounds; payment days are worth about €0.036/unit per 30 days here.
   Rival POs, even for the same part, came back "irrelevant".
 
+## Live check of e099702 (25 Oct, 00:11, Opus writer, one session each)
+
+| case | score | deal | plan | earlier sessions |
+|---|---|---|---|---|
+| P01 | **0.992** (new best) | €131.84, 14 days, from 1 Apr 2027, 3 rounds | reciprocal: letter asks +9.5 % vs drivers +2.3 %, 51 days' notice vs 90, it settled below its asks before; trusted | 0.780, 0.875, 0.903, 0.928, 0.971; analysis LLM-led 0.922 |
+| P18 | 0.467 | €5.50, 90 days, 36 months, AS-14404 clause | fast close (reviewing small accounts), switched to reciprocal after a 6.4 % first counter | 0.443 and 0.467 on this branch; best agent run 0.497, probe 0.532, another team 0.688 |
+
+Records: `starter-kit/runs/arena-P01-1792879982.json` (replay `/replay/65c18792ae313061`) and
+`starter-kit/runs/arena-P18-1792880021.json` (replay `/replay/ba767bc59339face`), local to the machine that ran them.
+
+- P01: three verified arguments in round 1 (notice, index, forecast), then the supplier took our 131.84 for April. The
+  deal is €477 above `c_best`.
+- P18: no refused accepts this time; its final offer was a single €5.50/90-day sheet, accepted directly. It moved
+  6.10 -> 5.60 -> 5.50 by round 2 and then held 5.50 against our 5.40-5.45. The gap to `c_best` (about €4.65/unit) is
+  unchanged: the levers that beat 5.50 were a concrete volume answer (probe, 5.40/90d) and, for another team, something
+  we have not found.
+- One session per case: a good sign for P01, no evidence of change on P18.
+
 ## Takeover plan
 
 1. **Preserve the game boundary.** Read the case, supplier profile, Arena thread, and offer history before the first move. The first priced offer must be ready within 60 seconds. Cap each supplier thread at 10 buyer messages, including holding messages.
