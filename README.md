@@ -255,7 +255,20 @@ of 3 % or less, so v5 sent only the two index arguments.
 - On the twin, same suppliers, old vs new arguments: P18 0.441 → 0.467 (€5.54 → €5.50), P08 0.473 → 0.505.
   The other 8 hosted cases send the same arguments as before and score the same.
 
-Ceiling: no real session went below €5.50. More needs a mechanism this supplier has not shown.
+Hosted, after the fix (24 Oct, evening):
+
+| session | writer | arguments sent | deal | score |
+|---|---|---|---|---|
+| 4d027315f6d5656f | template (no API key) | AS-14404, PPI-C2431, forecast | €5.45, 90 days, 36 months | **0.500** |
+| 647f738579e7e8f9 | Opus strategist | AS-14404, PPI-C2431 (forecast dropped) | €5.50 final offer | 0.467 |
+
+- The strategist may choose the arguments, but the code's own picks now fill any slots it leaves free
+  (one per kind, at most 3), so a counted argument can no longer be dropped. Picks the code rates below 0.3
+  stay the strategist's call (P04's forecast, 0.2).
+- Run records are saved as UTF-8. On Windows they were written as cp1252, which the replay loader could
+  not read.
+
+With the forecast sent, one real session reached €5.45. More needs a mechanism this supplier has not shown.
 
 ## Not yet done
 

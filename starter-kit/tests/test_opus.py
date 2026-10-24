@@ -196,6 +196,23 @@ def test_strategist_chooses_the_attachments_and_its_reading_is_kept(world):
     assert ts.sent_schedule or ts.sent_drivers  # never sent twice
 
 
+def test_code_arguments_fill_the_slots_the_strategist_leaves(world):
+    # real P18: Opus sent the two index arguments only and dropped the +1.9 % forecast the supplier had counted
+    agent = BuyerAgent(world, writer=StrategistWriter(fake_strategist({"claims": ["C1"]})), read_timeout_s=0)
+    sid = "sup:70740"
+    threads = {sid: [msg(6.10, payment_days=30, contract_months=12, index_clause=None)]}
+    agent.start(case("P18"), threads)
+    out = agent.write(agent.decide(threads, sid)["message"])
+    assert "(fc:370010@2026-09)" in out["body"] and "idx:AS-14404@2026-06" in out["body"]
+    assert len(re.findall(r"\((?:idx|fc):", out["body"])) == 3
+    # an argument code itself rates weak stays out when the strategist skips it (P04: "not strategic")
+    agent = BuyerAgent(world, writer=StrategistWriter(fake_strategist({"claims": []})), read_timeout_s=0)
+    sid = "sup:70620"
+    threads = {sid: [msg(4.61, payment_days=30, contract_months=12)]}
+    agent.start(case("P04"), threads)
+    assert "fc:" not in agent.write(agent.decide(threads, sid)["message"])["body"]
+
+
 def test_no_attachment_when_the_strategist_attaches_none(world):
     c = case("P01")
     agent = BuyerAgent(world, writer=StrategistWriter(fake_strategist({"attach": []})), read_timeout_s=0)

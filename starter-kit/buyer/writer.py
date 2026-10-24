@@ -312,6 +312,13 @@ class StrategistWriter(ClaudeWriter):
             if c and kind_key(c) not in kinds and len(claims) < 3:  # each index series is a kind of its own
                 claims.append(c)
                 kinds.add(kind_key(c))
+        # the code's own picks fill the free slots: real P18, Opus left out the +1.9 % forecast the supplier had
+        # counted (0.467 vs 0.500 with it). Below 0.3 (the prompt's skip line) it stays the strategist's call
+        for c in plan.claims:
+            ids = {i for x in claims for i in x.ids}
+            if len(claims) < 3 and kind_key(c) not in kinds and not ids & set(c.ids) and c.weight >= 0.3:
+                claims.append(c)
+                kinds.add(kind_key(c))
         pts = {f"P{i}": p for i, p in enumerate(plan.points, 1)}
         chosen = Plan(
             case=plan.case,

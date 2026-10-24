@@ -286,7 +286,8 @@ def play_and_record(client, case_id, factory):
                     default=str,
                     indent=1,
                     ensure_ascii=False,
-                )
+                ),
+                encoding="utf-8",  # Windows would write cp1252, which load_runs cannot read
             )
         except Exception as e:  # noqa: BLE001 - the result counts, the record is a bonus
             log.warning("%s: could not save the record: %s", case_id, e)
@@ -341,7 +342,7 @@ def main(argv=None):
             print(cid, "ERROR", r)
             continue
         print(cid, json.dumps({k: r.get(k) for k in ("deal", "supplier_id", "score", "c_open", "c_deal", "c_best")}))
-    Path(f"runs/{a.cmd}-{int(time.time())}.json").write_text(json.dumps(out, default=str, indent=1))
+    Path(f"runs/{a.cmd}-{int(time.time())}.json").write_text(json.dumps(out, default=str, indent=1), encoding="utf-8")
 
 
 if __name__ == "__main__":
