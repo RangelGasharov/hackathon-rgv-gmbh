@@ -257,21 +257,21 @@ def profile_strategy(dossier):
     profile = getattr(dossier, "profile", None) or {}
     playbook = (profile.get("persona") or {}).get("playbook") or {}
     arena = profile.get("arena") or {}
-    sessions = arena.get("sessions") or 0
-    walked = arena.get("walked") or 0
-    agreed_round1 = arena.get("agreed_round1") or 0
     try:
-        sessions, walked, agreed_round1 = max(0, int(sessions)), max(0, int(walked)), max(0, int(agreed_round1))
+        sessions, walked = max(0, int(arena.get("sessions") or 0)), max(0, int(arena.get("walked") or 0))
     except (TypeError, ValueError):
-        sessions, walked, agreed_round1 = 0, 0, 0
+        sessions, walked = 0, 0
     first = arena.get("first_counter_vs_opening")
     try:
         first = float(first) if first is not None and math.isfinite(float(first)) else None
     except (TypeError, ValueError):
         first = None
     walk_rate = walked / sessions if sessions else None
-    round1_rate = agreed_round1 / sessions if sessions else None
+    # a supplier whose first counter gives 8 %+ of its opening and rarely walks has room below its counter
+    room = sessions >= 5 and first is not None and first <= 0.92 and walk_rate is not None and walk_rate <= 0.15
 
+    # Not a cue: how often it agreed to our round-1 offer. That says our opening was above its first counter
+    # (we overpaid: P02, P05-70210, P18), so it argues for a deeper anchor, never a quicker close.
     cues = []
     if playbook.get("walk_risk") == "high":
         cues.append("the profile flags high walk risk")
@@ -279,14 +279,14 @@ def profile_strategy(dossier):
         cues.append("the profile describes a close opening")
     if sessions >= 5 and walk_rate is not None and walk_rate >= 0.20:
         cues.append(f"the arena record shows {walked}/{sessions} walks")
-    if sessions >= 5 and round1_rate is not None and round1_rate >= 0.25 and first is not None and first >= 0.96:
-        cues.append("the arena record favors an early, near-opening close")
-    evidence = {"first_counter_vs_opening": first, "walk_rate": walk_rate, "sessions": sessions}
+    evidence = {"first_counter_vs_opening": first, "walk_rate": walk_rate, "sessions": sessions, "room": room}
     if cues:
         return FAST_CLOSE, RECIPROCAL, "; ".join(cues), evidence
 
-    if sessions >= 5 and first is not None and first <= 0.92 and walk_rate is not None and walk_rate <= 0.15:
-        reason = f"arena counters average {first:.0%} of opening with low walk frequency ({walked}/{sessions})"
+    if room:
+        reason = (
+            f"its first counter is at {first:.0%} of its opening (median) and it rarely walks ({walked}/{sessions})"
+        )
     elif playbook.get("opening") == "deep" and playbook.get("walk_risk") == "low":
         reason = "profile shows a deep-opening supplier with low walk risk"
     elif profile:
@@ -345,7 +345,12 @@ class Planner:
         self.refresh()
 
     def strategy_summary(self):
-        labels = {FAST_CLOSE: "fast-close bargaining", RECIPROCAL: "reciprocal bargaining"}
+        # code prices every sheet either way: the plan is about how we write, never about the numbers
+        labels = {
+            FAST_CLOSE: "fast-close bargaining (a supplier that may walk: cooperative tone, answer every question, "
+            "lead with the package it wants; no pressure or deadlines)",
+            RECIPROCAL: "reciprocal bargaining (acknowledge each concession it makes and show ours in return)",
+        }
         if self.strategy_switched:
             return (
                 f"Negotiation plan: started with {labels[self.primary_strategy]}, then switched once to "
@@ -399,6 +404,12 @@ class Planner:
             d.has("cash_short") and not d.has("cash_short", strong=True)
         ):
             gap += 0.05
+        # where the arena record shows room below its first counter and few walks, open slightly deeper (at most
+        # two points; the caps below still apply). No shallower opening for a fast-close supplier: its first
+        # counter does not depend on ours, an opening above it is agreed at once, and the only real walk after an
+        # opening was P10's -19 % to a capacity-tight supplier (capped below). Twin: a 4 % cap cost P10 and P05.
+        if self.strategy == RECIPROCAL and self.strategy_evidence["room"]:
+            gap += min(0.02, (0.92 - self.strategy_evidence["first_counter_vs_opening"]) * 0.15)
         if ctype == "price_increase" and d.notice:
             gap = max(gap, 0.06)
         if ctype == "quality" or (d.has("cash_short", strong=True) and ctype != "rfq"):
@@ -410,21 +421,6 @@ class Planner:
             gap = min(gap, 0.10)  # far below a capacity-tight bidder: its final offer at once (P10: -19 %)
         if d.has("approval_ladder") and ctype != "rfq":
             gap = min(gap, 0.10)  # a pricing committee decides above 2 %: stay in a range it can approve
-        # A high walk-risk prior favors a credible quick-close anchor. Where observed arena behavior shows room to
-        # move and few walks, use that history for a slightly firmer opening (at most two percentage points).
-        if self.strategy == FAST_CLOSE:
-            gap = min(gap, 0.04)
-        else:
-            first = self.strategy_evidence.get("first_counter_vs_opening")
-            walk_rate = self.strategy_evidence.get("walk_rate")
-            if (
-                self.strategy_evidence["sessions"] >= 5
-                and first is not None
-                and first <= 0.92
-                and walk_rate is not None
-                and walk_rate <= 0.15
-            ):
-                gap = min(gap + min(0.02, (0.92 - first) * 0.15), 0.24)
         return gap
 
     def _anchor(self):
@@ -596,23 +592,15 @@ class Planner:
             if lim is None:
                 target = max(self.last_value + 0.004 * v0, ask - 0.015 * v0)
             else:
-                fast = self.strategy == FAST_CLOSE or rounds_left <= 2
-                # In a finite repeated game, reciprocate faster near the horizon; otherwise concede only part of
-                # the supplier's expected next move so we preserve room for a response.
-                nxt = ask - (0.6 if fast else 0.4) * max(0.0, ask - lim)
+                nxt = ask - 0.4 * max(0.0, ask - lim)
                 aim = min(lim - 0.003 * v0, nxt - 0.002 * v0)
                 step = 0.0025 * v0 if self.last_value + 0.0025 * v0 <= aim else 0.0012 * v0  # small near its limit
                 # at most 1.5 % of its opening a round: the limit estimate assumes a 75 % first step, and a supplier
                 # whose bigger moves need its committee steps less at first (P02 b1: we jumped to its opening price).
                 # RFQ: the rivals' cheaper offers do the work ("the buyer shows a much lower rival quote. I give
                 # half the step now and check the rest" - P05: 0.45 -> 0.81), so 1 %; committee suppliers 1 %.
-                jump = (
-                    0.015
-                    if fast
-                    else 0.01
-                    if len(self.case.get("suppliers") or []) > 1 or self.est.d.has("approval_ladder")
-                    else 0.015
-                )
+                # (Not lifted for a fast-close plan: 1.5 % to P10's committee supplier lost on the twin.)
+                jump = 0.01 if len(self.case.get("suppliers") or []) > 1 or self.est.d.has("approval_ladder") else 0.015
                 aim = min(aim, self.last_value + jump * v0)
                 if self.second_step:  # "we will come back to you on price": its next step comes anyway
                     aim = self.last_value + 0.001 * v0
@@ -866,11 +854,14 @@ class Planner:
         for pkg in self.packages[:12]:
             t = self._complete({**pkg.combo, PRICE: round(pkg.p_floor, 2)})
             same = self.reprice_to_cost(t, target_c)
-            if same and same not in out and must_haves_ok(self.case, same, self.est.standard):
-                out.append(same)
+            if not same or same in out or not must_haves_ok(self.case, same, self.est.standard):
+                continue
+            if self.ask_value and not self.fair_price_case and self.est.value(self.case, same) > self.ask_value:
+                continue  # as in `sheets`: never more than it asks
+            out.append(same)
             if len(out) >= n:
                 break
-        return out
+        return [self._no_step_back(t) for t in out]
 
     def reprice_to_cost(self, terms, target_c):
         lo, hi = terms[PRICE] * 0.6, terms[PRICE] * 1.6  # C misbehaves far from real prices: stay near
@@ -958,13 +949,10 @@ class Planner:
         return self._adapt_strategy(status)
 
     def _adapt_strategy(self, status):
-        """Use the one preselected fallback only when live bargaining evidence changes the prior."""
-        if self.strategy_switched or len(self.asks) < 2 or (self.second_step and status != "final_offer"):
-            return None
-        # A final offer is a terminal decision point in this arena: changing the plan here cannot influence
-        # another supplier move, and countering it can withdraw the offer. Keep the prior strategy intact;
-        # `BuyerAgent.decide` handles accept/walk from the reservation and outside option.
-        if status == "final_offer":
+        """Use the one preselected fallback only when live bargaining evidence changes the prior. Not on a final
+        offer (no further move for a new plan to shape; `BuyerAgent.decide` accepts or walks) and not while it
+        said it will come back on price (its next step is coming anyway)."""
+        if self.strategy_switched or len(self.asks) < 2 or self.second_step or status == "final_offer":
             return None
         opening = max(self.asks[0], 1e-9)
         if self.strategy == FAST_CLOSE:
@@ -977,7 +965,7 @@ class Planner:
         if len(self.asks) >= 3:
             threshold = 0.0015 * opening
             recent = (self.asks[-3] - self.asks[-2], self.asks[-2] - self.asks[-1])
-            if all(step <= threshold for step in recent):
+            if all(abs(step) <= threshold for step in recent):  # a raised ask is not "negligible"
                 return self._switch_to_fallback("two consecutive supplier replies showed negligible movement")
         return None
 

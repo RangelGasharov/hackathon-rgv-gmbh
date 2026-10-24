@@ -8,35 +8,60 @@ Use a supplier's cached profile and past negotiation behavior to choose a focuse
 
 ## Strategy model
 
-- `BuyerAgent.start` loads usable profiles before creating each `ThreadState`; a missing or stale profile uses the existing bounded live-read fallback.
-- `Planner` chooses one primary policy and one fallback in `profile_strategy`: `fast_close` for high walk risk, a close opening, or relevant arena evidence; otherwise `reciprocal`.
-- The profile prior can be revised once from observed behavior. A meaningful supplier concession can move `fast_close` to `reciprocal`; two replies with negligible movement or a take-it-or-leave-it offer can move `reciprocal` to `fast_close`.
-- The profile affects the first anchor and subsequent concession pace. In the last two available messages, pricing accelerates toward convergence without introducing a third policy.
-- The strategist receives the active plan in the dossier brief and is instructed to follow it. Code still prices every sheet and enforces the procurement reservation; the writer may choose only from that menu.
-- The bargaining model is finite-horizon and reciprocal: treat profile and arena history as the prior, update from observed concessions or resistance, preserve the outside option as the hard ceiling, and use the final available message for a decision.
+- `BuyerAgent.start` loads usable profiles before creating each `ThreadState`; a missing or stale profile uses the existing bounded live-read fallback. The Live Final's new suppliers have no profile, so there the plan is always `reciprocal` with no profile evidence.
+- `Planner` chooses one primary policy and one fallback in `profile_strategy`: `fast_close` when the persona read flags high walk risk or a close opening, or the arena record shows 20 %+ walks over 5+ sessions; otherwise `reciprocal`. How often a supplier agreed to our round-1 offer is not a cue: that means our opening was above its first counter (we overpaid).
+- The plan can switch once from observed behavior: a one-reply concession of 4 %+ of its opening moves `fast_close` to `reciprocal`; two replies in a row with negligible movement (a raised ask does not count) move `reciprocal` to `fast_close`. Never on a final offer, and not while it said it will come back on price.
+- Pricing effect: only one. A `reciprocal` supplier whose arena record shows a first counter at 92 % of its opening or lower, with 15 % walks or fewer, opens up to 2 points deeper (the case's protective caps still apply). `fast_close` changes no price: neither the opening nor the step size. Code prices every sheet either way, so the plan tells the strategist how to write (tone, which package to lead with), not what to offer.
+- The strategist receives the active plan in the dossier brief, with what each approach means. Code still prices every sheet and enforces the procurement reservation; the writer may choose only from that menu.
 
 ## Shared procurement behavior
 
 - Supplier threads run as workers under one `BuyerAgent`; decisions share the live best offer, reservation ceiling, and rival-price evidence.
-- When an accept or walk action closes the case, the runner sets its shared completion event. Other workers stop, and a slow sibling draft checks that event before sending.
-- The 10-message cap includes holding messages. The first offer uses cached local profile data; only suppliers without a usable profile incur the existing timed live read.
+- An accept or walk closes the case inside the shared lock and sets the runner's completion event. Other workers stop, and a sibling's counter draft that was already being written is dropped instead of sent.
+- The 10-message cap includes holding messages. Our 10th message may still be a counter: the supplier answers it, and after the round limit we may still accept (api.md, 409).
+- The first offer uses cached local profile data; only suppliers without a usable profile incur the existing timed live read.
 
 ## Files touched for this work
 
-- `starter-kit/buyer/strategy.py` selects and adapts the two-policy plan and uses it in offer pricing.
-- `starter-kit/buyer/agent.py` records the selected plan and logs a fallback switch.
-- `starter-kit/buyer/dossier.py` includes the active plan in the strategist's context.
+- `starter-kit/buyer/profiles.py` and `starter-kit/profiles/` hold the 46 supplier profiles and their builder/checker.
+- `starter-kit/buyer/strategy.py` selects and adapts the two-policy plan, uses it in offer pricing, and adds `probe` (two offers just under the walk-away when every package looks dearer than it, first two offers only).
+- `starter-kit/buyer/agent.py` loads profiles, records the selected plan, logs a fallback switch, caps rounds at 10, and calls `probe`.
+- `starter-kit/buyer/dossier.py` includes the profile brief and the active plan in the strategist's context.
 - `starter-kit/buyer/writer.py` tells the strategist to follow the assigned plan and priced menu.
-- `starter-kit/buyer/runner.py` stops sibling drafts after a case result.
+- `starter-kit/buyer/runner.py` drops sibling drafts after a case result.
 - `buyer_agent_v5_flow_updated.svg` and `.png` show the updated process; the root `README.md` summarizes the behavior.
+
+## Audit (25 Oct, before the P18 rerun)
+
+The first version of this branch was reviewed line by line. Fixed:
+
+- **Round-1 agreements chose `fast_close`** (P02's 70510). Those agreements show our opening was too generous, so the cue pointed the wrong way. Removed.
+- **`fast_close` capped the opening gap at 4 %** (P10 opened at 30.08 instead of 29.03, P05's 70240 likewise). The arena's first counter does not depend on our opening, an opening above it is agreed at once, and none of the real walks followed an opening except P10's -19 % to a capacity-tight supplier (already capped at 10 %). Removed: `fast_close` keeps the case-calibrated opening.
+- **`fast_close` lifted the step cap from 1 % to 1.5 %** for RFQ bidders and committee suppliers, undoing the calibrated committee guard (P02 b1). On the persona twin it was part of the P10 loss (0.35 -> 0.20; removing only the anchor cap recovered 0.26). Removed, together with the same lift for every thread with two messages left.
+- **"Reciprocate faster near the horizon" was a no-op.** `nxt = ask - 0.6/0.4 * (ask - lim)` never changed `aim = min(lim - 0.003 v0, nxt - 0.002 v0)`, which always resolves to the first term (also checked on 1,500 random states). Restored the original line.
+- **The deeper-opening bonus was added after the protective caps** (committee, capacity-tight, cash-short, quality) and could undo them. It is now applied before them.
+- **A raised ask counted as "negligible movement"** and could switch to `fast_close` while the supplier moved away. Now only small moves in either direction count.
+- **One message before the cap was forced to settle**, on the false premise that a 10th counter could not be answered. The arena answers it and still allows an accept after the limit. Reverted to deciding at the cap; the test now checks that.
+- **`probe` skipped the guards of `sheets`**: it could offer more than the supplier asks for a package it values more, or a lower price than our last offer on the same terms. It now applies both.
+- **The 70740 persona recommended citing 70710's €5.45 for the same part.** The P18 probe that did exactly that came back "irrelevant" and closed at €5.70 (0.336). Moved to "avoid"; the volume answer that reached €5.40 at 90 days (0.532) is now its tactic.
+- The plan text tells the strategist what each approach means, so "fast close" is not read as licence for pressure or deadlines.
+- The strategy layer had no tests; `tests/test_profiles.py` now covers cue selection, the unchanged fast-close opening, the deeper opening with room, at most one switch, and no switch on a final offer.
+- Three files the branch added were left unformatted; `ruff format` is clean again for the touched files.
+
+Checked and kept: the runner's completion-event checks (accept/walk still close inside the lock; only counter drafts are dropped, which also happens after a non-409/422 send error, as before), `round_cap` (no effect while every case has `round_limit` 10), the profile loader and its live-read fallback.
+
+Open doubts, not changed: `ts.sent` does not count arena timeouts, which use a round (predates this branch); timeout events that repeat the supplier's offer feed `observe_reply` and can look like a stalled reply.
 
 ## Graphify context
 
-The generated Graphify report and graph in `starter-kit/graphify-out/` were used to trace `BuyerAgent` → `ThreadState` → `Planner`, plus `play()` → `worker()` → `finish()`. The Graphify CLI is not available on this machine, so the checked-in graph snapshot was queried directly; its commit predates the profile additions and should be regenerated with Graphify when its runner is available.
+The generated Graphify report and graph are local only (`graphify-out/` is in `.git/info/exclude`, not in the repository). The graph on this machine was built before the profile and strategy changes.
 
 ## Validation status
 
-The updated SVG was parsed and rendered to a 2720×1920 PNG. Project tests were not run for this change.
+- `uv run pytest`: 125 passed, 3 skipped (the branch had 120; the new tests cover the strategy layer).
+- Persona twin, 19 cases (`uv run python -m buyer.bench --sim twin --agents buyer --cases-dir cases/real --seed N`), mean x 100 for seeds 0 / 1 / 2: `main` 68.1 / 69.6 / 67.8; this branch before the audit 66.9 / 67.1 / 66.1 (P10 and P05's 70240, both `fast_close`); after the audit 68.0 / 69.5 / 67.7. The remaining 0.01-0.02 on P05 comes from the profile trait reads, not the plan (same with the deeper-opening bonus off).
+- Calibrated twin (`uv run python -m buyer.twin_real bench`, 10 hosted cases): mean 0.731, identical per case to `main`. Its fitted limits make it insensitive to the opening, so it could not show the anchor regression.
+- `uv run python -m buyer.profiles check --data data/package`: 46 suppliers, 46 clean.
 
 ## P18 live run: diagnosis for the next agent
 

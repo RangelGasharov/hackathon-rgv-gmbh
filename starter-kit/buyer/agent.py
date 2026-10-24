@@ -52,6 +52,8 @@ MAX_ROUNDS = 10  # the arena's round limit: never plan for more messages per thr
 def round_cap(case):
     """Messages we may send per thread: the case's round limit, at most `MAX_ROUNDS`."""
     return min(int(case.get("round_limit") or MAX_ROUNDS), MAX_ROUNDS)
+
+
 COST_ROW = re.compile(r"^(material|conversion|overhead|margin|unit price)[^|]*\|\s*([-\d.]+)", re.I | re.M)
 
 
@@ -498,9 +500,9 @@ class BuyerAgent:
             and not best.dead
             and latest(threads[best_sid]).get("status") not in ("final_offer",) + tuple(ENDED)
         )
-        if rounds_left <= 1:
-            # the last message of a thread is a decision, never another counter: accept the best standing sheet
-            # (unless the alternative is clearly cheaper) - a counter now could only be answered after the round limit
+        if rounds_left <= 0:
+            # no message left: decide. Our last message may still be a counter - the supplier answers it, and after
+            # the round limit we may still accept (api.md: 409 "you reached the round limit (you may still accept)")
             return None if wait_best else settle()
         if rounds_left <= 2 and not ts.matched and (m := self.match(threads, sid)):
             return m

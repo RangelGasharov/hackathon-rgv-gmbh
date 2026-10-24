@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="2720" height="1920" viewBox="0 0 2720 1920" role="img" aria-labelledby="title desc">
   <title id="title">Buyer agent flow with supplier profiles and bounded negotiation rounds</title>
-  <desc id="desc">Case and data inputs build a dossier informed by one of 46 supplier profiles. Each supplier thread reads a reply, prices equal-cost offers and targeted probes, writes a guarded response, and either counters, accepts the best standing sheet, or walks only when the alternative is cheaper. Each thread is capped at ten messages or the lower case limit, and its last message is a decision.</desc>
+  <desc id="desc">Case and data inputs build a dossier informed by one of 46 supplier profiles. Each supplier thread reads a reply, prices equal-cost offers and targeted probes, writes a guarded response, and either counters, accepts the best standing sheet, or walks only when the alternative is cheaper. Each thread is capped at ten messages or the lower case limit,; after the tenth it may still accept.</desc>
   <defs>
     <marker id="arrow" markerWidth="24" markerHeight="24" refX="21" refY="12" orient="auto" markerUnits="userSpaceOnUse">
       <path d="M2,3 L21,12 L2,21" fill="none" stroke="#aaa8a0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -102,7 +102,7 @@
   <g>
     <rect class="input" x="85" y="1480" width="650" height="220" rx="34"/>
     <text class="label" x="410" y="1570" fill="#464644">Counter e-mail</text>
-    <text class="sub" x="410" y="1635" fill="#696966">Only while 2+ messages remain</text>
+    <text class="sub" x="410" y="1635" fill="#696966">While messages remain</text>
   </g>
   <g>
     <rect class="input" x="1035" y="1480" width="650" height="220" rx="34"/>
@@ -118,6 +118,6 @@
   <!-- A counter triggers another supplier reply and starts the next round. -->
   <path class="arrow" d="M410 1700 V1740 H48 V1212 H120"/>
   <text x="1360" y="1765" class="small" fill="#d0cec7">First offer within 60 s · cap: min(case limit, 10) messages per supplier thread</text>
-  <text x="1360" y="1815" class="small" fill="#d0cec7">Last available message decides: accept the best standing sheet, or walk only if the alternative is cheaper</text>
+  <text x="1360" y="1815" class="small" fill="#d0cec7">At the cap: accept the best standing sheet, or walk only if the alternative is cheaper</text>
   <text x="1360" y="1865" class="small" fill="#d0cec7">In multi-supplier cases, a closed deal stops sibling threads</text>
 </svg>

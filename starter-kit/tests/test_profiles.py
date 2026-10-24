@@ -9,6 +9,7 @@ import pytest
 from buyer import profiles
 from buyer.agent import MAX_ROUNDS, BuyerAgent, round_cap
 from buyer.dossier import World
+from buyer.strategy import FAST_CLOSE, RECIPROCAL, Planner
 
 
 @pytest.fixture(scope="module")
@@ -140,13 +141,71 @@ def _msg(price, status="open"):
     }
 
 
-def test_the_last_round_decides_instead_of_countering(world):
+def test_at_the_round_cap_it_decides_instead_of_countering(world):
     case = _case("P01")
     agent = BuyerAgent(world)
     agent.start(case)
     threads = {"sup:70110": [_msg(138.55), {"from": "buyer"}, _msg(136.0)]}
     agent.decide(threads, "sup:70110")  # read the thread
     ts = agent.t["sup:70110"]
-    ts.sent, ts.k = round_cap(case) - 1, 3  # nine messages sent: one left
+    ts.sent, ts.k = round_cap(case), 3  # ten messages sent: none left, accepting is still allowed
     d = agent.decide(threads, "sup:70110")
     assert d and d["message"].get("action", {}).get("type") == "accept"
+
+
+# -- the profile-chosen plan: one primary approach, at most one switch ------------------------------------------
+def _planner(world, cid, sid, profile):
+    agent = BuyerAgent(world, use_profiles=False)
+    agent.start(_case(cid))
+    est = agent.t[sid].est
+    est.d.profile = profile
+    return Planner(_case(cid), est)
+
+
+def _arena(**over):
+    return {"sessions": 10, "walked": 0, "agreed_round1": 0, "first_counter_vs_opening": 0.95, **over}
+
+
+def test_agreeing_to_our_first_offer_is_no_reason_to_close_fast(world):
+    # P02's 70510 agreed to our round-1 sheet 3 times in 10: our opening was too generous, not too deep
+    p = _planner(world, "P02", "sup:70510", {"arena": _arena(agreed_round1=3, first_counter_vs_opening=1.0)})
+    assert p.primary_strategy == RECIPROCAL
+
+
+def test_fast_close_does_not_open_closer_to_the_ask(world):
+    plain = _planner(world, "P10", "sup:70410", None)
+    fast = _planner(world, "P10", "sup:70410", {"persona": {"playbook": {"walk_risk": "high"}}})
+    assert fast.primary_strategy == FAST_CLOSE and plain.primary_strategy == RECIPROCAL
+    assert fast.anchor_gap == plain.anchor_gap
+
+
+def test_room_below_the_first_counter_opens_a_little_deeper(world):
+    plain = _planner(world, "P05", "sup:70250", None)
+    roomy = _planner(world, "P05", "sup:70250", {"arena": _arena(first_counter_vs_opening=0.80)})
+    assert roomy.primary_strategy == RECIPROCAL and roomy.strategy_evidence["room"]
+    assert plain.anchor_gap < roomy.anchor_gap <= plain.anchor_gap + 0.02
+    # a committee or capacity-tight supplier keeps its cap (P10's 70410: approval ladder, capacity tight)
+    capped = _planner(world, "P10", "sup:70410", {"arena": _arena(first_counter_vs_opening=0.80)})
+    assert capped.anchor_gap == _planner(world, "P10", "sup:70410", None).anchor_gap
+
+
+def test_one_switch_at_most_and_never_on_a_final_offer(world):
+    p = _planner(world, "P10", "sup:70410", {"persona": {"playbook": {"walk_risk": "high"}}})
+    p.asks = [100.0, 99.0]
+    assert p._adapt_strategy("final_offer") is None and p.strategy == FAST_CLOSE
+    p.asks = [100.0, 95.0]  # a 5 % step: it moves, so reciprocate
+    change = p._adapt_strategy("open")
+    assert change and change["to"] == RECIPROCAL and p.strategy == RECIPROCAL
+    assert "switched once" in p.est.d.strategy_plan
+    p.asks = [100.0, 95.0, 95.0, 95.0]  # it stalls afterwards: no second switch
+    assert p._adapt_strategy("open") is None and p.strategy == RECIPROCAL
+
+
+def test_two_stalled_replies_switch_reciprocal_to_fast_close(world):
+    p = _planner(world, "P01", "sup:70110", None)
+    p.asks = [100.0, 96.0, 96.0]
+    assert p._adapt_strategy("open") is None  # one stalled reply is not yet a pattern
+    p.asks = [100.0, 96.0, 96.0, 97.0]
+    assert p._adapt_strategy("open") is None  # it raised its ask: resistance, not "negligible movement"
+    p.asks = [100.0, 96.0, 96.0, 95.95]
+    assert p._adapt_strategy("open")["to"] == FAST_CLOSE

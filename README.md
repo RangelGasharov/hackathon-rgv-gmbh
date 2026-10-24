@@ -35,9 +35,10 @@ data and a deep read of its documents: [`starter-kit/profiles/INDEX.md`](starter
 there) and [`starter-kit/profiles/README.md`](starter-kit/profiles/README.md) (how they are built and used). The
 agent loads them at case start instead of reading documents under the clock. The profile and arena record select
 one primary bargaining approach and one fallback; live concessions or resistance can trigger the single switch.
-The priced offer stays inside the shared procurement ceiling. First offers remain within the 60-second move window,
-each supplier thread is capped at 10 messages, and the final available message can only decide. In a multi-supplier
-case, accepting a deal stops work on sibling threads for that procurement.
+The plan shapes how the strategist writes; its only pricing effect is a slightly deeper opening where the arena
+showed room below the supplier's first counter. Code still prices every offer inside the shared procurement ceiling. First offers remain within the 60-second move window, each
+supplier thread is capped at 10 messages (after the 10th we may still accept). In a multi-supplier case, closing the
+procurement stops work on sibling threads.
 
 ## Run
 

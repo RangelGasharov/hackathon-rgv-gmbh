@@ -381,7 +381,7 @@ def check_persona(p, f):
             errs.append(f"evidence cites {doc}, not a document of {f['id']}")
         elif doc in texts and ev.get("quote") and _norm(ev["quote"]) not in _norm(texts[doc]):
             # a quote must be the document's own words: no paraphrase passes as evidence
-            errs.append(f"quote not found verbatim in {doc}: \"{ev['quote'][:60]}\"")
+            errs.append(f'quote not found verbatim in {doc}: "{ev["quote"][:60]}"')
     strong = {k for k, v in (p.get("traits") or {}).items() if v == "strong"}
     cited = {ev.get("trait") for ev in p.get("evidence") or []}
     errs += [f"strong trait {k} without evidence" for k in sorted(strong - cited)]
@@ -564,8 +564,10 @@ def markdown(pr):
     out += ["", "## Persona", "", "| Trait | Level | Evidence |", "|---|---|---|"]
     ev = {}
     for e in p.get("evidence") or []:
-        ev.setdefault(e.get("trait"), []).append(f"{e.get('doc')}: \"{e.get('quote', '')}\"")
-    out += [f"| {k} | {v} | {'<br>'.join(ev.get(k, [])) or '-'} |" for k, v in sorted(traits.items())] or ["| - | - | - |"]
+        ev.setdefault(e.get("trait"), []).append(f'{e.get("doc")}: "{e.get("quote", "")}"')
+    out += [f"| {k} | {v} | {'<br>'.join(ev.get(k, [])) or '-'} |" for k, v in sorted(traits.items())] or [
+        "| - | - | - |"
+    ]
     out += [
         "",
         f"Wants: {', '.join(p.get('wants') or []) or '-'} · Fears: {'; '.join(p.get('fears') or []) or '-'}"
@@ -573,7 +575,8 @@ def markdown(pr):
         "",
         "## Facts",
         "",
-        "- Our spend: " + ", ".join(f"{k} €{v:,}" for k, v in w["spend_eur_by_year"].items())
+        "- Our spend: "
+        + ", ".join(f"{k} €{v:,}" for k, v in w["spend_eur_by_year"].items())
         + f" · we are {_share(w)} % of its turnover "
         f"· trend {_pct(w['spend_trend_pct'])}",
         f"- Company: equity {c.get('equity_ratio_pct', '?')} %, credit index {c.get('credit_index', '?')} "
@@ -590,10 +593,16 @@ def markdown(pr):
         k = pr["contract"]
         out.append(f"- Contract {k['id']}: {k['valid'][0]} to {k['valid'][1]}, {k['payment_days']} days, "
                    f"{k['incoterm']}, notice {k['notice_days']} days, {k['price_basis']}")  # fmt: skip
-    out += ["", "| Part | Price | Should-cost | Since | Cost drivers, 12 months | Other sources |", "|---|---|---|---|---|---|"]
+    out += [
+        "",
+        "| Part | Price | Should-cost | Since | Cost drivers, 12 months | Other sources |",
+        "|---|---|---|---|---|---|",
+    ]
     for x in pr["parts"]:
         sc = x["should_cost"] or {}
-        drv = ", ".join(f"{d['series']} {d['change_12m_pct']:+.1f} % (w {d['weight']})" for d in x.get("cost_drivers") or [])
+        drv = ", ".join(
+            f"{d['series']} {d['change_12m_pct']:+.1f} % (w {d['weight']})" for d in x.get("cost_drivers") or []
+        )
         out.append(
             f"| {x['part']} {x['description']} | {x['current_price']} | {sc.get('unit_cost', '-')}"
             f"{' (its plant)' if sc.get('of_this_supplier') else ''} | {x['price_since']} | {drv or '-'} | "
@@ -606,8 +615,8 @@ def markdown(pr):
             "",
             f"{a['sessions']} sessions in {', '.join(a['cases'])}: best score {a['best_score']}, first counter at "
             f"{a['first_counter_vs_opening']} of its opening, final offer around round {a['final_offer_round_median']}, "
-            f"walked {a['walked']}x, agreed our round-1 offer {a['agreed_round1']}x, \"fair point\" {a['fair_point']}x, "
-            f"\"does not change\" {a['no_change']}x, duplicates {a['duplicate']}x.",
+            f'walked {a["walked"]}x, agreed our round-1 offer {a["agreed_round1"]}x, "fair point" {a["fair_point"]}x, '
+            f'"does not change" {a["no_change"]}x, duplicates {a["duplicate"]}x.',
         ]
     out += ["", "## Documents", ""]
     out += [f"- `{d['id']}` {d['date']} {d['kind']} — {d['subject']}: {d['text'][:240]}" for d in pr["documents"]]
