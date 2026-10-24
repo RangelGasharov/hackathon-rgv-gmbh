@@ -83,6 +83,10 @@ PPM_WORK = 0.03  # committing to a ppm below its real rate costs 3 % of price pe
 RATE = 0.07  # its cost of money per year (MESO answers 6.6-8.3 %; the P01 and P03 relationship charges: 7 %)
 RATE_CASH = {"cash_short_hard": 0.30, "cash_short_weak": 0.15}
 FULL_COST_FACTOR = 0.979  # true full cost = should-cost x 0.979 (relationship charge of P01 and P03 deals)
+# a small account told it is "not strategic" shrugs off our forecast (P04: "does not change our calculation" 4 of 4);
+# one that is only "reviewing small accounts and will focus on customers with volume" counts it (P18: "we took it
+# into account", even for +1.9 %)
+NOT_STRATEGIC = r"not strategic|individual agreements will not be extended"
 
 # -- calibration: fitted by `calibrate` from runs/arena-*.json; per hosted case and supplier ----------
 # per case: the arena's c_open / c_best / c_alt; per supplier: opening sheet, standard terms (quote PDF,
@@ -317,6 +321,7 @@ def real_profile(world, case, sup, calib=None, seed=0):
         "round_to": (cal or {}).get("round_to", 0.01), "hosted": bool(cal),
         "hedge_until": base["hedge_until"], "approval": base["approval"],
         "stale": "stale_costing" in traits,
+        "not_strategic": bool(re.search(NOT_STRATEGIC, world.evidence(sup)[0], re.I)),
     }  # fmt: skip
     if opening is None:
         price = generic_opening(world, case, sup, base)
@@ -471,7 +476,7 @@ class TwinReal(Twin):
                 return 0.0, None
             return (2 * DELTA if case["type"] == "rfq" else DELTA), None
         if kind == "forecast":
-            if tr & {"capacity_tight", "small_account"}:
+            if "capacity_tight" in tr or ("small_account" in tr and p["not_strategic"]):
                 return 0.0, None
             return (DELTA_FAIR if p["stale"] else DELTA), (
                 "We did not know that - a fair point." if p["stale"] else None
@@ -867,8 +872,9 @@ def observe(world, cases, runs):
         for sup, op in rec["state"]["opening"].items():
             so = o["suppliers"].setdefault(sup, {"open": _sheet(case, op["terms"]), "missing": op["missing_fields"],
                                                  "_pairs": [], "_prices": []})  # fmt: skip
-            for _, _status, sheets in _supplier_replies(rec, sup)[1:]:
-                so["_prices"] += [t["unit_price"] for t in sheets]
+            for _, status, sheets in _supplier_replies(rec, sup)[1:]:
+                if status in ("open", "final_offer"):  # an agreement echoes our price, not its grid (P18: 5.61, 5.54)
+                    so["_prices"] += [t["unit_price"] for t in sheets]
                 if len(sheets) == 2:
                     so["_pairs"].append((sheets[0], sheets[1]))
     for cid, o in out.items():
@@ -1373,7 +1379,7 @@ CALIB.update({
         "sup:70140": {"open": {"ppm_commitment": 6400, "chargeback_eur_per_complaint": None, "unit_price": 47.0}, "standard": {"ppm_commitment": 6400, "chargeback_eur_per_complaint": 0}, "round_to": 0.5, "floor": 0.90863, "limit": 0.9775, "fit_loss": 0.0077},  # noqa: E501
     }},
     "case:P18": {"c_open": 295173.23, "c_best": 222651.27, "c_alt": 301087.96, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70740": {"open": {"unit_price": 6.1, "index_clause": None, "payment_days": 30, "contract_months": 12}, "standard": {"index_clause": None, "payment_days": 30, "contract_months": 12, "ppm_commitment": 70, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0939, "round_to": 0.01, "floor": 0.76225, "limit": 0.9075, "fit_loss": 0.01255},  # noqa: E501
+        "sup:70740": {"open": {"unit_price": 6.1, "index_clause": None, "payment_days": 30, "contract_months": 12}, "standard": {"index_clause": None, "payment_days": 30, "contract_months": 12, "ppm_commitment": 70, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0939, "round_to": 0.1, "floor": 0.76225, "limit": 0.9075, "fit_loss": 0.0095},  # noqa: E501
     }},
 })
 # fmt: on

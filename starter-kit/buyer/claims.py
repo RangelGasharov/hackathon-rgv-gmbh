@@ -161,11 +161,14 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                         "delivery",
                     )
                 )
-    # 4. our volume outlook: what volume-hungry and capacity-rich suppliers want to hear
+    # 4. our volume outlook: what volume-hungry and capacity-rich suppliers want to hear. Any rise counts: +1.9 %
+    # came back "we took it into account" 4 of 4 times (P08, P18). A small account told it is "not strategic" (strong)
+    # shrugs it off (P04, 4 of 4); one "reviewing small accounts, focus on customers with volume" (weak) counts it (P18)
     for n, (fid, ch) in enumerate(sorted(d.forecasts, key=lambda x: -x[1])):
-        if ch <= 3:
+        if ch <= 0:
             continue
-        w = 0.2 if (d.has("capacity_tight") or d.has("small_account")) else 0.85 if d.has("stale_costing") else 0.8
+        cold = d.has("capacity_tight") or d.has("small_account", strong=True)
+        w = 0.2 if cold else 0.85 if d.has("stale_costing") else 0.8
         what = "this part" if len(d.forecasts) == 1 else f"part {world.facts[fid]['part'].split(':')[1]} of the kit"
         out.append(
             Claim(

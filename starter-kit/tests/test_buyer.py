@@ -81,6 +81,16 @@ def test_hedged_supplier_gets_no_index_argument(world):
     assert all(c.kind != "idx" or c.weight < 0.2 for c in candidates(world, d, case))
 
 
+def test_small_forecast_rise_goes_out_unless_we_are_not_strategic(world):
+    # arena P18: +1.9 % "we took it into account" from a supplier reviewing small accounts; P04's supplier, which
+    # calls us "not strategic", answered every forecast with "does not change our calculation"
+    case = json.loads(Path("cases/practice/P18.json").read_text())
+    picked = ration(candidates(world, Dossier(world, case, "sup:70740"), case), set(), 0)
+    assert "fc:370010@2026-09" in [i for c in picked for i in c.ids]
+    case = json.loads(Path("cases/practice/P04.json").read_text())
+    assert all(c.weight < 0.5 for c in candidates(world, Dossier(world, case, "sup:70620"), case) if c.kind == "fc")
+
+
 def test_one_argument_per_kind_per_supplier():
     # arena v3: a second forecast (another kit part) or a second scorecard row came back `duplicate`
     def claim(kind, ids, weight, series=None):

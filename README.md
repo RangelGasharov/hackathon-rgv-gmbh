@@ -239,6 +239,24 @@ v5 changes:
 Ceiling: both analyses put the realistic mean on these 10 cases at about 0.73-0.75 under the behaviour
 seen so far. More needs a trigger the suppliers have not shown yet.
 
+## P18 fix (Blankstahl, raw material)
+
+In 7 real sessions Blankstahl answered on a €0.10 grid (5.8 / 5.7 / 5.6 / 5.5) and never went below €5.50 at
+90 days, 36 months, AS-14404 clause with 5 % deadband. The only session that reached €5.50 (0.467) had a
++1.9 % forecast argument next to the index one ("we took it into account"). The agent dropped forecast rises
+of 3 % or less, so v5 sent only the two index arguments.
+
+- Any forecast rise is now an argument. +1.9 % counted 4 of 4 times (P08 ×3, P18). It stays a weak argument
+  for a supplier that calls us "not strategic" (P04: "does not change our calculation", 4 of 4). It counts
+  for one "reviewing small accounts, focus on customers with volume" (P18).
+- Twin: Blankstahl's grid is €0.10, read from its own counters only; agreements that echo our price no longer
+  count. The P18 replay loss went from 0.0126 to 0.0095, and the twin now reproduces the €5.50 session
+  round by round.
+- On the twin, same suppliers, old vs new arguments: P18 0.441 → 0.467 (€5.54 → €5.50), P08 0.473 → 0.505.
+  The other 8 hosted cases send the same arguments as before and score the same.
+
+Ceiling: no real session went below €5.50. More needs a mechanism this supplier has not shown.
+
 ## Not yet done
 
 - Relationship-goal cases with only a generic cost estimate (e.g. P06): the agent can squeeze below the
