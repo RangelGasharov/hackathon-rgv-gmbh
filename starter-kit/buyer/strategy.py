@@ -952,7 +952,7 @@ class Planner:
         """Use the one preselected fallback only when live bargaining evidence changes the prior. Not on a final
         offer (no further move for a new plan to shape; `BuyerAgent.decide` accepts or walks) and not while it
         said it will come back on price (its next step is coming anyway)."""
-        if self.strategy_switched or len(self.asks) < 2 or self.second_step or status == "final_offer":
+        if self.strategy_switched or len(self.asks) < 2 or self.second_step or status in ("final_offer", "agreed"):
             return None
         opening = max(self.asks[0], 1e-9)
         if self.strategy == FAST_CLOSE:

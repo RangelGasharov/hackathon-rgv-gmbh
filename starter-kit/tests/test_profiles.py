@@ -205,6 +205,8 @@ def test_two_stalled_replies_switch_reciprocal_to_fast_close(world):
     p = _planner(world, "P01", "sup:70110", None)
     p.asks = [100.0, 96.0, 96.0]
     assert p._adapt_strategy("open") is None  # one stalled reply is not yet a pattern
+    p.asks = [100.0, 96.0, 96.0, 96.0]
+    assert p._adapt_strategy("agreed") is None  # it took our sheet: nothing left to adapt (live P18 rerun)
     p.asks = [100.0, 96.0, 96.0, 97.0]
     assert p._adapt_strategy("open") is None  # it raised its ask: resistance, not "negligible movement"
     p.asks = [100.0, 96.0, 96.0, 95.95]

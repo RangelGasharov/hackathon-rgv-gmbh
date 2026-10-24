@@ -77,6 +77,27 @@ Do not replay the case just to recreate this transcript; the session already con
 - Interpretation: acceptance respected the final-offer rule, and the result fell inside the profile's historic price range. The score still shows a meaningful optimization gap; diagnose value tradeoffs against `c_best` and the transcript before changing the anchor or trying to squeeze a supplier after its final offer.
 - Code correction after this run: do not mark a policy fallback switch on a `final_offer`. There is no next bargaining move where the new policy can affect the outcome, and the final decision belongs to the reservation/outside-option logic. The strategy summary now names only actionable switch triggers.
 
+## P18 rerun after the audit (24 Oct, 23:45)
+
+Run on commit f6767e8 with the Opus writer: `starter-kit/runs/play-1792878476.json` and
+`starter-kit/runs/arena-P18-1792878476.json` (session replay `/replay/1eb3654931419794`; local to the machine that ran it,
+`runs/` is not committed). The earlier session `f5fe76620163ed5a` is saved next to it as `arena-P18-1792876339.json`.
+
+- Result: **0.467**, deal at €5.50/unit, 90-day payment, 36 months, AS-14404 clause; `c_deal` €261,308.30 (was 0.443 at
+  €5.50/60 days). Best agent run on P18 so far 0.497 (€5.40/45 days); best probe 0.532 (€5.40/90 days); another team 0.688.
+- Flow: supplier 6.10 -> 5.60 -> 5.60 -> 5.50 (90d) -> final 5.50 (60d). Ours 5.27/5.32 -> 5.41 -> 5.43 -> 5.44/5.41.
+  Plan `reciprocal` throughout; two verified index claims in round 1, none counted after that.
+- **Pre-existing bug, not from this branch:** after the final offer, `standing()` picked the supplier's earlier, cheaper
+  €5.50/90d sheet (offer 3), which was no longer standing. The accept failed twice (422 "not a standing offer"), and the
+  runner's `reoffer` then sent those terms back as a counter to the final offer. The supplier agreed, so the deal kept 90
+  days, but countering a final offer ended in a walk in 3 of 4 earlier sessions. Decide deliberately: accept the final
+  sheet, or re-offer the supplier's own earlier sheet on purpose (it worked here and in session 1792870212).
+- The plan logged a switch on the closing "agreed" reply; fixed (no switch on `agreed` or `final_offer`).
+- Diagnosis of the gap to `c_best` (about €4.65/unit): the supplier's first counter is fixed near 5.60 whatever we open
+  with, and after round 1 it gives only 2-4 %. What moved it in other sessions was a concrete binding-volume answer
+  (5.40/90d, 0.532) and new argument kinds in later rounds; payment days are worth about €0.036/unit per 30 days here.
+  Rival POs, even for the same part, came back "irrelevant".
+
 ## Takeover plan
 
 1. **Preserve the game boundary.** Read the case, supplier profile, Arena thread, and offer history before the first move. The first priced offer must be ready within 60 seconds. Cap each supplier thread at 10 buyer messages, including holding messages.
