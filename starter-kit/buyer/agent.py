@@ -254,6 +254,15 @@ class BuyerAgent:
             and ts.plan.accept_now(ts.c_standing, ts.k, math.inf, rounds_left)
         ):
             return accept(sid)  # never the first offer: one exchange first, for its documents and its move
+        if (
+            ts.k >= 1
+            and sid == best_sid
+            and measure(ts) <= reservation
+            and not rival_better
+            and not ts.in_flight
+            and (ts.plan.near_floor() or ts.plan.holding())
+        ):
+            return accept(sid)  # close to its estimated floor, or it stopped moving
         if rounds_left <= 0:
             return settle()
         if rounds_left <= 2 and not ts.matched and (m := self.match(threads, sid)):
@@ -299,8 +308,9 @@ class BuyerAgent:
             ts.last_sent = [dict(t) for t in sheets]
         _, own = standing(threads[sid], self._price(sid))
         rivals = {}
-        for s, x in self.t.items():  # other bidders' standing offers, cited only when cheaper than this one's
-            if s != sid and math.isfinite(x.c_standing):
+        for s in self.t:  # other bidders' standing offers, cited only when cheaper than this one's (even
+            # when their other terms do not suit us: the arena checks the price, the supplier hears "cheaper")
+            if s != sid and latest(threads[s]).get("status") not in ENDED:
                 oid, terms = standing(threads[s], self._price(s))
                 if (
                     oid
@@ -335,7 +345,7 @@ class BuyerAgent:
             "body": None,
             "_plan": plan,
             "term_sheets": [{"terms": t} for t in sheets],
-            "refs": sorted({i for c in claims for i in c.ids})[:20],
+            "refs": list(dict.fromkeys(i for c in claims for i in c.ids))[:20],  # strongest first: 3 are checked
         }
         files = self.attachments(ts)
         if files:
@@ -422,7 +432,7 @@ class BuyerAgent:
             out.append("We want a price that keeps this part healthy for both of us.")
         if d.has("approval_ladder") and ts.sent >= 1:
             out.append(
-                "We understand that moves above 2 % go to your pricing committee: please submit this package; "
+                "We understand that larger moves go to your pricing committee: please submit this package; "
                 "we hold our offer until its decision."
             )
         if d.hedge_doc and ts.sent == 0:
@@ -471,7 +481,8 @@ class BuyerAgent:
                 + (f" for {months} months." if months else ".")
             )
         if ("figures" in body or "send us the data" in body or "which data" in body) and ts.sent_claims:
-            out.append("To your question on our figures: " + " ".join(ts.sent_claims[-2:]))
+            # the IDs were checked once already: citing them again only takes an argument slot ("duplicate")
+            out.append("To your question on our figures: the data references are in our earlier message.")
         return out
 
     def questions(self, ts):

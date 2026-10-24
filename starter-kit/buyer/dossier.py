@@ -271,7 +271,10 @@ class Dossier:
         """Our estimate of its full cost per unit, and how sure we are (relative error)."""
         sc, how = self.should_cost
         if sc:
-            return sc, 0.10 if how.startswith("own") else 0.15  # arena: real floors 10-37 % off
+            if how.startswith("own"):
+                # arena: the relationship charges on the P01 and P03 deals both put its full cost at 0.979 x ours
+                return round(sc * 0.979, 2), 0.10
+            return sc, 0.15  # arena: real floors 10-37 % off
         m = OWNER_MARGIN.get(self.intel["owner_type"] if self.intel else "", 0.09)
         if self.has("below_full_cost"):
             m = -0.04

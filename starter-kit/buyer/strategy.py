@@ -28,6 +28,7 @@ class Estimate:
         self.standard = dict(dossier.standard_guess)
         self.set_standard(standard)
         self.cap = None  # the lowest supplier value it has shown it will sign (from its own offers)
+        self.wants_clause = False  # set when its own sheets carry an index clause
         # relationship charge: trusted only for a supplier the data shows under water
         self.rel_weight = 1.0 if dossier.has("below_full_cost") else 0.1
 
@@ -57,14 +58,13 @@ class Estimate:
         months = t.get("contract_months") or 0
         if months >= 24 and (d.has("free_capacity") or d.has("small_account") or d.has("price_frozen")):
             x += 0.008 * p
-        if d.has("capacity_tight"):
-            std_lead = self.standard.get("lead_time_days")
-            if std_lead and t.get("lead_time_days") and t["lead_time_days"] < std_lead:
-                x -= 0.015 * p
-            if months >= 24:
-                x += 0.01 * p
-        if t.get("index_clause"):
-            x += 0.02 * p  # security against material moves: suppliers trade price for it
+        std_lead = self.standard.get("lead_time_days")
+        if std_lead and t.get("lead_time_days") and t["lead_time_days"] < std_lead:
+            x -= min(0.12, 0.005 * (std_lead - t["lead_time_days"])) * p  # arena: ~0.5 %/day faster
+        if d.has("capacity_tight") and months >= 24:
+            x += 0.01 * p
+        if t.get("index_clause") and self.wants_clause:
+            x += 0.02 * p  # raw-material distributors trade price for it; others never asked (arena P02)
         if months >= 36:
             x += 0.02 * p
         elif months >= 24:
@@ -77,7 +77,10 @@ class Estimate:
 
     def model(self, case, t):
         std = {**self.standard, **case.get("fixed_terms", {})}
-        return {"standard": std, "interest_rate": self.rate, "full_cost": self.full_cost, "extra": self.extra(t)}
+        out = {"standard": std, "interest_rate": self.rate, "full_cost": self.full_cost, "extra": self.extra(t)}
+        if ppm := (self.d.scorecard or {}).get("ppm"):
+            out["ppm"] = ppm  # it pays chargebacks at the defect rate it really has
+        return out
 
     def value(self, case, terms):
         t = closing_terms(case, terms, self.standard)
@@ -149,18 +152,20 @@ class Planner:
         C_best: leverage-type cases (RFQ, raw material, bundling, capacity) had 12-30 % room, routine and
         strategic renewals and price letters only 0.3-5 %."""
         ctype, goal = self.case.get("type"), self.case["buyer"].get("category_goal")
+        # arena (13 sessions): the supplier's first counter is the same whether we open 5 % or 20 % below,
+        # and deep openings only bring its final offer sooner (P10: final in round 1 after -19 %)
         gap = {
-            "rfq": 0.22,
-            "raw_material": 0.18,
-            "bundling": 0.15,
-            "capacity": 0.12,
+            "rfq": 0.12,
+            "raw_material": 0.10,
+            "bundling": 0.10,
+            "capacity": 0.10,
             "quality": 0.10,
             "price_increase": 0.06,
             "renewal": 0.06,
         }.get(ctype, 0.08)
         d = self.est.d
         if ctype in ("renewal", "price_increase") and goal in ("stabilise", "routine", "secure_supply"):
-            gap = min(gap, 0.035)
+            gap = min(gap, 0.025)
         if ctype == "price_increase" and d.notice:
             gap = max(gap, 0.06)
         if ctype == "quality" or d.has("cash_short", strong=True):
@@ -262,12 +267,18 @@ class Planner:
             if self.case.get("type") == "renewal" and d.current:  # a renewal opens at today's price at most
                 target = min(target, self.est.value(self.case, {PRICE: d.current}))
         else:
-            their_step = max(0.0, self.asks[-2] - self.asks[-1]) if len(self.asks) >= 2 else 0.0
-            # reciprocal: 0.6x its last step, at least a visible 0.4 %; no catch-up jumps (arena P07: a +4 %
-            # jump at the end against its 0.4-0.9 % steps). The deal comes from its final offer, which we take.
-            step = max(0.6 * their_step, 0.004 * self.last_value)
-            step = min(step, max(their_step, 0.006 * self.last_value))
-            target = self.last_value + step
+            # arena: a supplier concedes only on a visible move, and its final offer lands at its limit. An
+            # offer above its next ask is agreed at our own price, so stay just under that limit and keep
+            # moving a little every round until the final offer comes.
+            v0 = self.asks[0] if self.asks else ask
+            lim = self.limit_hat
+            if lim is None:
+                target = max(self.last_value + 0.004 * v0, ask - 0.015 * v0)
+            else:
+                nxt = ask - 0.4 * max(0.0, ask - lim)
+                aim = min(lim - 0.003 * v0, nxt - 0.002 * v0)
+                step = 0.0025 * v0 if self.last_value + 0.0025 * v0 <= aim else 0.0012 * v0  # small near its limit
+                target = max(self.last_value + step, aim)
         target = max(target, 0.75 * self.est.floor_value)
         if self.last_value:
             target = max(target, self.last_value * 1.003)  # never a step back
@@ -319,6 +330,46 @@ class Planner:
                 out.append(same)
                 vals.append(v)
         return out
+
+    @property
+    def f_hat(self):
+        """Floor estimate from the supplier's own first move (arena fit, leave-one-out error ~2 %):
+        F = V0 - (V0 - A1) / k, k ~0.335 for leverage-type cases, ~0.75 for routine and strategic ones;
+        price letters: today's price plus the data-justified change."""
+        if self.anchor_value and self.case.get("type") == "price_increase":
+            return self.anchor_value
+        if len(self.asks) < 2:
+            return None
+        v0, a1 = self.asks[0], self.asks[1]
+        wide = self.case.get("type") in ("rfq", "raw_material", "bundling", "capacity", "quality")
+        k = 0.335 if wide else 0.75
+        return v0 - max(0.0, v0 - a1) / k
+
+    @property
+    def limit_hat(self):
+        """Where its final offer will land (arena fit): its first counter covers ~75 % of the way from its
+        opening to that limit, ~35 % for a supplier short of cash. Verified arguments are already in it."""
+        if len(self.asks) < 2:
+            return None
+        rho = 0.35 if self.est.d.has("cash_short", strong=True) else 0.75
+        v0, a1 = self.asks[0], self.asks[1]
+        return v0 - max(0.0, v0 - a1) / rho
+
+    def near_floor(self):
+        """Its ask is within 15 % of the room above our floor estimate: take it."""
+        f = self.f_hat
+        if f is None or not self.asks or not self.ask_value:
+            return False
+        v0 = self.asks[0]
+        return self.ask_value <= f + 0.15 * max(0.0, v0 - f)
+
+    def holding(self):
+        """It answered twice without moving (arena P03: four holds, then a final offer)."""
+        return (
+            len(self.asks) >= 3
+            and abs(self.asks[-1] - self.asks[-2]) < 0.001 * self.asks[-1]
+            and abs(self.asks[-2] - self.asks[-3]) < 0.001 * self.asks[-2]
+        )
 
     def match_sheets(self, n=2):
         """Its own value level on our terms: worth as much to the supplier as its standing offer, but
@@ -407,6 +458,9 @@ class Planner:
                 locked[f] = v
         if locked != self.locked:
             self.locked = locked
+            self.refresh()
+        if any(t.get("index_clause") for t in sheets) and not self.est.wants_clause:
+            self.est.wants_clause = True  # it asks for a clause: now it is worth something to it
             self.refresh()
         values = [self.est.value(self.case, t) for t in sheets]
         self.asks.append(min(values))

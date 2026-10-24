@@ -59,8 +59,8 @@ def describe(terms):
         parts.append(
             "no index clause"
             if not c
-            else f"index clause on {c['series']} for {round(c['material_share'] * 100)}% of the price "
-            f"with a {c['deadband_pct']:g}% deadband"
+            else f"index clause on {c['series']} for {round(c['material_share'] * 100)} percent of the price "
+            f"with a deadband of {c['deadband_pct']:g} percent"
         )
     if terms.get("tooling_eur"):
         parts.append(f"tooling €{terms['tooling_eur']:,.0f} paid up front")
