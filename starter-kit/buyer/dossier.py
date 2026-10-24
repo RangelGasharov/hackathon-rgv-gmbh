@@ -458,6 +458,13 @@ class Dossier:
                 return r["id"], r["date"]
         return None
 
+    @property
+    def not_strategic(self):
+        """It told us we no longer matter to it (P04: "not strategic", "individual agreements will not be
+        extended"). Not the persona read's "strong" small account: Opus called P18's "reviewing small accounts"
+        strong, and that supplier counted our forecast."""
+        return bool(re.search(r"not strategic|individual agreements will not be extended", self.texts, re.I))
+
     def hedge_covers(self, series):
         """Whether its hedge shields it from this index series. Its own note names what it bought forward (P08:
         "our nickel and alloys requirement is covered at fixed prices"): labour and processing indices still reach

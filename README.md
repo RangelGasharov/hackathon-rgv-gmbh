@@ -293,6 +293,19 @@ On the twin, previous vs new agent against the same suppliers: P18 0.467 → 0.5
 P08 0.505 → 0.570 (€5.51 → €5.45). The other 8 hosted cases are identical. The P08 gain depends on the
 untested hedge assumption.
 
+Hosted, Opus strategist (24 Oct, 22:34):
+
+| case | session | arguments sent | supplier's answer | deal | score |
+|---|---|---|---|---|---|
+| P08 | 9b1e05d79107a3c5 | PPI-C2431, LCI-C, forecast (round 1) | all verified, "took it into account"; only AS-14404 is hedged | €5.48, 90 days, 36 months | **0.538** (best was 0.473) |
+| P18 | 6155cdbec958ab7c | AS-14404, PPI-C2431, LCI-C (round 1); no forecast | all verified, "adjusted our calculation" | €5.40, 45 days, 36 months | 0.497 (best 0.500) |
+
+- P08 confirms the hedge reading: Donautal "acknowledged the slight decreases in PPI-C2431 and LCI-C" and
+  said only its AS-14404 material is covered.
+- P18 never sent the forecast. Opus's persona read called Blankstahl's "reviewing small accounts" a strong
+  small account, so the forecast fell to 0.2, too weak to send. Only "not strategic" (P04) now makes a forecast
+  weak, whatever the read says, so P18 sends AS-14404, PPI-C2431 and the forecast in round 1 and LCI-C in round 2.
+
 ## Not yet done
 
 - Relationship-goal cases with only a generic cost estimate (e.g. P06): the agent can squeeze below the

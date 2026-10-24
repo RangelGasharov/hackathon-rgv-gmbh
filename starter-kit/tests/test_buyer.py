@@ -112,6 +112,12 @@ def test_small_forecast_rise_goes_out_unless_we_are_not_strategic(world):
     case = json.loads(Path("cases/practice/P18.json").read_text())
     picked = ration(candidates(world, Dossier(world, case, "sup:70740"), case), set(), 0)
     assert "fc:370010@2026-09" in [i for c in picked for i in c.ids]
+    # live P18 (6155cdbec958ab7c): Opus read "reviewing small accounts" as a strong small account, the forecast
+    # fell to 0.2 and never went out. Only "not strategic" makes it weak
+    d = Dossier(world, case, "sup:70740")
+    d.apply_read({"traits": {"small_account": "strong"}, "unsure": []})
+    assert d.has("small_account", strong=True)
+    assert "fc:370010@2026-09" in [i for c in ration(candidates(world, d, case), set(), 0) for i in c.ids]
     case = json.loads(Path("cases/practice/P04.json").read_text())
     assert all(c.weight < 0.5 for c in candidates(world, Dossier(world, case, "sup:70620"), case) if c.kind == "fc")
 
