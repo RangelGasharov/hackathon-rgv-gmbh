@@ -18,6 +18,7 @@ from pathlib import Path
 
 from arena_kit.cli import load_env
 from arena_kit.client import ArenaClient, ArenaError
+from arena_kit.docs import read_document
 from arena_kit.play import RemoteTable, fetch_documents
 
 from .agent import ENDED, BuyerAgent, latest
@@ -27,8 +28,56 @@ log = logging.getLogger("buyer")
 MOVE_BUDGET_S = 45  # our own deadline per message, well inside the arena's 60 s
 
 
+def cache_attachments(table):
+    """Download each attachment once per session: a refresh after a 409 or 422 re-reads every thread, and
+    the saved record gets the texts too. The bytes stay in memory only (`table.files`)."""
+    if getattr(table, "files", None) is not None:
+        return
+    get, table.files = table.attachment, {}
+
+    def attachment(attachment_id):
+        if attachment_id not in table.files:
+            table.files[attachment_id] = get(attachment_id)
+        return table.files[attachment_id]
+
+    table.attachment = attachment
+
+
+def with_timeouts(th):
+    """A thread's messages with the supplier's answers to our late moves (`timeouts`) put in place: a
+    timeout of round r stands where our round-r message would have been (arena b2 P05: an "agreed" and a
+    withdrawal sat only in `timeouts`, so we kept accepting an offer that was gone)."""
+    tos = sorted(th.get("timeouts") or [], key=lambda t: t.get("round") or 0)
+    out, rnd, i = [], 0, 0
+    for m in th.get("messages") or []:
+        if m.get("from") == "buyer" and not (m.get("action") or {}).get("type"):
+            while i < len(tos) and (tos[i].get("round") or 0) <= rnd + 1:
+                out.append(_timeout_message(tos[i]))
+                rnd, i = max(rnd, tos[i].get("round") or 0), i + 1
+            rnd += 1
+        out.append(m)
+    out += [_timeout_message(t) for t in tos[i:]]
+    return out
+
+
+def _timeout_message(t):
+    sheets = [{"term_sheet_id": t["offer_id"], "terms": t.get("terms") or {}}] if t.get("offer_id") else []
+    sheets += [{"term_sheet_id": a.get("offer_id"), "terms": a.get("terms") or a} for a in t.get("alternatives") or []]
+    return {
+        "from": "timeout",
+        "status": t.get("status"),
+        "body": t.get("text") or "",
+        "term_sheets": [x for x in sheets if x["term_sheet_id"]],
+        "claim_results": t.get("claim_results") or [],
+        "signals": t.get("signals"),
+        "missing_fields": t.get("missing_fields") or [],
+        "timeout_round": t.get("round"),
+    }
+
+
 def play(table, case_id, agent_factory, deadline=None, case=None):
     """One case to its end. Returns the result dict."""
+    cache_attachments(table)
     opened_case, threads = table.open(case_id)
     case = opened_case or case
     if getattr(table, "done", None):
@@ -36,10 +85,10 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
     for events in threads.values():
         for m in events:
             fetch_documents(table, m)
+    reply_at = {sid: time.monotonic() for sid in threads}  # when each supplier last answered: the clocks run
     agent = agent_factory(deadline)
-    agent.start(case)
+    agent.start(case, threads)  # with a model writer: the persona reads, at most `read_timeout` seconds
     lock, done, result = threading.Lock(), threading.Event(), {}
-    reply_at = {sid: time.monotonic() for sid in threads}  # when each supplier last answered
 
     def finish(res):
         if not done.is_set():
@@ -50,9 +99,11 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
         """Re-read a thread from the arena (after a stale accept or a late move)."""
         try:
             th = table.client.thread(table.session_id, sid)
-            threads[sid] = [fetch_documents(table, m) for m in th["messages"]]
+            threads[sid] = [fetch_documents(table, m) for m in with_timeouts(th)]
         except Exception as e:  # noqa: BLE001 - keep playing on what we have
             log.warning("refresh %s failed: %s", sid, e)
+
+    failed = {}  # (supplier, sheet id) -> failed accepts
 
     def worker(sid):
         while not done.is_set():
@@ -78,14 +129,30 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
                             return
                         for s in threads:
                             refresh(s)
-                        continue
+                        key = (decision["supplier_id"], (decision["message"]["action"] or {}).get("term_sheet_id"))
+                        failed[key] = failed.get(key, 0) + 1
+                        if failed[key] >= 2:  # still refused after a re-read: offer its own terms back instead
+                            decision = agent.reoffer(threads, decision["supplier_id"])
+                            if not decision:
+                                time.sleep(1.0)
+                                continue
+                        else:
+                            continue
                 if decision:
                     agent.t[decision["supplier_id"]].in_flight = True
             if decision is None:
                 if latest(threads[sid]).get("status") in ENDED or agent.t[sid].dead:
                     return
-                time.sleep(1.0)  # another thread decides this case; check back
-                continue
+                # nobody answers this supplier for now: before its 60 s run out, a short holding note (a
+                # timeout repeats our last offer and costs patience; three end the thread - arena b2 P05)
+                if time.monotonic() - reply_at.get(sid, time.monotonic()) > 45 and not agent.t[sid].in_flight:
+                    with lock:
+                        decision = agent.keep_alive(threads, sid)
+                    if decision:
+                        agent.t[sid].in_flight = True
+                if decision is None:
+                    time.sleep(1.0)  # another thread decides this case; check back
+                    continue
             target = decision["supplier_id"]
             # the 60 s per message run from the supplier's last reply: give the writer what is left of them
             budget = 60.0 - (time.monotonic() - reply_at.get(target, time.monotonic())) - 12.0
@@ -100,6 +167,9 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
                     log.warning("%s %s: %s", case_id, sid, e)
                     agent.t[target].in_flight = False
                     if e.status == 422:  # invalid message: nothing happened; re-read and decide again
+                        with lock:  # a value outside the options (the supplier's own standard) is taken back
+                            if agent.invalid_message(target):
+                                log.warning("%s %s: offering term options only from now on", case_id, target)
                         refresh(target)
                         continue
                     finish(table.result())
@@ -137,7 +207,7 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
 
 
 def make_factory(world, writer_name="template"):
-    from .writer import ClaudeWriter, TemplateWriter
+    from .writer import StrategistWriter, TemplateWriter
 
     writer = TemplateWriter()
     if writer_name == "claude":
@@ -150,7 +220,7 @@ def make_factory(world, writer_name="template"):
             log.warning("Claude %s ready (%.1fs warm-up)", llm.model, time.monotonic() - t0)
         except Exception as e:  # noqa: BLE001 - the template writer still works
             log.warning("Claude warm-up failed (%s): e-mails fall back to the template", e)
-        writer = ClaudeWriter(llm.complete)
+        writer = StrategistWriter(llm.complete)  # Opus chooses among the code's options and writes the e-mail
 
     def factory(deadline=None):
         return BuyerAgent(world, writer=writer, deadline=deadline)
@@ -200,6 +270,11 @@ def play_and_record(client, case_id, factory):
         try:
             state = client.session(table.session_id)
             threads = {s: client.thread(table.session_id, s) for s in state.get("threads", {})}
+            for th in threads.values():  # keep the attachment texts (8D reports, schedules) for later study
+                for m in th.get("messages", []):
+                    for att in m.get("attachments") or []:
+                        if (data := (table.files or {}).get(att.get("attachment_id"))) is not None:
+                            att["text"] = read_document(att["name"], data)
             try:
                 back = client.backoffice(table.session_id)
             except ArenaError as e:

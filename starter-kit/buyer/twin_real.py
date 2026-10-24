@@ -73,6 +73,7 @@ MAX_ROUNDS = 6  # final offer at the latest after this many buyer messages with 
 DELTA = 0.005  # a verified argument that "we took into account": ask and limit -0.5 % of the opening
 DELTA_FAIR = 0.0075  # "We did not know that - a fair point" (stale costing): -0.75 %
 MAX_CLAIMS = 3
+RIVAL_FAR = 0.10  # a rival price this much below its own: the two-step (half now, the rest next round)
 LAM = 0.45  # generic limit: this share of the way from the opening value to the floor (the data block sets the fit)
 LAM_CT = 0.10  # capacity-tight suppliers give much less (P10, P05 70240)
 LEAD_PREMIUM = 0.006  # capacity-tight: share of the opening price per day of lead time below standard
@@ -430,6 +431,23 @@ class TwinReal(Twin):
         return msg
 
     # -- the supplier's decision ---------------------------------------------------------------------------
+    def _claims(self, s, th, msg):
+        """The kit's checks, plus what the arena does on top (v3 sessions, P01, P07, P11): a supplier counts
+        each kind of argument once - a second forecast (another kit part) or a second scorecard row comes back
+        `duplicate`, "we have already taken that volume change data into account". Index series count
+        separately; rival offers and quotes per ID."""
+        results, found = super()._claims(s, th, msg)
+        seen = th["twin"].setdefault("kinds", set())
+        for i, (res, info) in enumerate(found):
+            if res != "verified" or not info or info["type"] in ("rival", "own"):
+                continue
+            key = (info["type"], info.get("series"))
+            if key in seen:
+                found[i] = ("duplicate", None)
+                results[i] = {**results[i], "result": "duplicate"}
+            seen.add(key)
+        return results, found
+
     def _claim_moves(self, p, case, info, standing):
         """(share of the opening value it moves, what it says) for one verified argument."""
         kind, tr = info["type"], set(p["traits"])
@@ -459,7 +477,12 @@ class TwinReal(Twin):
                 "We did not know that - a fair point." if p["stale"] else None
             )
         if kind == "scorecard":
-            return (0.0, None) if "capacity_tight" in tr else (DELTA, None)
+            if "capacity_tight" in tr:
+                return 0.0, None
+            if info.get("metric") == "otd":  # arena, 23 sessions: "the delivery record ... does not change our
+                # calculation" 6 of 6 times; a supplier on an old cost sheet: "we did not know that - a fair point"
+                return (DELTA_FAIR, "We did not know that - a fair point.") if p["stale"] else (0.0, None)
+            return DELTA, None
         if kind in ("cost", "notice"):
             return DELTA, None
         return 0.0, None
@@ -472,6 +495,9 @@ class TwinReal(Twin):
         why, say = [], []
         results, found = self._claims(s, th, msg)
         shift = 0.0
+        if rt.get("rest") and not rt["final"]:  # "Checked: give the rest of the step" (arena P05 back office)
+            shift += rt.pop("rest")
+            say.append("We have clarified this internally and can move further on the price.")
         for res, info in found:
             if res == "contradicted":
                 rt["trust"] -= 1
@@ -481,6 +507,19 @@ class TwinReal(Twin):
                 say.append("We have already taken that data into account.")
             elif res == "irrelevant":
                 say.append("Some of the data you cited does not concern our part or our company.")
+            elif (
+                res == "verified"
+                and info
+                and info["type"] == "rival"
+                and not rt["final"]
+                and ((stated := th["stated"].get("unit_price")) and info["price"] < stated * (1 - RIVAL_FAR))
+            ):
+                # arena P05 (b1, b2): "The buyer shows a much lower rival quote. I give half the step now and check
+                # the rest" - half the gap to the rival's price now, the other half next round, never below its floor
+                step = (stated - info["price"]) * v0 / stated
+                shift += step / 2
+                rt["rest"] = rt.get("rest", 0.0) + step / 2
+                say.append("We need to clarify this internally - we will come back to you on price.")
             elif res == "verified" and info and not rt["final"]:
                 d, line = self._claim_moves(p, case, info, th["stated"].get("unit_price") or math.inf)
                 if d and rt["claims"] < MAX_CLAIMS:
@@ -543,6 +582,9 @@ class TwinReal(Twin):
             why.append(f"push below its final offer ({top['v'] / rt['A'] - 1:+.1%}): repeats it")
             say.insert(0, "We have made our final offer. Please confirm it so we can proceed.")
             return self._reply(s, th, "final_offer", th["stated"], None, results, why, say, keep=True)
+
+        # no walk on a step back: P05 b1 (27.58 -> 27.48 on the same terms) carried on to its final offer; the
+        # P08 b1 withdrawal came at its limit after five rounds (the agent never steps back anyway)
 
         # the concession of this round
         rt["k"] += 1
@@ -1297,41 +1339,41 @@ __all__ = ["TwinReal", "LocalClient", "make_twin_real", "real_profile", "value",
 
 # -- calibration data (generated by `python -m buyer.twin_real calibrate`) ---
 # fmt: off
-FLOOR_BY_TYPE.update({"price_increase": 0.9588, "renewal": 0.9747, "rfq": 0.7672, "bundling": 0.8634, "raw_material": 0.7948, "capacity": 0.8535, "quality": 0.9086})  # noqa: E501
-FLOOR_DEFAULT = 0.8849
-LAM, LAM_CT = 0.46, 0.1
+FLOOR_BY_TYPE.update({"price_increase": 0.9588, "renewal": 0.9774, "rfq": 0.791, "bundling": 0.8635, "raw_material": 0.7949, "capacity": 0.8535, "quality": 0.9086})  # noqa: E501
+FLOOR_DEFAULT = 0.8879
+LAM, LAM_CT = 0.54, 0.11
 CALIB.update({
     "case:P01": {"c_open": 1153779.74, "c_best": 1096815.78, "c_alt": 1176178.02, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70110": {"open": {"unit_price": 138.55, "effective_date": "2026-11-01", "payment_days": None}, "standard": {"effective_date": "2026-11-01", "payment_days": 30, "ppm_commitment": 900, "chargeback_eur_per_complaint": 0.0}, "round_to": 0.1, "floor": 0.94483, "limit": 0.975, "fit_loss": 0.00358},  # noqa: E501
+        "sup:70110": {"open": {"unit_price": 138.55, "effective_date": "2026-11-01", "payment_days": None}, "standard": {"effective_date": "2026-11-01", "payment_days": 30, "ppm_commitment": 900, "chargeback_eur_per_complaint": 0.0}, "round_to": 0.1, "floor": 0.94483, "limit": 0.97, "fit_loss": 0.00531},  # noqa: E501
     }},
     "case:P02": {"c_open": 2282867.49, "c_best": 2235514.05, "c_alt": 2604227.78, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70510": {"open": {"unit_price": 370.96, "payment_days": 30, "index_clause": None}, "standard": {"payment_days": 30, "index_clause": None, "ppm_commitment": 250, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0661, "round_to": 0.01, "floor": 0.97273, "limit": 1.0, "fit_loss": 0.00354},  # noqa: E501
+        "sup:70510": {"open": {"unit_price": 370.96, "payment_days": 30, "index_clause": None}, "standard": {"payment_days": 30, "index_clause": None, "ppm_commitment": 250, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0661, "round_to": 0.01, "floor": 0.97273, "limit": 0.9875, "fit_loss": 0.02228},  # noqa: E501
     }},
     "case:P03": {"c_open": 4246314.02, "c_best": 3909043.1, "c_alt": 4332545.92, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70530": {"open": {"unit_price": 438.21, "payment_days": 30, "contract_months": 12, "volume_per_year": 4580}, "standard": {"payment_days": 30, "contract_months": 12, "volume_per_year": 4580, "ppm_commitment": 350, "chargeback_eur_per_complaint": 0.0}, "round_to": 0.01, "floor": 0.96638, "limit": 0.975, "fit_loss": 0.00024},  # noqa: E501
+        "sup:70530": {"open": {"unit_price": 438.21, "payment_days": 30, "contract_months": 12, "volume_per_year": 4580}, "standard": {"payment_days": 30, "contract_months": 12, "volume_per_year": 4580, "ppm_commitment": 350, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0407, "round_to": 0.01, "floor": 0.97272, "limit": 0.98, "fit_loss": 0.01057},  # noqa: E501
     }},
     "case:P04": {"c_open": 198846.33, "c_best": 196529.32, "c_alt": 203169.0, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70620": {"open": {"unit_price": 4.96, "payment_days": 30, "contract_months": 12}, "standard": {"payment_days": 30, "contract_months": 12, "ppm_commitment": 150, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0673, "round_to": 0.01, "floor": 0.98292, "limit": 0.985, "fit_loss": 0.00207},  # noqa: E501
+        "sup:70620": {"open": {"unit_price": 4.96, "payment_days": 30, "contract_months": 12}, "standard": {"payment_days": 30, "contract_months": 12, "ppm_commitment": 150, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0718, "round_to": 0.01, "floor": 0.98216, "limit": 0.9825, "fit_loss": 0.00809},  # noqa: E501
     }},
     "case:P05": {"c_open": 305544.96, "c_best": 223424.17, "c_alt": None, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70210": {"open": {"unit_price": 36.0, "payment_days": None, "lead_time_days": None}, "standard": {"payment_days": 30, "lead_time_days": 28, "ppm_commitment": 1200}, "round_to": 0.01, "floor": 0.76723, "limit": 0.885, "fit_loss": 0.01696},  # noqa: E501
-        "sup:70240": {"open": {"unit_price": 31.5, "payment_days": None, "lead_time_days": 52}, "standard": {"lead_time_days": 52, "payment_days": 45}, "round_to": 0.5, "lead_premium": 0.00701, "floor": 0.76723, "limit": 0.975, "fit_loss": 0.01289},  # noqa: E501
-        "sup:70250": {"open": {"unit_price": 38.5, "payment_days": None, "lead_time_days": None}, "standard": {"payment_days": 30, "lead_time_days": 28}, "round_to": 0.01, "floor": 0.76723, "limit": 0.8625, "fit_loss": 0.00644},  # noqa: E501
+        "sup:70210": {"open": {"unit_price": 36.0, "payment_days": None, "lead_time_days": None}, "standard": {"payment_days": 30, "lead_time_days": 28, "ppm_commitment": 1200}, "round_to": 0.01, "floor": 0.79096, "limit": 0.895, "fit_loss": 0.03837},  # noqa: E501
+        "sup:70240": {"open": {"unit_price": 31.5, "payment_days": None, "lead_time_days": 52}, "standard": {"lead_time_days": 52, "payment_days": 45}, "rate": 0.1183, "round_to": 0.5, "lead_premium": 0.00481, "floor": 0.79096, "limit": 0.97, "fit_loss": 0.03789},  # noqa: E501
+        "sup:70250": {"open": {"unit_price": 38.5, "payment_days": None, "lead_time_days": None}, "standard": {"payment_days": 30, "lead_time_days": 28}, "round_to": 0.01, "floor": 0.79096, "limit": 0.8625, "fit_loss": 0.03633},  # noqa: E501
     }},
     "case:P07": {"c_open": 391027.4, "c_best": 299241.49, "c_alt": 379916.0, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70610": {"open": {"unit_price": 5.74, "payment_days": 30, "contract_months": 12}, "standard": {"payment_days": 30, "contract_months": 12, "ppm_commitment": 80, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0767, "round_to": 0.01, "floor": 0.86344, "limit": 0.95, "fit_loss": 0.0027},  # noqa: E501
+        "sup:70610": {"open": {"unit_price": 5.74, "payment_days": 30, "contract_months": 12}, "standard": {"payment_days": 30, "contract_months": 12, "ppm_commitment": 80, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0765, "round_to": 0.01, "floor": 0.86347, "limit": 0.95, "fit_loss": 0.00543},  # noqa: E501
     }},
     "case:P08": {"c_open": 1135887.28, "c_best": 960309.33, "c_alt": 1157019.84, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70710": {"open": {"unit_price": 6.05, "index_clause": None, "payment_days": 30, "contract_months": 12}, "standard": {"index_clause": None, "payment_days": 30, "contract_months": 12, "ppm_commitment": 50, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0695, "round_to": 0.01, "floor": 0.82776, "limit": 0.92, "fit_loss": 0.00842},  # noqa: E501
+        "sup:70710": {"open": {"unit_price": 6.05, "index_clause": None, "payment_days": 30, "contract_months": 12}, "standard": {"index_clause": None, "payment_days": 30, "contract_months": 12, "ppm_commitment": 50, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0707, "round_to": 0.01, "floor": 0.8276, "limit": 0.9075, "fit_loss": 0.0134},  # noqa: E501
     }},
     "case:P10": {"c_open": 1932492.18, "c_best": 1328926.89, "c_alt": None, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70410": {"open": {"unit_price": 32.2, "volume_per_year": 19890, "contract_months": 12, "lead_time_days": 54}, "standard": {"volume_per_year": 19890, "contract_months": 12, "lead_time_days": 54, "ppm_commitment": 300, "chargeback_eur_per_complaint": 0.0}, "round_to": 0.1, "lead_premium": 0.00492, "floor": 0.85352, "limit": 0.9875, "fit_loss": 0.00904},  # noqa: E501
+        "sup:70410": {"open": {"unit_price": 32.2, "volume_per_year": 19890, "contract_months": 12, "lead_time_days": 54}, "standard": {"volume_per_year": 19890, "contract_months": 12, "lead_time_days": 54, "ppm_commitment": 300, "chargeback_eur_per_complaint": 0.0}, "round_to": 0.1, "lead_premium": 0.00492, "floor": 0.85352, "limit": 0.9875, "fit_loss": 0.00487},  # noqa: E501
     }},
     "case:P11": {"c_open": 817578.0, "c_best": 722500.02, "c_alt": 894383.19, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70140": {"open": {"ppm_commitment": 6400, "chargeback_eur_per_complaint": None, "unit_price": 47.0}, "standard": {"ppm_commitment": 6400, "chargeback_eur_per_complaint": 0}, "round_to": 0.5, "floor": 0.90863, "limit": 0.985, "fit_loss": 0.00214},  # noqa: E501
+        "sup:70140": {"open": {"ppm_commitment": 6400, "chargeback_eur_per_complaint": None, "unit_price": 47.0}, "standard": {"ppm_commitment": 6400, "chargeback_eur_per_complaint": 0}, "round_to": 0.5, "floor": 0.90863, "limit": 0.9775, "fit_loss": 0.0077},  # noqa: E501
     }},
     "case:P18": {"c_open": 295173.23, "c_best": 222651.27, "c_alt": 301087.96, "floor_fit_err": -0.0, "suppliers": {
-        "sup:70740": {"open": {"unit_price": 6.1, "index_clause": None, "payment_days": 30, "contract_months": 12}, "standard": {"index_clause": None, "payment_days": 30, "contract_months": 12, "ppm_commitment": 70, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0834, "round_to": 0.1, "floor": 0.7619, "limit": 0.9, "fit_loss": 0.005},  # noqa: E501
+        "sup:70740": {"open": {"unit_price": 6.1, "index_clause": None, "payment_days": 30, "contract_months": 12}, "standard": {"index_clause": None, "payment_days": 30, "contract_months": 12, "ppm_commitment": 70, "chargeback_eur_per_complaint": 0.0}, "rate": 0.0939, "round_to": 0.01, "floor": 0.76225, "limit": 0.9075, "fit_loss": 0.01255},  # noqa: E501
     }},
 })
 # fmt: on

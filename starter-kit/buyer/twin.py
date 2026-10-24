@@ -706,6 +706,8 @@ class Twin(Sim):
                 price = f["offer"].get("unit_price")
             elif f.get("part") not in parts or case.get("local_meta", {}).get("kit"):
                 return "irrelevant", None
+            elif arg[0] not in set(case.get("refs") or []) | {(case["buyer"].get("alternative") or {}).get("ref")}:
+                return "irrelevant", None  # arena b3 P18: a quote outside the case "does not concern this part"
             else:
                 price = f.get("unit_price")
             figs = [_num(next(g for g in m if g)) for m in MONEY.findall(text)]
@@ -716,9 +718,12 @@ class Twin(Sim):
                 return "irrelevant", None
             if kind == "qn" or re.search(r"ppm|quality|defect|complain", text, re.I):
                 v = sum(x["ppm"] for x in facts) / len(facts)
-                return self._fig([_num(x) for x in PPM.findall(text)], v, money(v)), {"type": "scorecard"}
+                return self._fig([_num(x) for x in PPM.findall(text)], v, money(v)), {
+                    "type": "scorecard",
+                    "metric": "ppm",
+                }
             v = sum(x["otd_pct"] for x in facts) / len(facts)
-            return self._fig(pcts, v, 0.5), {"type": "scorecard"}
+            return self._fig(pcts, v, 0.5), {"type": "scorecard", "metric": "otd"}
         if kind == "po":
             ok = f.get("part") in parts and all(x.get("part") == f.get("part") for x in facts) and len(arg) <= 8
             return ("verified", {"type": "orders"}) if ok else ("irrelevant", None)

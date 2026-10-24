@@ -41,6 +41,7 @@ TRAITS = {
         None,
     ),
     "late_payment_grievance": (r"invoices are overdue", None),
+    "wants_clause": (r"(?:price )?(?:adjustment|escalation|escalator|indexation|index|surcharge) clause", None),
 }
 NEWS_TRAITS = {
     "restructuring": "cash_short",
@@ -59,14 +60,26 @@ COUNTRY_COST = {"DE": 1.0, "AT": 1.05, "CH": 1.1, "CZ": 0.83, "PL": 0.83, "HU": 
 OWNER_MARGIN = {"group": 0.12, "private": 0.10, "family": 0.09, "founder": 0.08}
 HEDGE_UNTIL = re.compile(r"until (January|March|June|December) (\d{4})")
 MONTHS = {"January": 1, "March": 3, "June": 6, "December": 12}
+BEST_WINDOW_SLACK = 0  # index windows may end up to this many months before the latest month (None: 12 months only)
 
 
 REPLY_SIGNALS = {  # phrases in a supplier's own e-mail that reveal what it needs
     "cash_short": r"faster payment|cash ?flow|pay(?:ment)? earlier|would help us more than anything|liquidity",
-    "capacity_tight": r"binding (?:\d+-month )?commitment|firm,? long-term commitment|prioriti[sz]e customers|allocat",
+    # + what the two capacity-tight suppliers of the arena wrote (P10, P05 70240) and none of the other ten threads:
+    # "cannot be accommodated given our current capacity utilization", "our machines are totally full", "rushing
+    # production costs us extra", "not feasible; we must maintain 54 days to ensure stable supply"
+    "capacity_tight": (
+        r"binding (?:\d+-month )?commitment|firm,? long-term commitment|prioriti[sz]e customers|allocat|"
+        r"capacity utili[sz]ation|(?:totally|completely|fully|pretty) (?:full|packed|booked)|"
+        r"(?:super|very|really) busy right now|rushing production|squeeze (?:the )?production|"
+        r"not feasible[^.]{0,40}(?:maintain|stable supply)"
+    ),
     "price_frozen": r"frozen all price|no room on price|price list applies|cannot reduce our list",
     "approval_ladder": r"pricing committee|management approval|needs? (?:the )?approval",
 }
+# what one reply shows about a supplier stays true: arena "We did not know that - a fair point." came back to the two
+# suppliers on old cost sheets (P01, P05-70210) and to no other; for them index, volume and delivery data count more
+LASTING_SIGNALS = {"stale_costing": r"did not know that|fair point"}
 
 
 class World:
@@ -91,6 +104,20 @@ class World:
 
     def one(self, sql, *a):
         return self.db.execute(sql, a).fetchone()
+
+    def rows(self, table, supplier_id):
+        """A supplier's rows of `table` (documents, news, po_lines, ...): the database plus the Sunday release's
+        CSV rows, newest first by `date` where there is one. Dicts, so both sources read the same."""
+        out = [dict(r) for r in self.all(f'SELECT * FROM "{table}" WHERE supplier_id=?', supplier_id)]
+        if self.pkg.release:
+            out += [
+                dict(r)
+                for r in self.pkg._ids.values()
+                if r.get("root")
+                and r.get("table") == table
+                and supplier_id in (r.get("supplier_id"), r.get("supplier"))
+            ]
+        return sorted(out, key=lambda r: str(r.get("date") or r.get("order_date") or ""), reverse=True)
 
     def all(self, sql, *a):
         return self.db.execute(sql, a).fetchall()
@@ -136,24 +163,25 @@ class World:
             return None
         return round((v1 / r["value"] - 1) * 100, 1), r["id"], i1, r["month"], last
 
-    def index_best_window(self, series):
-        """The most favourable (most negative) change from any month in the last 12 to the latest month."""
-        last = self.series_last.get(series)
-        if not last:
+    def index_best_window(self, series, end_slack=0):
+        """The most favourable (most negative) change over any window the arena accepts: 1-12 months long and
+        ending at most `end_slack` months before the series' latest month (the arena takes windows that end in
+        the last 12 months; a recent end keeps the argument current). (change %, id0, id1, month0, month1)."""
+        rows = self.all("SELECT id, month, value FROM index_values WHERE series_id=? ORDER BY month", series)
+        if not rows:
             return None
-        y, m = int(last[:4]), int(last[5:7])
+        ordinal = lambda mo: int(mo[:4]) * 12 + int(mo[5:7])  # noqa: E731
+        by = {ordinal(r["month"]): r for r in rows}
+        last = max(by)
         best = None
-        for back in range(1, 13):
-            yy, mm = y, m - back
-            while mm <= 0:
-                yy, mm = yy - 1, mm + 12
-            first = f"{yy}-{mm:02d}"
-            (i0, v0), (i1, v1) = self.idx(series, first), self.idx(series, last)
-            if v0 and v1:
-                ch = round((v1 / v0 - 1) * 100, 1)
-                if best is None or ch < best[0]:
-                    best = (ch, i0, i1, first, last)
-        return best
+        for e in range(last - end_slack, last + 1):
+            for s in range(e - 12, e):
+                if e in by and s in by and by[s]["value"] and by[e]["value"]:
+                    ch = round((by[e]["value"] / by[s]["value"] - 1) * 100, 1)
+                    key = (ch, -e, s)  # most negative first, then the latest end, then the longest window
+                    if best is None or key < best[0]:
+                        best = (key, (ch, by[s]["id"], by[e]["id"], by[s]["month"], by[e]["month"]))
+        return best[1] if best else None
 
     def doc_text(self, doc_id):
         try:
@@ -183,8 +211,12 @@ class Dossier:
         self.intel = world.one("SELECT * FROM supplier_intel WHERE supplier_id=?", supplier)
         self.contract = world.one("SELECT * FROM contracts WHERE supplier_id=?", supplier)
         self.texts = self._texts()
+        self.read = None  # the persona read by the model (`persona.read_all`), merged over the regex traits
+        self.reply_hits = {}  # regex signals in its latest e-mail only (as calibrated on the arena)
+        self.reply_traits = {}  # what the strategist read in its e-mails: kept for the rest of the case
+        self.said = ""  # what the supplier has written to us so far
         self.traits = self._traits()
-        self.dead_kinds = set()  # claim kinds this supplier rejected (contradicted, irrelevant, "does not change")
+        self.dead_kinds = set()  # `claims.dead_key`s this supplier rejected (contradicted, irrelevant, "no change")
         self.facts_case = case.get("facts") or {}
 
     # -- evidence ---------------------------------------------------------------------------------
@@ -201,6 +233,8 @@ class Dossier:
         for f in (self.case.get("facts") or {}).values():  # hidden cases may carry their own letters
             if isinstance(f, dict) and f.get("supplier") == self.sid:
                 out.append(json.dumps(f))
+        if len(self.case.get("suppliers") or []) == 1 and self.case.get("briefing"):
+            out.append(self.case["briefing"])  # one supplier: the briefing describes it (hidden cases too)
         if self.w.pkg.release:  # the Sunday release: letters, e-mails and news only in its CSVs
             for ref, row in self.w.pkg._ids.items():
                 if row.get("root") and (row.get("supplier_id") == self.sid or row.get("supplier") == self.sid):
@@ -217,10 +251,34 @@ class Dossier:
             return False
         before = dict(self.traits)
         self.texts += "\n" + text
+        self.reply_hits = {name: "strong" for name, p in REPLY_SIGNALS.items() if re.search(p, text, re.I)}
+        self.said += "\n" + text
+        for name, pattern in LASTING_SIGNALS.items():  # a "fair point" marks it stale-costing for good
+            if re.search(pattern, self.said, re.I):
+                self.reply_traits[name] = "strong"
         self.traits = self._traits()
-        for name, pattern in REPLY_SIGNALS.items():
-            if re.search(pattern, text, re.I):
-                self.traits[name] = "strong"
+        return self._changed(before)
+
+    def apply_read(self, read):
+        """Merge the model's persona read over the regex traits: where it is sure, it decides (also that a
+        regex hit is not a trait); where it is unsure, the regex stays and the model can only add a hint."""
+        before = dict(self.traits)
+        self.read = read
+        self.traits = self._traits()
+        for prop in ("full_cost", "hedge_until"):
+            self.__dict__.pop(prop, None)
+        return self._changed(before)
+
+    def note_traits(self, traits):
+        """Traits the strategist read in its last e-mail ({name: "strong"|"weak"}): they stay, like regex hits."""
+        before = dict(self.traits)
+        for name, level in traits.items():
+            if self.reply_traits.get(name) != "strong":
+                self.reply_traits[name] = level
+        self.traits = self._traits()
+        return self._changed(before)
+
+    def _changed(self, before):
         if self.traits != before:
             for prop in ("cash_rate", "min_margin"):
                 self.__dict__.pop(prop, None)
@@ -228,13 +286,30 @@ class Dossier:
         return False
 
     def _traits(self):
+        """Regex traits from the documents and data, the model's persona read over them, its e-mails on top."""
+        t = self._regex_traits()
+        read = self.read or {}
+        for name, level in (read.get("traits") or {}).items():
+            if name in read.get("unsure", ()):
+                if level != "none" and name not in t:
+                    t[name] = "weak"
+            elif level == "none":
+                t.pop(name, None)
+            else:
+                t[name] = level
+        for name, level in {**self.reply_traits, **self.reply_hits}.items():
+            if t.get(name) != "strong":
+                t[name] = level
+        return t
+
+    def _regex_traits(self):
         t = {}
         for name, (strong, weak) in TRAITS.items():
             s, w = _hits(self.texts, strong), _hits(self.texts, weak)
             if s or w:
                 t[name] = "strong" if s else "weak"
-        for r in self.w.all("SELECT topic FROM news WHERE supplier_id=?", self.sid):
-            if (name := NEWS_TRAITS.get(r[0])) and t.get(name) != "strong":
+        for r in self.w.rows("news", self.sid):
+            if (name := NEWS_TRAITS.get(r.get("topic"))) and t.get(name) != "strong":
                 t[name] = "strong" if name == "cash_short" else t.get(name, "weak")
         if self.intel and self.intel["credit_index"] and self.intel["credit_index_12m_ago"]:
             if self.intel["credit_index"] - self.intel["credit_index_12m_ago"] >= 40:
@@ -273,7 +348,8 @@ class Dossier:
         if sc:
             if how.startswith("own"):
                 # arena: the relationship charges on the P01 and P03 deals both put its full cost at 0.979 x ours
-                return round(sc * 0.979, 2), 0.10
+                # (to 0.1 %), so this estimate is good enough to price the relationship charge (P02 v3: 27.7k)
+                return round(sc * 0.979, 2), 0.04
             return sc, 0.15  # arena: real floors 10-37 % off
         m = OWNER_MARGIN.get(self.intel["owner_type"] if self.intel else "", 0.09)
         if self.has("below_full_cost"):
@@ -331,6 +407,8 @@ class Dossier:
                 windows = [self.w.index_change(r[0])]
                 if self.price_since:  # also the window since the current price was agreed: often the fairer base
                     windows.append(self.w.index_change_since(r[0], self.price_since))
+                if BEST_WINDOW_SLACK is not None:  # and the most favourable recent window of any length
+                    windows.append(self.w.index_best_window(r[0], BEST_WINDOW_SLACK))
                 windows = [w for w in windows if w]
                 if windows:
                     weights.setdefault(r[0], []).append(r[1])
@@ -360,9 +438,11 @@ class Dossier:
     @cached_property
     def hedge_doc(self):
         """(doc id, date) of the supplier's own note that its material is covered at fixed prices."""
-        for r in self.w.all("SELECT id, date FROM documents WHERE supplier_id=? ORDER BY date DESC", self.sid):
-            if re.search(r"covered at fixed prices|bought their \w+(?: and \w+)? forward", self.w.doc_text(r[0]), re.I):
-                return r[0], r[1]
+        for r in self.w.rows("documents", self.sid):
+            if re.search(
+                r"covered at fixed prices|bought their \w+(?: and \w+)? forward", self.w.doc_text(r["id"]), re.I
+            ):
+                return r["id"], r["date"]
         return None
 
     def schedule_csv(self):
@@ -405,11 +485,7 @@ class Dossier:
     def news_items(self):
         """News about this supplier that speaks for us: [(id, topic, headline)]."""
         good = ("free_capacity", "energy_contract", "new_plant", "refocus")
-        return [
-            (r[0], r[1], r[2])
-            for r in self.w.all("SELECT id, topic, headline FROM news WHERE supplier_id=? ORDER BY date DESC", self.sid)
-            if r[1] in good
-        ]
+        return [(r["id"], r["topic"], r["headline"]) for r in self.w.rows("news", self.sid) if r.get("topic") in good]
 
     @cached_property
     def letter(self):
@@ -423,8 +499,8 @@ class Dossier:
     def own_letter(self):
         """The trigger document is ours (e.g. our quality escalation), not the supplier's."""
         trig = self.case.get("trigger_doc")
-        r = self.w.one("SELECT author FROM documents WHERE id=?", trig) if trig else None
-        return bool(r and r[0] and r[0].startswith("Hollerau"))
+        row = (self.w.pkg.lookup(trig) or {}) if trig else {}  # the database or the Sunday release
+        return str(row.get("author") or "").startswith("Hollerau")
 
     @cached_property
     def notice(self):
@@ -437,10 +513,33 @@ class Dossier:
             return L["id"], L["days"], self.contract["id"], cdays
         return None
 
+    def clause(self, kind):
+        """The text of our framework agreement's clause of this type ("price", "quality", ...), or ""."""
+        if not self.contract:
+            return ""
+        r = self.w.one("SELECT text FROM contract_clauses WHERE contract_id=? AND type=?", self.contract["id"], kind)
+        return r[0] if r else ""
+
+    @cached_property
+    def complaint_fee(self):
+        """EUR per supplier-caused complaint that our quality agreement already gives us (every framework
+        agreement in the package: "flat fee of EUR 150"), else None."""
+        m = re.search(r"fee of EUR ([\d.,]+) per supplier-caused complaint", self.clause("quality"))
+        return float(m.group(1).replace(",", "")) if m else None
+
     @cached_property
     def hedge_until(self):
-        m = HEDGE_UNTIL.search(self.texts) if self.has("hedged_material") else None
+        if not self.has("hedged_material"):
+            return None
+        if until := (self.read or {}).get("hedge_until"):  # the model reads any wording ("until end of Q1 2027")
+            return date(int(until[:4]), int(until[5:7]), 28)
+        m = HEDGE_UNTIL.search(self.texts)
         return date(int(m.group(2)), MONTHS[m.group(1)], 28) if m else None
+
+    @property
+    def wants(self):
+        """What the persona read says it wants from a deal (e.g. "index_clause", "faster_payment")."""
+        return set((self.read or {}).get("wants") or ())
 
     @cached_property
     def scorecard(self):
@@ -500,4 +599,8 @@ class Dossier:
             lines.append(f"We have paid this supplier on average {self.late_days} days late.")
         if self.hedge_until:
             lines.append(f"Its material is hedged until {self.hedge_until:%B %Y}.")
+        if self.read and self.read.get("notes"):
+            lines.append("Our read of this supplier: " + self.read["notes"])
+        if self.wants:
+            lines.append("It wants: " + ", ".join(sorted(self.wants)) + ".")
         return "\n".join(lines)
