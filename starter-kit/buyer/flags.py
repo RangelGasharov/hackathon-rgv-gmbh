@@ -37,3 +37,7 @@ def claims_per_message():
 
 def lean():
     return os.environ.get("BUYER_LEAN") == "1"
+
+
+def clause0():
+    return os.environ.get("BUYER_CLAUSE0") == "1"

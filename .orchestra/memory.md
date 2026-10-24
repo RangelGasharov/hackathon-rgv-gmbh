@@ -16,6 +16,8 @@ live practice sessions, document what works and what doesn't. Score per case = (
 - Commits: commit and push `improve/supplier-levers` at milestone close.
 
 ## Decisions
+- 2026-10-25 Rejected live: lean concessions (P05 -0.34), deadband-0 clause trial (P08 -0.02, P18 -0.04). Both stay
+  behind switches, default off. Kept: clause-pair price at its optimum (P02 0.63 -> 0.724).
 - 2026-10-25 Plan text shapes writing only; code prices every sheet (twin: plan-driven pricing lost P10/P05).
 - 2026-10-25 After a final offer only the supplier's own terms go back (changed: 3 walks/5; own: 2/2 agreed).
 
@@ -30,6 +32,10 @@ live practice sessions, document what works and what doesn't. Score per case = (
 
 - Arena: at most 10 OPEN sessions per API key (429 beyond), shared with the other agent: run one `scripts/ab.sh` at a
   time, AB_MAX=6 (default). A 429 opens no session.
+
+- Never run twin benchmarks or tests while live sessions run: round 2's three 0-score sessions (P04, P05 x2) stalled
+  after round 1 (sends never landed, all threads timed out) exactly while 6 twin processes + pytest loaded the CPU.
+- Sessions used for this project (budget 40): round 1 = 10, round 2 = 7, round 3 = 5 -> 22.
 
 ## Management rules (learned from retros)
 - Subagents cannot write report files (Write refuses 'report' files for subagents): cards ask for findings in the

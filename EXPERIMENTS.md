@@ -51,3 +51,54 @@ steps up to 1.5 %.
 The twins reward front-loaded arguments by construction (a verified argument shifts the supplier's ask at once), so
 they cannot judge spreading; the transcripts above say later arguments move suppliers. The twins have no LLM, so the
 strategist's menu, the plan text and the playbook can only be judged live.
+
+| lean concessions (`BUYER_LEAN=1`: 0.7 % steps, never within 2.2 % of its price) | 71.9 / 74.8 / 72.6 | 0.731 |
+| deadband-0 clause trial (`BUYER_CLAUSE0=1`) | about equal (P08 0.41/0.43/0.40) | 0.722 (P08 0.405 vs 0.473, P18 0.416 vs 0.441) |
+
+## 3. Live A/B (practice sessions, Opus writer, one session per cell unless noted)
+
+`starter-kit/scripts/ab.sh` runs the sessions, `scripts/ab_report.py` prints scores, prices per round and the
+supplier's own calls (c counter, h hold, F final, a accept).
+
+| Case | base (current branch) | lean | notes |
+|---|---|---|---|
+| P01 | 0.992 (earlier tonight) | 0.959 | base: it agreed to our 131.84; lean: its final 133.30 |
+| P02 | 0.630 -> **0.724 with the clause fix** | 0.630 (before the fix) | see 4.1 |
+| P03 | - | 0.919 | counter, counter, hold, hold |
+| P07 | 0.739 | 0.706 | four counters each, final in round 4 |
+| P08 | 0.462 | 0.455 | |
+| P10 | 0.679 | 0.679 | final at our 2nd message either way |
+| P11 | 0.626 | 0.635 | |
+| P18 | 0.467, 0.467 | 0.473 | lean reached 5.40 (lowest ever) but at 14 days |
+| P04 | - | 0.860 (round 3; round 2: 0, stalled) | team best 0.860 |
+| P05 | 0.725 (round 3; round 2: 0, stalled) | 0.381 (round 3; round 2: 0, stalled) | RFQ: lean's small steps lose the rivals' pull |
+
+Lean vs base on the seven cases with both: P05 -0.344, P01 -0.033, P07 -0.033, P08 -0.007, P10 0, P11 +0.009,
+P18 +0.006. **Rejected**: no live gain anywhere despite the persona twin's +5 points, and a large loss in the RFQ.
+The back-office rule (fixed increments) is real, but our bigger steps were not what limited the deals: the
+supplier's final offer comes after a set number of rounds and lands where it lands.
+
+| Case | base | deadband-0 clause trial (`BUYER_CLAUSE0=1`) | notes |
+|---|---|---|---|
+| P08 | 0.462 | 0.438 | it took deadband 0 at 5.38/30 days; expected index cost EUR 27,541 ate the lower price |
+| P18 | 0.467, 0.467 | 0.430 | it took deadband 0 at 5.40/60 days |
+
+**Rejected** live and on the calibrated twin. The other agent's single 0.614 on P08 (5.24, deadband 0, 45 days) did
+not reproduce with our concession path.
+
+## 4. Bugs found and fixed
+
+### 4.1 Clause sheet priced below the supplier's healthy margin (P02, `Planner._clause_pair`)
+In a stabilise case the relationship charge rises as the price falls, so no clause price costs us what the clause-free
+sheet does. The fallback then took the clause-free price less the clause's cost share (357.12) and allowed it at up to
+1.2 % more cost by our own model (it was 0.88 %, about EUR 20k). The supplier wants the clause and took that sheet at
+once: relationship charge EUR 66,941, score 0.63. Fix: the fallback prices the clause sheet where it costs us least
+(the package's relationship-optimal price, 359.36-360.36); the 1.2 % limit stays. Live: **0.724** (the supplier took
+359.92 at once). Regression test `test_the_clause_sheet_sits_at_its_cheapest_price_for_us`. The trial itself stays:
+the real P02 supplier sells clause-free only above ~372. (The old persona twin, whose suppliers value no clause,
+drops P02 from 1.00 to 0.00 with this fix; the real supplier does the opposite.)
+
+### 4.2 Stalled sessions under local CPU load
+Three sessions (P04 lean, P05 base and lean) composed their round-2 message but it never reached the arena; every
+thread timed out and the suppliers walked (score 0). All three ran while six local twin benchmarks and the test suite
+loaded the machine; no session stalled without that load. Rule: nothing heavy on the machine that plays.

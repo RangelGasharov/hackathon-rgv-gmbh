@@ -746,7 +746,33 @@ class Planner:
                 out.append(same)
                 vals.append(v)
                 varied |= {f for f in same if f != PRICE and same.get(f) != best.get(f)}
+        if zero := self._clause0_sheet(best, c0, k):
+            out = out[: n - 1] + [zero]  # in place of the last alternative
         return [self._no_step_back(t) for t in out]
+
+    def _clause0_variant(self):
+        """Its required clause with no deadband, if the case allows that option: full indexation both ways."""
+        pref = self.pref_clause
+        if not (self.clause_required and pref and pref.get("deadband_pct")):
+            return None
+        for o in self.case.get("term_options", {}).get("index_clause") or []:
+            if o and o.get("series") == pref.get("series") and o.get("deadband_pct") == 0:
+                return {**pref, "deadband_pct": 0}
+        return None
+
+    def _clause0_sheet(self, best, c0, k):
+        """Our best sheet with the deadband-0 clause, at the price where it costs us the same, in our first two
+        offers. A supplier values full indexation more than it costs us at a small expected move: live P08 (other
+        agent) took deadband 0 at 45 days, countered 5.48 instead of its usual 5.64 and closed at 5.24 (0.614; our
+        deadband-5 deals 5.52-5.55, 0.46). Off unless BUYER_CLAUSE0=1 until live A/B decides."""
+        if not flags.clause0() or k > 1 or not (zero := self._clause0_variant()):
+            return None
+        same = self.reprice_to_cost({**best, "index_clause": zero}, c0)
+        if not same or not (0.85 * best[PRICE] <= same[PRICE] <= 1.15 * best[PRICE]):
+            return None
+        if self.ask_value and self.est.value(self.case, same) > self.ask_value:
+            return None
+        return same
 
     def _clause_trial(self):
         """An optional clause on a part driven by its series, and no sign yet that this supplier wants one: offer
@@ -1022,6 +1048,10 @@ class Planner:
             if max(leads) < self.open_lead and self.bounds.get("lead_time_days", ("<=", 1e9))[1] > max(leads):
                 self.bounds["lead_time_days"] = ("<=", max(leads))  # a shorter lead time it granted stays ours
                 self.refresh()
+        zero = self._clause0_variant()
+        if zero and all(t.get("index_clause") == zero for t in sheets):  # it took full indexation: ours from now on
+            self.pref_clause = zero
+            self.refresh()
         if any(t.get("index_clause") for t in sheets):
             self.clause_seen = True
             self.want_clause()  # it asks for a clause: now it is worth something to it
