@@ -1,0 +1,339 @@
+{
+ "schema": 1,
+ "id": "sup:70160",
+ "name": "Meridune Precision Castings Co., Ltd.",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "e117270a303e42e5",
+ "persona_stale": false,
+ "problems": [],
+ "country": "CN",
+ "category": "castings",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 90,
+  "cash_discount": null,
+  "incoterm": "FCA",
+  "lead_time_days": 105
+ },
+ "company": {
+  "owner_type": "private",
+  "group_parent": null,
+  "legal_form": "Co., Ltd.",
+  "founded": 2003,
+  "staff": 900,
+  "turnover_eur": 39300000,
+  "turnover_band": "25-50 M EUR",
+  "equity_ratio_pct": 25.3,
+  "credit_index": 254,
+  "credit_index_12m_ago": 254,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001; ISO 14001; ISO 50001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 27096,
+   "FY2025": 46642,
+   "FY2026": 45236
+  },
+  "share_of_its_turnover_pct": 0.12,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 67.0
+ },
+ "parts": [
+  {
+   "part": "part:310051",
+   "description": "Impeller HI 250",
+   "status": "active",
+   "quota_pct": 40,
+   "tooling_owner": "supplier",
+   "price_unit": 1,
+   "current_price": 79.44,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -7.6,
+   "should_cost": {
+    "unit_cost": 84.97,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": -6.5
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.29,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.24,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.09,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.9,
+   "other_sources": [
+    {
+     "supplier": "sup:70180",
+     "status": "active",
+     "quota_pct": 60
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070160",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 90,
+  "incoterm": "FCA",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070160#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070160#4.1",
+    "type": "payment",
+    "text": "Payment: 90 days net."
+   },
+   {
+    "id": "ctr:4600070160#5.1",
+    "type": "delivery",
+    "text": "Delivery FCA; standard lead time 105 days from order."
+   },
+   {
+    "id": "ctr:4600070160#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070160#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-25",
+    "part": "part:310051",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": "accepted below full cost to keep the volume"
+   },
+   {
+    "date": "2023-12-02",
+    "part": "part:310051",
+    "type": "annual renewal",
+    "asked_pct": -2.6,
+    "settled_pct": -5.1,
+    "note": "accepted below full cost to keep the volume"
+   },
+   {
+    "date": "2024-11-13",
+    "part": "part:310051",
+    "type": "annual renewal",
+    "asked_pct": 1.0,
+    "settled_pct": -0.3,
+    "note": "accepted below full cost to keep the volume"
+   },
+   {
+    "date": "2025-12-09",
+    "part": "part:310051",
+    "type": "annual renewal",
+    "asked_pct": -1.1,
+    "settled_pct": -2.3,
+    "note": "accepted below full cost to keep the volume"
+   }
+  ],
+  "asked_avg_pct": -0.9,
+  "settled_avg_pct": -2.6,
+  "kept_share_of_ask": 1.25
+ },
+ "payments": {
+  "invoices": 62,
+  "avg_days_late": 1.9,
+  "share_paid_over_5_days_late_pct": 4.8,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70160@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 76.0,
+    "ppm": 5396,
+    "colour": "red"
+   },
+   {
+    "id": "sc:70160@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 72.0,
+    "ppm": 3623,
+    "colour": "red"
+   },
+   {
+    "id": "sc:70160@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 74.1,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70160@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 84.0,
+    "ppm": 0,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 4,
+  "cost_recharged_eur": 150,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260925-37",
+   "date": "2026-09-25",
+   "topic": "noise",
+   "headline": "New managing director at Meridune Precision Castings Co., Ltd."
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260701-70160-M1",
+   "date": "2026-07-01",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Meridune Precision Castings Co., Ltd.",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20251116-70160-N",
+   "date": "2025-11-16",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Meridune Precision Castings Co., Ltd.",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70160",
+  "source_hash": "e117270a303e42e5",
+  "analysed": "deep read v1",
+  "confidence": "low",
+  "summary": "Chinese private investment caster (900 staff, EUR 39.3 M); we are only 0.12 % of its turnover, a tiny account. Impeller HI 250 sells 6.5 % below its own full cost (repeatedly 'accepted below full cost to keep the volume'); 70180 holds 60 % as active co-source. Quality recovered to green (OTD 84 %, 0 ppm) after two red quarters. Few documents. Renewals settled 1.2-2.5 pts below its ask; little room to squeeze.",
+  "notes": "Needs to keep the volume it priced below cost to win. Fears losing the 40 % share to 70180. Only one generic 10-day payment e-mail; we pay nearly on time (1.9 days late).",
+  "traits": {
+   "cash_short": "weak",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "strong",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "strong",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "approval_ladder",
+   "hedged_material",
+   "stale_costing"
+  ],
+  "wants": [
+   "binding_volume"
+  ],
+  "fears": [
+   "losing HI 250 share to 70180",
+   "deeper losses on a part already below cost"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "small_account",
+    "doc": "data:our_weight.share_of_its_turnover_pct",
+    "quote": "0.12 % of its turnover (EUR 45 k of EUR 39.3 M)"
+   },
+   {
+    "trait": "below_full_cost",
+    "doc": "data:parts.should_cost",
+    "quote": "part:310051 should-cost 84.97 vs price 79.44 (-6.5 %), own plant"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260701-70160-M1",
+    "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "high",
+   "levers": [
+    "HI 250 quota shift from 70180",
+    "binding volume",
+    "longer lead time (standard 105 days)"
+   ],
+   "arguments": [
+    "volume shift to active co-source 70180 (dearer at 118.73, no rival-price argument)",
+    "past quality record: two red quarters (5396 ppm)",
+    "volume forecast (+67 % spend trend)"
+   ],
+   "avoid": [
+    "squeezing price further below its cost",
+    "threats: we are too small to matter",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Keep the opening moderate; price is already 6.5 % below its own cost.",
+    "Use the 70180 co-source as the main lever and offer more quota for price stability.",
+    "Aim to hold the current price rather than win a big cut.",
+    "Do not offer faster payment as a gift; it shows no distress."
+   ],
+   "expected_concession": "No arena data; renewals settled 1.2-2.5 pts below its ask, each noted 'accepted below full cost to keep the volume'."
+  }
+ },
+ "arena": null
+}

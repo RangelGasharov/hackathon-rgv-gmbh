@@ -7,12 +7,14 @@ thread's supplier has answered, under one lock, so RFQ threads can see each othe
 
 import logging
 import math
+import os
 import re
 import time
 
 from arena_kit.cost import RELATIONSHIP_GOALS, must_haves_ok
 from arena_kit.docs import quote_terms
 
+from . import profiles
 from .claims import candidates, dead_key, kind_key, no_change_kinds, ration
 from .dossier import Dossier
 from .persona import opening_text, read_all
@@ -44,6 +46,12 @@ ASKS_DATA = re.compile(
     re.I,
 )
 LEARN_OPENING_LEAD = True  # a supplier's opening lead time is its standard (see `learn_opening_standard`)
+MAX_ROUNDS = 10  # the arena's round limit: never plan for more messages per thread, whatever a case file says
+
+
+def round_cap(case):
+    """Messages we may send per thread: the case's round limit, at most `MAX_ROUNDS`."""
+    return min(int(case.get("round_limit") or MAX_ROUNDS), MAX_ROUNDS)
 COST_ROW = re.compile(r"^(material|conversion|overhead|margin|unit price)[^|]*\|\s*([-\d.]+)", re.I | re.M)
 
 
@@ -88,7 +96,7 @@ class ThreadState:
         self.sid = sid
         self.d = dossier or Dossier(world, case, sid)
         self.est = Estimate(self.d)
-        rounds = max(3, min(6, case.get("round_limit", 10) - 3))
+        rounds = max(3, min(6, round_cap(case) - 3))
         self.plan = Planner(case, self.est, horizon_rounds=rounds)
         self.k = 0  # messages with term sheets sent
         self.sent = 0  # messages sent
@@ -119,10 +127,14 @@ class ThreadState:
 
 
 class BuyerAgent:
-    def __init__(self, world, writer=None, deadline=None, close_margin_s=90, read_timeout_s=15.0):
+    def __init__(self, world, writer=None, deadline=None, close_margin_s=90, read_timeout_s=15.0, profiles_root=None,
+                 use_profiles=None):  # fmt: skip
         self.world = world
         self.writer = writer or TemplateWriter()
-        self.read_timeout = read_timeout_s  # the persona reads at case start, all suppliers at once
+        self.read_timeout = read_timeout_s  # live persona read, only for suppliers without a profile
+        self.profiles_root = profiles_root
+        # BUYER_PROFILES=0 plays without them (A/B on the twin)
+        self.use_profiles = os.environ.get("BUYER_PROFILES", "1") != "0" if use_profiles is None else use_profiles
         self.deadline, self.close_margin = deadline, close_margin_s
         self.case = None
         self.t = {}
@@ -136,18 +148,42 @@ class BuyerAgent:
 
     # -- setup ------------------------------------------------------------------------------------
     def start(self, case, threads=None):
-        """Build each supplier's dossier; with a model writer, its persona read first (all suppliers in
-        parallel, `read_timeout` seconds at most: the 60 s for our first message are running)."""
+        """Build each supplier's dossier with its profile (`profiles/`: the deep read made once, no clock running).
+        Only a supplier without a usable profile gets the live persona read (all in parallel, `read_timeout`
+        seconds at most: the 60 s for our first message are running)."""
         self.case = case
         dossiers = {sid: Dossier(self.world, case, sid) for sid in case["suppliers"]}
+        live = []
+        for sid, d in dossiers.items():
+            prof = profiles.load(sid, self.profiles_root) if self.use_profiles else None
+            read = profiles.read_of(prof)
+            if not read:
+                live.append(sid)
+                continue
+            before = dict(d.traits)
+            d.profile, d.playbook = prof, profiles.brief(prof)
+            d.apply_read(read)
+            self.log.append((sid, "profile", {"merged": d.traits, "regex": before}))
         complete = getattr(self.writer, "complete", None)
-        if complete and self.read_timeout:
-            items = [(sid, d, opening_text((threads or {}).get(sid))) for sid, d in dossiers.items()]
+        if complete and self.read_timeout and live:
+            items = [(sid, dossiers[sid], opening_text((threads or {}).get(sid))) for sid in live]
             for sid, read in read_all(complete, items, self.read_timeout).items():
                 before = dict(dossiers[sid].traits)
                 dossiers[sid].apply_read(read)
                 self.log.append((sid, "persona", {**read, "merged": dossiers[sid].traits, "regex": before}))
         self.t = {sid: ThreadState(self.world, case, sid, dossiers[sid]) for sid in case["suppliers"]}
+        for sid, ts in self.t.items():
+            self.log.append(
+                (
+                    sid,
+                    "strategy_selected",
+                    {
+                        "primary": ts.plan.primary_strategy,
+                        "fallback": ts.plan.fallback_strategy,
+                        "reason": ts.plan.strategy_reason,
+                    },
+                )
+            )
 
     # -- reading ----------------------------------------------------------------------------------
     def ingest(self, sid, events):
@@ -208,7 +244,9 @@ class BuyerAgent:
                 ts.dead = True
             if m.get("term_sheets"):  # every alternative it sent, not just the first
                 self.learn_opening_standard(ts, m)
-                ts.plan.observe_reply([x.get("terms") or {} for x in m["term_sheets"]], m.get("status"))
+                change = ts.plan.observe_reply([x.get("terms") or {} for x in m["term_sheets"]], m.get("status"))
+                if change:
+                    self.log.append((sid, "strategy_switch", change))
             ts.last_body = m.get("body") or ""
         ts.seen = len(incoming)
         _, terms = standing(events, self._price(sid))
@@ -360,7 +398,7 @@ class BuyerAgent:
             return settle()
         if ts.dead:
             return None
-        rounds_left = self.case.get("round_limit", 10) - ts.sent
+        rounds_left = round_cap(self.case) - ts.sent
         # in an RFQ, keep going while another bidder's next package is clearly cheaper than this sheet
         rival_better = any(  # another bidder's real standing offer is clearly cheaper and it can still move,
             # or it said it will come back on price: its second step is coming (b3 P05: we signed 29.50 with one
@@ -372,7 +410,7 @@ class BuyerAgent:
                 or ((x.plan.second_step or x.in_flight) and x.c_standing < ts.c_standing * 1.06)
                 or self.heading_below(x, ts)
             )
-            and x.sent < self.case.get("round_limit", 10) - 1
+            and x.sent < round_cap(self.case) - 1
             and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)
             for s, x in live.items()
         )
@@ -460,13 +498,19 @@ class BuyerAgent:
             and not best.dead
             and latest(threads[best_sid]).get("status") not in ("final_offer",) + tuple(ENDED)
         )
-        if rounds_left <= 0:
+        if rounds_left <= 1:
+            # the last message of a thread is a decision, never another counter: accept the best standing sheet
+            # (unless the alternative is clearly cheaper) - a counter now could only be answered after the round limit
             return None if wait_best else settle()
         if rounds_left <= 2 and not ts.matched and (m := self.match(threads, sid)):
             return m
         sheets = ts.plan.sheets(ts.k, rounds_left=rounds_left)
         if sheets and ts.last_sent and all(t in ts.last_sent for t in sheets):
             sheets = []  # never resend the same sheets: suppliers read that as no move
+        if not sheets and ts.k < 2 and rounds_left > 2 and math.isfinite(reservation):
+            # every package looks dearer than our walk-away, but that rests on a guess of its floor: put up to two
+            # real offers just under the walk-away before settling (accepting still needs a sheet that beats it)
+            sheets = [t for t in ts.plan.probe(reservation * 0.97) if not ts.last_sent or t not in ts.last_sent]
         if not sheets:  # nothing better left to offer within our limits
             if not ts.matched and (m := self.match(threads, sid)):
                 return m
@@ -636,7 +680,7 @@ class BuyerAgent:
         ts = self.t[sid]
         if ts.dead or latest(threads[sid]).get("status") in ENDED:
             return None
-        if self.case.get("round_limit", 10) - ts.sent <= 1:
+        if round_cap(self.case) - ts.sent <= 1:
             return None  # the last round is for a decision, not for a note
         self.log.append((sid, "keep_alive", None))
         return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[], hold=True)}
@@ -657,7 +701,7 @@ class BuyerAgent:
         try:
             ts = self.t[sid]
             time_left = (self.deadline - time.time()) if self.deadline else math.inf
-            rounds_left = self.case.get("round_limit", 10) - ts.sent
+            rounds_left = round_cap(self.case) - ts.sent
             if time_left > self.close_margin and rounds_left > 1:
                 if ts.in_flight or ts.fallback_seen == ts.seen or latest(threads[sid]).get("status") in ENDED:
                     return None

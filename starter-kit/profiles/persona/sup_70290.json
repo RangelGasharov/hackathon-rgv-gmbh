@@ -1,0 +1,50 @@
+{
+  "supplier": "sup:70290",
+  "source_hash": "440333f89564bb84",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Founder-led 25-staff shop, 2-5 M EUR; our ~EUR 219k is ~4-11 % of its turnover. Won a large hydraulics contract and confirms extra volume only against binding 12-month commitments. Holds 70 % of pump shaft HN 24 mm at 24.92, already 1.2 % below its own plant should-cost; sup:70210 holds 30 % at 24.37 with free capacity. Open moderately, buy price with lead time and binding volume, use sup:70210 and the amber scorecard, do not squeeze hard.",
+  "notes": "Needs binding volume and planning security; fears tying capacity to unplanned demand. Price below its full cost yet it gave 2.7-2.9 % reductions in 2023 and 2025. We pay 9.8 days late on average (79 % >5 days late) without written complaint. OTD 69-81 %, 1 open 8D.",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "strong",
+    "hedged_material": "none",
+    "capacity_tight": "strong",
+    "late_payment_grievance": "weak",
+    "wants_clause": "none"
+  },
+  "unsure": ["hedged_material", "approval_ladder"],
+  "wants": ["binding_volume"],
+  "fears": ["committing capacity without binding volume"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "capacity_tight", "doc": "doc:20260619-70290-M3", "quote": "Order intake is very strong. We can confirm additional volumes only against a binding 12-month commitment."},
+    {"trait": "capacity_tight", "doc": "news:20260323-06", "quote": "Feinmechanik Rottaler GmbH wins large hydraulics contract"},
+    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:320010 price 24.92 vs should-cost of its plant 25.22 (-1.2 %), no margin included"},
+    {"trait": "cash_short", "doc": "doc:20260501-70290-M2", "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."},
+    {"trait": "late_payment_grievance", "doc": "data:payments.avg_days_late", "quote": "avg 9.8 days late, 79.2 % of invoices over 5 days late"}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "medium",
+    "levers": ["binding 12-month volume", "longer lead time (~0.5 % per day)", "paying on time"],
+    "arguments": ["rival price: sup:70210 at 24.37 on the same part", "scorecard: OTD 75.9 %, 921 ppm, open 8D", "binding volume with schedule data", "contract §3.1: no increase notice by 2 Oct"],
+    "avoid": ["deep opening (capacity-tight bots jump to a final offer)", "forecast-only volume talk", "squeezing far below 24.37 (already below its cost)", "changing terms after a final offer"],
+    "mandatory_terms": ["binding commitment for any additional volume"],
+    "tactics": [
+      "Open moderately, aiming at sup:70210's 24.37 rather than a deep cut.",
+      "Offer a binding 12-month volume and accept its 35-day or longer lead time for price.",
+      "Mention sup:70210 has free capacity for more of the 24 mm shaft.",
+      "Use the scorecard once; do not cite drivers that rose."
+    ],
+    "expected_concession": "Small: renewals settled 1.7-3.7 pts below its ask, but price is already below its cost; expect 1-2 % at most."
+  }
+}

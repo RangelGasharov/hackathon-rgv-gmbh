@@ -1,0 +1,51 @@
+{
+  "supplier": "sup:70520",
+  "source_hash": "8e0cdd8a9adddd73",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Vesmo Elektromotory a.s., Czech motor maker (1,200 staff, solid credit); we are 1.15 % of its turnover and growing 20 %. Copper is bought forward until March 2027, so index and copper arguments will not move it. Margins are thin (price 1.7-1.9 % over its should-cost). We have leverage: sup:70510 holds 70 % of the 4 kW motor and is qualified for the 15 kW. Use the quota shift, scorecard and binding volume.",
+  "notes": "It needs volume (it is reviewing small accounts) and fears losing share to sup:70510. Its hedge cuts both ways: it cannot claim copper-driven increases before April 2027. OTD sits at 81-85 % against a 95 % target, ppm rose to 764 and one 8D is open. Price moves above 2 % need its pricing committee.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "none",
+    "small_account": "weak",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "strong",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["free_capacity"],
+  "wants": ["binding_volume", "price_stability"],
+  "fears": ["losing 4 kW quota to sup:70510", "being dropped as a small account", "thin margin"],
+  "hedge_until": "2027-03",
+  "evidence": [
+    {"trait": "hedged_material", "doc": "doc:20260620-70520-M1", "quote": "our copper requirement is covered at fixed prices until March 2027."},
+    {"trait": "hedged_material", "doc": "doc:20260701-70520-M4", "quote": "they bought their copper forward until March 2027 and said the market price is 'not our reality'"},
+    {"trait": "hedged_material", "doc": "quote:7300077", "quote": "Material covered until March 2027; price valid accordingly."},
+    {"trait": "approval_ladder", "doc": "doc:20260426-70520-M5", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."},
+    {"trait": "small_account", "doc": "doc:20260413-70520-M2", "quote": "they are reviewing small accounts and will focus on customers with volume."}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "medium",
+    "levers": ["4 kW quota shift from or to sup:70510", "binding annual volume", "contract length for price stability"],
+    "arguments": ["second source sup:70510 (active 4 kW, qualified 15 kW); do not cite its 4 kW price, 239.21 is higher", "scorecard: OTD 81 % vs 95 % target, ppm 764, open 8D", "binding volume commitment", "volume forecast (+20 % spend)"],
+    "avoid": ["copper or index arguments (hedged until March 2027)", "squeezing far below its 1.7-1.9 % margin", "changing terms after a final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep; its prices are covered by the hedge, so reject any increase before April 2027.",
+      "Offer more of the 4 kW quota (sup:70510 holds 70 %) for a lower price; never cite 70510's higher 4 kW price.",
+      "Cite the Q3 scorecard (OTD 81.1 %, ppm 764, open 8D) once as the quality argument.",
+      "Offer a binding annual volume; it says it focuses on customers with volume.",
+      "Turn its own hedge letter against any copper-driven ask."
+    ],
+    "expected_concession": "No arena data; history shows it settled at about a third to a half of its ask (asked 2.7-4.7 %, settled 1.2-1.4 %); expect small moves given its thin margin."
+  }
+}

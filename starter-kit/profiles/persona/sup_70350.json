@@ -1,0 +1,51 @@
+{
+  "supplier": "sup:70350",
+  "source_hash": "e8c026030f37f4ff",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Founder-run coater (30 staff, EUR 2-5 M), sole source of our cover plate set. In financial distress: credit index jumped 248 to 343, rating downgraded, bank watching monthly, MD 'cannot sign anything that lowers our margin now'. Complains about overdue invoices. Quality is red and worsening (OTD 54 %, 5556 ppm, 3 open 8D). Open moderate: buy price with faster payment, use the scorecard, do not squeeze it into failure.",
+  "notes": "Needs cash: asked twice for earlier payment, quote remark requests 10-day payment. Fears the bank and late payers. Contradiction: says we pay late, yet we paid 6.7 days early on average taking 42 cash discounts; still 39 % of invoices over 5 days late. Contract already has 2 %/10 days. Sole source: supply risk if it fails.",
+  "traits": {
+    "cash_short": "strong",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "strong",
+    "wants_clause": "none"
+  },
+  "unsure": ["below_full_cost", "small_account", "hedged_material"],
+  "wants": ["faster_payment"],
+  "fears": ["bank pressure on liquidity", "late payment of invoices", "any margin cut"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "cash_short", "doc": "doc:20260912-70350-M1", "quote": "said the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"},
+    {"trait": "cash_short", "doc": "data:company.credit_index", "quote": "credit index 343, 248 twelve months ago"},
+    {"trait": "cash_short", "doc": "news:20260904-26", "quote": "Credit agency lowers rating of Oberflächentechnik Weißacher GmbH"},
+    {"trait": "late_payment_grievance", "doc": "doc:20260820-70350-P", "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"},
+    {"trait": "late_payment_grievance", "doc": "quote:7300070", "quote": "Payment within 10 days requested."}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "medium",
+    "levers": ["guaranteed payment within 10 days on every invoice", "on-time payment commitment", "stable call-off volume"],
+    "arguments": ["faster payment: guaranteed 10-day payment for a price step (it is truly cash-short)", "red scorecard sc:70350@2026Q3: OTD 53.8 %, 5556 ppm, 3 open 8D", "complaint cost recovery under clause 6.1", "notice-period breach for any 2027 increase"],
+    "avoid": ["hard margin squeeze on a distressed sole source", "leading with index arguments", "changing terms after its final offer", "ignoring its overdue-invoice complaint"],
+    "mandatory_terms": ["payment within 10 days"],
+    "tactics": [
+      "Open moderate and lead with guaranteed 10-day payment on all invoices: cash is what it needs.",
+      "Acknowledge the overdue invoices and commit to on-time payment as part of the package.",
+      "Use the red scorecard and 3 open 8D reports as the second argument.",
+      "Take a modest price step plus a quality improvement commitment; do not push it below a sustainable margin.",
+      "Accept its final offer if it is reasonable; walking risks supply of a sole-sourced part."
+    ],
+    "expected_concession": "History: asked +1.9-2.8 % and settled 0 %; now resists any margin cut, so expect small moves bought mainly with faster payment."
+  }
+}

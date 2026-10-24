@@ -1,0 +1,283 @@
+{
+ "schema": 1,
+ "built": "2026-10-24T20:09Z",
+ "data": "D:\\hackathon-rgv-gmbh\\starter-kit\\data\\package",
+ "suppliers": {
+  "sup:70110": {
+   "source_hash": "a8b60dfbdc4f45c3",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70120": {
+   "source_hash": "afe27458ef5f9494",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70130": {
+   "source_hash": "944040d10dadbcfd",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70140": {
+   "source_hash": "f41433f376db6f39",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70150": {
+   "source_hash": "0bcaf046f8c1f6ed",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70160": {
+   "source_hash": "e117270a303e42e5",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70170": {
+   "source_hash": "5a4756e7847d99c3",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70180": {
+   "source_hash": "832441bbd199f75b",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70190": {
+   "source_hash": "0a46c05273aa11c3",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70210": {
+   "source_hash": "29ee703554f68426",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70220": {
+   "source_hash": "acd71f0bada32bc2",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70230": {
+   "source_hash": "7598d35351bc35fc",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70240": {
+   "source_hash": "e9f99fe749f71248",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70250": {
+   "source_hash": "61dcc1c7c8987724",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70260": {
+   "source_hash": "4e2157b6fccc47bb",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70270": {
+   "source_hash": "1b35d649bcb5f99f",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70280": {
+   "source_hash": "148bbb504dfce435",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70290": {
+   "source_hash": "440333f89564bb84",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70295": {
+   "source_hash": "0090d743c85ab80b",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70310": {
+   "source_hash": "8b3a78244486fa20",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70320": {
+   "source_hash": "9cd704a3e3b02560",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70330": {
+   "source_hash": "103be693d8709162",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70340": {
+   "source_hash": "a0a8565b397bff15",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70350": {
+   "source_hash": "e8c026030f37f4ff",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70360": {
+   "source_hash": "d323410c0413f5fe",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70410": {
+   "source_hash": "75058b2946f7fa68",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70420": {
+   "source_hash": "22421795c8f3bef4",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70430": {
+   "source_hash": "167066b44330e980",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70440": {
+   "source_hash": "7f7a7f897b81749c",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70510": {
+   "source_hash": "f4ce8d9c9838c659",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70520": {
+   "source_hash": "8e0cdd8a9adddd73",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70530": {
+   "source_hash": "0b5b2e8ce02c171e",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70540": {
+   "source_hash": "d87c223de7324c49",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70550": {
+   "source_hash": "cfc9d40aa8505d83",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70560": {
+   "source_hash": "0c6a0dc03eb709b6",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70570": {
+   "source_hash": "b1c0d053ac293d4a",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70580": {
+   "source_hash": "3879094630bdb93d",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70610": {
+   "source_hash": "23676527d20f464c",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70620": {
+   "source_hash": "a0cb5e8c8597e1ea",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70630": {
+   "source_hash": "21960a5129d6975b",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70640": {
+   "source_hash": "e863d4038f23fd8d",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70650": {
+   "source_hash": "e206211f2a209db2",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70710": {
+   "source_hash": "cbc325a1b5388d58",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70720": {
+   "source_hash": "ae29fa1db9e42202",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70730": {
+   "source_hash": "de93900bdd0edfd6",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  },
+  "sup:70740": {
+   "source_hash": "bfd6504eb35d636f",
+   "persona": true,
+   "stale": false,
+   "changed": false
+  }
+ }
+}

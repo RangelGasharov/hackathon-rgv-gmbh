@@ -1,0 +1,49 @@
+{
+  "supplier": "sup:70310",
+  "source_hash": "8b3a78244486fa20",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family sheet-metal shop (70 staff, EUR 7.5 M). We are 11.3 % of its turnover; it is our sole source for base frame HN 50/65 (our tooling, no second source). Quality is collapsing: red scorecard three quarters running, OTD 63 %, 4118 ppm, escalation letter sent 24 Sep. It asked +2-4 % in 2024/25 and settled at 0. Open deep, lead with scorecard and cost recovery, then index and forecast.",
+  "notes": "Needs our volume (11 % of turnover); asked for 10-day payment against a cash discount (generic e-mail, no distress: credit index flat 232). Fears losing the frame after the red escalation. No should-cost and no second source: our walk-away rests on owning the tooling. We pay 6 days late on average, no complaint yet.",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "weak",
+    "wants_clause": "none"
+  },
+  "unsure": ["below_full_cost", "stale_costing", "hedged_material"],
+  "wants": ["faster_payment"],
+  "fears": ["losing the frame after the red escalation", "cost recovery for complaints", "resourcing of our own tooling"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "cash_short", "doc": "doc:20260911-70310-M1", "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."},
+    {"trait": "late_payment_grievance", "doc": "data:payments.share_paid_over_5_days_late_pct", "quote": "47.4 % of invoices paid over 5 days late"},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "11.33"}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["10-day payment only against cash discount or price cut", "binding volume / forecast", "contract extension beyond 2027-06", "withholding complaint cost recovery"],
+    "arguments": ["red scorecard sc:70310@2026Q3: OTD 63 %, 4118 ppm", "complaint cost recovery under clause 6.1 and escalation doc:20260924-70310-P12", "our 11 % share of its turnover", "material/energy index, only if it actually fell", "notice-period breach: any 2027 increase missed the 90-day deadline", "volume forecast"],
+    "avoid": ["citing a cost driver that rose", "giving faster payment for free: it is not distressed", "repeating an argument kind"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep and lead with the red scorecard and the escalation letter: quality cost recovery is the first argument.",
+      "Use our 11 % share of its turnover: it cannot afford to lose the frame.",
+      "Offer 10-day payment only if it comes with a cash discount or extra price cut.",
+      "Add index and forecast arguments one kind per round; move in small visible steps.",
+      "Reject any increase: the 90-day notice before year end has passed."
+    ],
+    "expected_concession": "No arena data; history shows it asks +2-4 % and settles at 0, and once gave -6 % after asking -2.2 %, so it yields under pressure."
+  }
+}

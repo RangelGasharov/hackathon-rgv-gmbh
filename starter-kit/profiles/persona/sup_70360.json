@@ -1,0 +1,50 @@
+{
+  "supplier": "sup:70360",
+  "source_hash": "d323410c0413f5fe",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Austrian founder-run bending shop (25 staff, EUR 2-5 M). Owner prices from a two-year-old spreadsheet, second shift idle since spring, calls us an important reference customer. Holds 50 % of motor bracket HB at EUR 16.11, 3 % above Steinfelder's 15.63, and is qualified but unused on the coupling guard. Open deep; cite the rival price, check indices against its old spreadsheet, offer volume for price.",
+  "notes": "Needs work for its idle shift; qualified on the coupling guard but at 0 % quota. Fears losing its bracket half to cheaper Steinfelder. Our spend is falling (-5.9 %). Amber scorecard (OTD 76 %), two open 8D, 21 complaints in 3 years. We pay 4.9 days late on average; no complaint.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "strong",
+    "reference_customer": "strong",
+    "stale_costing": "strong",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "weak",
+    "wants_clause": "none"
+  },
+  "unsure": ["below_full_cost", "hedged_material"],
+  "wants": ["binding_volume"],
+  "fears": ["losing bracket share to sup:70340", "idle second shift"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "stale_costing", "doc": "doc:20260606-70360-M1", "quote": "he works from his own spreadsheet, last updated two years ago."},
+    {"trait": "free_capacity", "doc": "doc:20260527-70360-M2", "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."},
+    {"trait": "reference_customer", "doc": "doc:20260812-70360-M3", "quote": "Kantteile Strasser GmbH said Hollerau is an important reference customer for them."},
+    {"trait": "late_payment_grievance", "doc": "data:payments.share_paid_over_5_days_late_pct", "quote": "45.9 % of invoices paid over 5 days late"}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["higher bracket quota", "entry to coupling guard volume", "binding volume commitment", "reference-customer status"],
+    "arguments": ["rival price: sup:70340 supplies the same bracket at EUR 15.63", "material/energy index vs its stale spreadsheet, only if the index fell", "binding volume commitment to fill its idle shift", "scorecard: OTD 76 % vs 95 % target, 2 open 8D", "notice-period breach for any 2027 increase"],
+    "avoid": ["citing a cost driver that rose", "faster payment as a gift"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep at or below Steinfelder's EUR 15.63 and cite that price as the rival quote.",
+      "If current material indices fell, cite them: its spreadsheet is two years old.",
+      "Offer a higher bracket quota or coupling-guard trial volume against the price step.",
+      "Use the amber OTD and open 8D reports as a separate argument.",
+      "Expect 'a fair point' and keep moving in small steps."
+    ],
+    "expected_concession": "No arena data; history: asked +3.6-3.7 % and settled 0, so it gives up its asks; owner-led with stale costing, expect generous moves."
+  }
+}

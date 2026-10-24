@@ -1,0 +1,51 @@
+{
+  "supplier": "sup:70650",
+  "source_hash": "e206211f2a209db2",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Small family fastener firm (19.5 M EUR, 40 staff); we are 0.72 %. Calls us 'not strategic', quotes list conditions from stock only and won't extend individual agreements, yet its second shift is idle. 70610 is 14 % cheaper on the M12 bolt and 12 % on the M12 nut and is a candidate for our one-supplier kit; it is sole source only for the M16 bolt. Historically asked ~2.5 % and settled ~0 % on average. Lead with 70610.",
+  "notes": "Contradiction: refocus on key accounts vs idle second shift wanting work. We pay late (avg 6.1 days, 57.5 % of invoices over 5 days), Delivery poor: OTD 75-84 % vs 95 % target, 80 complaints, 2 open 8D.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "weak",
+    "small_account": "strong",
+    "open_book": "none",
+    "free_capacity": "strong",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "weak",
+    "wants_clause": "none"
+  },
+  "unsure": ["below_full_cost", "late_payment_grievance"],
+  "wants": ["binding_volume"],
+  "fears": ["losing M12 bolt and nut volume to 70610", "idle second shift"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "small_account", "doc": "doc:20260602-70650-M4", "quote": "Their new sales director said Hollerau's volumes are 'not strategic' for Verbindungstechnik Mairhofer GmbH any more"},
+    {"trait": "approval_ladder", "doc": "doc:20260327-70650-M3", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks"},
+    {"trait": "free_capacity", "doc": "doc:20260411-70650-M5", "quote": "they could take additional parts at short notice; the second shift has been on hold since spring"},
+    {"trait": "price_frozen", "doc": "doc:20260817-70650-M1", "quote": "Standard items will be supplied from stock at list conditions; individual agreements will not be extended."},
+    {"trait": "late_payment_grievance", "doc": "data:payments.avg_days_late", "quote": "6.1"}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "medium",
+    "levers": ["binding volume", "keeping the sole-sourced M16 bolt and a kit share", "paying on time"],
+    "arguments": ["rival price: 70610 at 12.46 vs 14.52 (M12 bolt) and 4.91 vs 5.60 (M12 nut)", "scorecard: OTD 84 % vs 95 % target, 80 complaints, 2 open 8D", "notice period: price changes need written notice at least 60 days before year end (ctr 3.1)", "binding volume commitment"],
+    "avoid": ["volume forecasts alone (non-strategic account)", "cost-breakdown requests", "changing terms after its final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Lead with 70610's lower prices for the same M12 bolt and nut and our plan for one kit supplier.",
+      "Expect 'half the step now, the rest next round' on the rival price; keep moving visibly.",
+      "Use the scorecard once: OTD 75-84 % against a 95 % target, 2 open 8D reports.",
+      "Offer a binding volume on the M16x60 bolt only in exchange for price on all three parts.",
+      "Keep steps near 2 % (pricing committee) and accept its final offer without reopening terms."
+    ],
+    "expected_concession": "No arena data; 70620, with the same refocus documents, barely moved in arena; its history (avg ask 2.5 %, settled ~0 %) gives no clear guide."
+  }
+}

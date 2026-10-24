@@ -1,0 +1,413 @@
+{
+ "schema": 1,
+ "id": "sup:70360",
+ "name": "Kantteile Strasser GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "d323410c0413f5fe",
+ "persona_stale": false,
+ "problems": [],
+ "country": "AT",
+ "category": "sheet metal",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 28
+ },
+ "company": {
+  "owner_type": "founder",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1999,
+  "staff": 25,
+  "turnover_eur": null,
+  "turnover_band": "2-5 M EUR",
+  "equity_ratio_pct": 31.1,
+  "credit_index": 223,
+  "credit_index_12m_ago": 223,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 157406,
+   "FY2025": 146595,
+   "FY2026": 148083
+  },
+  "share_of_its_turnover_pct": null,
+  "share_of_its_turnover_range_pct": [
+   3.0,
+   7.4
+  ],
+  "spend_trend_pct": -5.9
+ },
+ "parts": [
+  {
+   "part": "part:330020",
+   "description": "Coupling guard, galvanised",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C241",
+     "weight": 0.35,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.01,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 3.1,
+   "other_sources": [
+    {
+     "supplier": "sup:70340",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  },
+  {
+   "part": "part:330030",
+   "description": "Motor bracket HB",
+   "status": "active",
+   "quota_pct": 50,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 16.11,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -6.0,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C241",
+     "weight": 0.35,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.25,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.04,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.8,
+   "other_sources": [
+    {
+     "supplier": "sup:70340",
+     "status": "active",
+     "quota_pct": 50
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070360",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070360#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070360#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070360#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 28 days from order."
+   },
+   {
+    "id": "ctr:4600070360#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070360#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-23",
+    "part": "part:330030",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-20",
+    "part": "part:330030",
+    "type": "annual renewal",
+    "asked_pct": -3.1,
+    "settled_pct": -6.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-26",
+    "part": "part:330030",
+    "type": "annual renewal",
+    "asked_pct": 3.7,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-24",
+    "part": "part:330030",
+    "type": "annual renewal",
+    "asked_pct": 3.6,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 1.4,
+  "settled_avg_pct": -2.0,
+  "kept_share_of_ask": 0.65
+ },
+ "payments": {
+  "invoices": 74,
+  "avg_days_late": 4.9,
+  "share_paid_over_5_days_late_pct": 45.9,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70360@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 76.9,
+    "ppm": 858,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70360@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 80.0,
+    "ppm": 753,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70360@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 76.0,
+    "ppm": 640,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70360@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 76.0,
+    "ppm": 762,
+    "colour": "amber"
+   }
+  ],
+  "complaints_3y": 21,
+  "cost_recharged_eur": 2250,
+  "open_8d": 2
+ },
+ "news": [],
+ "documents": [
+  {
+   "id": "doc:20260812-70360-M3",
+   "date": "2026-08-12",
+   "kind": "meeting_note",
+   "subject": "Supplier day",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "At our supplier day Kantteile Strasser GmbH said Hollerau is an important reference customer for them."
+  },
+  {
+   "id": "doc:20260606-70360-M1",
+   "date": "2026-06-06",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Kantteile Strasser GmbH: he asked where we get our index figures from - he works from his own spreadsheet, last updated two years ago."
+  },
+  {
+   "id": "doc:20260527-70360-M2",
+   "date": "2026-05-27",
+   "kind": "call_note",
+   "subject": "Capacity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with sales at Kantteile Strasser GmbH: they could take additional parts at short notice; the second shift has been on hold since spring."
+  },
+  {
+   "id": "doc:20251212-70360-N",
+   "date": "2025-12-12",
+   "kind": "email",
+   "subject": "ISO 9001 certificate",
+   "author": "Kantteile Strasser GmbH",
+   "text": "Please find attached our renewed ISO 9001 certificate."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70360",
+  "source_hash": "d323410c0413f5fe",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Austrian founder-run bending shop (25 staff, EUR 2-5 M). Owner prices from a two-year-old spreadsheet, second shift idle since spring, calls us an important reference customer. Holds 50 % of motor bracket HB at EUR 16.11, 3 % above Steinfelder's 15.63, and is qualified but unused on the coupling guard. Open deep; cite the rival price, check indices against its old spreadsheet, offer volume for price.",
+  "notes": "Needs work for its idle shift; qualified on the coupling guard but at 0 % quota. Fears losing its bracket half to cheaper Steinfelder. Our spend is falling (-5.9 %). Amber scorecard (OTD 76 %), two open 8D, 21 complaints in 3 years. We pay 4.9 days late on average; no complaint.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "strong",
+   "reference_customer": "strong",
+   "stale_costing": "strong",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "weak",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost",
+   "hedged_material"
+  ],
+  "wants": [
+   "binding_volume"
+  ],
+  "fears": [
+   "losing bracket share to sup:70340",
+   "idle second shift"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "stale_costing",
+    "doc": "doc:20260606-70360-M1",
+    "quote": "he works from his own spreadsheet, last updated two years ago."
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "doc:20260527-70360-M2",
+    "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."
+   },
+   {
+    "trait": "reference_customer",
+    "doc": "doc:20260812-70360-M3",
+    "quote": "Kantteile Strasser GmbH said Hollerau is an important reference customer for them."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "data:payments.share_paid_over_5_days_late_pct",
+    "quote": "45.9 % of invoices paid over 5 days late"
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "higher bracket quota",
+    "entry to coupling guard volume",
+    "binding volume commitment",
+    "reference-customer status"
+   ],
+   "arguments": [
+    "rival price: sup:70340 supplies the same bracket at EUR 15.63",
+    "material/energy index vs its stale spreadsheet, only if the index fell",
+    "binding volume commitment to fill its idle shift",
+    "scorecard: OTD 76 % vs 95 % target, 2 open 8D",
+    "notice-period breach for any 2027 increase"
+   ],
+   "avoid": [
+    "citing a cost driver that rose",
+    "faster payment as a gift"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep at or below Steinfelder's EUR 15.63 and cite that price as the rival quote.",
+    "If current material indices fell, cite them: its spreadsheet is two years old.",
+    "Offer a higher bracket quota or coupling-guard trial volume against the price step.",
+    "Use the amber OTD and open 8D reports as a separate argument.",
+    "Expect 'a fair point' and keep moving in small steps."
+   ],
+   "expected_concession": "No arena data; history: asked +3.6-3.7 % and settled 0, so it gives up its asks; owner-led with stale costing, expect generous moves."
+  }
+ },
+ "arena": null
+}

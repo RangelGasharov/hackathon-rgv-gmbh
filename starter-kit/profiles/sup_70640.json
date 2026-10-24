@@ -1,0 +1,436 @@
+{
+ "schema": 1,
+ "id": "sup:70640",
+ "name": "Kugellager-Vertrieb Inntal GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "e863d4038f23fd8d",
+ "persona_stale": false,
+ "problems": [],
+ "country": "AT",
+ "category": "C-parts",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 10
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1981,
+  "staff": 80,
+  "turnover_eur": 37000000,
+  "turnover_band": "25-50 M EUR",
+  "equity_ratio_pct": 43.4,
+  "credit_index": 180,
+  "credit_index_12m_ago": 180,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 89213,
+   "FY2025": 98867,
+   "FY2026": 98435
+  },
+  "share_of_its_turnover_pct": 0.27,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 10.3
+ },
+ "parts": [
+  {
+   "part": "part:360020",
+   "description": "Deep groove ball bearing 6306-2Z C3",
+   "status": "active",
+   "quota_pct": 30,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 4.2,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 3.4,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2815",
+     "weight": 0.63,
+     "change_12m_pct": 0.8,
+     "ids": [
+      "idx:PPI-C2815@2025-08",
+      "idx:PPI-C2815@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.09,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 0.7,
+   "other_sources": [
+    {
+     "supplier": "sup:70620",
+     "status": "active",
+     "quota_pct": 70
+    }
+   ]
+  },
+  {
+   "part": "part:360021",
+   "description": "Deep groove ball bearing 6308-2Z C3",
+   "status": "active",
+   "quota_pct": 60,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 7.21,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 5.9,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2815",
+     "weight": 0.66,
+     "change_12m_pct": 0.8,
+     "ids": [
+      "idx:PPI-C2815@2025-08",
+      "idx:PPI-C2815@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.12,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 0.9,
+   "other_sources": [
+    {
+     "supplier": "sup:70620",
+     "status": "active",
+     "quota_pct": 40
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070640",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070640#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070640#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070640#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 10 days from order."
+   },
+   {
+    "id": "ctr:4600070640#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070640#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-22",
+    "part": "part:360021",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-01",
+    "part": "part:360020",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-25",
+    "part": "part:360020",
+    "type": "annual renewal",
+    "asked_pct": 1.3,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2023-12-10",
+    "part": "part:360021",
+    "type": "annual renewal",
+    "asked_pct": 5.4,
+    "settled_pct": 1.8,
+    "note": null
+   },
+   {
+    "date": "2024-11-23",
+    "part": "part:360020",
+    "type": "annual renewal",
+    "asked_pct": 5.0,
+    "settled_pct": 3.4,
+    "note": null
+   },
+   {
+    "date": "2024-11-23",
+    "part": "part:360021",
+    "type": "annual renewal",
+    "asked_pct": 1.8,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-24",
+    "part": "part:360021",
+    "type": "annual renewal",
+    "asked_pct": 6.4,
+    "settled_pct": 4.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-26",
+    "part": "part:360020",
+    "type": "annual renewal",
+    "asked_pct": 3.4,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 3.9,
+  "settled_avg_pct": 1.5,
+  "kept_share_of_ask": 0.27
+ },
+ "payments": {
+  "invoices": 150,
+  "avg_days_late": 3.1,
+  "share_paid_over_5_days_late_pct": 18.0,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70640@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 80.8,
+    "ppm": 292,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70640@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 84.3,
+    "ppm": 175,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70640@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 84.9,
+    "ppm": 171,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70640@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 86.5,
+    "ppm": 0,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 7,
+  "cost_recharged_eur": 750,
+  "open_8d": 0
+ },
+ "news": [],
+ "documents": [
+  {
+   "id": "doc:20260925-70640-P19",
+   "date": "2026-09-25",
+   "kind": "email",
+   "subject": "Renewal of framework agreement 4600070640",
+   "author": "Kugellager-Vertrieb Inntal GmbH",
+   "text": "Hello,\nour framework agreement ctr:4600070640 for Deep groove ball bearing 6306-2Z C3 (part:360020) expires on 30 June 2027. We would like to agree the terms for the coming period and will send our offer when we meet. Please let us know your expected volumes.\nBest regards,\nKugellager-Vertrieb Inntal GmbH"
+  },
+  {
+   "id": "doc:20260819-70640-M1",
+   "date": "2026-08-19",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Kugellager-Vertrieb Inntal GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260715-70640-M4",
+   "date": "2026-07-15",
+   "kind": "call_note",
+   "subject": "Capacity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with sales at Kugellager-Vertrieb Inntal GmbH: they could take additional parts at short notice; the second shift has been on hold since spring."
+  },
+  {
+   "id": "doc:20260512-70640-M2",
+   "date": "2026-05-12",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Kugellager-Vertrieb Inntal GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20260228-70640-M3",
+   "date": "2026-02-28",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Kugellager-Vertrieb Inntal GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20260201-70640-M5",
+   "date": "2026-02-01",
+   "kind": "call_note",
+   "subject": "Capacity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with sales at Kugellager-Vertrieb Inntal GmbH: they could take additional parts at short notice; the second shift has been on hold since spring."
+  },
+  {
+   "id": "doc:20251212-70640-N",
+   "date": "2025-12-12",
+   "kind": "email",
+   "subject": "ISO 9001 certificate",
+   "author": "Kugellager-Vertrieb Inntal GmbH",
+   "text": "Please find attached our renewed ISO 9001 certificate."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70640",
+  "source_hash": "e863d4038f23fd8d",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Austrian family bearing distributor (37 M EUR); we are 0.27 %. Second shift idle since spring and it can take more parts, though it is reviewing small accounts. Already cheaper than 70620 on 6306/6308, so our lever is moving 70620's quota (70 % of 6306) to it. Historically asks ~4 % and keeps only 27 %. Moves above 2 % need its pricing committee. Offer binding volume plus quota shift for a lower price.",
+  "notes": "Needs work for its idle second shift; it is itself reviewing small accounts like ours. Contradiction: idle capacity vs 'focus on customers with volume'. Renewal mail (contract to 2027-06) asks our expected volumes. OTD 81-87 % vs 95 % target, ppm fell to 0 in Q3.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "none",
+   "small_account": "strong",
+   "open_book": "none",
+   "free_capacity": "strong",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost"
+  ],
+  "wants": [
+   "binding_volume"
+  ],
+  "fears": [
+   "idle second shift"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260512-70640-M2",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks"
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "doc:20260715-70640-M4",
+    "quote": "they could take additional parts at short notice; the second shift has been on hold since spring"
+   },
+   {
+    "trait": "small_account",
+    "doc": "doc:20260819-70640-M1",
+    "quote": "they are reviewing small accounts and will focus on customers with volume."
+   },
+   {
+    "trait": "small_account",
+    "doc": "data:our_weight.share_of_its_turnover_pct",
+    "quote": "0.27"
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "quota shift from 70620 (6306 and 6308)",
+    "binding annual volume",
+    "36-month term"
+   ],
+   "arguments": [
+    "binding volume and quota shift with volume schedule CSV",
+    "volume forecast",
+    "scorecard: OTD 86.5 % vs 95 % target",
+    "an index that fell, if available"
+   ],
+   "avoid": [
+    "rival quote from 70620 (it is dearer)",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep and offer to move 70620's share of 6306/6308 to it in exchange for a lower price.",
+    "State a binding annual volume and send the volume schedule it asked for in its renewal mail.",
+    "Cite the scorecard once: OTD 81-87 % against a 95 % target.",
+    "Expect steps of about 2 % (pricing-committee threshold); keep moving visibly each round.",
+    "Accept its final offer unchanged."
+   ],
+   "expected_concession": "No arena data; history (keeps 27 % of its ask) and idle capacity suggest it gives way, likely in steps of 2 % or less."
+  }
+ },
+ "arena": null
+}

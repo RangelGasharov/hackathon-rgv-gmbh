@@ -1,0 +1,48 @@
+{
+  "supplier": "sup:70570",
+  "source_hash": "b1c0d053ac293d4a",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Sensorik Ammertal GmbH, 150-staff pressure-sensor maker bought by an investor in June 2026; we are 1.2 % of its turnover; it is our sole source. Head office has frozen all price reductions until December 2027, but it is open on payment terms and call-off flexibility. Price is 2.9 % over its should-cost. Contract ends 2026-12-31. Hold the price flat and win value through terms and quality.",
+  "notes": "Contradiction: a private firm citing a 'head office' directive. Historically it gave way, settling far below its asks. Quality is weak: 17 complaints in three years and OTD 80-92 % against a 95 % target. Our spend is falling 2.6 %.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "strong",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["cash_short"],
+  "wants": [],
+  "fears": ["falling volume"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "price_frozen", "doc": "doc:20260927-70570-M1", "quote": "head office has frozen all price reductions until December 2027."},
+    {"trait": "price_frozen", "doc": "quote:7300075", "quote": "Prices as per current list; discounts not possible this year (head-office directive)."},
+    {"trait": "approval_ladder", "doc": "doc:20260314-70570-M2", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "medium",
+    "levers": ["payment terms", "call-off flexibility", "binding volume", "contract length"],
+    "arguments": ["quality record: 17 complaints, OTD 80-92 %", "binding volume commitment", "should-cost (2.9 % over cost)", "volume forecast"],
+    "avoid": ["repeating price-cut demands against the freeze", "threatening a second source we do not have", "changing terms after a final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Hold 23.13; the freeze blocks cuts, not our refusal of any increase.",
+      "Trade a binding volume and a 24-36 month contract for price stability.",
+      "Ask for value in terms it offered: payment days and call-off flexibility.",
+      "Use the complaint record once as the quality argument."
+    ],
+    "expected_concession": "No arena data; it historically settled well below its asks (kept -0.16), but the new freeze means expect terms, not price cuts."
+  }
+}

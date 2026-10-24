@@ -1,0 +1,505 @@
+{
+ "schema": 1,
+ "id": "sup:70110",
+ "name": "Gießerei Brandlhuber GmbH & Co. KG",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "a8b60dfbdc4f45c3",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "castings",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "FCA",
+  "lead_time_days": 42
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH & Co. KG",
+  "founded": 1921,
+  "staff": 185,
+  "turnover_eur": 25800000,
+  "turnover_band": "25-50 M EUR",
+  "equity_ratio_pct": 24.7,
+  "credit_index": 222,
+  "credit_index_12m_ago": 222,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001; ISO 14001; ISO 50001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 1014074,
+   "FY2025": 1212230,
+   "FY2026": 1256303
+  },
+  "share_of_its_turnover_pct": 4.87,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 23.9
+ },
+ "parts": [
+  {
+   "part": "part:310010",
+   "description": "Volute casing HN 50-200",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 126.53,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -7.0,
+   "should_cost": {
+    "unit_cost": 132.64,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": -4.6
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.32,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.26,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.06,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.3,
+   "other_sources": [
+    {
+     "supplier": "sup:70140",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  },
+  {
+   "part": "part:310012",
+   "description": "Volute casing HN 100-315",
+   "status": "active",
+   "quota_pct": 40,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 383.06,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -7.0,
+   "should_cost": {
+    "unit_cost": 347.27,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 10.3
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.27,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.1,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.2,
+   "other_sources": [
+    {
+     "supplier": "sup:70130",
+     "status": "active",
+     "quota_pct": 60
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070110",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "FCA",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070110#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070110#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070110#5.1",
+    "type": "delivery",
+    "text": "Delivery FCA; standard lead time 42 days from order."
+   },
+   {
+    "id": "ctr:4600070110#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070110#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-22",
+    "part": "part:310012",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-05",
+    "part": "part:310010",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": "accepted below full cost to keep the volume"
+   },
+   {
+    "date": "2023-11-16",
+    "part": "part:310010",
+    "type": "annual renewal",
+    "asked_pct": -2.2,
+    "settled_pct": -5.6,
+    "note": "accepted below full cost to keep the volume"
+   },
+   {
+    "date": "2023-11-25",
+    "part": "part:310012",
+    "type": "annual renewal",
+    "asked_pct": -3.3,
+    "settled_pct": -5.6,
+    "note": null
+   },
+   {
+    "date": "2024-11-17",
+    "part": "part:310010",
+    "type": "annual renewal",
+    "asked_pct": 1.9,
+    "settled_pct": -0.1,
+    "note": "accepted below full cost to keep the volume"
+   },
+   {
+    "date": "2024-12-01",
+    "part": "part:310012",
+    "type": "annual renewal",
+    "asked_pct": 2.6,
+    "settled_pct": -0.1,
+    "note": null
+   },
+   {
+    "date": "2025-11-26",
+    "part": "part:310012",
+    "type": "annual renewal",
+    "asked_pct": 1.5,
+    "settled_pct": -1.4,
+    "note": null
+   },
+   {
+    "date": "2025-12-03",
+    "part": "part:310010",
+    "type": "annual renewal",
+    "asked_pct": 2.1,
+    "settled_pct": -1.4,
+    "note": "accepted below full cost to keep the volume"
+   }
+  ],
+  "asked_avg_pct": 0.4,
+  "settled_avg_pct": -2.4,
+  "kept_share_of_ask": 0.43
+ },
+ "payments": {
+  "invoices": 145,
+  "avg_days_late": 3.7,
+  "share_paid_over_5_days_late_pct": 26.9,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70110@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 84.9,
+    "ppm": 625,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70110@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 81.5,
+    "ppm": 522,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70110@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 83.3,
+    "ppm": 626,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70110@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 85.2,
+    "ppm": 712,
+    "colour": "amber"
+   }
+  ],
+  "complaints_3y": 15,
+  "cost_recharged_eur": 1350,
+  "open_8d": 2
+ },
+ "news": [],
+ "documents": [
+  {
+   "id": "doc:20260917-70110-M3",
+   "date": "2026-09-17",
+   "kind": "meeting_note",
+   "subject": "Visit by the owner",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Visit by the owner of Gießerei Brandlhuber GmbH & Co. KG. He reminded us that in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."
+  },
+  {
+   "id": "doc:20260911-70110-P01",
+   "date": "2026-09-11",
+   "kind": "letter",
+   "subject": "Price adjustment from 01 November 2026",
+   "author": "Gießerei Brandlhuber GmbH & Co. KG",
+   "text": "Dear Sir or Madam,\nwe have supplied Hollerau Pumpenwerke reliably for many years. Owing to sustained increases in energy, raw material and wage costs, we are forced to adjust our prices for Volute casing HN 50-200 (part:310010) by **9.5 %** with effect from **01 November 2026**: from EUR 126.53 to EUR 138.55 per  pc.\nWe regret this step and ask for your understanding.\nYours faithfully,\nGießerei Brandlhuber GmbH & Co. KG"
+  },
+  {
+   "id": "doc:20260909-70110-M4",
+   "date": "2026-09-09",
+   "kind": "meeting_note",
+   "subject": "Visit by the owner",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The owner of Gießerei Brandlhuber GmbH & Co. KG admitted he had not followed his material and energy prices closely since the 2022 peak; his office manager does the costing."
+  },
+  {
+   "id": "doc:20260902-70110-M2",
+   "date": "2026-09-02",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Gießerei Brandlhuber GmbH & Co. KG",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20260824-70110-M1",
+   "date": "2026-08-24",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Gießerei Brandlhuber GmbH & Co. KG: he asked where we get our index figures from - he works from his own spreadsheet, last updated two years ago."
+  },
+  {
+   "id": "doc:20260715-70110-M5",
+   "date": "2026-07-15",
+   "kind": "meeting_note",
+   "subject": "Visit by the owner",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Visit by the owner of Gießerei Brandlhuber GmbH & Co. KG. He reminded us that in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."
+  },
+  {
+   "id": "doc:20251217-70110-N",
+   "date": "2025-12-17",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Gießerei Brandlhuber GmbH & Co. KG",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70110",
+  "source_hash": "a8b60dfbdc4f45c3",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Family foundry (185 staff, EUR 25.8 M), we are 4.9 % of its turnover and growing. Owner-led, costs from a two-year-old spreadsheet. Letter asks +9.5 % on HN 50-200 from 1 Nov 2026, breaching the calendar-year price clause. HN 50-200 already sells below its full cost; HN 100-315 has ~10 % margin and 70130 as active co-source. In the arena it accepts facts with 'a fair point', trades price for binding volume and 14-day payment, settles reached ~132-134 by round 2 (one logged deal at 132.7).",
+  "notes": "Needs volume security and recognition of 2022 favour (held old price a quarter). Fears losing HN 50-200 to qualified 70140. Contradiction: claims rising energy/material costs but admits not tracking prices since 2022 peak. Delivery weak (OTD 81-85 % vs 95 % target, amber Q3, 2 open 8D).",
+  "traits": {
+   "cash_short": "weak",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "strong",
+   "reciprocity": "strong",
+   "below_full_cost": "strong",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [],
+  "wants": [
+   "binding_volume",
+   "faster_payment"
+  ],
+  "fears": [
+   "losing HN 50-200 volume to qualified 70140",
+   "losing HN 100-315 share to 70130",
+   "being treated as non-partner after 2022 favour"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "stale_costing",
+    "doc": "doc:20260824-70110-M1",
+    "quote": "he works from his own spreadsheet, last updated two years ago."
+   },
+   {
+    "trait": "stale_costing",
+    "doc": "doc:20260909-70110-M4",
+    "quote": "admitted he had not followed his material and energy prices closely since the 2022 peak"
+   },
+   {
+    "trait": "stale_costing",
+    "doc": "arena:case:P01",
+    "quote": "We did not know that - a fair point."
+   },
+   {
+    "trait": "reciprocity",
+    "doc": "doc:20260917-70110-M3",
+    "quote": "in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."
+   },
+   {
+    "trait": "below_full_cost",
+    "doc": "data:parts.should_cost",
+    "quote": "part:310010 should-cost 132.64 vs price 126.53 (-4.6 %), own plant"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260902-70110-M2",
+    "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "binding annual volume commitment",
+    "14-day payment",
+    "effective date 1 Jan 2027",
+    "HN 100-315 quota vs 70130"
+   ],
+   "arguments": [
+    "notice-period breach: clause 3.1 fixes prices per calendar year, 1 Nov invalid",
+    "electricity: PPI-D351 fell 3.7 % in 12 months (its own cost driver, weight 0.06); never cite LCI-C (+2.7 %) or PPI-C241 (+6.5 %), they rose",
+    "delivery record: OTD 81-85 % vs 95 % target, amber Q3",
+    "qualified second source 70140 for HN 50-200",
+    "volume forecast / binding volume"
+   ],
+   "avoid": [
+    "citing LCI-C or PPI-C241 (they rose: 'your figures confirm our case')",
+    "changing any term after its final offer",
+    "squeezing HN 50-200 far below its 132.64 cost",
+    "asking for its calculation (stays internal)"
+   ],
+   "mandatory_terms": [
+    "calendar-year effective date (1 Jan)"
+   ],
+   "tactics": [
+    "Open at the current 126.53 and cite clause 3.1: no change before 1 Jan 2027.",
+    "Use one argument kind per round: notice breach, then OTD record, then the PPI-D351 electricity fall.",
+    "Offer a binding annual volume when it asks 'Which volume can you commit to?' and trade it for price.",
+    "Concede 14-day payment only in exchange for a visible price step.",
+    "Aim for about 131-133 from 1 Jan 2027; accept its final offer unchanged."
+   ],
+   "expected_concession": "Arena P01 (4 deals, 0 walked): first counter barely moves (138.55 to ~137-137.9), ~131.9-133.8 by round 2; one logged deal at 132.7 with 14-day payment and 1 Jan 2027 in round 3."
+  }
+ },
+ "arena": {
+  "cases": [
+   "case:P01"
+  ],
+  "sessions": 4,
+  "deals": 4,
+  "best_score": 0.928,
+  "walked": 0,
+  "agreed_round1": 0,
+  "fair_point": 8,
+  "no_change": 0,
+  "duplicate": 1,
+  "first_counter_vs_opening": 0.991,
+  "final_offer_round_median": null
+ }
+}

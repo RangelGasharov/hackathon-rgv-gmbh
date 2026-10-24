@@ -1,0 +1,48 @@
+{
+  "supplier": "sup:70160",
+  "source_hash": "e117270a303e42e5",
+  "analysed": "deep read v1",
+  "confidence": "low",
+  "summary": "Chinese private investment caster (900 staff, EUR 39.3 M); we are only 0.12 % of its turnover, a tiny account. Impeller HI 250 sells 6.5 % below its own full cost (repeatedly 'accepted below full cost to keep the volume'); 70180 holds 60 % as active co-source. Quality recovered to green (OTD 84 %, 0 ppm) after two red quarters. Few documents. Renewals settled 1.2-2.5 pts below its ask; little room to squeeze.",
+  "notes": "Needs to keep the volume it priced below cost to win. Fears losing the 40 % share to 70180. Only one generic 10-day payment e-mail; we pay nearly on time (1.9 days late).",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "strong",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "strong",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["approval_ladder", "hedged_material", "stale_costing"],
+  "wants": ["binding_volume"],
+  "fears": ["losing HI 250 share to 70180", "deeper losses on a part already below cost"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "0.12 % of its turnover (EUR 45 k of EUR 39.3 M)"},
+    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:310051 should-cost 84.97 vs price 79.44 (-6.5 %), own plant"},
+    {"trait": "cash_short", "doc": "doc:20260701-70160-M1", "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "high",
+    "levers": ["HI 250 quota shift from 70180", "binding volume", "longer lead time (standard 105 days)"],
+    "arguments": ["volume shift to active co-source 70180 (dearer at 118.73, no rival-price argument)", "past quality record: two red quarters (5396 ppm)", "volume forecast (+67 % spend trend)"],
+    "avoid": ["squeezing price further below its cost", "threats: we are too small to matter", "changing terms after its final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Keep the opening moderate; price is already 6.5 % below its own cost.",
+      "Use the 70180 co-source as the main lever and offer more quota for price stability.",
+      "Aim to hold the current price rather than win a big cut.",
+      "Do not offer faster payment as a gift; it shows no distress."
+    ],
+    "expected_concession": "No arena data; renewals settled 1.2-2.5 pts below its ask, each noted 'accepted below full cost to keep the volume'."
+  }
+}

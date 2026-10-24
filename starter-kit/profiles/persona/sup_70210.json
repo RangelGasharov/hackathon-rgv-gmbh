@@ -1,0 +1,55 @@
+{
+  "supplier": "sup:70210",
+  "source_hash": "29ee703554f68426",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Founder-led 22-staff turner (2-5 M EUR turnover); our ~EUR 317k is roughly 6-16 % of its turnover, so we matter. Second shift idle since spring, owner admits stale costing, calls us a reference customer. In P05 it answered data with 'a fair point' and moved 36 -> 30.5 -> 28 by round 3; faster payment and binding volume bought more. Open deep, feed it index, scorecard and rival data one kind per round, never change terms after its final offer.",
+  "notes": "Needs work for the idle second shift and reliable cash. Grievance about overdue invoices although we pay on average 8 days early (30 % of invoices >5 days late). Quality slipping: OTD 85.7 -> 80.8 %, ppm up to 1,863, 3 open 8D. Should-cost 25.22 for part:320010 is not of its plant (price 24.37).",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "weak",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "strong",
+    "reference_customer": "strong",
+    "stale_costing": "strong",
+    "reciprocity": "none",
+    "below_full_cost": "weak",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "strong",
+    "wants_clause": "none"
+  },
+  "unsure": ["hedged_material"],
+  "wants": ["faster_payment", "binding_volume"],
+  "fears": ["idle second shift", "losing part:320010 share to sup:70290", "late payments"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "stale_costing", "doc": "doc:20260908-70210-M1", "quote": "admitted he had not followed his material and energy prices closely since the 2022 peak"},
+    {"trait": "free_capacity", "doc": "doc:20260722-70210-M2", "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."},
+    {"trait": "free_capacity", "doc": "arena:case:P05", "quote": "We have free capacity for your parts."},
+    {"trait": "reference_customer", "doc": "doc:20260910-70210-M3", "quote": "said Hollerau is an important reference customer for them."},
+    {"trait": "late_payment_grievance", "doc": "doc:20260504-70210-P", "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"},
+    {"trait": "late_payment_grievance", "doc": "arena:case:P05", "quote": "getting the cash in … days reliably is exactly what we need."},
+    {"trait": "cash_short", "doc": "arena:case:P05", "quote": "we can always use the cash faster."},
+    {"trait": "approval_ladder", "doc": "arena:case:P05", "quote": "We need to clarify this internally - we will come back to you on price."},
+    {"trait": "stale_costing", "doc": "arena:case:P05", "quote": "We did not know that - a fair point."}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["14-day payment", "binding 12-month volume", "more parts for the idle second shift", "standard 28-day lead time"],
+    "arguments": ["index change (in P05 it conceded electricity is down)", "delivery record / scorecard (OTD 80.8 %, 1,863 ppm, 3 open 8D)", "rival quote from other RFQ bidders (sup:70290 is dearer at 24.92 on the 24 mm shaft)", "binding volume with schedule data", "contract §3.1: no increase notice by 2 Oct"],
+    "avoid": ["changing any term after its final offer (walked in P05)", "accepting in round 1 (it agreed instantly at 32.57/31.51 = too much)", "citing a cost driver that rose", "repeating an argument kind"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep; its first counter does not depend on our opening.",
+      "Bring one new evidence kind per round (index, scorecard, rival quote); it calls each a fair point and moves.",
+      "Offer 14-day payment and a binding volume with the schedule attached in exchange for price.",
+      "When it says it must clarify internally, hold and wait for the next round; it comes back lower.",
+      "After its final offer accept or walk; do not touch payment or lead time again."
+    ],
+    "expected_concession": "In P05 first counter ~15 % below its opening, final ~22 % below by round 3 (best 27.66 vs 36.0); renewals settled ~2 pts below its ask."
+  }
+}

@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2720" height="1920" viewBox="0 0 2720 1920" role="img" aria-labelledby="title desc">
+  <title id="title">Buyer agent flow with supplier profiles and bounded negotiation rounds</title>
+  <desc id="desc">Case and data inputs build a dossier informed by one of 46 supplier profiles. Each supplier thread reads a reply, prices equal-cost offers and targeted probes, writes a guarded response, and either counters, accepts the best standing sheet, or walks only when the alternative is cheaper. Each thread is capped at ten messages or the lower case limit, and its last message is a decision.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="24" markerHeight="24" refX="21" refY="12" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M2,3 L21,12 L2,21" fill="none" stroke="#aaa8a0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; }
+      .heading { font-size: 46px; font-weight: 600; fill: #f1efe8; }
+      .label { font-size: 54px; font-weight: 600; text-anchor: middle; }
+      .sub { font-size: 41px; font-weight: 400; text-anchor: middle; }
+      .small { font-size: 32px; font-weight: 400; text-anchor: middle; }
+      .input { fill: #f1efe8; stroke: #b9b7b0; stroke-width: 3; }
+      .data { fill: #def6ef; stroke: #178d77; stroke-width: 3; }
+      .process { fill: #eeedff; stroke: #655bd6; stroke-width: 3; }
+      .arrow { fill: none; stroke: #aaa8a0; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); }
+      .flow-frame { fill: none; stroke: #27292b; stroke-width: 3; stroke-dasharray: 12 16; }
+    </style>
+  </defs>
+
+  <rect width="2720" height="1920" fill="#090a0b"/>
+  <text x="1360" y="70" class="heading" text-anchor="middle">Buyer agent flow · supplier profiles and bounded rounds</text>
+
+  <!-- Inputs -->
+  <g>
+    <rect class="input" x="160" y="150" width="680" height="240" rx="34"/>
+    <text class="label" x="500" y="245" fill="#464644">Case file</text>
+    <text class="sub" x="500" y="322" fill="#696966">Need, rates, levers</text>
+  </g>
+  <g>
+    <rect class="input" x="1020" y="150" width="680" height="240" rx="34"/>
+    <text class="label" x="1360" y="245" fill="#464644">Data package</text>
+    <text class="sub" x="1360" y="322" fill="#696966">ERP, notes, indices</text>
+  </g>
+  <g>
+    <rect class="input" x="1880" y="150" width="680" height="240" rx="34"/>
+    <text class="label" x="2220" y="245" fill="#464644">Supplier replies</text>
+    <text class="sub" x="2220" y="322" fill="#696966">Sheets, PDFs, reasons</text>
+  </g>
+
+  <!-- Setup: the branch adds cached supplier knowledge and a live-read fallback. -->
+  <path class="arrow" d="M500 390 V515"/>
+  <path class="arrow" d="M1190 390 L900 515"/>
+  <path class="arrow" d="M1460 390 L1900 515"/>
+  <g>
+    <rect class="data" x="180" y="520" width="1000" height="235" rx="34"/>
+    <text class="label" x="680" y="615" fill="#075849">Dossier</text>
+    <text class="sub" x="680" y="680" fill="#16816d">Case facts, traits, costs, drivers</text>
+    <text class="small" x="680" y="724" fill="#16816d">Profile persona merged when usable</text>
+  </g>
+  <g>
+    <rect class="data" x="1540" y="520" width="1020" height="235" rx="34"/>
+    <text class="label" x="2050" y="615" fill="#075849">Supplier profiles</text>
+    <text class="sub" x="2050" y="680" fill="#16816d">46 prebuilt: facts, persona, playbook, arena history</text>
+    <text class="small" x="2050" y="724" fill="#16816d">Built once · 1 primary + 1 fallback; live read if missing/stale</text>
+  </g>
+  <path class="arrow" d="M1540 640 H1190"/>
+
+  <!-- Supplier replies enter the per-thread loop; dossier and profile guide its choices. -->
+  <path class="arrow" d="M2560 270 H2665 V1060 H410 V1085"/>
+  <text x="1860" y="1018" class="small" fill="#b8b6ae">new supplier reply</text>
+  <path class="arrow" d="M680 755 V865 H1360 V965"/>
+  <text x="1990" y="910" class="small" fill="#b8b6ae">dossier + profile playbook</text>
+
+  <!-- Per-supplier thread loop -->
+  <rect class="flow-frame" x="80" y="960" width="2560" height="450" rx="40"/>
+  <text x="145" y="1030" font-size="42" font-weight="600" fill="#d3d1ca">Each round · per supplier thread; offers shared across bidders</text>
+
+  <g>
+    <rect class="process" x="130" y="1095" width="560" height="235" rx="32"/>
+    <text class="label" x="410" y="1185" fill="#454091">Read reply</text>
+    <text class="sub" x="410" y="1250" fill="#5e56c1">Signals, sheets, documents</text>
+  </g>
+  <g>
+    <rect class="process" x="750" y="1095" width="560" height="235" rx="32"/>
+    <text class="label" x="1030" y="1185" fill="#454091">Price sheets</text>
+    <text class="sub" x="1030" y="1240" fill="#5e56c1">Equal-cost menu</text>
+    <text class="small" x="1030" y="1290" fill="#5e56c1">Probe near walk-away when needed</text>
+  </g>
+  <g>
+    <rect class="process" x="1370" y="1095" width="560" height="235" rx="32"/>
+    <text class="label" x="1650" y="1185" fill="#454091">Strategist</text>
+    <text class="small" x="1650" y="1250" fill="#5e56c1">One plan · fallback only on evidence</text>
+  </g>
+  <g>
+    <rect class="process" x="1990" y="1095" width="560" height="235" rx="32"/>
+    <text class="label" x="2270" y="1185" fill="#454091">Guard</text>
+    <text class="sub" x="2270" y="1250" fill="#5e56c1">Checks prices, claims, limits</text>
+  </g>
+  <path class="arrow" d="M690 1212 H740"/>
+  <path class="arrow" d="M1310 1212 H1360"/>
+  <path class="arrow" d="M1930 1212 H1980"/>
+
+  <!-- Outcomes -->
+  <path d="M2270 1330 V1430" fill="none" stroke="#aaa8a0" stroke-width="7" stroke-linecap="round"/>
+  <path class="arrow" d="M410 1430 V1470"/>
+  <path class="arrow" d="M1360 1430 V1470"/>
+  <path class="arrow" d="M2310 1430 V1470"/>
+  <path d="M410 1430 H2310" fill="none" stroke="#aaa8a0" stroke-width="7" stroke-linecap="round"/>
+
+  <g>
+    <rect class="input" x="85" y="1480" width="650" height="220" rx="34"/>
+    <text class="label" x="410" y="1570" fill="#464644">Counter e-mail</text>
+    <text class="sub" x="410" y="1635" fill="#696966">Only while 2+ messages remain</text>
+  </g>
+  <g>
+    <rect class="input" x="1035" y="1480" width="650" height="220" rx="34"/>
+    <text class="label" x="1360" y="1570" fill="#464644">Accept</text>
+    <text class="sub" x="1360" y="1635" fill="#696966">Best standing sheet</text>
+  </g>
+  <g>
+    <rect class="input" x="1985" y="1480" width="650" height="220" rx="34"/>
+    <text class="label" x="2310" y="1570" fill="#464644">Walk away</text>
+    <text class="sub" x="2310" y="1635" fill="#696966">Only if the alternative is cheaper</text>
+  </g>
+
+  <!-- A counter triggers another supplier reply and starts the next round. -->
+  <path class="arrow" d="M410 1700 V1740 H48 V1212 H120"/>
+  <text x="1360" y="1765" class="small" fill="#d0cec7">First offer within 60 s · cap: min(case limit, 10) messages per supplier thread</text>
+  <text x="1360" y="1815" class="small" fill="#d0cec7">Last available message decides: accept the best standing sheet, or walk only if the alternative is cheaper</text>
+  <text x="1360" y="1865" class="small" fill="#d0cec7">In multi-supplier cases, a closed deal stops sibling threads</text>
+</svg>

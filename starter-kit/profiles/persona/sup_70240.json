@@ -1,0 +1,50 @@
+{
+  "supplier": "sup:70240",
+  "source_hash": "e9f99fe749f71248",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Czech founder-led machine shop, 60 staff, EUR 2.81 M turnover; we are 2.19 % of it. Fully booked, confirms volume only against a binding 12-month commitment. In P05 it closed no deal in 7 sessions: opened 31.5 at 52-day lead time, raised price when we cut lead time, kept asking 'Which volume can you commit to?'. Open close, accept its lead time, send a binding volume schedule, and keep the flange DN 100 split with sup:70230 as our fallback.",
+  "notes": "Needs binding volume and long lead times; fears squeezed production. Wants faster cash in arena ('… days payment is way too long for us') though standard is 45 days. Rival quotes mostly 'do not change our calculation'. OTD fell to 62.5 % in Q3 2026, all quarters amber.",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "strong",
+    "late_payment_grievance": "weak",
+    "wants_clause": "none"
+  },
+  "unsure": ["hedged_material"],
+  "wants": ["binding_volume", "longer_lead_time", "faster_payment"],
+  "fears": ["squeezing production for short lead times", "unplanned volumes without proof"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "capacity_tight", "doc": "doc:20260924-70240-M1", "quote": "Order intake is very strong. We can confirm additional volumes only against a binding 12-month commitment."},
+    {"trait": "capacity_tight", "doc": "news:20260710-18", "quote": "Strojírna Hrvelec s.r.o. fully booked into next year"},
+    {"trait": "capacity_tight", "doc": "arena:case:P05", "quote": "we are super busy right now so … days lead time would actually push the price up."},
+    {"trait": "cash_short", "doc": "arena:case:P05", "quote": "But … days payment is way too long for us, we really need … days."},
+    {"trait": "late_payment_grievance", "doc": "data:payments.avg_days_late", "quote": "avg 5.6 days late, 53.7 % of invoices over 5 days late"}
+  ],
+  "playbook": {
+    "opening": "close",
+    "walk_risk": "high",
+    "levers": ["lead time at or above its 42-day standard (~0.5 % per day)", "binding 12-month volume with schedule data", "14-day payment"],
+    "arguments": ["binding volume with forecast/schedule CSV", "scorecard: OTD 62.5 % in 2026Q3", "volume shift on flange DN 100 to sup:70230"],
+    "avoid": ["deep opening", "pushing lead time below 42 days (price goes up)", "rival quote (usually 'does not change our calculation')", "changing any term after its final offer (walked in P05)"],
+    "mandatory_terms": ["binding volume commitment"],
+    "tactics": [
+      "Open close to its price and accept 42 days or longer lead time.",
+      "Answer 'Which volume can you commit to?' at once with a binding figure and the schedule data.",
+      "Offer 14-day payment as the trade for price; it reflects faster payment.",
+      "Take its final offer if within target; any later term change makes it walk."
+    ],
+    "expected_concession": "Barely moves: first counter ~at or above its opening (ratio 1.02), final offer ~round 5 at or slightly above its opening (32.5 vs 31.5); renewals asked +2.4/+3.3 % settled 0 % (2025: asked -1.0, settled -3.1 %)."
+  }
+}

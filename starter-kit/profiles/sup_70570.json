@@ -1,0 +1,332 @@
+{
+ "schema": 1,
+ "id": "sup:70570",
+ "name": "Sensorik Ammertal GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "b1c0d053ac293d4a",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "electrical",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 28
+ },
+ "company": {
+  "owner_type": "private",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1998,
+  "staff": 150,
+  "turnover_eur": 35100000,
+  "turnover_band": "25-50 M EUR",
+  "equity_ratio_pct": 43.5,
+  "credit_index": 176,
+  "credit_index_12m_ago": 176,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 434249,
+   "FY2025": 425973,
+   "FY2026": 422828
+  },
+  "share_of_its_turnover_pct": 1.2,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": -2.6
+ },
+ "parts": [
+  {
+   "part": "part:350050",
+   "description": "Pressure sensor 0-16 bar",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 23.13,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 1.3,
+   "should_cost": {
+    "unit_cost": 22.47,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 2.9
+   },
+   "cost_drivers": [
+    {
+     "series": "PPI-C2611",
+     "weight": 0.3,
+     "change_12m_pct": 13.5,
+     "ids": [
+      "idx:PPI-C2611@2025-08",
+      "idx:PPI-C2611@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.28,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 4.8,
+   "other_sources": []
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070570",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070570#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070570#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070570#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 28 days from order."
+   },
+   {
+    "id": "ctr:4600070570#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070570#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-26",
+    "part": "part:350050",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-12-05",
+    "part": "part:350050",
+    "type": "annual renewal",
+    "asked_pct": 2.1,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-13",
+    "part": "part:350050",
+    "type": "annual renewal",
+    "asked_pct": 1.6,
+    "settled_pct": -1.8,
+    "note": null
+   },
+   {
+    "date": "2025-12-08",
+    "part": "part:350050",
+    "type": "annual renewal",
+    "asked_pct": 4.9,
+    "settled_pct": 3.1,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 2.9,
+  "settled_avg_pct": 0.4,
+  "kept_share_of_ask": -0.16
+ },
+ "payments": {
+  "invoices": 71,
+  "avg_days_late": 2.9,
+  "share_paid_over_5_days_late_pct": 11.3,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70570@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 92.0,
+    "ppm": 374,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70570@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 80.0,
+    "ppm": 400,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70570@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 84.0,
+    "ppm": 272,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70570@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 88.0,
+    "ppm": 271,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 17,
+  "cost_recharged_eur": 1650,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260622-16",
+   "date": "2026-06-22",
+   "topic": "new_owner",
+   "headline": "Sensorik Ammertal GmbH acquired by an investor"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260927-70570-M1",
+   "date": "2026-09-27",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Sensorik Ammertal GmbH. Their sales director said there is no room on price this year: head office has frozen all price reductions until December 2027. He was open on payment terms and call-off flexibility."
+  },
+  {
+   "id": "doc:20260314-70570-M2",
+   "date": "2026-03-14",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Sensorik Ammertal GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20251007-70570-N",
+   "date": "2025-10-07",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Sensorik Ammertal GmbH",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300075",
+   "date": "2026-09-02",
+   "part": "part:350050",
+   "remarks": "Prices as per current list; discounts not possible this year (head-office directive)."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70570",
+  "source_hash": "b1c0d053ac293d4a",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Sensorik Ammertal GmbH, 150-staff pressure-sensor maker bought by an investor in June 2026; we are 1.2 % of its turnover; it is our sole source. Head office has frozen all price reductions until December 2027, but it is open on payment terms and call-off flexibility. Price is 2.9 % over its should-cost. Contract ends 2026-12-31. Hold the price flat and win value through terms and quality.",
+  "notes": "Contradiction: a private firm citing a 'head office' directive. Historically it gave way, settling far below its asks. Quality is weak: 17 complaints in three years and OTD 80-92 % against a 95 % target. Our spend is falling 2.6 %.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "strong",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "cash_short"
+  ],
+  "wants": [],
+  "fears": [
+   "falling volume"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "price_frozen",
+    "doc": "doc:20260927-70570-M1",
+    "quote": "head office has frozen all price reductions until December 2027."
+   },
+   {
+    "trait": "price_frozen",
+    "doc": "quote:7300075",
+    "quote": "Prices as per current list; discounts not possible this year (head-office directive)."
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260314-70570-M2",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "medium",
+   "levers": [
+    "payment terms",
+    "call-off flexibility",
+    "binding volume",
+    "contract length"
+   ],
+   "arguments": [
+    "quality record: 17 complaints, OTD 80-92 %",
+    "binding volume commitment",
+    "should-cost (2.9 % over cost)",
+    "volume forecast"
+   ],
+   "avoid": [
+    "repeating price-cut demands against the freeze",
+    "threatening a second source we do not have",
+    "changing terms after a final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Hold 23.13; the freeze blocks cuts, not our refusal of any increase.",
+    "Trade a binding volume and a 24-36 month contract for price stability.",
+    "Ask for value in terms it offered: payment days and call-off flexibility.",
+    "Use the complaint record once as the quality argument."
+   ],
+   "expected_concession": "No arena data; it historically settled well below its asks (kept -0.16), but the new freeze means expect terms, not price cuts."
+  }
+ },
+ "arena": null
+}

@@ -1,0 +1,50 @@
+{
+  "supplier": "sup:70230",
+  "source_hash": "7598d35351bc35fc",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Family KG, 14 staff, turnover under 2 M EUR; our ~EUR 369k is likely 18 %+ of its business, so it depends on us. Owner's costing is stale and he offered an open-book walk-through, yet on 27 Sep it demanded +7 % on the coupling hub from 1 Nov 2026, inside the fixed-price year. All three parts have a second source. Reject the increase on contract grounds, open deep for a reduction, use its own calculation and any indices that fell.",
+  "notes": "Fears losing volume and is unsure of its own numbers. Increase letter cites April wage rise, energy and material, yet the owner admits he has not followed energy/material since 2022. Complains of overdue invoices although we pay ~4 days early on average (39 % >5 days late, 119 discounts taken).",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "strong",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "strong",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "strong",
+    "wants_clause": "none"
+  },
+  "unsure": ["hedged_material", "free_capacity", "approval_ladder"],
+  "wants": ["faster_payment"],
+  "fears": ["losing coupling hub to qualified sup:70250", "losing shaft sleeve / flange share to sup:70295 / sup:70240", "rising wage costs"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "open_book", "doc": "doc:20260809-70230-M3", "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."},
+    {"trait": "stale_costing", "doc": "doc:20260724-70230-M1", "quote": "admitted he had not followed his material and energy prices closely since the 2022 peak"},
+    {"trait": "late_payment_grievance", "doc": "doc:20260812-70230-P", "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"},
+    {"trait": "cash_short", "doc": "doc:20260912-70230-M2", "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["2 % / 14-day discount payment, on time", "volume share on shaft sleeve and flange DN 100", "keeping the coupling hub single-sourced"],
+    "arguments": ["contract §3.1 breach: prices fixed per calendar year, 1 Nov increase invalid", "index change, only drivers that truly fell (owner has not tracked them since 2022)", "its own calculation (open book)", "rival source: sup:70250 qualified for coupling hub", "scorecard OTD ~82 % vs 95 % target"],
+    "avoid": ["citing wages (they rose April 2026)", "accepting any part of the 7 % for 2026", "repeating the same argument kind"],
+    "mandatory_terms": [],
+    "tactics": [
+      "First reject the 1 Nov 2026 increase: §3.1 fixes prices for the calendar year.",
+      "Accept the open-book offer and argue from its hourly rate and material shares.",
+      "If current energy/material indices are below his figures, show them; he has not tracked them since 2022.",
+      "Mention sup:70250 is qualified for the coupling hub and has free capacity.",
+      "Offer reliable on-time payment rather than paying for faster payment."
+    ],
+    "expected_concession": "Renewals: asked +1.3 to +4.2 % and settled at ~0 % in 2024 and 2025; in 2023 it settled 2.0-3.6 pts below its ask."
+  }
+}

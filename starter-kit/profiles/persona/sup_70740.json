@@ -1,0 +1,98 @@
+{
+  "supplier": "sup:70740",
+  "source_hash": "bfd6504eb35d636f",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Family bright-steel firm (98 M EUR); we are 0.44 % and it is reviewing small accounts. Dearer than our other sources: 1.4404 bar 5.84 vs 70710's 5.45, C45 bar 143.39 vs 70720's 126.05; sole source for 1.4021 bar. Wants an AS-14404 clause and binding volume; index-fall data moved it. Arena P18: first counter -7 %, deals 5.40-5.70 with 45-90 days and the clause; one walk, one round-1 agreement (at 5.70).",
+  "notes": "Wants binding volume and an index clause; fears losing quota to cheaper 70710 and 70720. Contradiction: owner offered open book twice, but arena refuses any breakdown beyond material share. History: settles far below its ask (kept 367 %). OTD 81-84 % vs 95 % target.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "none",
+    "small_account": "strong",
+    "open_book": "weak",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "strong"
+  },
+  "unsure": [
+    "below_full_cost"
+  ],
+  "wants": [
+    "index_clause",
+    "binding_volume",
+    "long_contract"
+  ],
+  "fears": [
+    "losing bar quota to cheaper 70710 and 70720",
+    "alloy cost risk without a clause"
+  ],
+  "hedge_until": null,
+  "evidence": [
+    {
+      "trait": "small_account",
+      "doc": "doc:20260916-70740-M5",
+      "quote": "they are reviewing small accounts and will focus on customers with volume."
+    },
+    {
+      "trait": "approval_ladder",
+      "doc": "doc:20260812-70740-M3",
+      "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks"
+    },
+    {
+      "trait": "wants_clause",
+      "doc": "doc:20260922-70740-P18",
+      "quote": "including a price adjustment clause based on AS-14404. Please let us know your view."
+    },
+    {
+      "trait": "wants_clause",
+      "doc": "arena:case:P18",
+      "quote": "We can offer a Preisgleitklausel on AS-14404"
+    },
+    {
+      "trait": "open_book",
+      "doc": "arena:case:P18",
+      "quote": "While we cannot provide a detailed cost breakdown, we will gladly coordinate with our management"
+    }
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "medium",
+    "levers": [
+      "binding annual volume",
+      "AS-14404 index clause",
+      "36-month term",
+      "payment days",
+      "quota on 1.4404 and C45 bar"
+    ],
+    "arguments": [
+      "recent AS-14404 fall: -5.5 % from 2026-06 to 2026-09 (over 12 months it rose 5.9 %); in P18 it acknowledged 'the recent decreases in AS-14404'",
+      "binding volume with consumption data",
+      "same-part price: 70710 at 5.45 (1.4404) or 70720 at 126.05 (C45)",
+      "scorecard: OTD 81 % vs 95 % target"
+    ],
+    "avoid": [
+      "citing cost drivers that rose",
+      "rival or price-history data not for this exact part",
+      "offering too much early (agreed in round 1 once)",
+      "changing terms after its final offer"
+    ],
+    "mandatory_terms": [
+      "AS-14404 index clause"
+    ],
+    "tactics": [
+      "Accept its AS-14404 clause, then cite the recent AS-14404 fall (-5.5 % since 2026-06) with its index ids; it answered 'it holds and we took it into account'.",
+      "State a binding annual volume for 36 months and send the consumption data it asks for.",
+      "Name the exact part when citing 70710's 5.45 or 70720's 126.05; generic rival data was rejected.",
+      "Expect steps of ~0.10 and a final offer by round 4; keep moving visibly and accept it unchanged.",
+      "Take its short-payment alternative only if the discount beats ~7-8 %/yr."
+    ],
+    "expected_concession": "First counter ~7 % below its opening (6.10 to 5.6-5.8), then 0.10 steps; P18 deals at 5.40-5.61 in rounds 3-5, plus one at 5.70 agreed in round 1."
+  }
+}

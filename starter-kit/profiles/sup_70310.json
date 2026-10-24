@@ -1,0 +1,334 @@
+{
+ "schema": 1,
+ "id": "sup:70310",
+ "name": "Blechtechnik Aichbauer GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "8b3a78244486fa20",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "sheet metal",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 45,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 21
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1982,
+  "staff": 70,
+  "turnover_eur": 7510000,
+  "turnover_band": "5-10 M EUR",
+  "equity_ratio_pct": 24.1,
+  "credit_index": 232,
+  "credit_index_12m_ago": 232,
+  "vda63_grade": "C",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 828503,
+   "FY2025": 856497,
+   "FY2026": 851190
+  },
+  "share_of_its_turnover_pct": 11.33,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 2.7
+ },
+ "parts": [
+  {
+   "part": "part:330010",
+   "description": "Base frame HN 50/65, welded, painted",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 100.14,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -6.0,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C241",
+     "weight": 0.32,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.29,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.06,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.6,
+   "other_sources": []
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070310",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 45,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070310#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070310#4.1",
+    "type": "payment",
+    "text": "Payment: 45 days net."
+   },
+   {
+    "id": "ctr:4600070310#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 21 days from order."
+   },
+   {
+    "id": "ctr:4600070310#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070310#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-20",
+    "part": "part:330010",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-12-06",
+    "part": "part:330010",
+    "type": "annual renewal",
+    "asked_pct": -2.2,
+    "settled_pct": -6.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-27",
+    "part": "part:330010",
+    "type": "annual renewal",
+    "asked_pct": 2.2,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-20",
+    "part": "part:330010",
+    "type": "annual renewal",
+    "asked_pct": 3.6,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 1.2,
+  "settled_avg_pct": -2.0,
+  "kept_share_of_ask": 0.91
+ },
+ "payments": {
+  "invoices": 76,
+  "avg_days_late": 6.0,
+  "share_paid_over_5_days_late_pct": 47.4,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70310@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 70.4,
+    "ppm": 1197,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70310@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 67.9,
+    "ppm": 2903,
+    "colour": "red"
+   },
+   {
+    "id": "sc:70310@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 65.5,
+    "ppm": 3175,
+    "colour": "red"
+   },
+   {
+    "id": "sc:70310@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 63.0,
+    "ppm": 4118,
+    "colour": "red"
+   }
+  ],
+  "complaints_3y": 22,
+  "cost_recharged_eur": 1650,
+  "open_8d": 1
+ },
+ "news": [],
+ "documents": [
+  {
+   "id": "doc:20260924-70310-P12",
+   "date": "2026-09-24",
+   "kind": "letter",
+   "subject": "Escalation: delivery and quality performance",
+   "author": "Hollerau Pumpenwerke, Supplier Quality",
+   "text": "To Blechtechnik Aichbauer GmbH\nyour rolling 12-month scorecard (sc:70310@2026Q3) is **red**: on-time delivery 63.0 %, 4118 ppm, 0 overdue 8D reports. We expect a binding improvement plan for Base frame HN 50/65, welded, painted (part:330010) and will discuss quality commitments and cost recovery.\nHollerau Pumpenwerke, Supplier Quality"
+  },
+  {
+   "id": "doc:20260911-70310-M1",
+   "date": "2026-09-11",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Blechtechnik Aichbauer GmbH",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20251003-70310-N",
+   "date": "2025-10-03",
+   "kind": "email",
+   "subject": "ISO 9001 certificate",
+   "author": "Blechtechnik Aichbauer GmbH",
+   "text": "Please find attached our renewed ISO 9001 certificate."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70310",
+  "source_hash": "8b3a78244486fa20",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family sheet-metal shop (70 staff, EUR 7.5 M). We are 11.3 % of its turnover; it is our sole source for base frame HN 50/65 (our tooling, no second source). Quality is collapsing: red scorecard three quarters running, OTD 63 %, 4118 ppm, escalation letter sent 24 Sep. It asked +2-4 % in 2024/25 and settled at 0. Open deep, lead with scorecard and cost recovery, then index and forecast.",
+  "notes": "Needs our volume (11 % of turnover); asked for 10-day payment against a cash discount (generic e-mail, no distress: credit index flat 232). Fears losing the frame after the red escalation. No should-cost and no second source: our walk-away rests on owning the tooling. We pay 6 days late on average, no complaint yet.",
+  "traits": {
+   "cash_short": "weak",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "weak",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost",
+   "stale_costing",
+   "hedged_material"
+  ],
+  "wants": [
+   "faster_payment"
+  ],
+  "fears": [
+   "losing the frame after the red escalation",
+   "cost recovery for complaints",
+   "resourcing of our own tooling"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260911-70310-M1",
+    "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "data:payments.share_paid_over_5_days_late_pct",
+    "quote": "47.4 % of invoices paid over 5 days late"
+   },
+   {
+    "trait": "small_account",
+    "doc": "data:our_weight.share_of_its_turnover_pct",
+    "quote": "11.33"
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "10-day payment only against cash discount or price cut",
+    "binding volume / forecast",
+    "contract extension beyond 2027-06",
+    "withholding complaint cost recovery"
+   ],
+   "arguments": [
+    "red scorecard sc:70310@2026Q3: OTD 63 %, 4118 ppm",
+    "complaint cost recovery under clause 6.1 and escalation doc:20260924-70310-P12",
+    "our 11 % share of its turnover",
+    "material/energy index, only if it actually fell",
+    "notice-period breach: any 2027 increase missed the 90-day deadline",
+    "volume forecast"
+   ],
+   "avoid": [
+    "citing a cost driver that rose",
+    "giving faster payment for free: it is not distressed",
+    "repeating an argument kind"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep and lead with the red scorecard and the escalation letter: quality cost recovery is the first argument.",
+    "Use our 11 % share of its turnover: it cannot afford to lose the frame.",
+    "Offer 10-day payment only if it comes with a cash discount or extra price cut.",
+    "Add index and forecast arguments one kind per round; move in small visible steps.",
+    "Reject any increase: the 90-day notice before year end has passed."
+   ],
+   "expected_concession": "No arena data; history shows it asks +2-4 % and settles at 0, and once gave -6 % after asking -2.2 %, so it yields under pressure."
+  }
+ },
+ "arena": null
+}

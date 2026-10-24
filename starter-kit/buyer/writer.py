@@ -190,6 +190,7 @@ How these suppliers behave (from 40+ real sessions):
 - Its reply phrases are signals. "It holds and we took it into account": that argument counted. "We did not know that - a fair point": it counted more. "Does not change our calculation": no effect, do not send more of that kind. "Your figures confirm our case": it backfired. "Already taken into account" or duplicate: that kind is used up. "We need to clarify this internally" or "we will come back to you on price": a second concession is coming, so do not move much. The same price twice: it is at its limit and a final offer follows.
 - A verified argument of a kind it has not heard is our strongest lever; each kind counts once per supplier, so send different kinds, strongest for this supplier first. A rival quote far below its price makes it give half the gap at once and the rest next round.
 - It gives nothing without a visible move from us, but our moves are priced by code: choose among the MENU only.
+- Follow the assigned negotiation plan in WHAT WE KNOW: keep to its primary approach, and use only its one fallback when the plan says it switched. Do not invent a third tactic or change any price.
 - It pays for packages it values: an index clause for a supplier driven by copper or alloy prices, 36 months for frozen-price or long-term suppliers, a longer lead time for a capacity-tight one, faster payment for a cash-short one, a binding volume commitment for one that needs volume. Read its documents and e-mails to see which, and pick sheets accordingly; a sheet with a small extra cost to us is worth sending when it is the package this supplier wants.
 - Raw-material distributors fix no price beyond 12 months: every longer sheet carries their index clause, and in 12 of 12 real sessions they came back with the same deadband-5 clause, also when we had offered deadband 3 or none. The MENU therefore holds one clause, the one that costs us least; never change it after their final offer (they withdraw). Where the clause is optional (a copper-driven part, 12 months) the MENU has a sheet with it next to one without: send both once, and if it takes the clause sheet, stay with it.
 - Answer its questions with the facts in POINTS (binding volume, data we attach): free commitments it values.
@@ -259,7 +260,8 @@ class StrategistWriter(ClaudeWriter):
         return "\n\n".join(
             [
                 f"CASE: {case['title']} ({case.get('type')}, goal {b.get('category_goal')}). Round {plan.round_no + 1} "
-                f"of {case.get('round_limit', 10)}. Our need: {b.get('need_per_year')} a year; must-haves: {must}.",
+                f"of {min(case.get('round_limit') or 10, 10)}. Our need: {b.get('need_per_year')} a year; "
+                f"must-haves: {must}.",
                 "THREAD SO FAR (oldest first):\n" + _thread_lines(plan.thread or []),
                 "ARGUMENT KINDS THIS SUPPLIER HAS ALREADY HEARD: " + (", ".join(sorted(plan.used_kinds)) or "none"),
                 "ARGUMENTS WE SENT LAST (kinds): " + (", ".join(plan.last_kinds) or "none"),

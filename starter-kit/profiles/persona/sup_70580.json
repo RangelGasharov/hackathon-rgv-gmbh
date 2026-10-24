@@ -1,0 +1,52 @@
+{
+  "supplier": "sup:70580",
+  "source_hash": "3879094630bdb93d",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Motorenwerk Saalach GmbH, group-owned motor maker (650 staff) refocusing on key accounts; we are 0.63 % of its turnover and now 'not strategic'. We pay it 19.4 days late on average (90 % of invoices over 5 days late) and it threatened to review conditions. It quotes list conditions, stock supply only. Quality is excellent. Price is 2.6 % over its should-cost; sup:70510 is qualified for its 30 kW motor. Offer on-time payment; keep demands modest.",
+  "notes": "Needs on-time payment; it fears being tied to a small, late-paying account. Our grievance is self-inflicted. Its quality is excellent (0 ppm, OTD 92-100 %, 1 complaint in 3 years), so quality arguments backfire. 'Supply from stock only' hints it may cut service. Spend grew 28 %, yet it still calls us not strategic.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "weak",
+    "small_account": "strong",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "weak",
+    "late_payment_grievance": "strong",
+    "wants_clause": "none"
+  },
+  "unsure": ["capacity_tight"],
+  "wants": ["faster_payment"],
+  "fears": ["late payment", "small unprofitable accounts"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "late_payment_grievance", "doc": "doc:20260612-70580-P", "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"},
+    {"trait": "late_payment_grievance", "doc": "data:payments.avg_days_late", "quote": "19.4 days late on average, 90 % of invoices over 5 days late"},
+    {"trait": "small_account", "doc": "doc:20260926-70580-M1", "quote": "Hollerau's volumes are 'not strategic' for Motorenwerk Saalach GmbH any more"},
+    {"trait": "small_account", "doc": "doc:20260908-70580-M3", "quote": "they are reviewing small accounts and will focus on customers with volume."},
+    {"trait": "approval_ladder", "doc": "doc:20260322-70580-M2", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."},
+    {"trait": "price_frozen", "doc": "quote:7300057", "quote": "List conditions; supply from stock only."}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "high",
+    "levers": ["on-time or faster payment", "binding volume", "7.5 kW motor volume (qualified here)"],
+    "arguments": ["commitment to pay on time or faster", "qualified second source sup:70510 for the 30 kW (no price on file)", "binding volume commitment", "volume forecast (+28 % spend)"],
+    "avoid": ["quality or delivery arguments (record is excellent)", "asking for longer payment terms", "deep cuts or ultimatums", "changing terms after a final offer"],
+    "mandatory_terms": ["payment on agreed terms"],
+    "tactics": [
+      "Acknowledge the overdue invoices and commit to paying on time, or faster, as the opener.",
+      "Keep payment at 30 days or shorter; never ask for longer.",
+      "Hold current 1608.32; cite the sup:70510 alternative once, politely.",
+      "Offer volume or 7.5 kW share to counter 'not strategic'.",
+      "Accept a fair final offer early; it may walk."
+    ],
+    "expected_concession": "No arena data; it historically settled well below its asks (kept -0.04), but the new sales director and grievance make it firmer now."
+  }
+}

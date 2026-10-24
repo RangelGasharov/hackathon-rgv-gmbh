@@ -93,6 +93,7 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
     def finish(res):
         if not done.is_set():
             result.update(res or {})
+            # Shared by every supplier worker: once the procurement has a result, sibling drafts stop.
             done.set()
 
     def refresh(sid):
@@ -154,9 +155,15 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
                     time.sleep(1.0)  # another thread decides this case; check back
                     continue
             target = decision["supplier_id"]
+            if done.is_set():  # another supplier thread closed the procurement while this draft was being prepared
+                agent.t[target].in_flight = False
+                return
             # the 60 s per message run from the supplier's last reply: give the writer what is left of them
             budget = 60.0 - (time.monotonic() - reply_at.get(target, time.monotonic())) - 12.0
             msg = agent.write(decision["message"], budget)
+            if done.is_set():  # discard a slow sibling draft after the procurement has closed
+                agent.t[target].in_flight = False
+                return
             took = time.monotonic() - t0
             if took > MOVE_BUDGET_S:
                 log.warning("%s %s: decision took %.0fs", case_id, sid, took)

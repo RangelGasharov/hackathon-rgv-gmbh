@@ -1,0 +1,383 @@
+{
+ "schema": 1,
+ "id": "sup:70290",
+ "name": "Feinmechanik Rottaler GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "440333f89564bb84",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "machined parts",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "EXW",
+  "lead_time_days": 35
+ },
+ "company": {
+  "owner_type": "founder",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1993,
+  "staff": 25,
+  "turnover_eur": null,
+  "turnover_band": "2-5 M EUR",
+  "equity_ratio_pct": 21.7,
+  "credit_index": 231,
+  "credit_index_12m_ago": 231,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 191949,
+   "FY2025": 215910,
+   "FY2026": 218808
+  },
+  "share_of_its_turnover_pct": null,
+  "share_of_its_turnover_range_pct": [
+   4.4,
+   10.9
+  ],
+  "spend_trend_pct": 14.0
+ },
+ "parts": [
+  {
+   "part": "part:320010",
+   "description": "Pump shaft HN 24 mm",
+   "status": "active",
+   "quota_pct": 70,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 24.92,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -5.5,
+   "should_cost": {
+    "unit_cost": 25.22,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": -1.2
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.33,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.19,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.12,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.01,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 3.9,
+   "other_sources": [
+    {
+     "supplier": "sup:70210",
+     "status": "active",
+     "quota_pct": 30
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070290",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "EXW",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070290#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070290#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070290#5.1",
+    "type": "delivery",
+    "text": "Delivery EXW; standard lead time 35 days from order."
+   },
+   {
+    "id": "ctr:4600070290#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070290#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-12-07",
+    "part": "part:320010",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-12",
+    "part": "part:320010",
+    "type": "annual renewal",
+    "asked_pct": -0.1,
+    "settled_pct": -2.7,
+    "note": null
+   },
+   {
+    "date": "2024-12-02",
+    "part": "part:320010",
+    "type": "annual renewal",
+    "asked_pct": 3.7,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-19",
+    "part": "part:320010",
+    "type": "annual renewal",
+    "asked_pct": -1.2,
+    "settled_pct": -2.9,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 0.8,
+  "settled_avg_pct": -1.9,
+  "kept_share_of_ask": 9.81
+ },
+ "payments": {
+  "invoices": 72,
+  "avg_days_late": 9.8,
+  "share_paid_over_5_days_late_pct": 79.2,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70290@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 69.2,
+    "ppm": 592,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70290@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 75.0,
+    "ppm": 679,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70290@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 80.8,
+    "ppm": 739,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70290@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 75.9,
+    "ppm": 921,
+    "colour": "amber"
+   }
+  ],
+  "complaints_3y": 24,
+  "cost_recharged_eur": 2100,
+  "open_8d": 1
+ },
+ "news": [
+  {
+   "id": "news:20260323-06",
+   "date": "2026-03-23",
+   "topic": "big_order",
+   "headline": "Feinmechanik Rottaler GmbH wins large hydraulics contract"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260619-70290-M3",
+   "date": "2026-06-19",
+   "kind": "email",
+   "subject": "New volumes",
+   "author": "Feinmechanik Rottaler GmbH",
+   "text": "Order intake is very strong. We can confirm additional volumes only against a binding 12-month commitment."
+  },
+  {
+   "id": "doc:20260501-70290-M2",
+   "date": "2026-05-01",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Feinmechanik Rottaler GmbH",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20260315-70290-M1",
+   "date": "2026-03-15",
+   "kind": "email",
+   "subject": "New volumes",
+   "author": "Feinmechanik Rottaler GmbH",
+   "text": "Order intake is very strong. We can confirm additional volumes only against a binding 12-month commitment."
+  },
+  {
+   "id": "doc:20251014-70290-N",
+   "date": "2025-10-14",
+   "kind": "email",
+   "subject": "ISO 9001 certificate",
+   "author": "Feinmechanik Rottaler GmbH",
+   "text": "Please find attached our renewed ISO 9001 certificate."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70290",
+  "source_hash": "440333f89564bb84",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Founder-led 25-staff shop, 2-5 M EUR; our ~EUR 219k is ~4-11 % of its turnover. Won a large hydraulics contract and confirms extra volume only against binding 12-month commitments. Holds 70 % of pump shaft HN 24 mm at 24.92, already 1.2 % below its own plant should-cost; sup:70210 holds 30 % at 24.37 with free capacity. Open moderately, buy price with lead time and binding volume, use sup:70210 and the amber scorecard, do not squeeze hard.",
+  "notes": "Needs binding volume and planning security; fears tying capacity to unplanned demand. Price below its full cost yet it gave 2.7-2.9 % reductions in 2023 and 2025. We pay 9.8 days late on average (79 % >5 days late) without written complaint. OTD 69-81 %, 1 open 8D.",
+  "traits": {
+   "cash_short": "weak",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "strong",
+   "hedged_material": "none",
+   "capacity_tight": "strong",
+   "late_payment_grievance": "weak",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "hedged_material",
+   "approval_ladder"
+  ],
+  "wants": [
+   "binding_volume"
+  ],
+  "fears": [
+   "committing capacity without binding volume"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "capacity_tight",
+    "doc": "doc:20260619-70290-M3",
+    "quote": "Order intake is very strong. We can confirm additional volumes only against a binding 12-month commitment."
+   },
+   {
+    "trait": "capacity_tight",
+    "doc": "news:20260323-06",
+    "quote": "Feinmechanik Rottaler GmbH wins large hydraulics contract"
+   },
+   {
+    "trait": "below_full_cost",
+    "doc": "data:parts.should_cost",
+    "quote": "part:320010 price 24.92 vs should-cost of its plant 25.22 (-1.2 %), no margin included"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260501-70290-M2",
+    "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "data:payments.avg_days_late",
+    "quote": "avg 9.8 days late, 79.2 % of invoices over 5 days late"
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "medium",
+   "levers": [
+    "binding 12-month volume",
+    "longer lead time (~0.5 % per day)",
+    "paying on time"
+   ],
+   "arguments": [
+    "rival price: sup:70210 at 24.37 on the same part",
+    "scorecard: OTD 75.9 %, 921 ppm, open 8D",
+    "binding volume with schedule data",
+    "contract §3.1: no increase notice by 2 Oct"
+   ],
+   "avoid": [
+    "deep opening (capacity-tight bots jump to a final offer)",
+    "forecast-only volume talk",
+    "squeezing far below 24.37 (already below its cost)",
+    "changing terms after a final offer"
+   ],
+   "mandatory_terms": [
+    "binding commitment for any additional volume"
+   ],
+   "tactics": [
+    "Open moderately, aiming at sup:70210's 24.37 rather than a deep cut.",
+    "Offer a binding 12-month volume and accept its 35-day or longer lead time for price.",
+    "Mention sup:70210 has free capacity for more of the 24 mm shaft.",
+    "Use the scorecard once; do not cite drivers that rose."
+   ],
+   "expected_concession": "Small: renewals settled 1.7-3.7 pts below its ask, but price is already below its cost; expect 1-2 % at most."
+  }
+ },
+ "arena": null
+}

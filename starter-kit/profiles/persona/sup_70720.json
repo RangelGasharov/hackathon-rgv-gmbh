@@ -1,0 +1,84 @@
+{
+  "supplier": "sup:70720",
+  "source_hash": "ae29fa1db9e42202",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family steel stockholder (196 M EUR, 500 staff); we are 0.22 % but it twice called us an important reference customer. Cheaper second source for C45 bar (126.05 vs 70740's 143.39) and sole source for S235 sheet. Proposes a PPI-C241 adjustment clause for the sheet; owner offered open-book costing twice. History: passes on more decrease than it asks (kept 155 %). Accept a two-way clause, push the base price with its own cost shares.",
+  "notes": "Needs an index clause to protect its steel margin and wants to keep a reference customer. No hedge stated. Our spend fell ~9 % in FY2026. Contradiction: 0.22 % share vs 'important reference customer'. OTD 90-92 % vs 95 % target, 1 open 8D.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "strong",
+    "free_capacity": "none",
+    "reference_customer": "strong",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "strong"
+  },
+  "unsure": [
+    "below_full_cost",
+    "hedged_material"
+  ],
+  "wants": [
+    "index_clause"
+  ],
+  "fears": [
+    "steel cost risk without an index clause",
+    "losing a reference customer"
+  ],
+  "hedge_until": null,
+  "evidence": [
+    {
+      "trait": "reference_customer",
+      "doc": "doc:20260924-70720-M1",
+      "quote": "Stahlhandel Rupprecht-Kessel GmbH said Hollerau is an important reference customer for them."
+    },
+    {
+      "trait": "open_book",
+      "doc": "doc:20260712-70720-M3",
+      "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+    },
+    {
+      "trait": "wants_clause",
+      "doc": "doc:20260916-70720-P16",
+      "quote": "including a price adjustment clause based on PPI-C241. Please let us know your view."
+    }
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": [
+      "PPI-C241 index clause (two-way)",
+      "longer term",
+      "reference-customer role",
+      "binding volume"
+    ],
+    "arguments": [
+      "its own cost shares from the open-book calculation",
+      "no index argument: its cost drivers rose over 12 months (PPI-C2431 +12.3 %, PPI-C241 +6.5 %, LCI-C +2.7 %)",
+      "scorecard: OTD 92 % vs 95 % target, 1 open 8D",
+      "volume forecast"
+    ],
+    "avoid": [
+      "citing a cost driver that rose",
+      "changing terms after its final offer"
+    ],
+    "mandatory_terms": [
+      "PPI-C241 price adjustment clause (it proposed one for the sheet)"
+    ],
+    "tactics": [
+      "Accept its PPI-C241 clause but set it two-way with our base month, material share and a deadband.",
+      "Take up the owner's offer: ask for its calculation and argue from its own material and labour shares.",
+      "Use its reference-customer statement as the reason for a sharp base price.",
+      "Cite the scorecard once (OTD 92 % vs 95 %, 1 open 8D).",
+      "Do not change any term after its final offer."
+    ],
+    "expected_concession": "No arena data; history shows it settles below its own ask every year (kept 155 %), so expect it to move further than its first counter."
+  }
+}

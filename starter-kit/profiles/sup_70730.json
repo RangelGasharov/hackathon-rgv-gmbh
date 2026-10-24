@@ -1,0 +1,364 @@
+{
+ "schema": 1,
+ "id": "sup:70730",
+ "name": "Inox Center Ostalpen GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "de93900bdd0edfd6",
+ "persona_stale": false,
+ "problems": [],
+ "country": "AT",
+ "category": "raw material",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 14
+ },
+ "company": {
+  "owner_type": "private",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1995,
+  "staff": 150,
+  "turnover_eur": 76300000,
+  "turnover_band": "50-100 M EUR",
+  "equity_ratio_pct": 34.2,
+  "credit_index": 167,
+  "credit_index_12m_ago": 167,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 288138,
+   "FY2025": 278282,
+   "FY2026": 267004
+  },
+  "share_of_its_turnover_pct": 0.35,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": -7.3
+ },
+ "parts": [
+  {
+   "part": "part:370021",
+   "description": "Sheet 1.4301 2 mm, 2B, cut to size",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 4.05,
+   "price_since": "2026-07-01",
+   "price_change_pct_since_first": -20.6,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "AS-14301",
+     "weight": 0.46,
+     "change_12m_pct": 8.6,
+     "ids": [
+      "idx:AS-14301@2025-09",
+      "idx:AS-14301@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.34,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.04,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 6.3,
+   "other_sources": [
+    {
+     "supplier": "sup:70710",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070730",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 60,
+  "price_basis": "index clause",
+  "clauses": [
+   {
+    "id": "ctr:4600070730#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 60 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070730#3.2",
+    "type": "index",
+    "text": "The price follows index AS-14301: P = P0 x (1 - 0.45 + 0.45 x I(m-2) / I(base)), base = the index two months before the price year starts, adjusted quarterly on the 1st of January, April, July and October if the change exceeds 0 %.",
+    "series": "AS-14301",
+    "material_share": 0.45
+   },
+   {
+    "id": "ctr:4600070730#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070730#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 14 days from order."
+   },
+   {
+    "id": "ctr:4600070730#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070730#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 60 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-12-04",
+    "part": "part:370021",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-19",
+    "part": "part:370021",
+    "type": "annual renewal",
+    "asked_pct": -6.4,
+    "settled_pct": -8.9,
+    "note": null
+   },
+   {
+    "date": "2024-12-07",
+    "part": "part:370021",
+    "type": "annual renewal",
+    "asked_pct": 1.2,
+    "settled_pct": -1.2,
+    "note": null
+   },
+   {
+    "date": "2025-11-20",
+    "part": "part:370021",
+    "type": "annual renewal",
+    "asked_pct": -0.8,
+    "settled_pct": -2.8,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": -2.0,
+  "settled_avg_pct": -4.3,
+  "kept_share_of_ask": 1.3
+ },
+ "payments": {
+  "invoices": 70,
+  "avg_days_late": 2.9,
+  "share_paid_over_5_days_late_pct": 14.3,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70730@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 95.8,
+    "ppm": 46,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70730@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 95.7,
+    "ppm": 64,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70730@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 100.0,
+    "ppm": 90,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70730@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 96.0,
+    "ppm": 89,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 15,
+  "cost_recharged_eur": 1350,
+  "open_8d": 0
+ },
+ "news": [],
+ "documents": [
+  {
+   "id": "doc:20260806-70730-M3",
+   "date": "2026-08-06",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Inox Center Ostalpen GmbH: he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+  },
+  {
+   "id": "doc:20260727-70730-M1",
+   "date": "2026-07-27",
+   "kind": "call_note",
+   "subject": "Material purchasing",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with Inox Center Ostalpen GmbH: they bought their nickel and alloys forward until January 2027 and said the market price is 'not our reality' before then."
+  },
+  {
+   "id": "doc:20260308-70730-M2",
+   "date": "2026-03-08",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Inox Center Ostalpen GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20251216-70730-N",
+   "date": "2025-12-16",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Inox Center Ostalpen GmbH",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300063",
+   "date": "2026-09-15",
+   "part": "part:370021",
+   "remarks": "Material covered until January 2027; price valid accordingly."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70730",
+  "source_hash": "de93900bdd0edfd6",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Private Austrian stainless stockholder (76 M EUR); we are 0.35 %. Sole active source for 1.4301 sheet, but 70710 is qualified (0 % quota): a credible switch. Nickel and alloys bought forward to January 2027, so falling market prices are 'not our reality'. Contract already has an AS-14301 clause (45 %). Owner offered open-book costing; moves above 2 % need its pricing committee. Push with 70710 and its own cost shares, not market falls.",
+  "notes": "Fears losing the sheet to qualified 70710; needs its forward cover priced in until Jan 2027. Note: hedged, yet its price is down 20.6 % since the first price under the index-clause contract and renewals. Delivery excellent (OTD 96-100 %), so quality is no lever.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "none",
+   "small_account": "weak",
+   "open_book": "strong",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "strong",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "weak"
+  },
+  "unsure": [
+   "below_full_cost"
+  ],
+  "wants": [
+   "index_clause"
+  ],
+  "fears": [
+   "losing the sheet to qualified 70710",
+   "market prices below its forward cover"
+  ],
+  "hedge_until": "2027-01",
+  "evidence": [
+   {
+    "trait": "hedged_material",
+    "doc": "doc:20260727-70730-M1",
+    "quote": "they bought their nickel and alloys forward until January 2027 and said the market price is 'not our reality'"
+   },
+   {
+    "trait": "hedged_material",
+    "doc": "quote:7300063",
+    "quote": "Material covered until January 2027; price valid accordingly."
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260308-70730-M2",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks"
+   },
+   {
+    "trait": "open_book",
+    "doc": "doc:20260806-70730-M3",
+    "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "term running past Jan 2027",
+    "keeping 100 % quota vs 70710",
+    "binding volume",
+    "index clause terms (base month, deadband)"
+   ],
+   "arguments": [
+    "a quote from 70710 (qualified for the same sheet; none in our data yet)",
+    "its own cost shares (open-book offer)",
+    "hedge ends Jan 2027: from then its cost follows the market",
+    "volume forecast"
+   ],
+   "avoid": [
+    "today's falling nickel or alloy index (hedged to 2027-01)",
+    "quality complaints (OTD 96-100 %)",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [
+    "AS-14301 index clause (existing, 45 %)"
+   ],
+   "tactics": [
+    "Point to 70710 being qualified for the 1.4301 sheet; with a real 70710 quote expect half the step now, the rest next round.",
+    "Do not argue the current nickel fall; it is hedged to January 2027 and will use that against us.",
+    "Keep the quarterly AS-14301 clause so market falls after its hedge expires reach our price.",
+    "Ask for its calculation (the owner offered it) and argue from its own material share.",
+    "Keep steps near 2 % (pricing committee) and never reopen terms after its final offer."
+   ],
+   "expected_concession": "No arena data; history settles 2-3 % below its own ask (kept 130 %); expect moderate moves once a rival quote is on the table."
+  }
+ },
+ "arena": null
+}

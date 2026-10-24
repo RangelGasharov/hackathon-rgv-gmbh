@@ -1,0 +1,51 @@
+{
+  "supplier": "sup:70530",
+  "source_hash": "0b5b2e8ce02c171e",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Selvbrunn Drive Systems GmbH, group-owned converter maker (2,200 staff); we are 0.28 % of its turnover. Head office froze all price reductions until December 2027, yet in the arena it asked +6.2 % (412.74 to 438.21). It gives about 1.2-1.4 % for 90-day payment plus a 24-36 month contract, then holds flat. Contract ends 2026-12-31 and it wants volumes. Trade terms (contract length, firm volume, 30-day payment); expect little price.",
+  "notes": "Wants planning security: long contract and firm volume. Contradiction: it 'froze price reductions' but asks increases, so the freeze is one-way. It also gave a price cut for keeping 30-day payment. OTD fell to 84.6 % against a 95 % target. sup:70540 is qualified for this part but also freezes prices and quotes 84-day lead times.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "strong",
+    "small_account": "weak",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": [],
+  "wants": ["long_contract", "binding_volume", "faster_payment"],
+  "fears": ["losing volume at renewal", "price erosion against head-office directive"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "price_frozen", "doc": "doc:20260826-70530-M1", "quote": "head office has frozen all price reductions until December 2027."},
+    {"trait": "price_frozen", "doc": "quote:7300003", "quote": "Prices as per current list; discounts not possible this year (head-office directive)."},
+    {"trait": "price_frozen", "doc": "arena:case:P03", "quote": "the freeze on price reductions remains strictly in place."},
+    {"trait": "approval_ladder", "doc": "doc:20260909-70530-M2", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "0.28 % of its turnover"}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["contract length 24-36 months", "binding annual volume above 4,580", "30-day payment for a lower price", "call-off flexibility"],
+    "arguments": ["binding volume increase", "volume forecast with data", "should-cost (price only 2.4 % over cost)", "scorecard: OTD 84.6 % vs 95 % target", "qualified second source sup:70540"],
+    "avoid": ["repeating price arguments against the freeze", "asking for its cost breakdown", "resending an unchanged proposal", "changing terms after a final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep at the current 412.74; the freeze blocks cuts, not our refusal of an increase.",
+      "Offer a 36-month contract early; it moved to 432.15 for 36 months vs 432.94 for 24.",
+      "Offer a higher binding volume; it said a lower price needs more volume.",
+      "Test keeping 30-day payment: it offered a cut 'by maintaining our standard 30-day payment terms'.",
+      "Move something each round; it held flat for 5 rounds and sent a final offer in round 6."
+    ],
+    "expected_concession": "From 438.21 it drops to about 432 in round 1 when given 90 days plus a 24-36 month contract, then holds flat; best arena score 0.923 (4 deals in 4 sessions)."
+  }
+}

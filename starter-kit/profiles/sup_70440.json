@@ -1,0 +1,430 @@
+{
+ "schema": 1,
+ "id": "sup:70440",
+ "name": "Kohlering-Technik Pirkheim GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "7f7a7f897b81749c",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "seals",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 35
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1972,
+  "staff": 140,
+  "turnover_eur": 35200000,
+  "turnover_band": "25-50 M EUR",
+  "equity_ratio_pct": 24.5,
+  "credit_index": 147,
+  "credit_index_12m_ago": 147,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 220409,
+   "FY2025": 264102,
+   "FY2026": 287769
+  },
+  "share_of_its_turnover_pct": 0.82,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 30.6
+ },
+ "parts": [
+  {
+   "part": "part:340011",
+   "description": "Mechanical seal 32 mm, SiC/carbon, EPDM",
+   "status": "active",
+   "quota_pct": 60,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 37.55,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 2.1,
+   "should_cost": {
+    "unit_cost": 34.74,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 8.1
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.33,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2219",
+     "weight": 0.17,
+     "change_12m_pct": 3.9,
+     "ids": [
+      "idx:PPI-C2219@2025-08",
+      "idx:PPI-C2219@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.6,
+   "other_sources": [
+    {
+     "supplier": "sup:70410",
+     "status": "active",
+     "quota_pct": 40
+    }
+   ]
+  },
+  {
+   "part": "part:340040",
+   "description": "Lip seal 35x52x7",
+   "status": "active",
+   "quota_pct": 50,
+   "tooling_owner": "n/a",
+   "price_unit": 100,
+   "current_price": 111.69,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 1.8,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2219",
+     "weight": 0.54,
+     "change_12m_pct": 3.9,
+     "ids": [
+      "idx:PPI-C2219@2025-08",
+      "idx:PPI-C2219@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.12,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.4,
+   "other_sources": [
+    {
+     "supplier": "sup:70430",
+     "status": "active",
+     "quota_pct": 50
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070440",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070440#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070440#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070440#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 35 days from order."
+   },
+   {
+    "id": "ctr:4600070440#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070440#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-27",
+    "part": "part:340011",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-01",
+    "part": "part:340040",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-14",
+    "part": "part:340040",
+    "type": "annual renewal",
+    "asked_pct": 3.9,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2023-12-07",
+    "part": "part:340011",
+    "type": "annual renewal",
+    "asked_pct": 2.9,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-25",
+    "part": "part:340011",
+    "type": "annual renewal",
+    "asked_pct": 1.1,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-25",
+    "part": "part:340040",
+    "type": "annual renewal",
+    "asked_pct": 4.7,
+    "settled_pct": 1.8,
+    "note": null
+   },
+   {
+    "date": "2025-11-12",
+    "part": "part:340040",
+    "type": "annual renewal",
+    "asked_pct": 1.7,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-17",
+    "part": "part:340011",
+    "type": "annual renewal",
+    "asked_pct": 4.8,
+    "settled_pct": 2.1,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 3.2,
+  "settled_avg_pct": 0.7,
+  "kept_share_of_ask": 0.14
+ },
+ "payments": {
+  "invoices": 143,
+  "avg_days_late": 2.9,
+  "share_paid_over_5_days_late_pct": 12.6,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70440@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 80.4,
+    "ppm": 360,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70440@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 80.4,
+    "ppm": 322,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70440@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 76.0,
+    "ppm": 378,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70440@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 75.5,
+    "ppm": 387,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 27,
+  "cost_recharged_eur": 2400,
+  "open_8d": 2
+ },
+ "news": [
+  {
+   "id": "news:20260827-25",
+   "date": "2026-08-27",
+   "topic": "allocation",
+   "headline": "Kohlering-Technik Pirkheim GmbH allocates volumes"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260910-70440-M1",
+   "date": "2026-09-10",
+   "kind": "meeting_note",
+   "subject": "Commercial terms",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Kohlering-Technik Pirkheim GmbH stated that standard items are not discounted; only multi-year volume agreements change prices."
+  },
+  {
+   "id": "doc:20260524-70440-M2",
+   "date": "2026-05-24",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Kohlering-Technik Pirkheim GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20251012-70440-N",
+   "date": "2025-10-12",
+   "kind": "email",
+   "subject": "New contact person",
+   "author": "Kohlering-Technik Pirkheim GmbH",
+   "text": "From 1 October your contact in sales is our new colleague in inside sales; all other contacts stay the same."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70440",
+  "source_hash": "7f7a7f897b81749c",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family seal maker (140 staff, EUR 35 M); we are 0.82 % of its turnover, spend up 31 %. Allocating volumes; pricing committee above 2 %; standard items not discounted, only multi-year volume agreements change prices. Thin margin on the 32 mm seal (price only 8.1 % over should-cost of its plant). Its lip seal is 10.6 % dearer than Hermannsdorfer's. Open moderate; trade multi-year volume, cite the rival lip-seal price.",
+  "notes": "Wants multi-year volume agreements; fears losing lip-seal share, especially if our kit goes to sup:70430. Do not cite Ravensteiner's 32 mm price: it is higher (38.29 vs 37.55). Allocation news but no own words on capacity. OTD sliding to 75.5 %, two open 8D. Payment record fine.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "weak",
+   "small_account": "weak",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "strong",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "hedged_material"
+  ],
+  "wants": [
+   "binding_volume",
+   "long_contract"
+  ],
+  "fears": [
+   "losing lip-seal share if our kit goes to sup:70430",
+   "discounting standard items"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260524-70440-M2",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+   },
+   {
+    "trait": "capacity_tight",
+    "doc": "news:20260827-25",
+    "quote": "Kohlering-Technik Pirkheim GmbH allocates volumes"
+   },
+   {
+    "trait": "price_frozen",
+    "doc": "doc:20260910-70440-M1",
+    "quote": "standard items are not discounted; only multi-year volume agreements change prices."
+   },
+   {
+    "trait": "small_account",
+    "doc": "data:our_weight.share_of_its_turnover_pct",
+    "quote": "0.82"
+   },
+   {
+    "trait": "below_full_cost",
+    "doc": "data:parts.should_cost",
+    "quote": "part:340011 should-cost 34.74 vs price 37.55, 8.1 % over cost"
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "medium",
+   "levers": [
+    "multi-year volume agreement",
+    "binding annual volume",
+    "longer lead time",
+    "keeping its lip-seal and 32 mm quotas"
+   ],
+   "arguments": [
+    "rival price: sup:70430 sells the same lip seal at EUR 100.98/100 vs 111.69",
+    "multi-year binding volume with schedule CSV",
+    "scorecard: OTD 75.5 % vs 95 % target, 2 open 8D",
+    "notice-period breach for any 2027 increase"
+   ],
+   "avoid": [
+    "deep opening (capacity-tight)",
+    "citing Ravensteiner's 32 mm price (higher)",
+    "pushing the 32 mm seal far: thin margin",
+    "changing terms after its final offer",
+    "demanding shorter lead time"
+   ],
+   "mandatory_terms": [
+    "multi-year volume agreement for any price change"
+   ],
+   "tactics": [
+    "Open moderately; frame every ask as part of a multi-year volume agreement.",
+    "Lead on the lip seal: Hermannsdorfer's price is 9.6 % lower and our kit plan could move that volume.",
+    "Keep each step within 2 % so it stays below the pricing committee threshold.",
+    "Offer a longer lead time rather than demand a shorter one: lead time is its currency.",
+    "Accept a reasonable final offer unchanged."
+   ],
+   "expected_concession": "No arena data; history: asked +1.1-4.8 % and settled 0-2.1 %; expect small steps, larger only against multi-year volume."
+  }
+ },
+ "arena": null
+}

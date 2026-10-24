@@ -1,0 +1,427 @@
+{
+ "schema": 1,
+ "id": "sup:70240",
+ "name": "Strojírna Hrvelec s.r.o.",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "e9f99fe749f71248",
+ "persona_stale": false,
+ "problems": [],
+ "country": "CZ",
+ "category": "machined parts",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 45,
+  "cash_discount": null,
+  "incoterm": "FCA",
+  "lead_time_days": 42
+ },
+ "company": {
+  "owner_type": "founder",
+  "group_parent": null,
+  "legal_form": "s.r.o.",
+  "founded": 1999,
+  "staff": 60,
+  "turnover_eur": 2810000,
+  "turnover_band": "2-5 M EUR",
+  "equity_ratio_pct": 30.2,
+  "credit_index": 246,
+  "credit_index_12m_ago": 246,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 55226,
+   "FY2025": 62473,
+   "FY2026": 61647
+  },
+  "share_of_its_turnover_pct": 2.19,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 11.6
+ },
+ "parts": [
+  {
+   "part": "part:320030",
+   "description": "Flange DN 65 PN 16, machined",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": {
+    "unit_cost": 15.4,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": null
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.33,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.32,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.02,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 4.8,
+   "other_sources": [
+    {
+     "supplier": "sup:70220",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  },
+  {
+   "part": "part:320031",
+   "description": "Flange DN 100 PN 16, machined",
+   "status": "active",
+   "quota_pct": 70,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 19.9,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -3.1,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.35,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.29,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.01,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 4.5,
+   "other_sources": [
+    {
+     "supplier": "sup:70230",
+     "status": "active",
+     "quota_pct": 30
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070240",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 45,
+  "incoterm": "FCA",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070240#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070240#4.1",
+    "type": "payment",
+    "text": "Payment: 45 days net."
+   },
+   {
+    "id": "ctr:4600070240#5.1",
+    "type": "delivery",
+    "text": "Delivery FCA; standard lead time 42 days from order."
+   },
+   {
+    "id": "ctr:4600070240#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070240#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-14",
+    "part": "part:320031",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-12-12",
+    "part": "part:320031",
+    "type": "annual renewal",
+    "asked_pct": 2.4,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-12-02",
+    "part": "part:320031",
+    "type": "annual renewal",
+    "asked_pct": 3.3,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-14",
+    "part": "part:320031",
+    "type": "annual renewal",
+    "asked_pct": -1.0,
+    "settled_pct": -3.1,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 1.6,
+  "settled_avg_pct": -1.0,
+  "kept_share_of_ask": 1.03
+ },
+ "payments": {
+  "invoices": 67,
+  "avg_days_late": 5.6,
+  "share_paid_over_5_days_late_pct": 53.7,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70240@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 80.0,
+    "ppm": 2260,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70240@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 83.3,
+    "ppm": 1930,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70240@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 73.9,
+    "ppm": 1343,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70240@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 62.5,
+    "ppm": 980,
+    "colour": "amber"
+   }
+  ],
+  "complaints_3y": 15,
+  "cost_recharged_eur": 1500,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260710-18",
+   "date": "2026-07-10",
+   "topic": "full_order_book",
+   "headline": "Strojírna Hrvelec s.r.o. fully booked into next year"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260924-70240-M1",
+   "date": "2026-09-24",
+   "kind": "email",
+   "subject": "New volumes",
+   "author": "Strojírna Hrvelec s.r.o.",
+   "text": "Order intake is very strong. We can confirm additional volumes only against a binding 12-month commitment."
+  },
+  {
+   "id": "doc:20251203-70240-N",
+   "date": "2025-12-03",
+   "kind": "email",
+   "subject": "Trade fair invitation",
+   "author": "Strojírna Hrvelec s.r.o.",
+   "text": "We would be pleased to welcome you at our booth at the regional supplier fair in November."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70240",
+  "source_hash": "e9f99fe749f71248",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Czech founder-led machine shop, 60 staff, EUR 2.81 M turnover; we are 2.19 % of it. Fully booked, confirms volume only against a binding 12-month commitment. In P05 it closed no deal in 7 sessions: opened 31.5 at 52-day lead time, raised price when we cut lead time, kept asking 'Which volume can you commit to?'. Open close, accept its lead time, send a binding volume schedule, and keep the flange DN 100 split with sup:70230 as our fallback.",
+  "notes": "Needs binding volume and long lead times; fears squeezed production. Wants faster cash in arena ('… days payment is way too long for us') though standard is 45 days. Rival quotes mostly 'do not change our calculation'. OTD fell to 62.5 % in Q3 2026, all quarters amber.",
+  "traits": {
+   "cash_short": "weak",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "strong",
+   "late_payment_grievance": "weak",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "hedged_material"
+  ],
+  "wants": [
+   "binding_volume",
+   "longer_lead_time",
+   "faster_payment"
+  ],
+  "fears": [
+   "squeezing production for short lead times",
+   "unplanned volumes without proof"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "capacity_tight",
+    "doc": "doc:20260924-70240-M1",
+    "quote": "Order intake is very strong. We can confirm additional volumes only against a binding 12-month commitment."
+   },
+   {
+    "trait": "capacity_tight",
+    "doc": "news:20260710-18",
+    "quote": "Strojírna Hrvelec s.r.o. fully booked into next year"
+   },
+   {
+    "trait": "capacity_tight",
+    "doc": "arena:case:P05",
+    "quote": "we are super busy right now so … days lead time would actually push the price up."
+   },
+   {
+    "trait": "cash_short",
+    "doc": "arena:case:P05",
+    "quote": "But … days payment is way too long for us, we really need … days."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "data:payments.avg_days_late",
+    "quote": "avg 5.6 days late, 53.7 % of invoices over 5 days late"
+   }
+  ],
+  "playbook": {
+   "opening": "close",
+   "walk_risk": "high",
+   "levers": [
+    "lead time at or above its 42-day standard (~0.5 % per day)",
+    "binding 12-month volume with schedule data",
+    "14-day payment"
+   ],
+   "arguments": [
+    "binding volume with forecast/schedule CSV",
+    "scorecard: OTD 62.5 % in 2026Q3",
+    "volume shift on flange DN 100 to sup:70230"
+   ],
+   "avoid": [
+    "deep opening",
+    "pushing lead time below 42 days (price goes up)",
+    "rival quote (usually 'does not change our calculation')",
+    "changing any term after its final offer (walked in P05)"
+   ],
+   "mandatory_terms": [
+    "binding volume commitment"
+   ],
+   "tactics": [
+    "Open close to its price and accept 42 days or longer lead time.",
+    "Answer 'Which volume can you commit to?' at once with a binding figure and the schedule data.",
+    "Offer 14-day payment as the trade for price; it reflects faster payment.",
+    "Take its final offer if within target; any later term change makes it walk."
+   ],
+   "expected_concession": "Barely moves: first counter ~at or above its opening (ratio 1.02), final offer ~round 5 at or slightly above its opening (32.5 vs 31.5); renewals asked +2.4/+3.3 % settled 0 % (2025: asked -1.0, settled -3.1 %)."
+  }
+ },
+ "arena": {
+  "cases": [
+   "case:P05"
+  ],
+  "sessions": 7,
+  "deals": 0,
+  "best_score": null,
+  "walked": 1,
+  "agreed_round1": 0,
+  "fair_point": 0,
+  "no_change": 3,
+  "duplicate": 1,
+  "first_counter_vs_opening": 1.016,
+  "final_offer_round_median": 5
+ }
+}

@@ -1,0 +1,338 @@
+{
+ "schema": 1,
+ "id": "sup:70170",
+ "name": "Slévárna Vrbenský s.r.o.",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "5a4756e7847d99c3",
+ "persona_stale": false,
+ "problems": [],
+ "country": "CZ",
+ "category": "castings",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 45,
+  "cash_discount": null,
+  "incoterm": "FCA",
+  "lead_time_days": 56
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "s.r.o.",
+  "founded": 1997,
+  "staff": 150,
+  "turnover_eur": 8270000,
+  "turnover_band": "5-10 M EUR",
+  "equity_ratio_pct": 36.4,
+  "credit_index": 239,
+  "credit_index_12m_ago": 239,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001; ISO 14001; ISO 50001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 152201,
+   "FY2025": 186763,
+   "FY2026": 198530
+  },
+  "share_of_its_turnover_pct": 2.4,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 30.4
+ },
+ "parts": [
+  {
+   "part": "part:310050",
+   "description": "Volute casing HI 80-250",
+   "status": "active",
+   "quota_pct": 25,
+   "tooling_owner": "supplier",
+   "price_unit": 1,
+   "current_price": 559.61,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -7.6,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.26,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.24,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.06,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.9,
+   "other_sources": [
+    {
+     "supplier": "sup:70180",
+     "status": "active",
+     "quota_pct": 75
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070170",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 45,
+  "incoterm": "FCA",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070170#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070170#4.1",
+    "type": "payment",
+    "text": "Payment: 45 days net."
+   },
+   {
+    "id": "ctr:4600070170#5.1",
+    "type": "delivery",
+    "text": "Delivery FCA; standard lead time 56 days from order."
+   },
+   {
+    "id": "ctr:4600070170#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070170#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-24",
+    "part": "part:310050",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-25",
+    "part": "part:310050",
+    "type": "annual renewal",
+    "asked_pct": -2.5,
+    "settled_pct": -5.9,
+    "note": null
+   },
+   {
+    "date": "2024-12-06",
+    "part": "part:310050",
+    "type": "annual renewal",
+    "asked_pct": 1.2,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-17",
+    "part": "part:310050",
+    "type": "annual renewal",
+    "asked_pct": 0.6,
+    "settled_pct": -1.7,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": -0.2,
+  "settled_avg_pct": -2.5,
+  "kept_share_of_ask": -0.16
+ },
+ "payments": {
+  "invoices": 65,
+  "avg_days_late": 5.5,
+  "share_paid_over_5_days_late_pct": 47.7,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70170@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 100.0,
+    "ppm": 2959,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70170@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 100.0,
+    "ppm": 2874,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70170@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 91.3,
+    "ppm": 3003,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70170@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 91.7,
+    "ppm": 5682,
+    "colour": "red"
+   }
+  ],
+  "complaints_3y": 2,
+  "cost_recharged_eur": 150,
+  "open_8d": 1
+ },
+ "news": [
+  {
+   "id": "news:20260420-09",
+   "date": "2026-04-20",
+   "topic": "new_plant",
+   "headline": "Slévárna Vrbenský s.r.o. opens a new moulding line"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260512-70170-M2",
+   "date": "2026-05-12",
+   "kind": "meeting_note",
+   "subject": "Supplier day",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "At our supplier day Slévárna Vrbenský s.r.o. said Hollerau is an important reference customer for them."
+  },
+  {
+   "id": "doc:20260210-70170-M1",
+   "date": "2026-02-10",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Slévárna Vrbenský s.r.o.",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20251109-70170-N",
+   "date": "2025-11-09",
+   "kind": "email",
+   "subject": "Trade fair invitation",
+   "author": "Slévárna Vrbenský s.r.o.",
+   "text": "We would be pleased to welcome you at our booth at the regional supplier fair in November."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70170",
+  "source_hash": "5a4756e7847d99c3",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Czech family foundry (150 staff, EUR 8.3 M), we are 2.4 % of its turnover and growing 30 %. It calls Hollerau an important reference customer and opened a new moulding line (Apr 2026), which may mean spare capacity. Holds only 25 % of Volute casing HI 80-250; 70180 has 75 % (at a higher 654.52). Historically gives way fully (kept share below 0). Quality slipping: ppm 5682, red Q3. Push hard with volume as the carrot.",
+  "notes": "New moulding line may mean spare capacity; it values Hollerau as a reference. Fears losing the 25 % share to 70180. Only a generic 10-day payment e-mail; we pay 5.5 days late on average. No should-cost for its part.",
+  "traits": {
+   "cash_short": "weak",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "weak",
+   "reference_customer": "strong",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost",
+   "stale_costing"
+  ],
+  "wants": [],
+  "fears": [
+   "losing HI 80-250 share to 70180",
+   "losing Hollerau as reference customer"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "reference_customer",
+    "doc": "doc:20260512-70170-M2",
+    "quote": "said Hollerau is an important reference customer for them."
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "news:20260420-09",
+    "quote": "Slévárna Vrbenský s.r.o. opens a new moulding line"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260210-70170-M1",
+    "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "HI 80-250 quota shift from 70180",
+    "binding volume for the new moulding line",
+    "reference status"
+   ],
+   "arguments": [
+    "volume shift from co-source 70180 (70180 is dearer, no rival-price argument)",
+    "quality record: ppm 5682 and red Q3, OTD down to 91.7 %",
+    "binding volume / forecast"
+   ],
+   "avoid": [
+    "faster payment as a gift (no distress shown)",
+    "citing cost drivers that rose",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep: it gave way fully in past renewals and we have 70180 at 75 %.",
+    "Offer more quota from 70180 as binding volume for its new line in exchange for price.",
+    "Cite the red Q3 scorecard (5682 ppm) as a separate argument.",
+    "Mention its reference status: a competitive price keeps it on our panel."
+   ],
+   "expected_concession": "No arena data; past renewals settled below even its own offers (kept share -0.16), so expect it to move readily."
+  }
+ },
+ "arena": null
+}

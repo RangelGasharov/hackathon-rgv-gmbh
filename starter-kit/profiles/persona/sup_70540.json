@@ -1,0 +1,52 @@
+{
+  "supplier": "sup:70540",
+  "source_hash": "d87c223de7324c49",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Konvertek Antriebselektronik GmbH, Austrian group-owned converter maker (800 staff, solid credit); we are 0.65 % of its turnover. Its price list applies to all customers without exception until June 2027, and it has held our 15 kW price flat for three years. It is reviewing small accounts and warned of longer delivery times (chip shortage news); standard lead time is already 84 days. Price is 1.2 % below its should-cost. Negotiate payment, logistics and lead time, not price.",
+  "notes": "Wants us to stay on list and accept its terms; it will talk logistics and payment. Contradiction: it held price flat although it asked +1 to +3.2 % each year, so flat is its norm. OTD is 81.5 % against a 95 % target. sup:70530 is qualified for the 15 kW but freezes prices too.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "strong",
+    "small_account": "strong",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "weak",
+    "hedged_material": "none",
+    "capacity_tight": "weak",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["capacity_tight"],
+  "wants": ["price_stability", "longer_lead_time"],
+  "fears": ["chip shortage", "low-volume small accounts", "exceptions to its price list"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "price_frozen", "doc": "doc:20260906-70540-M1", "quote": "Our price list applies to all customers without exception until June 2027."},
+    {"trait": "price_frozen", "doc": "quote:7300067", "quote": "Prices as per current list; discounts not possible this year (head-office directive)."},
+    {"trait": "approval_ladder", "doc": "doc:20260711-70540-M3", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."},
+    {"trait": "small_account", "doc": "doc:20260223-70540-M2", "quote": "they are reviewing small accounts and will focus on customers with volume."},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "0.65 % of its turnover"},
+    {"trait": "capacity_tight", "doc": "news:20260302-01", "quote": "Konvertek Antriebselektronik GmbH warns of longer delivery times"},
+    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:350021 should-cost 692.92 vs price 684.92 (-1.2 %)"}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "medium",
+    "levers": ["payment terms", "logistics and call-off terms", "longer lead time or forecast-based call-offs", "binding volume"],
+    "arguments": ["scorecard: OTD 81.5 % vs 95 % target", "binding volume commitment", "volume forecast (+28 % spend)", "qualified second source sup:70530"],
+    "avoid": ["demanding a list-price cut", "should-cost arguments (price is below its cost)", "threats it can read as small-account exit", "changing terms after a final offer"],
+    "mandatory_terms": ["list price until June 2027"],
+    "tactics": [
+      "Hold the 684.92 list price; reject any increase until the list ends in June 2027.",
+      "Seek value in terms: longer payment days, logistics and call-off flexibility.",
+      "Offer a longer lead time or a firm forecast in exchange for supply security on chips.",
+      "Use the OTD record (81.5 %) once as a quality argument."
+    ],
+    "expected_concession": "No arena data; price settled at 0.0 % in all three renewals, so expect no price move, only terms."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "supplier": "sup:70730",
+  "source_hash": "de93900bdd0edfd6",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Private Austrian stainless stockholder (76 M EUR); we are 0.35 %. Sole active source for 1.4301 sheet, but 70710 is qualified (0 % quota): a credible switch. Nickel and alloys bought forward to January 2027, so falling market prices are 'not our reality'. Contract already has an AS-14301 clause (45 %). Owner offered open-book costing; moves above 2 % need its pricing committee. Push with 70710 and its own cost shares, not market falls.",
+  "notes": "Fears losing the sheet to qualified 70710; needs its forward cover priced in until Jan 2027. Note: hedged, yet its price is down 20.6 % since the first price under the index-clause contract and renewals. Delivery excellent (OTD 96-100 %), so quality is no lever.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "none",
+    "small_account": "weak",
+    "open_book": "strong",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "strong",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "weak"
+  },
+  "unsure": ["below_full_cost"],
+  "wants": ["index_clause"],
+  "fears": ["losing the sheet to qualified 70710", "market prices below its forward cover"],
+  "hedge_until": "2027-01",
+  "evidence": [
+    {"trait": "hedged_material", "doc": "doc:20260727-70730-M1", "quote": "they bought their nickel and alloys forward until January 2027 and said the market price is 'not our reality'"},
+    {"trait": "hedged_material", "doc": "quote:7300063", "quote": "Material covered until January 2027; price valid accordingly."},
+    {"trait": "approval_ladder", "doc": "doc:20260308-70730-M2", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks"},
+    {"trait": "open_book", "doc": "doc:20260806-70730-M3", "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["term running past Jan 2027", "keeping 100 % quota vs 70710", "binding volume", "index clause terms (base month, deadband)"],
+    "arguments": ["a quote from 70710 (qualified for the same sheet; none in our data yet)", "its own cost shares (open-book offer)", "hedge ends Jan 2027: from then its cost follows the market", "volume forecast"],
+    "avoid": ["today's falling nickel or alloy index (hedged to 2027-01)", "quality complaints (OTD 96-100 %)", "changing terms after its final offer"],
+    "mandatory_terms": ["AS-14301 index clause (existing, 45 %)"],
+    "tactics": [
+      "Point to 70710 being qualified for the 1.4301 sheet; with a real 70710 quote expect half the step now, the rest next round.",
+      "Do not argue the current nickel fall; it is hedged to January 2027 and will use that against us.",
+      "Keep the quarterly AS-14301 clause so market falls after its hedge expires reach our price.",
+      "Ask for its calculation (the owner offered it) and argue from its own material share.",
+      "Keep steps near 2 % (pricing committee) and never reopen terms after its final offer."
+    ],
+    "expected_concession": "No arena data; history settles 2-3 % below its own ask (kept 130 %); expect moderate moves once a rival quote is on the table."
+  }
+}

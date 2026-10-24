@@ -244,11 +244,73 @@ class Package:
         self.combo, self.p_floor, self.p_opt, self.c_opt = combo, p_floor, p_opt, c_opt
 
 
+FAST_CLOSE = "fast_close"
+RECIPROCAL = "reciprocal"
+
+
+def profile_strategy(dossier):
+    """Choose one primary bargaining policy and one fallback from supplier-profile evidence.
+
+    This is a finite-horizon repeated-bargaining policy: the profile is the prior, observed offers update it,
+    and our outside option remains the hard ceiling. Selecting and pricing a strategy needs no model call.
+    """
+    profile = getattr(dossier, "profile", None) or {}
+    playbook = (profile.get("persona") or {}).get("playbook") or {}
+    arena = profile.get("arena") or {}
+    sessions = arena.get("sessions") or 0
+    walked = arena.get("walked") or 0
+    agreed_round1 = arena.get("agreed_round1") or 0
+    try:
+        sessions, walked, agreed_round1 = max(0, int(sessions)), max(0, int(walked)), max(0, int(agreed_round1))
+    except (TypeError, ValueError):
+        sessions, walked, agreed_round1 = 0, 0, 0
+    first = arena.get("first_counter_vs_opening")
+    try:
+        first = float(first) if first is not None and math.isfinite(float(first)) else None
+    except (TypeError, ValueError):
+        first = None
+    walk_rate = walked / sessions if sessions else None
+    round1_rate = agreed_round1 / sessions if sessions else None
+
+    cues = []
+    if playbook.get("walk_risk") == "high":
+        cues.append("the profile flags high walk risk")
+    if playbook.get("opening") == "close":
+        cues.append("the profile describes a close opening")
+    if sessions >= 5 and walk_rate is not None and walk_rate >= 0.20:
+        cues.append(f"the arena record shows {walked}/{sessions} walks")
+    if sessions >= 5 and round1_rate is not None and round1_rate >= 0.25 and first is not None and first >= 0.96:
+        cues.append("the arena record favors an early, near-opening close")
+    evidence = {"first_counter_vs_opening": first, "walk_rate": walk_rate, "sessions": sessions}
+    if cues:
+        return FAST_CLOSE, RECIPROCAL, "; ".join(cues), evidence
+
+    if sessions >= 5 and first is not None and first <= 0.92 and walk_rate is not None and walk_rate <= 0.15:
+        reason = f"arena counters average {first:.0%} of opening with low walk frequency ({walked}/{sessions})"
+    elif playbook.get("opening") == "deep" and playbook.get("walk_risk") == "low":
+        reason = "profile shows a deep-opening supplier with low walk risk"
+    elif profile:
+        reason = "profile does not signal elevated walk risk; test reciprocity against its first counter"
+    else:
+        reason = "no usable profile; use the case-calibrated reciprocal policy and observe the first counter"
+    return RECIPROCAL, FAST_CLOSE, reason, evidence
+
+
 class Planner:
     """Per supplier thread: packages, the concession path, accept and walk."""
 
     def __init__(self, case, est, horizon_rounds=6):
         self.case, self.est, self.rounds = case, est, horizon_rounds
+        (
+            self.primary_strategy,
+            self.fallback_strategy,
+            self.strategy_reason,
+            self.strategy_evidence,
+        ) = profile_strategy(est.d)
+        self.strategy = self.primary_strategy
+        self.strategy_switched = False  # at most one profile-chosen fallback; no strategy roulette
+        self.strategy_switch_reason = None
+        est.d.strategy_plan = self.strategy_summary()
         alt = case["buyer"].get("alternative") or {}
         self.c_alt = total_cost(case, alt["terms"]) if alt.get("terms", {}).get(PRICE) else math.inf
         self.frozen = est.d.current if est.d.has("price_frozen", strong=True) else None
@@ -281,6 +343,35 @@ class Planner:
         # us at the committed one, so forcing it raised C on the twin (P12 0.351 -> 0.325); MESO still offers it.
         self.bounds = {}
         self.refresh()
+
+    def strategy_summary(self):
+        labels = {FAST_CLOSE: "fast-close bargaining", RECIPROCAL: "reciprocal bargaining"}
+        if self.strategy_switched:
+            return (
+                f"Negotiation plan: started with {labels[self.primary_strategy]}, then switched once to "
+                f"{labels[self.strategy]} because {self.strategy_switch_reason}. Do not add a third approach; "
+                "price and terms stay inside the planned menu and our walk-away ceiling."
+            )
+        trigger = (
+            "a meaningful supplier concession (at least 4% of its opening)"
+            if self.strategy == FAST_CLOSE
+            else "two consecutive replies with negligible supplier movement"
+        )
+        return (
+            f"Negotiation plan: use {labels[self.strategy]} first ({self.strategy_reason}). One fallback is "
+            f"{labels[self.fallback_strategy]}, used only after {trigger}. The profile chooses the approach; "
+            "the priced menu and our walk-away ceiling choose the offer."
+        )
+
+    def _switch_to_fallback(self, reason):
+        if self.strategy_switched or self.strategy == self.fallback_strategy:
+            return None
+        previous = self.strategy
+        self.strategy = self.fallback_strategy
+        self.strategy_switched = True
+        self.strategy_switch_reason = reason
+        self.est.d.strategy_plan = self.strategy_summary()
+        return {"from": previous, "to": self.strategy, "reason": reason}
 
     def _anchor_gap(self):
         """How far below the supplier's ask we open, in value terms. Fitted to the real arena's revealed
@@ -319,6 +410,21 @@ class Planner:
             gap = min(gap, 0.10)  # far below a capacity-tight bidder: its final offer at once (P10: -19 %)
         if d.has("approval_ladder") and ctype != "rfq":
             gap = min(gap, 0.10)  # a pricing committee decides above 2 %: stay in a range it can approve
+        # A high walk-risk prior favors a credible quick-close anchor. Where observed arena behavior shows room to
+        # move and few walks, use that history for a slightly firmer opening (at most two percentage points).
+        if self.strategy == FAST_CLOSE:
+            gap = min(gap, 0.04)
+        else:
+            first = self.strategy_evidence.get("first_counter_vs_opening")
+            walk_rate = self.strategy_evidence.get("walk_rate")
+            if (
+                self.strategy_evidence["sessions"] >= 5
+                and first is not None
+                and first <= 0.92
+                and walk_rate is not None
+                and walk_rate <= 0.15
+            ):
+                gap = min(gap + min(0.02, (0.92 - first) * 0.15), 0.24)
         return gap
 
     def _anchor(self):
@@ -490,14 +596,23 @@ class Planner:
             if lim is None:
                 target = max(self.last_value + 0.004 * v0, ask - 0.015 * v0)
             else:
-                nxt = ask - 0.4 * max(0.0, ask - lim)
+                fast = self.strategy == FAST_CLOSE or rounds_left <= 2
+                # In a finite repeated game, reciprocate faster near the horizon; otherwise concede only part of
+                # the supplier's expected next move so we preserve room for a response.
+                nxt = ask - (0.6 if fast else 0.4) * max(0.0, ask - lim)
                 aim = min(lim - 0.003 * v0, nxt - 0.002 * v0)
                 step = 0.0025 * v0 if self.last_value + 0.0025 * v0 <= aim else 0.0012 * v0  # small near its limit
                 # at most 1.5 % of its opening a round: the limit estimate assumes a 75 % first step, and a supplier
                 # whose bigger moves need its committee steps less at first (P02 b1: we jumped to its opening price).
                 # RFQ: the rivals' cheaper offers do the work ("the buyer shows a much lower rival quote. I give
                 # half the step now and check the rest" - P05: 0.45 -> 0.81), so 1 %; committee suppliers 1 %.
-                jump = 0.01 if len(self.case.get("suppliers") or []) > 1 or self.est.d.has("approval_ladder") else 0.015
+                jump = (
+                    0.015
+                    if fast
+                    else 0.01
+                    if len(self.case.get("suppliers") or []) > 1 or self.est.d.has("approval_ladder")
+                    else 0.015
+                )
                 aim = min(aim, self.last_value + jump * v0)
                 if self.second_step:  # "we will come back to you on price": its next step comes anyway
                     aim = self.last_value + 0.001 * v0
@@ -742,6 +857,21 @@ class Planner:
             self.last_sheets = [dict(t) for t in sheets]
             self.last_value = max(self.est.value(self.case, t) for t in sheets)
 
+    def probe(self, target_c, n=2):
+        """Sheets that cost us `target_c` (just under our walk-away), for when every package our cost estimate
+        allows looks dearer than the alternative. The estimate of its floor is a guess (10-15 % off on generic
+        should-cost): walking without one real offer below the alternative throws the chance away (twin P12:
+        walked after the opening at 0.377 while a deal at C_best 853 k, under the alternative's 907 k, existed)."""
+        out = []
+        for pkg in self.packages[:12]:
+            t = self._complete({**pkg.combo, PRICE: round(pkg.p_floor, 2)})
+            same = self.reprice_to_cost(t, target_c)
+            if same and same not in out and must_haves_ok(self.case, same, self.est.standard):
+                out.append(same)
+            if len(out) >= n:
+                break
+        return out
+
     def reprice_to_cost(self, terms, target_c):
         lo, hi = terms[PRICE] * 0.6, terms[PRICE] * 1.6  # C misbehaves far from real prices: stay near
         if cost(self.case, {**terms, PRICE: lo}, self.est) > target_c:
@@ -825,6 +955,31 @@ class Planner:
         for t in sheets:
             self.observe(t, status)
         self.ask_value = self.asks[-1]
+        return self._adapt_strategy(status)
+
+    def _adapt_strategy(self, status):
+        """Use the one preselected fallback only when live bargaining evidence changes the prior."""
+        if self.strategy_switched or len(self.asks) < 2 or (self.second_step and status != "final_offer"):
+            return None
+        # A final offer is a terminal decision point in this arena: changing the plan here cannot influence
+        # another supplier move, and countering it can withdraw the offer. Keep the prior strategy intact;
+        # `BuyerAgent.decide` handles accept/walk from the reservation and outside option.
+        if status == "final_offer":
+            return None
+        opening = max(self.asks[0], 1e-9)
+        if self.strategy == FAST_CLOSE:
+            step = self.asks[-2] - self.asks[-1]
+            if step >= 0.04 * opening:
+                return self._switch_to_fallback(
+                    f"the supplier conceded {step / opening:.1%} of its opening on one reply"
+                )
+            return None
+        if len(self.asks) >= 3:
+            threshold = 0.0015 * opening
+            recent = (self.asks[-3] - self.asks[-2], self.asks[-2] - self.asks[-1])
+            if all(step <= threshold for step in recent):
+                return self._switch_to_fallback("two consecutive supplier replies showed negligible movement")
+        return None
 
     def want_clause(self):
         """An index clause is worth something to this supplier from now on."""

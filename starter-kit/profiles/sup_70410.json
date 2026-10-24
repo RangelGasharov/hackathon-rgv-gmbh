@@ -1,0 +1,544 @@
+{
+ "schema": 1,
+ "id": "sup:70410",
+ "name": "Dichtungswerk Ravensteiner GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "75058b2946f7fa68",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "seals",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 42
+ },
+ "company": {
+  "owner_type": "group",
+  "group_parent": "Ravensteiner Holding AG",
+  "legal_form": "GmbH",
+  "founded": 1958,
+  "staff": 650,
+  "turnover_eur": 151000000,
+  "turnover_band": "100-250 M EUR",
+  "equity_ratio_pct": 28.8,
+  "credit_index": 159,
+  "credit_index_12m_ago": 159,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 700405,
+   "FY2025": 808344,
+   "FY2026": 816441
+  },
+  "share_of_its_turnover_pct": 0.54,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 16.6
+ },
+ "parts": [
+  {
+   "part": "part:340010",
+   "description": "Mechanical seal 24 mm, SiC/carbon, EPDM",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 29.89,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 3.3,
+   "should_cost": {
+    "unit_cost": 24.31,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 23.0
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.28,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2219",
+     "weight": 0.14,
+     "change_12m_pct": 3.9,
+     "ids": [
+      "idx:PPI-C2219@2025-08",
+      "idx:PPI-C2219@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.3,
+   "other_sources": []
+  },
+  {
+   "part": "part:340011",
+   "description": "Mechanical seal 32 mm, SiC/carbon, EPDM",
+   "status": "active",
+   "quota_pct": 40,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 38.29,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 2.1,
+   "should_cost": {
+    "unit_cost": 34.74,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 10.2
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.33,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2219",
+     "weight": 0.17,
+     "change_12m_pct": 3.9,
+     "ids": [
+      "idx:PPI-C2219@2025-08",
+      "idx:PPI-C2219@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.6,
+   "other_sources": [
+    {
+     "supplier": "sup:70440",
+     "status": "active",
+     "quota_pct": 60
+    }
+   ]
+  },
+  {
+   "part": "part:340030",
+   "description": "Casing gasket, aramid fibre",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 2.23,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 3.7,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2219",
+     "weight": 0.56,
+     "change_12m_pct": 3.9,
+     "ids": [
+      "idx:PPI-C2219@2025-08",
+      "idx:PPI-C2219@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.11,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.5,
+   "other_sources": [
+    {
+     "supplier": "sup:70430",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070410",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070410#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070410#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070410#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 42 days from order."
+   },
+   {
+    "id": "ctr:4600070410#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070410#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-14",
+    "part": "part:340030",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-11-18",
+    "part": "part:340010",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-10",
+    "part": "part:340011",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-12-02",
+    "part": "part:340011",
+    "type": "annual renewal",
+    "asked_pct": 1.8,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2023-12-08",
+    "part": "part:340030",
+    "type": "annual renewal",
+    "asked_pct": 2.2,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2023-12-10",
+    "part": "part:340010",
+    "type": "annual renewal",
+    "asked_pct": 7.0,
+    "settled_pct": 3.3,
+    "note": null
+   },
+   {
+    "date": "2024-11-24",
+    "part": "part:340010",
+    "type": "annual renewal",
+    "asked_pct": 2.0,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-24",
+    "part": "part:340011",
+    "type": "annual renewal",
+    "asked_pct": 4.9,
+    "settled_pct": 2.1,
+    "note": null
+   },
+   {
+    "date": "2024-12-06",
+    "part": "part:340030",
+    "type": "annual renewal",
+    "asked_pct": 5.6,
+    "settled_pct": 3.7,
+    "note": null
+   },
+   {
+    "date": "2025-11-23",
+    "part": "part:340010",
+    "type": "annual renewal",
+    "asked_pct": 2.5,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-12-02",
+    "part": "part:340011",
+    "type": "annual renewal",
+    "asked_pct": 1.5,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-12-07",
+    "part": "part:340030",
+    "type": "annual renewal",
+    "asked_pct": 1.1,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 3.2,
+  "settled_avg_pct": 1.0,
+  "kept_share_of_ask": 0.17
+ },
+ "payments": {
+  "invoices": 212,
+  "avg_days_late": 1.9,
+  "share_paid_over_5_days_late_pct": 0.9,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70410@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 81.8,
+    "ppm": 412,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70410@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 81.6,
+    "ppm": 405,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70410@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 79.7,
+    "ppm": 366,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70410@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 79.5,
+    "ppm": 270,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 50,
+  "cost_recharged_eur": 4950,
+  "open_8d": 1
+ },
+ "news": [
+  {
+   "id": "news:20260822-23",
+   "date": "2026-08-22",
+   "topic": "allocation",
+   "headline": "Dichtungswerk Ravensteiner GmbH allocates volumes"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260918-70410-P10",
+   "date": "2026-09-18",
+   "kind": "email",
+   "subject": "Capacity situation and delivery dates",
+   "author": "Dichtungswerk Ravensteiner GmbH",
+   "text": "Hello,\ndue to very high capacity utilisation we cannot confirm your full forecast for Mechanical seal 24 mm, SiC/carbon, EPDM (part:340010) for the coming months. Lead times are currently longer than agreed. We will prioritise customers with firm, long-term commitments.\nBest regards,\nDichtungswerk Ravensteiner GmbH"
+  },
+  {
+   "id": "doc:20260327-70410-M2",
+   "date": "2026-03-27",
+   "kind": "email",
+   "subject": "New volumes",
+   "author": "Dichtungswerk Ravensteiner GmbH",
+   "text": "Order intake is very strong. We can confirm additional volumes only against a binding 12-month commitment."
+  },
+  {
+   "id": "doc:20260310-70410-M1",
+   "date": "2026-03-10",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Dichtungswerk Ravensteiner GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20251108-70410-N",
+   "date": "2025-11-08",
+   "kind": "email",
+   "subject": "New contact person",
+   "author": "Dichtungswerk Ravensteiner GmbH",
+   "text": "From 1 October your contact in sales is our new colleague in inside sales; all other contacts stay the same."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70410",
+  "source_hash": "75058b2946f7fa68",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Seal maker in Ravensteiner Holding (650 staff, EUR 151 M); we are 0.54 % of its turnover. Capacity tight: allocating volumes, cannot confirm our forecast, extra volume only against a binding 12-month commitment. Pricing committee above 2 %. Price of the 24 mm seal is 23 % over the should-cost of its plant. Arena P10: barely moves, final offer in round 2, trades price for 56-day lead time, 36 months and binding volume. Open moderate.",
+  "notes": "Wants firm long-term commitments and longer lead time; fears unplanned volume. Group KAM: delivery and volume-record arguments 'do not change our calculation', but a should-cost citation is accepted. Refuses cost breakdowns. Contradiction: claims full capacity yet adds volume on 36 months. Rivals: sup:70440 on the 32 mm seal (1.9 % cheaper), sup:70430 qualified on the gasket.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "none",
+   "small_account": "strong",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "strong",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "hedged_material"
+  ],
+  "wants": [
+   "binding_volume",
+   "long_contract",
+   "longer_lead_time"
+  ],
+  "fears": [
+   "committing capacity without firm volume",
+   "short lead times it cannot meet"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "capacity_tight",
+    "doc": "doc:20260918-70410-P10",
+    "quote": "We will prioritise customers with firm, long-term commitments."
+   },
+   {
+    "trait": "capacity_tight",
+    "doc": "doc:20260327-70410-M2",
+    "quote": "We can confirm additional volumes only against a binding 12-month commitment."
+   },
+   {
+    "trait": "capacity_tight",
+    "doc": "news:20260822-23",
+    "quote": "Dichtungswerk Ravensteiner GmbH allocates volumes"
+   },
+   {
+    "trait": "capacity_tight",
+    "doc": "arena:case:P10",
+    "quote": "This reflects the maximum adjustment possible under our current capacity constraints."
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260310-70410-M1",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+   },
+   {
+    "trait": "small_account",
+    "doc": "data:our_weight.share_of_its_turnover_pct",
+    "quote": "0.54"
+   },
+   {
+    "trait": "open_book",
+    "doc": "arena:case:P10",
+    "quote": "Our calculation is our property; we do not share a breakdown."
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "high",
+   "levers": [
+    "56-day lead time (about EUR 1-2/unit better than 42 days in P10)",
+    "36-month contract",
+    "binding annual volume",
+    "volume schedule data"
+   ],
+   "arguments": [
+    "should-cost of its plant: EUR 24.31 vs 29.89 on part:340010 ('it holds and we took it into account')",
+    "binding volume commitment with schedule CSV",
+    "rival source sup:70440 on the 32 mm seal at EUR 37.55",
+    "notice-period breach for any 2027 increase"
+   ],
+   "avoid": [
+    "deep opening (P10: immediate final offer)",
+    "changing any term after its final offer (walked in P10)",
+    "demanding lead time below its standard",
+    "delivery-record or volume-change arguments: 'does not change our calculation'",
+    "asking for its cost breakdown"
+   ],
+   "mandatory_terms": [
+    "binding volume for any extra volume",
+    "lead time at or above its standard (54-56 days for best price)"
+   ],
+   "tactics": [
+    "Open moderately, a few percent below its price; a deep opening triggers an immediate final offer.",
+    "Offer 56-day lead time, 36 months and a binding annual volume in one package and send the volume schedule.",
+    "Cite the should-cost of its plant once; it accepts that argument.",
+    "Expect its final offer in round 2; accept it unchanged if it beats our target.",
+    "Never change lead time, term or volume after its final offer."
+   ],
+   "expected_concession": "Arena P10: first counter about 1.5 % below its open, final offer in round 2, 1.5-3 % total when we accept 56 days, 36 months and binding volume; keeping 42 days left its final offer 4-7 % higher."
+  }
+ },
+ "arena": {
+  "cases": [
+   "case:P10"
+  ],
+  "sessions": 9,
+  "deals": 8,
+  "best_score": 0.694,
+  "walked": 1,
+  "agreed_round1": 0,
+  "fair_point": 0,
+  "no_change": 7,
+  "duplicate": 0,
+  "first_counter_vs_opening": 0.988,
+  "final_offer_round_median": 2
+ }
+}

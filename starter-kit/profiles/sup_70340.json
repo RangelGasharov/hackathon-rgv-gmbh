@@ -1,0 +1,444 @@
+{
+ "schema": 1,
+ "id": "sup:70340",
+ "name": "Metallbau Steinfelder KG",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "a0a8565b397bff15",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "sheet metal",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 21
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "KG",
+  "founded": 1977,
+  "staff": 40,
+  "turnover_eur": null,
+  "turnover_band": "2-5 M EUR",
+  "equity_ratio_pct": 33.0,
+  "credit_index": 230,
+  "credit_index_12m_ago": 230,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 373266,
+   "FY2025": 386708,
+   "FY2026": 386528
+  },
+  "share_of_its_turnover_pct": null,
+  "share_of_its_turnover_range_pct": [
+   7.7,
+   19.3
+  ],
+  "spend_trend_pct": 3.6
+ },
+ "parts": [
+  {
+   "part": "part:330020",
+   "description": "Coupling guard, galvanised",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 18.16,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -8.3,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C241",
+     "weight": 0.35,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.01,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 3.1,
+   "other_sources": [
+    {
+     "supplier": "sup:70360",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  },
+  {
+   "part": "part:330030",
+   "description": "Motor bracket HB",
+   "status": "active",
+   "quota_pct": 50,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 15.63,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -7.4,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C241",
+     "weight": 0.35,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.25,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.04,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.8,
+   "other_sources": [
+    {
+     "supplier": "sup:70360",
+     "status": "active",
+     "quota_pct": 50
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070340",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070340#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070340#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070340#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 21 days from order."
+   },
+   {
+    "id": "ctr:4600070340#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070340#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-19",
+    "part": "part:330020",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-12",
+    "part": "part:330030",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-24",
+    "part": "part:330020",
+    "type": "annual renewal",
+    "asked_pct": -3.2,
+    "settled_pct": -6.1,
+    "note": null
+   },
+   {
+    "date": "2023-12-12",
+    "part": "part:330030",
+    "type": "annual renewal",
+    "asked_pct": -3.4,
+    "settled_pct": -7.4,
+    "note": null
+   },
+   {
+    "date": "2024-11-19",
+    "part": "part:330020",
+    "type": "annual renewal",
+    "asked_pct": 0.4,
+    "settled_pct": -1.1,
+    "note": null
+   },
+   {
+    "date": "2024-11-22",
+    "part": "part:330030",
+    "type": "annual renewal",
+    "asked_pct": 2.1,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-30",
+    "part": "part:330030",
+    "type": "annual renewal",
+    "asked_pct": 3.2,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-12-12",
+    "part": "part:330020",
+    "type": "annual renewal",
+    "asked_pct": 0.2,
+    "settled_pct": -1.3,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": -0.1,
+  "settled_avg_pct": -2.6,
+  "kept_share_of_ask": -0.86
+ },
+ "payments": {
+  "invoices": 141,
+  "avg_days_late": 9.2,
+  "share_paid_over_5_days_late_pct": 75.9,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70340@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 85.7,
+    "ppm": 713,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70340@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 85.7,
+    "ppm": 562,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70340@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 88.0,
+    "ppm": 531,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70340@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 88.5,
+    "ppm": 489,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 34,
+  "cost_recharged_eur": 3150,
+  "open_8d": 2
+ },
+ "news": [],
+ "documents": [
+  {
+   "id": "doc:20260728-70340-M1",
+   "date": "2026-07-28",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Metallbau Steinfelder KG: he asked where we get our index figures from - he works from his own spreadsheet, last updated two years ago."
+  },
+  {
+   "id": "doc:20260721-70340-M2",
+   "date": "2026-07-21",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Metallbau Steinfelder KG: he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+  },
+  {
+   "id": "doc:20260418-70340-M3",
+   "date": "2026-04-18",
+   "kind": "meeting_note",
+   "subject": "Supplier day",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "At our supplier day Metallbau Steinfelder KG said Hollerau is an important reference customer for them."
+  },
+  {
+   "id": "doc:20251009-70340-N",
+   "date": "2025-10-09",
+   "kind": "email",
+   "subject": "New contact person",
+   "author": "Metallbau Steinfelder KG",
+   "text": "From 1 October your contact in sales is our new colleague in inside sales; all other contacts stay the same."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70340",
+  "source_hash": "a0a8565b397bff15",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Owner-run family KG (40 staff, EUR 2-5 M); our EUR 387 k is likely 8-19 % of its turnover. The owner prices from a two-year-old spreadsheet, offered to walk us through his calculation and calls us an important reference customer. Settles below its own ask (asked +0.2 %, gave -1.3 %). Sup:70360 is qualified on the coupling guard and holds 50 % of the motor bracket. Open deep; check current indices against its old spreadsheet, ask for its breakdown.",
+  "notes": "Wants to keep us as reference customer and its 100 % coupling-guard share; fears volume moving to Strasser (70360). No payment complaint although we pay 9.2 days late on average (76 % of invoices over 5 days late). Green scorecard but 34 complaints in 3 years and two open 8D. Do not cite Strasser's bracket price: it is higher (16.11 vs 15.63).",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "strong",
+   "free_capacity": "none",
+   "reference_customer": "strong",
+   "stale_costing": "strong",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "weak",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost",
+   "hedged_material"
+  ],
+  "wants": [],
+  "fears": [
+   "losing coupling-guard volume to sup:70360",
+   "losing a reference customer"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "stale_costing",
+    "doc": "doc:20260728-70340-M1",
+    "quote": "he works from his own spreadsheet, last updated two years ago."
+   },
+   {
+    "trait": "open_book",
+    "doc": "doc:20260721-70340-M2",
+    "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+   },
+   {
+    "trait": "reference_customer",
+    "doc": "doc:20260418-70340-M3",
+    "quote": "Metallbau Steinfelder KG said Hollerau is an important reference customer for them."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "data:payments.share_paid_over_5_days_late_pct",
+    "quote": "75.9 % of invoices paid over 5 days late"
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "keeping 100 % of the coupling guard",
+    "reference-customer status",
+    "longer contract",
+    "on-time payment"
+   ],
+   "arguments": [
+    "material/energy index vs its stale spreadsheet, only if the index fell",
+    "its own cost shares from the offered open-book walk-through",
+    "second source sup:70360 qualified on coupling guard: volume can move",
+    "scorecard: OTD 88.5 % vs 95 % target, 2 open 8D",
+    "notice-period breach for any 2027 increase"
+   ],
+   "avoid": [
+    "citing Strasser's bracket price (16.11, higher than its 15.63)",
+    "citing a cost driver that rose",
+    "faster payment as a gift"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep; if current material and energy indices fell, cite them: its spreadsheet is two years old.",
+    "Ask it to share the hourly-rate and material breakdown it offered, then argue from its own cost shares.",
+    "Point out sup:70360 is qualified on the coupling guard and could take volume.",
+    "Offer to keep it as sole source on the coupling guard in exchange for the price step.",
+    "Expect 'a fair point' and keep moving in small steps; one argument kind per round."
+   ],
+   "expected_concession": "Owner-led with stale costing: history shows it settles 1.5-4 points below its own ask; no arena data."
+  }
+ },
+ "arena": null
+}

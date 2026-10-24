@@ -1,0 +1,501 @@
+{
+ "schema": 1,
+ "id": "sup:70130",
+ "name": "Gießerei Wimbacher GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "944040d10dadbcfd",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "castings",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "FCA",
+  "lead_time_days": 45
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1954,
+  "staff": 120,
+  "turnover_eur": 19300000,
+  "turnover_band": "10-25 M EUR",
+  "equity_ratio_pct": 39.9,
+  "credit_index": 231,
+  "credit_index_12m_ago": 231,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001; ISO 14001; ISO 50001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 1193486,
+   "FY2025": 1301472,
+   "FY2026": 1289396
+  },
+  "share_of_its_turnover_pct": 6.68,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 8.0
+ },
+ "parts": [
+  {
+   "part": "part:310011",
+   "description": "Volute casing HN 65-250",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 180.52,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -7.0,
+   "should_cost": {
+    "unit_cost": 180.19,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 0.2
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.25,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.1,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.1,
+   "other_sources": [
+    {
+     "supplier": "sup:70190",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  },
+  {
+   "part": "part:310012",
+   "description": "Volute casing HN 100-315",
+   "status": "active",
+   "quota_pct": 60,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 359.17,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -7.0,
+   "should_cost": {
+    "unit_cost": 370.21,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": -3.0
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.27,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.1,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.2,
+   "other_sources": [
+    {
+     "supplier": "sup:70110",
+     "status": "active",
+     "quota_pct": 40
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070130",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "FCA",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070130#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070130#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070130#5.1",
+    "type": "delivery",
+    "text": "Delivery FCA; standard lead time 45 days from order."
+   },
+   {
+    "id": "ctr:4600070130#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070130#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-12",
+    "part": "part:310011",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": "accepted below full cost to keep the volume"
+   },
+   {
+    "date": "2022-11-23",
+    "part": "part:310012",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-29",
+    "part": "part:310012",
+    "type": "annual renewal",
+    "asked_pct": -3.2,
+    "settled_pct": -5.6,
+    "note": null
+   },
+   {
+    "date": "2023-12-04",
+    "part": "part:310011",
+    "type": "annual renewal",
+    "asked_pct": -2.9,
+    "settled_pct": -5.6,
+    "note": "accepted below full cost to keep the volume"
+   },
+   {
+    "date": "2024-11-25",
+    "part": "part:310012",
+    "type": "annual renewal",
+    "asked_pct": 1.4,
+    "settled_pct": -0.1,
+    "note": null
+   },
+   {
+    "date": "2024-12-01",
+    "part": "part:310011",
+    "type": "annual renewal",
+    "asked_pct": 1.3,
+    "settled_pct": -0.1,
+    "note": "accepted below full cost to keep the volume"
+   },
+   {
+    "date": "2025-11-18",
+    "part": "part:310011",
+    "type": "annual renewal",
+    "asked_pct": 0.9,
+    "settled_pct": -1.4,
+    "note": "accepted below full cost to keep the volume"
+   },
+   {
+    "date": "2025-11-19",
+    "part": "part:310012",
+    "type": "annual renewal",
+    "asked_pct": 0.9,
+    "settled_pct": -1.4,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": -0.3,
+  "settled_avg_pct": -2.4,
+  "kept_share_of_ask": 0.07
+ },
+ "payments": {
+  "invoices": 142,
+  "avg_days_late": 2.8,
+  "share_paid_over_5_days_late_pct": 13.4,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70130@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 92.2,
+    "ppm": 1486,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70130@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 90.2,
+    "ppm": 1163,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70130@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 86.5,
+    "ppm": 1290,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70130@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 82.4,
+    "ppm": 651,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 21,
+  "cost_recharged_eur": 1800,
+  "open_8d": 1
+ },
+ "news": [
+  {
+   "id": "news:20260322-05",
+   "date": "2026-03-22",
+   "topic": "succession",
+   "headline": "Owner of Gießerei Wimbacher GmbH seeks a successor"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260911-70130-M3",
+   "date": "2026-09-11",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Gießerei Wimbacher GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260802-70130-M1",
+   "date": "2026-08-02",
+   "kind": "call_note",
+   "subject": "Liquidity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the managing director of Gießerei Wimbacher GmbH: he asked twice whether we could pay earlier and said the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"
+  },
+  {
+   "id": "doc:20260607-70130-M2",
+   "date": "2026-06-07",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Gießerei Wimbacher GmbH",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20260602-70130-M4",
+   "date": "2026-06-02",
+   "kind": "meeting_note",
+   "subject": "Supplier visit",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Visit at Gießerei Wimbacher GmbH: half the shop floor was idle, two shifts are on short hours, and the MD spoke mostly about cash and the banks."
+  },
+  {
+   "id": "doc:20260322-70130-M6",
+   "date": "2026-03-22",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Gießerei Wimbacher GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260321-70130-M5",
+   "date": "2026-03-21",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Gießerei Wimbacher GmbH",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20251107-70130-N",
+   "date": "2025-11-07",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Gießerei Wimbacher GmbH",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300051",
+   "date": "2026-09-03",
+   "part": "part:310011",
+   "remarks": "Payment within 10 days requested."
+  },
+  {
+   "id": "quote:7300078",
+   "date": "2026-09-05",
+   "part": "part:310012",
+   "remarks": "Payment within 10 days requested."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70130",
+  "source_hash": "944040d10dadbcfd",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Family foundry (120 staff, EUR 19.3 M) in distress: half the shop floor idle, two shifts on short hours, bank watching monthly, owner seeking a successor. We are 6.7 % of its turnover, so we matter. HN 65-250 sells at cost, HN 100-315 below cost (70110 co-sources 40 %, 70190 qualified for HN 65-250). It historically gave way (kept 7 % of asks). Trade faster payment and volume for price; do not cut its margin hard.",
+  "notes": "Needs cash (asked 10-day payment in two e-mails, two quotes and a call) and volume to fill idle capacity. Fears bank pressure and margin loss: 'cannot sign anything that lowers our margin'. Says it drops small accounts, but we are 6.7 % of its turnover. Succession adds continuity risk.",
+  "traits": {
+   "cash_short": "strong",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "strong",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "strong",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "stale_costing"
+  ],
+  "wants": [
+   "faster_payment",
+   "binding_volume"
+  ],
+  "fears": [
+   "bank pulling credit",
+   "margin loss",
+   "losing volume while shop floor is idle",
+   "succession uncertainty"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260802-70130-M1",
+    "quote": "the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260602-70130-M4",
+    "quote": "two shifts are on short hours, and the MD spoke mostly about cash and the banks."
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "doc:20260602-70130-M4",
+    "quote": "half the shop floor was idle"
+   },
+   {
+    "trait": "below_full_cost",
+    "doc": "data:parts.should_cost",
+    "quote": "part:310012 should-cost 370.21 vs price 359.17 (-3.0 %); part:310011 at cost (+0.2 %)"
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "medium",
+   "levers": [
+    "payment in 10-14 days",
+    "binding volume to fill idle capacity",
+    "HN 100-315 quota shift from 70110",
+    "longer contract for bank comfort"
+   ],
+   "arguments": [
+    "faster payment worth more than the price step to it",
+    "binding volume / forecast fills idle shifts",
+    "delivery record: OTD fell 92 % to 82 % vs 95 % target",
+    "second sources: 70110 active on HN 100-315, 70190 qualified on HN 65-250"
+   ],
+   "avoid": [
+    "demanding a straight margin cut ('cannot sign anything that lowers our margin')",
+    "squeezing HN 100-315 below its cost",
+    "changing terms after its final offer",
+    "threatening to leave while it is distressed (supply risk for us)"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Offer 10-14 day payment early and ask for price in return: cash is its real need.",
+    "Add binding volume or extra HN 100-315 quota to fill its idle capacity.",
+    "Frame concessions as cash and volume, not as a lower margin.",
+    "Keep the opening moderate; prices sit at or below its own cost.",
+    "Watch supply continuity (succession, bank): prefer a stable deal over the last euro."
+   ],
+   "expected_concession": "No arena data; history shows it gives way easily (kept 7 % of its asks), but distress caps how far price can fall without payment or volume trades."
+  }
+ },
+ "arena": null
+}

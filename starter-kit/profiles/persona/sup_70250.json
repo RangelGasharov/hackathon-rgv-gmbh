@@ -1,0 +1,52 @@
+{
+  "supplier": "sup:70250",
+  "source_hash": "61dcc1c7c8987724",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Founder-led 18-staff turner (<2 M EUR, equity 19.6 %), looking for new customers with its second shift idle; our ~EUR 59k is ~3 %+ of its turnover and it calls us a reference customer. Shares the spacer sleeve 50/50 with sup:70295 (4.64 vs 4.60) and is qualified for the coupling hub. In P05 it dropped 38.5 -> ~30.5 at once and agreed ~29.3-29.5 in round 2 (only 1 of 7 sessions closed). Open deep, trade 14-day payment and volume, cite rival prices.",
+  "notes": "Needs work and reliable cash; fears losing spacer share to sup:70295. Its overdue-invoice complaint is justified: we pay 10 days late on average, 75 % of invoices >5 days late. Quality is green (VDA A) but OTD slid 95.8 -> 88 %. Arena: an agreed deal broke when we kept negotiating.",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "weak",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "strong",
+    "reference_customer": "strong",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "strong",
+    "wants_clause": "none"
+  },
+  "unsure": ["hedged_material", "stale_costing"],
+  "wants": ["faster_payment", "binding_volume"],
+  "fears": ["idle second shift", "losing spacer sleeve share to sup:70295", "late payment"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "free_capacity", "doc": "doc:20260723-70250-M1", "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."},
+    {"trait": "free_capacity", "doc": "news:20260309-03", "quote": "Drehteile Fuchsreiter GmbH looks for new customers"},
+    {"trait": "reference_customer", "doc": "doc:20260811-70250-M2", "quote": "said Hollerau is an important reference customer for them."},
+    {"trait": "late_payment_grievance", "doc": "doc:20260818-70250-P", "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"},
+    {"trait": "late_payment_grievance", "doc": "arena:case:P05", "quote": "the … days payment is good for us, as long as you really pay on time as promised."},
+    {"trait": "cash_short", "doc": "arena:case:P05", "quote": "Alright, we agree to the … per unit with … days payment, the quick cash is good for us."},
+    {"trait": "approval_ladder", "doc": "arena:case:P05", "quote": "We have clarified this internally and can move further on the price."}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["14-day payment, reliably on time", "binding volume", "more spacer sleeve share or coupling hub volume"],
+    "arguments": ["rival quote (sup:70295 at 4.60 on the spacer sleeve)", "binding volume with schedule data"],
+    "avoid": ["reopening terms after it agreed (walked in P05)", "delivery-record argument ('does not change our calculation')", "promising faster payment we cannot keep"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep; its first counter is a big step regardless.",
+      "Pair 14-day payment with a binding volume in one package; it squeezes its calculation for that.",
+      "Cite the rival price; it checks it and moves after 'clarifying internally'.",
+      "When it agrees, close immediately; do not add or change a term."
+    ],
+    "expected_concession": "Fast: in P05 first counter ~20 % below its opening, agreed in round 2 at ~24 % below; renewals settled 1.3 pts below its ask."
+  }
+}

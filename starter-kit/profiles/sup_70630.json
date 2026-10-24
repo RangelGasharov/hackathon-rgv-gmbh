@@ -1,0 +1,451 @@
+{
+ "schema": 1,
+ "id": "sup:70630",
+ "name": "Normteile Brucker KG",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "21960a5129d6975b",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "C-parts",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 7
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "KG",
+  "founded": 1966,
+  "staff": 60,
+  "turnover_eur": 29100000,
+  "turnover_band": "25-50 M EUR",
+  "equity_ratio_pct": 36.2,
+  "credit_index": 185,
+  "credit_index_12m_ago": 185,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 84963,
+   "FY2025": 85923,
+   "FY2026": 81302
+  },
+  "share_of_its_turnover_pct": 0.28,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": -4.3
+ },
+ "parts": [
+  {
+   "part": "part:360013",
+   "description": "Stud bolt M10 A2-70",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 100,
+   "current_price": 29.23,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -12.4,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2594",
+     "weight": 0.32,
+     "change_12m_pct": 1.7,
+     "ids": [
+      "idx:PPI-C2594@2025-08",
+      "idx:PPI-C2594@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "AS-14301",
+     "weight": 0.28,
+     "change_12m_pct": 8.6,
+     "ids": [
+      "idx:AS-14301@2025-09",
+      "idx:AS-14301@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.1,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 3.2,
+   "other_sources": []
+  },
+  {
+   "part": "part:360030",
+   "description": "Washer ISO 7089 M12, zinc",
+   "status": "active",
+   "quota_pct": 50,
+   "tooling_owner": "n/a",
+   "price_unit": 1000,
+   "current_price": 12.64,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 0.0,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2594",
+     "weight": 0.64,
+     "change_12m_pct": 1.7,
+     "ids": [
+      "idx:PPI-C2594@2025-08",
+      "idx:PPI-C2594@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.08,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.3,
+   "other_sources": [
+    {
+     "supplier": "sup:70610",
+     "status": "active",
+     "quota_pct": 50
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070630",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070630#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070630#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070630#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 7 days from order."
+   },
+   {
+    "id": "ctr:4600070630#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070630#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-12-10",
+    "part": "part:360013",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-11",
+    "part": "part:360030",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-12",
+    "part": "part:360030",
+    "type": "annual renewal",
+    "asked_pct": 1.7,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2023-11-20",
+    "part": "part:360013",
+    "type": "annual renewal",
+    "asked_pct": -5.1,
+    "settled_pct": -6.3,
+    "note": null
+   },
+   {
+    "date": "2024-11-12",
+    "part": "part:360030",
+    "type": "annual renewal",
+    "asked_pct": 3.5,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-12-08",
+    "part": "part:360013",
+    "type": "annual renewal",
+    "asked_pct": -1.1,
+    "settled_pct": -2.8,
+    "note": null
+   },
+   {
+    "date": "2025-11-22",
+    "part": "part:360013",
+    "type": "annual renewal",
+    "asked_pct": -0.7,
+    "settled_pct": -3.8,
+    "note": null
+   },
+   {
+    "date": "2025-12-08",
+    "part": "part:360030",
+    "type": "annual renewal",
+    "asked_pct": 1.2,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": -0.1,
+  "settled_avg_pct": -2.1,
+  "kept_share_of_ask": 1.53
+ },
+ "payments": {
+  "invoices": 143,
+  "avg_days_late": 4.4,
+  "share_paid_over_5_days_late_pct": 33.6,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70630@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 89.6,
+    "ppm": 216,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70630@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 89.6,
+    "ppm": 270,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70630@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 88.0,
+    "ppm": 293,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70630@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 88.0,
+    "ppm": 257,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 51,
+  "cost_recharged_eur": 5250,
+  "open_8d": 1
+ },
+ "news": [
+  {
+   "id": "news:20260706-17",
+   "date": "2026-07-06",
+   "topic": "noise",
+   "headline": "Normteile Brucker KG trains apprentices"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260923-70630-M4",
+   "date": "2026-09-23",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Normteile Brucker KG. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20260724-70630-M1",
+   "date": "2026-07-24",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Normteile Brucker KG. Their sales director said there is no room on price this year: head office has frozen all price reductions until December 2027. He was open on payment terms and call-off flexibility."
+  },
+  {
+   "id": "doc:20260706-70630-M3",
+   "date": "2026-07-06",
+   "kind": "email",
+   "subject": "Price list 2027",
+   "author": "Normteile Brucker KG",
+   "text": "Our price list applies to all customers without exception until December 2027. We are happy to discuss logistics and payment conditions."
+  },
+  {
+   "id": "doc:20260327-70630-M2",
+   "date": "2026-03-27",
+   "kind": "meeting_note",
+   "subject": "Commercial terms",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Normteile Brucker KG stated that standard items are not discounted; only multi-year volume agreements change prices."
+  },
+  {
+   "id": "doc:20251222-70630-N",
+   "date": "2025-12-22",
+   "kind": "email",
+   "subject": "Packaging",
+   "author": "Normteile Brucker KG",
+   "text": "From November we deliver in returnable boxes instead of cardboard."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300052",
+   "date": "2026-09-04",
+   "part": "part:360013",
+   "remarks": "Prices as per current list; discounts not possible this year (head-office directive)."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70630",
+  "source_hash": "21960a5129d6975b",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Small family KG (29 M EUR, 60 staff); we are 0.28 %. Head office froze all price reductions until December 2027 and its list applies to all customers; it offers payment terms and call-off flexibility instead. Sole source for stud bolt M10 A2-70; 70610 is second source on the washer but dearer. Yet it settled below its own ask on the stud bolt three years running. Trade on terms, not list price.",
+  "notes": "Wants a uniform price list and multi-year volume; open on payment and logistics. We pay late (34 % of invoices >5 days). Contradictions: a 60-staff family KG cites a head office and pricing committee; 'no discounts' vs stud bolt down 12.4 % since first price. OTD 88 % vs 95 %, 51 complaints, 1 open 8D.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "strong",
+   "small_account": "weak",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "weak",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost",
+   "late_payment_grievance"
+  ],
+  "wants": [
+   "price_stability",
+   "long_contract"
+  ],
+  "fears": [
+   "breaking its uniform price list"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "price_frozen",
+    "doc": "doc:20260724-70630-M1",
+    "quote": "head office has frozen all price reductions until December 2027. He was open on payment terms and call-off flexibility."
+   },
+   {
+    "trait": "price_frozen",
+    "doc": "quote:7300052",
+    "quote": "discounts not possible this year (head-office directive)."
+   },
+   {
+    "trait": "price_frozen",
+    "doc": "doc:20260706-70630-M3",
+    "quote": "Our price list applies to all customers without exception until December 2027."
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260923-70630-M4",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks"
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "data:payments.share_paid_over_5_days_late_pct",
+    "quote": "33.6"
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "low",
+   "levers": [
+    "payment terms",
+    "call-off flexibility and logistics",
+    "multi-year volume agreement"
+   ],
+   "arguments": [
+    "multi-year binding volume (its stated route to price changes)",
+    "scorecard: OTD 88 % vs 95 % target, 1 open 8D",
+    "stud bolt history: settled below its own ask 3 years running",
+    "volume forecast"
+   ],
+   "avoid": [
+    "a list-price cut as the headline (head-office freeze)",
+    "rival quote on the washer (70610 is dearer)",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [
+    "uniform list price, no discounts until 2027-12"
+   ],
+   "tactics": [
+    "Expect the price to hold near list; take value in payment days, call-off flexibility and contract length.",
+    "Offer a multi-year binding volume, the only route to price it names, and ask for a price for that package.",
+    "Use the quality record once: OTD 88 % against a 95 % target, 51 complaints, 1 open 8D.",
+    "Keep each price step at or below 2 % to stay under its pricing-committee threshold.",
+    "Never reopen terms after its final offer."
+   ],
+   "expected_concession": "No arena data; the freeze (to Dec 2027) suggests little list-price movement and value mainly on terms; before it, the stud bolt settled 1-3 points below its own ask."
+  }
+ },
+ "arena": null
+}

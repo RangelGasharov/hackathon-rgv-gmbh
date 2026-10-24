@@ -1,0 +1,561 @@
+{
+ "schema": 1,
+ "id": "sup:70620",
+ "name": "Wälzlager-Zentrum Süd GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "a0cb5e8c8597e1ea",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "C-parts",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 7
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1975,
+  "staff": 120,
+  "turnover_eur": 46800000,
+  "turnover_band": "25-50 M EUR",
+  "equity_ratio_pct": 34.0,
+  "credit_index": 181,
+  "credit_index_12m_ago": 181,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 180530,
+   "FY2025": 192796,
+   "FY2026": 216969
+  },
+  "share_of_its_turnover_pct": 0.46,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 20.2
+ },
+ "parts": [
+  {
+   "part": "part:360020",
+   "description": "Deep groove ball bearing 6306-2Z C3",
+   "status": "active",
+   "quota_pct": 70,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 4.39,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 6.6,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2815",
+     "weight": 0.63,
+     "change_12m_pct": 0.8,
+     "ids": [
+      "idx:PPI-C2815@2025-08",
+      "idx:PPI-C2815@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.09,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 0.7,
+   "other_sources": [
+    {
+     "supplier": "sup:70640",
+     "status": "active",
+     "quota_pct": 30
+    }
+   ]
+  },
+  {
+   "part": "part:360021",
+   "description": "Deep groove ball bearing 6308-2Z C3",
+   "status": "active",
+   "quota_pct": 40,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 7.23,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 4.8,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2815",
+     "weight": 0.66,
+     "change_12m_pct": 0.8,
+     "ids": [
+      "idx:PPI-C2815@2025-08",
+      "idx:PPI-C2815@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.12,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 0.9,
+   "other_sources": [
+    {
+     "supplier": "sup:70640",
+     "status": "active",
+     "quota_pct": 60
+    }
+   ]
+  },
+  {
+   "part": "part:360022",
+   "description": "Angular contact ball bearing 7309 BEP",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 22.8,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 4.9,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2815",
+     "weight": 0.63,
+     "change_12m_pct": 0.8,
+     "ids": [
+      "idx:PPI-C2815@2025-08",
+      "idx:PPI-C2815@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.12,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 0.8,
+   "other_sources": []
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070620",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 60,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070620#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 60 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070620#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070620#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 7 days from order."
+   },
+   {
+    "id": "ctr:4600070620#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070620#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 60 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-18",
+    "part": "part:360022",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-11-22",
+    "part": "part:360020",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-12",
+    "part": "part:360021",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-23",
+    "part": "part:360021",
+    "type": "annual renewal",
+    "asked_pct": 5.2,
+    "settled_pct": 2.3,
+    "note": null
+   },
+   {
+    "date": "2023-11-23",
+    "part": "part:360022",
+    "type": "annual renewal",
+    "asked_pct": 1.6,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2023-12-10",
+    "part": "part:360020",
+    "type": "annual renewal",
+    "asked_pct": 5.7,
+    "settled_pct": 4.1,
+    "note": null
+   },
+   {
+    "date": "2024-11-27",
+    "part": "part:360021",
+    "type": "annual renewal",
+    "asked_pct": 4.2,
+    "settled_pct": 2.4,
+    "note": null
+   },
+   {
+    "date": "2024-12-02",
+    "part": "part:360022",
+    "type": "annual renewal",
+    "asked_pct": 7.1,
+    "settled_pct": 4.9,
+    "note": null
+   },
+   {
+    "date": "2024-12-04",
+    "part": "part:360020",
+    "type": "annual renewal",
+    "asked_pct": 3.8,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-24",
+    "part": "part:360021",
+    "type": "annual renewal",
+    "asked_pct": 1.8,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-12-05",
+    "part": "part:360020",
+    "type": "annual renewal",
+    "asked_pct": 5.7,
+    "settled_pct": 2.3,
+    "note": null
+   },
+   {
+    "date": "2025-12-10",
+    "part": "part:360022",
+    "type": "annual renewal",
+    "asked_pct": 2.1,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 4.1,
+  "settled_avg_pct": 1.8,
+  "kept_share_of_ask": 0.31
+ },
+ "payments": {
+  "invoices": 218,
+  "avg_days_late": 3.1,
+  "share_paid_over_5_days_late_pct": 17.0,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70620@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 86.7,
+    "ppm": 387,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70620@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 83.1,
+    "ppm": 345,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70620@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 86.8,
+    "ppm": 283,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70620@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 85.0,
+    "ppm": 302,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 15,
+  "cost_recharged_eur": 1500,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260619-15",
+   "date": "2026-06-19",
+   "topic": "refocus",
+   "headline": "Wälzlager-Zentrum Süd GmbH sharpens its focus"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260920-70620-P04",
+   "date": "2026-09-20",
+   "kind": "email",
+   "subject": "Renewal of framework agreement 4600070620",
+   "author": "Wälzlager-Zentrum Süd GmbH",
+   "text": "Hello,\nour framework agreement ctr:4600070620 for Deep groove ball bearing 6306-2Z C3 (part:360020) expires on 31 December 2026. We would like to agree the terms for the coming period and will send our offer when we meet. Please let us know your expected volumes.\nBest regards,\nWälzlager-Zentrum Süd GmbH"
+  },
+  {
+   "id": "doc:20260917-70620-M4",
+   "date": "2026-09-17",
+   "kind": "meeting_note",
+   "subject": "Account review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Their new sales director said Hollerau's volumes are 'not strategic' for Wälzlager-Zentrum Süd GmbH any more; replies have become slower since the summer."
+  },
+  {
+   "id": "doc:20260706-70620-M1",
+   "date": "2026-07-06",
+   "kind": "email",
+   "subject": "Range changes",
+   "author": "Wälzlager-Zentrum Süd GmbH",
+   "text": "We are reorganising our range around our key accounts. Standard items will be supplied from stock at list conditions; individual agreements will not be extended."
+  },
+  {
+   "id": "doc:20260627-70620-M2",
+   "date": "2026-06-27",
+   "kind": "meeting_note",
+   "subject": "Commercial terms",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Wälzlager-Zentrum Süd GmbH stated that standard items are not discounted; only multi-year volume agreements change prices."
+  },
+  {
+   "id": "doc:20260616-70620-M6",
+   "date": "2026-06-16",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Wälzlager-Zentrum Süd GmbH: he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+  },
+  {
+   "id": "doc:20260501-70620-M3",
+   "date": "2026-05-01",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Wälzlager-Zentrum Süd GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260427-70620-M5",
+   "date": "2026-04-27",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Wälzlager-Zentrum Süd GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20251216-70620-N",
+   "date": "2025-12-16",
+   "kind": "email",
+   "subject": "Trade fair invitation",
+   "author": "Wälzlager-Zentrum Süd GmbH",
+   "text": "We would be pleased to welcome you at our booth at the regional supplier fair in November."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300004",
+   "date": "2026-09-06",
+   "part": "part:360020",
+   "remarks": "List conditions; supply from stock only."
+  },
+  {
+   "id": "quote:7300087",
+   "date": "2026-09-14",
+   "part": "part:360022",
+   "remarks": "List conditions; supply from stock only."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70620",
+  "source_hash": "a0cb5e8c8597e1ea",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Family bearing distributor (46.8 M EUR); we are 0.46 % and, since its refocus on key accounts, 'not strategic'. Sole source for the 7309 angular bearing; 70640 is an active second source for 6306/6308 and cheaper on 6306 (4.20 vs 4.39). Arena P04: barely moved (first counter -0.4 %), answered volume and delivery data with 'does not change our calculation', final offer by round 2. Package multi-year volume; use 70640's price.",
+  "notes": "Wants multi-year volume deals only; cites rising LCI-C and PPI-C2815. Contradiction: owner offered to walk us through costs (June), but in arena 'company policy' blocks any breakdown. Renewal mail asks our volumes. OTD 83-87 % vs 95 % target, ppm 283-387, yet delivery data did not move it.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "none",
+   "price_frozen": "weak",
+   "small_account": "strong",
+   "open_book": "weak",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost"
+  ],
+  "wants": [
+   "binding_volume",
+   "long_contract"
+  ],
+  "fears": [
+   "rising labour and bearing producer prices (LCI-C, PPI-C2815)"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "small_account",
+    "doc": "doc:20260917-70620-M4",
+    "quote": "Their new sales director said Hollerau's volumes are 'not strategic' for Wälzlager-Zentrum Süd GmbH any more"
+   },
+   {
+    "trait": "small_account",
+    "doc": "doc:20260706-70620-M1",
+    "quote": "We are reorganising our range around our key accounts."
+   },
+   {
+    "trait": "price_frozen",
+    "doc": "doc:20260627-70620-M2",
+    "quote": "standard items are not discounted; only multi-year volume agreements change prices."
+   },
+   {
+    "trait": "open_book",
+    "doc": "doc:20260616-70620-M6",
+    "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+   },
+   {
+    "trait": "open_book",
+    "doc": "arena:case:P04",
+    "quote": "Due to company policy, we are unable to share our internal cost breakdown."
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "medium",
+   "levers": [
+    "36-month term",
+    "binding annual volume",
+    "payment days (it priced a 14-day option in arena)",
+    "quota shift to or from 70640"
+   ],
+   "arguments": [
+    "rival price: 70640 supplies 6306-2Z C3 at 4.20",
+    "binding volume commitment with volume schedule",
+    "notice period: price changes need written notice at least 60 days before year end (ctr 3.1)",
+    "scorecard: OTD 85 % vs 95 % target"
+   ],
+   "avoid": [
+    "cost-breakdown requests (company policy refusal)",
+    "delivery or forecast arguments alone (no change)",
+    "dragging rounds: final offer by round 2",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Expect almost no price movement: secure the best package within the first two rounds.",
+    "Lead with 70640's lower price on 6306-2Z C3 (4.20 vs 4.39) and offer to shift quota.",
+    "Offer 36 months with a binding annual volume; it says only multi-year volume agreements change prices.",
+    "If it asks an increase, check contract 3.1: written notice is required at least 60 days before year end.",
+    "Accept its final offer as is; do not reopen any term."
+   ],
+   "expected_concession": "Minimal: P04 first counter 0.4 % below its opening and final offer by round 2; most sessions ended at 4.94 (-0.4 %); best seen 4.88 (-1.6 %) with 36 months."
+  }
+ },
+ "arena": {
+  "cases": [
+   "case:P04"
+  ],
+  "sessions": 5,
+  "deals": 5,
+  "best_score": 0.86,
+  "walked": 0,
+  "agreed_round1": 0,
+  "fair_point": 0,
+  "no_change": 5,
+  "duplicate": 0,
+  "first_counter_vs_opening": 0.996,
+  "final_offer_round_median": 2
+ }
+}

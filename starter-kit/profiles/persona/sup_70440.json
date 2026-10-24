@@ -1,0 +1,51 @@
+{
+  "supplier": "sup:70440",
+  "source_hash": "7f7a7f897b81749c",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family seal maker (140 staff, EUR 35 M); we are 0.82 % of its turnover, spend up 31 %. Allocating volumes; pricing committee above 2 %; standard items not discounted, only multi-year volume agreements change prices. Thin margin on the 32 mm seal (price only 8.1 % over should-cost of its plant). Its lip seal is 10.6 % dearer than Hermannsdorfer's. Open moderate; trade multi-year volume, cite the rival lip-seal price.",
+  "notes": "Wants multi-year volume agreements; fears losing lip-seal share, especially if our kit goes to sup:70430. Do not cite Ravensteiner's 32 mm price: it is higher (38.29 vs 37.55). Allocation news but no own words on capacity. OTD sliding to 75.5 %, two open 8D. Payment record fine.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "weak",
+    "small_account": "weak",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "strong",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["hedged_material"],
+  "wants": ["binding_volume", "long_contract"],
+  "fears": ["losing lip-seal share if our kit goes to sup:70430", "discounting standard items"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "approval_ladder", "doc": "doc:20260524-70440-M2", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."},
+    {"trait": "capacity_tight", "doc": "news:20260827-25", "quote": "Kohlering-Technik Pirkheim GmbH allocates volumes"},
+    {"trait": "price_frozen", "doc": "doc:20260910-70440-M1", "quote": "standard items are not discounted; only multi-year volume agreements change prices."},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "0.82"},
+    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:340011 should-cost 34.74 vs price 37.55, 8.1 % over cost"}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "medium",
+    "levers": ["multi-year volume agreement", "binding annual volume", "longer lead time", "keeping its lip-seal and 32 mm quotas"],
+    "arguments": ["rival price: sup:70430 sells the same lip seal at EUR 100.98/100 vs 111.69", "multi-year binding volume with schedule CSV", "scorecard: OTD 75.5 % vs 95 % target, 2 open 8D", "notice-period breach for any 2027 increase"],
+    "avoid": ["deep opening (capacity-tight)", "citing Ravensteiner's 32 mm price (higher)", "pushing the 32 mm seal far: thin margin", "changing terms after its final offer", "demanding shorter lead time"],
+    "mandatory_terms": ["multi-year volume agreement for any price change"],
+    "tactics": [
+      "Open moderately; frame every ask as part of a multi-year volume agreement.",
+      "Lead on the lip seal: Hermannsdorfer's price is 9.6 % lower and our kit plan could move that volume.",
+      "Keep each step within 2 % so it stays below the pricing committee threshold.",
+      "Offer a longer lead time rather than demand a shorter one: lead time is its currency.",
+      "Accept a reasonable final offer unchanged."
+    ],
+    "expected_concession": "No arena data; history: asked +1.1-4.8 % and settled 0-2.1 %; expect small steps, larger only against multi-year volume."
+  }
+}

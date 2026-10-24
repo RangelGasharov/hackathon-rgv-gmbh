@@ -1,0 +1,51 @@
+{
+  "supplier": "sup:70295",
+  "source_hash": "0090d743c85ab80b",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Founder-led 20-staff turner (2-5 M EUR), our A supplier: ~EUR 569k is ~11-28 % of its turnover. Looking for new customers, second shift idle, owner admits stale costing (twice) and calls us a reference customer. Wear ring set (single source) rose 8.5 % since 2022 while its other parts fell; shaft sleeve and spacer have active second sources. Open deep, use any indices that fell, the amber scorecard with 5 open 8D, and share shifts; pay on time as the sweetener.",
+  "notes": "Needs work and on-time cash; fears losing share on sleeve/spacer. Its overdue-invoice complaint is justified: we pay 10.4 days late on average, 81 % >5 days late. 58 complaints in 3 years, EUR 5,700 recharged, 5 open 8D. Wear ring settled +5.2 % (2024) and +3.1 % (2025).",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "strong",
+    "reference_customer": "strong",
+    "stale_costing": "strong",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "strong",
+    "wants_clause": "none"
+  },
+  "unsure": ["hedged_material", "approval_ladder"],
+  "wants": ["faster_payment", "binding_volume"],
+  "fears": ["idle second shift", "losing shaft sleeve share to sup:70230", "losing spacer share to sup:70250", "late payment"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "stale_costing", "doc": "doc:20260909-70295-M4", "quote": "admitted he had not followed his material and energy prices closely since the 2022 peak"},
+    {"trait": "free_capacity", "doc": "doc:20260419-70295-M5", "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."},
+    {"trait": "free_capacity", "doc": "news:20260514-12", "quote": "Drehzentrum Ilzauer GmbH looks for new customers"},
+    {"trait": "reference_customer", "doc": "doc:20260828-70295-M3", "quote": "said Hollerau is an important reference customer for them."},
+    {"trait": "late_payment_grievance", "doc": "doc:20260515-70295-P", "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"},
+    {"trait": "cash_short", "doc": "doc:20260505-70295-M2", "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["on-time or 14-day payment", "binding volume / more parts for the idle shift", "share on shaft sleeve and spacer sleeve"],
+    "arguments": ["index change, only drivers that truly fell (owner has not tracked them since 2022)", "scorecard: amber, ~1,000 ppm, 58 complaints, 5 open 8D", "share shift to co-sources sup:70230 (sleeve) and sup:70250 (spacer); both are dearer, no rival-price argument", "wear ring +8.5 % since 2022 while sleeve and spacer fell", "contract §3.1: no increase notice by 2 Oct"],
+    "avoid": ["citing a driver that rose", "denying our late payments", "repeating an argument kind"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep, especially on the wear ring set.",
+      "If indices fell since 2022, show them with sources; the owner does not track them.",
+      "Use the open 8Ds and complaint costs as the quality argument.",
+      "Acknowledge late payments and offer reliable on-time payment for price."
+    ],
+    "expected_concession": "Renewals settled 2-3 pts below its ask on sleeve/spacer but it won increases on the wear ring; expect solid moves once shown data."
+  }
+}

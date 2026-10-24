@@ -112,7 +112,8 @@ def test_start_applies_the_read_before_the_packages_are_priced(world):
         seen.append(user)
         return json.dumps({"traits": {"cash_short": "none"}, "wants": ["index_clause"], "notes": "Group."})
 
-    agent = BuyerAgent(world, writer=StrategistWriter(complete))
+    # the live read is the fallback for a supplier without a profile: test it without profiles
+    agent = BuyerAgent(world, writer=StrategistWriter(complete), use_profiles=False)
     opening = msg(370.96, body="CU-NOTATION rose 47.7 % in twelve months and is 20 % of our cost.")
     agent.start(c, {"sup:70510": [opening]})
     assert "CU-NOTATION rose" in seen[0]  # the opening e-mail is part of the read
@@ -121,7 +122,7 @@ def test_start_applies_the_read_before_the_packages_are_priced(world):
 
 
 def test_template_writer_makes_no_model_call(world):
-    agent = BuyerAgent(world)  # the benchmark's writer: no `complete`, regex traits only
+    agent = BuyerAgent(world, use_profiles=False)  # the benchmark's writer: no `complete`, regex traits only
     agent.start(case("P01"), {"sup:70110": [msg(138.55)]})
     assert agent.t["sup:70110"].d.read is None
 
@@ -210,7 +211,7 @@ def test_no_attachment_when_the_strategist_attaches_none(world):
 # -- code reads the clause wish from its own words ---------------------------------------------------------
 def test_supplier_naming_the_clause_series_wants_a_clause(world):
     c = case("P02")
-    agent = BuyerAgent(world)
+    agent = BuyerAgent(world, use_profiles=False)  # its profile already knows it wants the clause
     agent.start(c)
     ts = agent.t["sup:70510"]
     assert not ts.est.wants_clause

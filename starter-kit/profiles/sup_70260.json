@@ -1,0 +1,379 @@
+{
+ "schema": 1,
+ "id": "sup:70260",
+ "name": "Mechanik Tauvelt GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "4e2157b6fccc47bb",
+ "persona_stale": false,
+ "problems": [],
+ "country": "AT",
+ "category": "machined parts",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "FCA",
+  "lead_time_days": 35
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1979,
+  "staff": 45,
+  "turnover_eur": null,
+  "turnover_band": "5-10 M EUR",
+  "equity_ratio_pct": 38.8,
+  "credit_index": 240,
+  "credit_index_12m_ago": 240,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 120309,
+   "FY2025": 137414,
+   "FY2026": 143953
+  },
+  "share_of_its_turnover_pct": null,
+  "share_of_its_turnover_range_pct": [
+   1.4,
+   2.9
+  ],
+  "spend_trend_pct": 19.7
+ },
+ "parts": [
+  {
+   "part": "part:320012",
+   "description": "Pump shaft HI duplex",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 105.87,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -5.3,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.32,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.2,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.16,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.01,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 4.2,
+   "other_sources": []
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070260",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "FCA",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070260#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070260#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070260#5.1",
+    "type": "delivery",
+    "text": "Delivery FCA; standard lead time 35 days from order."
+   },
+   {
+    "id": "ctr:4600070260#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070260#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-20",
+    "part": "part:320012",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-30",
+    "part": "part:320012",
+    "type": "annual renewal",
+    "asked_pct": -0.1,
+    "settled_pct": -4.0,
+    "note": null
+   },
+   {
+    "date": "2024-12-02",
+    "part": "part:320012",
+    "type": "annual renewal",
+    "asked_pct": 1.8,
+    "settled_pct": -0.3,
+    "note": null
+   },
+   {
+    "date": "2025-11-15",
+    "part": "part:320012",
+    "type": "annual renewal",
+    "asked_pct": 2.6,
+    "settled_pct": -1.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 1.4,
+  "settled_avg_pct": -1.8,
+  "kept_share_of_ask": 13.15
+ },
+ "payments": {
+  "invoices": 69,
+  "avg_days_late": 4.4,
+  "share_paid_over_5_days_late_pct": 36.2,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70260@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 92.0,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70260@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 92.0,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70260@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 92.0,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70260@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 92.3,
+    "ppm": 0,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 0,
+  "cost_recharged_eur": 0,
+  "open_8d": null
+ },
+ "news": [
+  {
+   "id": "news:20260417-08",
+   "date": "2026-04-17",
+   "topic": "noise",
+   "headline": "Mechanik Tauvelt GmbH installs solar panels"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260913-70260-M2",
+   "date": "2026-09-13",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Mechanik Tauvelt GmbH",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20260522-70260-M3",
+   "date": "2026-05-22",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Mechanik Tauvelt GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260322-70260-M4",
+   "date": "2026-03-22",
+   "kind": "meeting_note",
+   "subject": "Visit by the owner",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Visit by the owner of Mechanik Tauvelt GmbH. He reminded us that in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."
+  },
+  {
+   "id": "doc:20260212-70260-M1",
+   "date": "2026-02-12",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Mechanik Tauvelt GmbH: he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+  },
+  {
+   "id": "doc:20251220-70260-N",
+   "date": "2025-12-20",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Mechanik Tauvelt GmbH",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70260",
+  "source_hash": "4e2157b6fccc47bb",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Austrian family firm, 45 staff, 5-10 M EUR; our ~EUR 144k is only ~1.4-2.9 % of its turnover and it is reviewing small accounts. Sole source of the duplex pump shaft HI (105.87, no second source), flawless quality (0 ppm, OTD 92 %). Owner expects partnership for holding prices in 2022 but offered an open-book walk-through. Open moderately, take up the open book, offer volume and acknowledge the 2022 favour; do not risk a walk.",
+  "notes": "Says it is reviewing small accounts and will focus on customers with volume; expects partnership for the 2022 favour. We pay 4.4 days late on average (36 % >5 days late) without written complaint. No should-cost and no quality lever.",
+  "traits": {
+   "cash_short": "weak",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "weak",
+   "open_book": "strong",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "strong",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "weak",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "hedged_material",
+   "stale_costing",
+   "approval_ladder"
+  ],
+  "wants": [
+   "binding_volume"
+  ],
+  "fears": [
+   "being a small account",
+   "partnership not returned"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "small_account",
+    "doc": "doc:20260522-70260-M3",
+    "quote": "they are reviewing small accounts and will focus on customers with volume."
+   },
+   {
+    "trait": "reciprocity",
+    "doc": "doc:20260322-70260-M4",
+    "quote": "in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."
+   },
+   {
+    "trait": "open_book",
+    "doc": "doc:20260212-70260-M1",
+    "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+   },
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260913-70260-M2",
+    "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "data:payments.avg_days_late",
+    "quote": "avg 4.4 days late, 36.2 % of invoices over 5 days late"
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "medium",
+   "levers": [
+    "binding volume (spend up 19.7 %)",
+    "longer contract",
+    "on-time payment"
+   ],
+   "arguments": [
+    "its own cost shares (open book)",
+    "binding volume with schedule data",
+    "index change, only drivers that fell",
+    "contract §3.1: no increase notice by 2 Oct"
+   ],
+   "avoid": [
+    "quality or delivery arguments (0 ppm, no complaints)",
+    "threatening to resource (no second source)",
+    "ignoring the 2022 favour",
+    "citing a driver that rose"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Thank it for holding prices in 2022, then ask to go through its calculation.",
+    "Argue from its hourly rate and material share, not from our target.",
+    "Offer a binding 12-month volume to show we are a volume customer.",
+    "Accept a moderate gain; do not push it to a walk on a sole-source part."
+   ],
+   "expected_concession": "Renewals settled 2-4 pts below its ask (asked +2.6 % settled -1.0 % in 2025); expect a few percent, slowly."
+  }
+ },
+ "arena": null
+}

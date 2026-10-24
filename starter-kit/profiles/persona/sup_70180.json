@@ -1,0 +1,46 @@
+{
+  "supplier": "sup:70180",
+  "source_hash": "832441bbd199f75b",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family investment caster (160 staff, EUR 24.1 M); we are 3.3 % of its turnover, spend up 37 %. Owner expects partnership for the 2022 favour. Its prices are far above our co-sources: HI 80-250 at 654.52 vs 559.61 at 70170 (+17 %), Impeller HI 250 at 118.73 vs 79.44 at 70160 and 40 % over a should-cost not modelled on its plant. We own the tooling. Historically gives way fully (kept share -5.4). Open deep with rival prices.",
+  "notes": "Needs recognition of its 2022 hold-price favour; otherwise no stated need. Fears losing 75 % / 60 % quotas to 70170 and 70160. Delivery weak: OTD 73 %, amber Q3. Few documents, so traits beyond reciprocity are uncertain.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "strong",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["stale_costing", "capacity_tight"],
+  "wants": [],
+  "fears": ["losing HI 80-250 quota to 70170", "losing HI 250 quota to 70160", "partnership not honoured"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "reciprocity", "doc": "doc:20260924-70180-M1", "quote": "in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["quota from 70170 / 70160 (we own the tooling)", "binding volume", "acknowledging the 2022 favour"],
+    "arguments": ["rival prices: 70170 HI 80-250 at 559.61, 70160 HI 250 at 79.44", "should-cost: HI 250 ~85 vs 118.73 (estimate not of its plant)", "delivery scorecard: OTD 73 % vs 95 % target, amber Q3", "volume forecast (+37 % spend)"],
+    "avoid": ["dismissing the 2022 favour", "citing cost drivers that rose", "changing terms after its final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep on HI 250: co-source 70160 sells it at 79.44, 33 % below.",
+      "Use the 70170 price on HI 80-250 as a rival quote, one argument per round.",
+      "Thank it for 2022, then say partnership means market prices for both sides.",
+      "Offer more quota or binding volume only for a visible price step."
+    ],
+    "expected_concession": "No arena data; past renewals settled well below its asks (kept share -5.4), so expect it to move readily."
+  }
+}

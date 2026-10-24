@@ -1,0 +1,50 @@
+{
+  "supplier": "sup:70640",
+  "source_hash": "e863d4038f23fd8d",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Austrian family bearing distributor (37 M EUR); we are 0.27 %. Second shift idle since spring and it can take more parts, though it is reviewing small accounts. Already cheaper than 70620 on 6306/6308, so our lever is moving 70620's quota (70 % of 6306) to it. Historically asks ~4 % and keeps only 27 %. Moves above 2 % need its pricing committee. Offer binding volume plus quota shift for a lower price.",
+  "notes": "Needs work for its idle second shift; it is itself reviewing small accounts like ours. Contradiction: idle capacity vs 'focus on customers with volume'. Renewal mail (contract to 2027-06) asks our expected volumes. OTD 81-87 % vs 95 % target, ppm fell to 0 in Q3.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "none",
+    "small_account": "strong",
+    "open_book": "none",
+    "free_capacity": "strong",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["below_full_cost"],
+  "wants": ["binding_volume"],
+  "fears": ["idle second shift"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "approval_ladder", "doc": "doc:20260512-70640-M2", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks"},
+    {"trait": "free_capacity", "doc": "doc:20260715-70640-M4", "quote": "they could take additional parts at short notice; the second shift has been on hold since spring"},
+    {"trait": "small_account", "doc": "doc:20260819-70640-M1", "quote": "they are reviewing small accounts and will focus on customers with volume."},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "0.27"}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["quota shift from 70620 (6306 and 6308)", "binding annual volume", "36-month term"],
+    "arguments": ["binding volume and quota shift with volume schedule CSV", "volume forecast", "scorecard: OTD 86.5 % vs 95 % target", "an index that fell, if available"],
+    "avoid": ["rival quote from 70620 (it is dearer)", "changing terms after its final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep and offer to move 70620's share of 6306/6308 to it in exchange for a lower price.",
+      "State a binding annual volume and send the volume schedule it asked for in its renewal mail.",
+      "Cite the scorecard once: OTD 81-87 % against a 95 % target.",
+      "Expect steps of about 2 % (pricing-committee threshold); keep moving visibly each round.",
+      "Accept its final offer unchanged."
+    ],
+    "expected_concession": "No arena data; history (keeps 27 % of its ask) and idle capacity suggest it gives way, likely in steps of 2 % or less."
+  }
+}

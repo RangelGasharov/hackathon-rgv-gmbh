@@ -1,0 +1,353 @@
+{
+ "schema": 1,
+ "id": "sup:70560",
+ "name": "Kabelwerk Rhönsberg GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "0c6a0dc03eb709b6",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "electrical",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 14
+ },
+ "company": {
+  "owner_type": "group",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1957,
+  "staff": 400,
+  "turnover_eur": 98100000,
+  "turnover_band": "50-100 M EUR",
+  "equity_ratio_pct": 32.3,
+  "credit_index": 149,
+  "credit_index_12m_ago": 149,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 740130,
+   "FY2025": 812884,
+   "FY2026": 833607
+  },
+  "share_of_its_turnover_pct": 0.85,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 12.6
+ },
+ "parts": [
+  {
+   "part": "part:350040",
+   "description": "Motor cable H07RN-F 4G2.5",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 100,
+   "current_price": 316.35,
+   "price_since": "2026-07-01",
+   "price_change_pct_since_first": 21.9,
+   "should_cost": {
+    "unit_cost": 304.49,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 3.9
+   },
+   "cost_drivers": [
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.56,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.11,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 27.0,
+   "other_sources": []
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070560",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 60,
+  "price_basis": "index clause",
+  "clauses": [
+   {
+    "id": "ctr:4600070560#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 60 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070560#3.2",
+    "type": "index",
+    "text": "The price follows index CU-NOTATION: P = P0 x (1 - 0.55 + 0.55 x I(m-2) / I(base)), base = the index two months before the price year starts, adjusted quarterly on the 1st of January, April, July and October if the change exceeds 0 %.",
+    "series": "CU-NOTATION",
+    "material_share": 0.55
+   },
+   {
+    "id": "ctr:4600070560#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070560#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 14 days from order."
+   },
+   {
+    "id": "ctr:4600070560#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070560#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 60 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-12-03",
+    "part": "part:350040",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-12-10",
+    "part": "part:350040",
+    "type": "annual renewal",
+    "asked_pct": 2.1,
+    "settled_pct": -1.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-15",
+    "part": "part:350040",
+    "type": "annual renewal",
+    "asked_pct": 2.7,
+    "settled_pct": 1.6,
+    "note": null
+   },
+   {
+    "date": "2025-11-22",
+    "part": "part:350040",
+    "type": "annual renewal",
+    "asked_pct": 8.6,
+    "settled_pct": 6.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 4.5,
+  "settled_avg_pct": 2.2,
+  "kept_share_of_ask": 0.27
+ },
+ "payments": {
+  "invoices": 73,
+  "avg_days_late": 2.2,
+  "share_paid_over_5_days_late_pct": 4.1,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70560@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 88.9,
+    "ppm": 124,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70560@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 81.5,
+    "ppm": 89,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70560@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 84.6,
+    "ppm": 110,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70560@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 88.5,
+    "ppm": 111,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 24,
+  "cost_recharged_eur": 2550,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260303-02",
+   "date": "2026-03-03",
+   "topic": "noise",
+   "headline": "Kabelwerk Rhönsberg GmbH at the trade fair"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260910-70560-P14",
+   "date": "2026-09-10",
+   "kind": "email",
+   "subject": "Renewal of framework agreement 4600070560",
+   "author": "Kabelwerk Rhönsberg GmbH",
+   "text": "Hello,\nour framework agreement ctr:4600070560 for Motor cable H07RN-F 4G2.5 (part:350040) expires on 31 December 2026. We would like to agree the terms for the coming period and will send our offer when we meet. Please let us know your expected volumes.\nBest regards,\nKabelwerk Rhönsberg GmbH"
+  },
+  {
+   "id": "doc:20260617-70560-M1",
+   "date": "2026-06-17",
+   "kind": "call_note",
+   "subject": "Material purchasing",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with Kabelwerk Rhönsberg GmbH: they bought their copper forward until March 2027 and said the market price is 'not our reality' before then."
+  },
+  {
+   "id": "doc:20260415-70560-M2",
+   "date": "2026-04-15",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Kabelwerk Rhönsberg GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20251014-70560-N",
+   "date": "2025-10-14",
+   "kind": "email",
+   "subject": "Packaging",
+   "author": "Kabelwerk Rhönsberg GmbH",
+   "text": "From November we deliver in returnable boxes instead of cardboard."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300014",
+   "date": "2026-09-16",
+   "part": "part:350040",
+   "remarks": "Material covered until March 2027; price valid accordingly."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70560",
+  "source_hash": "0c6a0dc03eb709b6",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Kabelwerk Rhönsberg GmbH, group-owned cable maker (400 staff); we are 0.85 % of its turnover; it is our sole source for motor cable. The contract has a CU-NOTATION index clause (55 % share), yet its copper is bought forward until March 2027. Price rose 21.9 % since the start and sits 3.9 % over its should-cost. The contract ends 2026-12-31 with 60-day notice. Push the hedge against index pass-through and use its complaint record.",
+  "notes": "Asked for our expected volumes for the renewal. Contradiction: the index passes market copper to us quarterly while its own copper is fixed until March 2027, so any pass-through before April 2027 is a windfall. Complaint record: 24 in three years, EUR 2,550 recharged) and OTD of 81-89 %.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "none",
+   "small_account": "weak",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "strong",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "weak"
+  },
+  "unsure": [],
+  "wants": [
+   "binding_volume"
+  ],
+  "fears": [
+   "volume uncertainty at renewal"
+  ],
+  "hedge_until": "2027-03",
+  "evidence": [
+   {
+    "trait": "hedged_material",
+    "doc": "doc:20260617-70560-M1",
+    "quote": "they bought their copper forward until March 2027 and said the market price is 'not our reality'"
+   },
+   {
+    "trait": "hedged_material",
+    "doc": "quote:7300014",
+    "quote": "Material covered until March 2027; price valid accordingly."
+   },
+   {
+    "trait": "wants_clause",
+    "doc": "data:contract.price_basis",
+    "quote": "index clause: CU-NOTATION, material share 0.55, adjusted quarterly"
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260415-70560-M2",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "medium",
+   "levers": [
+    "binding annual volume",
+    "index terms: lower share, base reset, deadband",
+    "contract length"
+   ],
+   "arguments": [
+    "its own hedge: copper cost fixed until March 2027",
+    "quality record: 24 complaints, EUR 2,550 recharged",
+    "binding volume commitment",
+    "should-cost (3.9 % over cost)",
+    "scorecard: OTD vs 95 % target"
+   ],
+   "avoid": [
+    "arguing that copper rose",
+    "dropping the index entirely (it is in the current contract)",
+    "threatening a second source we do not have",
+    "changing terms after a final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Cite its hedge: no index pass-through or increase before April 2027.",
+    "Keep an index clause but cut the material share or add a deadband.",
+    "Use the complaint record (24 in three years) as the quality argument.",
+    "Answer its volume request with a binding annual volume in exchange for price."
+   ],
+   "expected_concession": "No arena data; it kept only 0.27 of its asks historically, but in 2025 it kept 6.0 % of an 8.6 % ask."
+  }
+ },
+ "arena": null
+}

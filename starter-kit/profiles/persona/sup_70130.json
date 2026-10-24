@@ -1,0 +1,50 @@
+{
+  "supplier": "sup:70130",
+  "source_hash": "944040d10dadbcfd",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Family foundry (120 staff, EUR 19.3 M) in distress: half the shop floor idle, two shifts on short hours, bank watching monthly, owner seeking a successor. We are 6.7 % of its turnover, so we matter. HN 65-250 sells at cost, HN 100-315 below cost (70110 co-sources 40 %, 70190 qualified for HN 65-250). It historically gave way (kept 7 % of asks). Trade faster payment and volume for price; do not cut its margin hard.",
+  "notes": "Needs cash (asked 10-day payment in two e-mails, two quotes and a call) and volume to fill idle capacity. Fears bank pressure and margin loss: 'cannot sign anything that lowers our margin'. Says it drops small accounts, but we are 6.7 % of its turnover. Succession adds continuity risk.",
+  "traits": {
+    "cash_short": "strong",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "strong",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "strong",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["stale_costing"],
+  "wants": ["faster_payment", "binding_volume"],
+  "fears": ["bank pulling credit", "margin loss", "losing volume while shop floor is idle", "succession uncertainty"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "cash_short", "doc": "doc:20260802-70130-M1", "quote": "the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"},
+    {"trait": "cash_short", "doc": "doc:20260602-70130-M4", "quote": "two shifts are on short hours, and the MD spoke mostly about cash and the banks."},
+    {"trait": "free_capacity", "doc": "doc:20260602-70130-M4", "quote": "half the shop floor was idle"},
+    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:310012 should-cost 370.21 vs price 359.17 (-3.0 %); part:310011 at cost (+0.2 %)"}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "medium",
+    "levers": ["payment in 10-14 days", "binding volume to fill idle capacity", "HN 100-315 quota shift from 70110", "longer contract for bank comfort"],
+    "arguments": ["faster payment worth more than the price step to it", "binding volume / forecast fills idle shifts", "delivery record: OTD fell 92 % to 82 % vs 95 % target", "second sources: 70110 active on HN 100-315, 70190 qualified on HN 65-250"],
+    "avoid": ["demanding a straight margin cut ('cannot sign anything that lowers our margin')", "squeezing HN 100-315 below its cost", "changing terms after its final offer", "threatening to leave while it is distressed (supply risk for us)"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Offer 10-14 day payment early and ask for price in return: cash is its real need.",
+      "Add binding volume or extra HN 100-315 quota to fill its idle capacity.",
+      "Frame concessions as cash and volume, not as a lower margin.",
+      "Keep the opening moderate; prices sit at or below its own cost.",
+      "Watch supply continuity (succession, bank): prefer a stable deal over the last euro."
+    ],
+    "expected_concession": "No arena data; history shows it gives way easily (kept 7 % of its asks), but distress caps how far price can fall without payment or volume trades."
+  }
+}

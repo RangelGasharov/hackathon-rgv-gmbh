@@ -1,0 +1,48 @@
+{
+  "supplier": "sup:70190",
+  "source_hash": "0a46c05273aa11c3",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family foundry (95 staff, EUR 14.8 M); we are 7.1 % of its turnover, so we matter. Power and material bought forward until December 2028: it will dismiss index arguments and offers prices valid to 2028. Casing cover HB is sole-sourced at cost; Pump housing HB 40 is 35 % dearer than co-source 70150 (32.24 vs 43.39). Qualified but unused on three more parts, a strong volume carrot. 44 complaints in 3 years.",
+  "notes": "Wants price stability matched to its hedge through 2028. Fears losing HB 40 to 70150 and missing new volume. Casing cover has no second source.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "weak",
+    "hedged_material": "strong",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["free_capacity"],
+  "wants": ["price_stability", "long_contract"],
+  "fears": ["losing HB 40 share to 70150", "missing award of qualified parts"],
+  "hedge_until": "2028-12",
+  "evidence": [
+    {"trait": "hedged_material", "doc": "doc:20260623-70190-M1", "quote": "they bought their electricity forward until December 2028 and said the market price is 'not our reality' before then."},
+    {"trait": "hedged_material", "doc": "quote:7300064", "quote": "Material covered until December 2028; price valid accordingly."},
+    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:310040 should-cost 33.93 vs price 33.94 (0.0 %), own plant"}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["award of qualified parts (HN 65-250, bearing bracket, HN 200)", "HB 40 quota from 70150", "price fixed to Dec 2028 (long contract)"],
+    "arguments": ["rival quote: 70150 HB 40 at 32.24 vs 43.39", "quality record: 44 complaints in 3 years, amber Q3", "binding volume / new part awards", "hedge cuts its cost: fixed inputs mean no increase is justified"],
+    "avoid": ["index or market-price arguments (it is hedged to Dec 2028)", "squeezing casing cover HB (sole source, at cost)", "changing terms after its final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep on HB 40 with the 70150 price; argue rival quote, not index.",
+      "Turn the hedge around: inputs fixed to 2028, so any increase has no basis.",
+      "Offer a price fixed until Dec 2028 plus award of a qualified part for a cut.",
+      "Leave casing cover HB near its current price; it sells at cost."
+    ],
+    "expected_concession": "No arena data; it settles well below its asks (kept 22 %), but a hedged supplier ignores index moves, so volume and rival quotes do the work."
+  }
+}

@@ -30,6 +30,15 @@ agent.py     per thread: read reply (quote PDF standard terms, cost breakdown), 
 runner.py    one worker per supplier thread (no thread idles past 60 s), Live Final waves
 ```
 
+**Supplier profiles:** every one of the 46 suppliers the cases can involve has a profile, built once from the
+data and a deep read of its documents: [`starter-kit/profiles/INDEX.md`](starter-kit/profiles/INDEX.md) (start
+there) and [`starter-kit/profiles/README.md`](starter-kit/profiles/README.md) (how they are built and used). The
+agent loads them at case start instead of reading documents under the clock. The profile and arena record select
+one primary bargaining approach and one fallback; live concessions or resistance can trigger the single switch.
+The priced offer stays inside the shared procurement ceiling. First offers remain within the 60-second move window,
+each supplier thread is capped at 10 messages, and the final available message can only decide. In a multi-supplier
+case, accepting a deal stops work on sibling threads for that procurement.
+
 ## Run
 
 ```bash

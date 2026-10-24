@@ -1,0 +1,101 @@
+{
+  "supplier": "sup:70110",
+  "source_hash": "a8b60dfbdc4f45c3",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Family foundry (185 staff, EUR 25.8 M), we are 4.9 % of its turnover and growing. Owner-led, costs from a two-year-old spreadsheet. Letter asks +9.5 % on HN 50-200 from 1 Nov 2026, breaching the calendar-year price clause. HN 50-200 already sells below its full cost; HN 100-315 has ~10 % margin and 70130 as active co-source. In the arena it accepts facts with 'a fair point', trades price for binding volume and 14-day payment, settles reached ~132-134 by round 2 (one logged deal at 132.7).",
+  "notes": "Needs volume security and recognition of 2022 favour (held old price a quarter). Fears losing HN 50-200 to qualified 70140. Contradiction: claims rising energy/material costs but admits not tracking prices since 2022 peak. Delivery weak (OTD 81-85 % vs 95 % target, amber Q3, 2 open 8D).",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "strong",
+    "reciprocity": "strong",
+    "below_full_cost": "strong",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": [],
+  "wants": [
+    "binding_volume",
+    "faster_payment"
+  ],
+  "fears": [
+    "losing HN 50-200 volume to qualified 70140",
+    "losing HN 100-315 share to 70130",
+    "being treated as non-partner after 2022 favour"
+  ],
+  "hedge_until": null,
+  "evidence": [
+    {
+      "trait": "stale_costing",
+      "doc": "doc:20260824-70110-M1",
+      "quote": "he works from his own spreadsheet, last updated two years ago."
+    },
+    {
+      "trait": "stale_costing",
+      "doc": "doc:20260909-70110-M4",
+      "quote": "admitted he had not followed his material and energy prices closely since the 2022 peak"
+    },
+    {
+      "trait": "stale_costing",
+      "doc": "arena:case:P01",
+      "quote": "We did not know that - a fair point."
+    },
+    {
+      "trait": "reciprocity",
+      "doc": "doc:20260917-70110-M3",
+      "quote": "in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."
+    },
+    {
+      "trait": "below_full_cost",
+      "doc": "data:parts.should_cost",
+      "quote": "part:310010 should-cost 132.64 vs price 126.53 (-4.6 %), own plant"
+    },
+    {
+      "trait": "cash_short",
+      "doc": "doc:20260902-70110-M2",
+      "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+    }
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": [
+      "binding annual volume commitment",
+      "14-day payment",
+      "effective date 1 Jan 2027",
+      "HN 100-315 quota vs 70130"
+    ],
+    "arguments": [
+      "notice-period breach: clause 3.1 fixes prices per calendar year, 1 Nov invalid",
+      "electricity: PPI-D351 fell 3.7 % in 12 months (its own cost driver, weight 0.06); never cite LCI-C (+2.7 %) or PPI-C241 (+6.5 %), they rose",
+      "delivery record: OTD 81-85 % vs 95 % target, amber Q3",
+      "qualified second source 70140 for HN 50-200",
+      "volume forecast / binding volume"
+    ],
+    "avoid": [
+      "citing LCI-C or PPI-C241 (they rose: 'your figures confirm our case')",
+      "changing any term after its final offer",
+      "squeezing HN 50-200 far below its 132.64 cost",
+      "asking for its calculation (stays internal)"
+    ],
+    "mandatory_terms": [
+      "calendar-year effective date (1 Jan)"
+    ],
+    "tactics": [
+      "Open at the current 126.53 and cite clause 3.1: no change before 1 Jan 2027.",
+      "Use one argument kind per round: notice breach, then OTD record, then the PPI-D351 electricity fall.",
+      "Offer a binding annual volume when it asks 'Which volume can you commit to?' and trade it for price.",
+      "Concede 14-day payment only in exchange for a visible price step.",
+      "Aim for about 131-133 from 1 Jan 2027; accept its final offer unchanged."
+    ],
+    "expected_concession": "Arena P01 (4 deals, 0 walked): first counter barely moves (138.55 to ~137-137.9), ~131.9-133.8 by round 2; one logged deal at 132.7 with 14-day payment and 1 Jan 2027 in round 3."
+  }
+}

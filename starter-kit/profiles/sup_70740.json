@@ -1,0 +1,573 @@
+{
+ "schema": 1,
+ "id": "sup:70740",
+ "name": "Blankstahl Werdenfels GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "bfd6504eb35d636f",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "raw material",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 14
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1961,
+  "staff": 200,
+  "turnover_eur": 98200000,
+  "turnover_band": "50-100 M EUR",
+  "equity_ratio_pct": 39.3,
+  "credit_index": 148,
+  "credit_index_12m_ago": 148,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 453955,
+   "FY2025": 419915,
+   "FY2026": 428119
+  },
+  "share_of_its_turnover_pct": 0.44,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": -5.7
+ },
+ "parts": [
+  {
+   "part": "part:370010",
+   "description": "Round bar 1.4404 dia 30 mm, peeled",
+   "status": "active",
+   "quota_pct": 20,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 5.84,
+   "price_since": "2026-07-01",
+   "price_change_pct_since_first": -9.5,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "AS-14404",
+     "weight": 0.43,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.36,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.03,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 7.0,
+   "other_sources": [
+    {
+     "supplier": "sup:70710",
+     "status": "active",
+     "quota_pct": 80
+    }
+   ]
+  },
+  {
+   "part": "part:370011",
+   "description": "Round bar 1.4021 dia 40 mm, peeled",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 3.2,
+   "price_since": "2026-07-01",
+   "price_change_pct_since_first": 0.0,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2431",
+     "weight": 0.82,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.06,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 10.2,
+   "other_sources": []
+  },
+  {
+   "part": "part:370012",
+   "description": "Round bar C45 dia 50 mm, cold drawn",
+   "status": "active",
+   "quota_pct": 60,
+   "tooling_owner": "n/a",
+   "price_unit": 100,
+   "current_price": 143.39,
+   "price_since": "2026-07-01",
+   "price_change_pct_since_first": -1.5,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2431",
+     "weight": 0.82,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.06,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 10.2,
+   "other_sources": [
+    {
+     "supplier": "sup:70720",
+     "status": "active",
+     "quota_pct": 40
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070740",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 60,
+  "price_basis": "index clause",
+  "clauses": [
+   {
+    "id": "ctr:4600070740#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 60 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070740#3.2",
+    "type": "index",
+    "text": "The price follows index PPI-C2431: P = P0 x (1 - 0.8 + 0.8 x I(m-2) / I(base)), base = the index two months before the price year starts, adjusted quarterly on the 1st of January, April, July and October if the change exceeds 3 %.",
+    "series": "PPI-C2431",
+    "material_share": 0.8
+   },
+   {
+    "id": "ctr:4600070740#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070740#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 14 days from order."
+   },
+   {
+    "id": "ctr:4600070740#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070740#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 60 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-13",
+    "part": "part:370011",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-11-17",
+    "part": "part:370012",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-11-21",
+    "part": "part:370010",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-20",
+    "part": "part:370011",
+    "type": "annual renewal",
+    "asked_pct": 1.8,
+    "settled_pct": -1.7,
+    "note": null
+   },
+   {
+    "date": "2023-11-22",
+    "part": "part:370012",
+    "type": "annual renewal",
+    "asked_pct": -0.3,
+    "settled_pct": -3.7,
+    "note": null
+   },
+   {
+    "date": "2023-12-02",
+    "part": "part:370010",
+    "type": "annual renewal",
+    "asked_pct": -2.4,
+    "settled_pct": -5.7,
+    "note": null
+   },
+   {
+    "date": "2024-11-17",
+    "part": "part:370010",
+    "type": "annual renewal",
+    "asked_pct": -2.6,
+    "settled_pct": -4.5,
+    "note": null
+   },
+   {
+    "date": "2024-11-17",
+    "part": "part:370012",
+    "type": "annual renewal",
+    "asked_pct": -1.0,
+    "settled_pct": -2.4,
+    "note": null
+   },
+   {
+    "date": "2024-12-07",
+    "part": "part:370011",
+    "type": "annual renewal",
+    "asked_pct": -0.5,
+    "settled_pct": -4.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-15",
+    "part": "part:370010",
+    "type": "annual renewal",
+    "asked_pct": -0.6,
+    "settled_pct": -4.2,
+    "note": null
+   },
+   {
+    "date": "2025-11-27",
+    "part": "part:370012",
+    "type": "annual renewal",
+    "asked_pct": 3.0,
+    "settled_pct": -0.3,
+    "note": null
+   },
+   {
+    "date": "2025-12-05",
+    "part": "part:370011",
+    "type": "annual renewal",
+    "asked_pct": 2.5,
+    "settled_pct": 0.7,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": -0.0,
+  "settled_avg_pct": -2.9,
+  "kept_share_of_ask": 3.67
+ },
+ "payments": {
+  "invoices": 225,
+  "avg_days_late": 3.2,
+  "share_paid_over_5_days_late_pct": 13.3,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70740@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 82.7,
+    "ppm": 58,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70740@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 83.8,
+    "ppm": 26,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70740@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 82.5,
+    "ppm": 38,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70740@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 81.0,
+    "ppm": 32,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 34,
+  "cost_recharged_eur": 2550,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260619-14",
+   "date": "2026-06-19",
+   "topic": "noise",
+   "headline": "Blankstahl Werdenfels GmbH at the trade fair"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260922-70740-P18",
+   "date": "2026-09-22",
+   "kind": "letter",
+   "subject": "Price basis and surcharge clause for the coming period",
+   "author": "Blankstahl Werdenfels GmbH",
+   "text": "Dear Sir or Madam,\nfor Round bar 1.4404 dia 30 mm, peeled (part:370010) we propose to agree the price basis for the coming period, including a price adjustment clause based on AS-14404. Please let us know your view.\nYours faithfully,\nBlankstahl Werdenfels GmbH"
+  },
+  {
+   "id": "doc:20260916-70740-M5",
+   "date": "2026-09-16",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Blankstahl Werdenfels GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260904-70740-M1",
+   "date": "2026-09-04",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Blankstahl Werdenfels GmbH: he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+  },
+  {
+   "id": "doc:20260813-70740-M2",
+   "date": "2026-08-13",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Blankstahl Werdenfels GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260812-70740-M3",
+   "date": "2026-08-12",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Blankstahl Werdenfels GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20260601-70740-M4",
+   "date": "2026-06-01",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Blankstahl Werdenfels GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260514-70740-M6",
+   "date": "2026-05-14",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Blankstahl Werdenfels GmbH: he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+  },
+  {
+   "id": "doc:20251009-70740-N",
+   "date": "2025-10-09",
+   "kind": "email",
+   "subject": "New contact person",
+   "author": "Blankstahl Werdenfels GmbH",
+   "text": "From 1 October your contact in sales is our new colleague in inside sales; all other contacts stay the same."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70740",
+  "source_hash": "bfd6504eb35d636f",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Family bright-steel firm (98 M EUR); we are 0.44 % and it is reviewing small accounts. Dearer than our other sources: 1.4404 bar 5.84 vs 70710's 5.45, C45 bar 143.39 vs 70720's 126.05; sole source for 1.4021 bar. Wants an AS-14404 clause and binding volume; index-fall data moved it. Arena P18: first counter -7 %, deals 5.40-5.70 with 45-90 days and the clause; one walk, one round-1 agreement (at 5.70).",
+  "notes": "Wants binding volume and an index clause; fears losing quota to cheaper 70710 and 70720. Contradiction: owner offered open book twice, but arena refuses any breakdown beyond material share. History: settles far below its ask (kept 367 %). OTD 81-84 % vs 95 % target.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "none",
+   "small_account": "strong",
+   "open_book": "weak",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "strong"
+  },
+  "unsure": [
+   "below_full_cost"
+  ],
+  "wants": [
+   "index_clause",
+   "binding_volume",
+   "long_contract"
+  ],
+  "fears": [
+   "losing bar quota to cheaper 70710 and 70720",
+   "alloy cost risk without a clause"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "small_account",
+    "doc": "doc:20260916-70740-M5",
+    "quote": "they are reviewing small accounts and will focus on customers with volume."
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260812-70740-M3",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks"
+   },
+   {
+    "trait": "wants_clause",
+    "doc": "doc:20260922-70740-P18",
+    "quote": "including a price adjustment clause based on AS-14404. Please let us know your view."
+   },
+   {
+    "trait": "wants_clause",
+    "doc": "arena:case:P18",
+    "quote": "We can offer a Preisgleitklausel on AS-14404"
+   },
+   {
+    "trait": "open_book",
+    "doc": "arena:case:P18",
+    "quote": "While we cannot provide a detailed cost breakdown, we will gladly coordinate with our management"
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "medium",
+   "levers": [
+    "binding annual volume",
+    "AS-14404 index clause",
+    "36-month term",
+    "payment days",
+    "quota on 1.4404 and C45 bar"
+   ],
+   "arguments": [
+    "recent AS-14404 fall: -5.5 % from 2026-06 to 2026-09 (over 12 months it rose 5.9 %); in P18 it acknowledged 'the recent decreases in AS-14404'",
+    "binding volume with consumption data",
+    "same-part price: 70710 at 5.45 (1.4404) or 70720 at 126.05 (C45)",
+    "scorecard: OTD 81 % vs 95 % target"
+   ],
+   "avoid": [
+    "citing cost drivers that rose",
+    "rival or price-history data not for this exact part",
+    "offering too much early (agreed in round 1 once)",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [
+    "AS-14404 index clause"
+   ],
+   "tactics": [
+    "Accept its AS-14404 clause, then cite the recent AS-14404 fall (-5.5 % since 2026-06) with its index ids; it answered 'it holds and we took it into account'.",
+    "State a binding annual volume for 36 months and send the consumption data it asks for.",
+    "Name the exact part when citing 70710's 5.45 or 70720's 126.05; generic rival data was rejected.",
+    "Expect steps of ~0.10 and a final offer by round 4; keep moving visibly and accept it unchanged.",
+    "Take its short-payment alternative only if the discount beats ~7-8 %/yr."
+   ],
+   "expected_concession": "First counter ~7 % below its opening (6.10 to 5.6-5.8), then 0.10 steps; P18 deals at 5.40-5.61 in rounds 3-5, plus one at 5.70 agreed in round 1."
+  }
+ },
+ "arena": {
+  "cases": [
+   "case:P18"
+  ],
+  "sessions": 11,
+  "deals": 10,
+  "best_score": 0.5,
+  "walked": 1,
+  "agreed_round1": 1,
+  "fair_point": 0,
+  "no_change": 1,
+  "duplicate": 0,
+  "first_counter_vs_opening": 0.934,
+  "final_offer_round_median": 4
+ }
+}

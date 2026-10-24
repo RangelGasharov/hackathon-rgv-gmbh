@@ -1,0 +1,488 @@
+{
+ "schema": 1,
+ "id": "sup:70520",
+ "name": "Vesmo Elektromotory a.s.",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "8e0cdd8a9adddd73",
+ "persona_stale": false,
+ "problems": [],
+ "country": "CZ",
+ "category": "electrical",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 45,
+  "cash_discount": null,
+  "incoterm": "FCA",
+  "lead_time_days": 42
+ },
+ "company": {
+  "owner_type": "group",
+  "group_parent": null,
+  "legal_form": "a.s.",
+  "founded": 1948,
+  "staff": 1200,
+  "turnover_eur": 192000000,
+  "turnover_band": "100-250 M EUR",
+  "equity_ratio_pct": 37.4,
+  "credit_index": 173,
+  "credit_index_12m_ago": 173,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 1831249,
+   "FY2025": 2061237,
+   "FY2026": 2208543
+  },
+  "share_of_its_turnover_pct": 1.15,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 20.6
+ },
+ "parts": [
+  {
+   "part": "part:350010",
+   "description": "Motor IE3 4 kW, 4-pole",
+   "status": "active",
+   "quota_pct": 30,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 225.61,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 0.0,
+   "should_cost": {
+    "unit_cost": 221.47,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 1.9
+   },
+   "cost_drivers": [
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.21,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.19,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.16,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 11.6,
+   "other_sources": [
+    {
+     "supplier": "sup:70510",
+     "status": "active",
+     "quota_pct": 70
+    }
+   ]
+  },
+  {
+   "part": "part:350012",
+   "description": "Motor IE3 15 kW, 4-pole",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 601.27,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 0.0,
+   "should_cost": {
+    "unit_cost": 591.2,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 1.7
+   },
+   "cost_drivers": [
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.21,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.19,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.15,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 11.5,
+   "other_sources": [
+    {
+     "supplier": "sup:70510",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070520",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 45,
+  "incoterm": "FCA",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070520#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070520#4.1",
+    "type": "payment",
+    "text": "Payment: 45 days net."
+   },
+   {
+    "id": "ctr:4600070520#5.1",
+    "type": "delivery",
+    "text": "Delivery FCA; standard lead time 42 days from order."
+   },
+   {
+    "id": "ctr:4600070520#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070520#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-26",
+    "part": "part:350010",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-07",
+    "part": "part:350012",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-19",
+    "part": "part:350012",
+    "type": "annual renewal",
+    "asked_pct": -0.9,
+    "settled_pct": -2.6,
+    "note": null
+   },
+   {
+    "date": "2023-12-08",
+    "part": "part:350010",
+    "type": "annual renewal",
+    "asked_pct": -0.7,
+    "settled_pct": -2.6,
+    "note": null
+   },
+   {
+    "date": "2024-11-21",
+    "part": "part:350012",
+    "type": "annual renewal",
+    "asked_pct": 2.7,
+    "settled_pct": 1.4,
+    "note": null
+   },
+   {
+    "date": "2024-12-06",
+    "part": "part:350010",
+    "type": "annual renewal",
+    "asked_pct": 4.7,
+    "settled_pct": 1.4,
+    "note": null
+   },
+   {
+    "date": "2025-11-13",
+    "part": "part:350012",
+    "type": "annual renewal",
+    "asked_pct": 4.3,
+    "settled_pct": 1.2,
+    "note": null
+   },
+   {
+    "date": "2025-11-19",
+    "part": "part:350010",
+    "type": "annual renewal",
+    "asked_pct": 3.5,
+    "settled_pct": 1.2,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 2.3,
+  "settled_avg_pct": -0.0,
+  "kept_share_of_ask": 1.34
+ },
+ "payments": {
+  "invoices": 140,
+  "avg_days_late": 3.1,
+  "share_paid_over_5_days_late_pct": 15.0,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70520@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 84.6,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70520@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 83.0,
+    "ppm": 401,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70520@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 84.6,
+    "ppm": 588,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70520@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 81.1,
+    "ppm": 764,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 7,
+  "cost_recharged_eur": 600,
+  "open_8d": 1
+ },
+ "news": [],
+ "documents": [
+  {
+   "id": "doc:20260701-70520-M4",
+   "date": "2026-07-01",
+   "kind": "call_note",
+   "subject": "Material purchasing",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with Vesmo Elektromotory a.s.: they bought their copper forward until March 2027 and said the market price is 'not our reality' before then."
+  },
+  {
+   "id": "doc:20260620-70520-M1",
+   "date": "2026-06-20",
+   "kind": "letter",
+   "subject": "Material costs",
+   "author": "Vesmo Elektromotory a.s.",
+   "text": "Dear Sir or Madam,\nfor your information: our copper requirement is covered at fixed prices until March 2027. Market movements reach our costs only after that.\nYours faithfully,\nVesmo Elektromotory a.s."
+  },
+  {
+   "id": "doc:20260426-70520-M5",
+   "date": "2026-04-26",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Vesmo Elektromotory a.s.. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20260413-70520-M2",
+   "date": "2026-04-13",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Vesmo Elektromotory a.s. said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260218-70520-M3",
+   "date": "2026-02-18",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Vesmo Elektromotory a.s.. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20251207-70520-N",
+   "date": "2025-12-07",
+   "kind": "email",
+   "subject": "Packaging",
+   "author": "Vesmo Elektromotory a.s.",
+   "text": "From November we deliver in returnable boxes instead of cardboard."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300077",
+   "date": "2026-09-04",
+   "part": "part:350010",
+   "remarks": "Material covered until March 2027; price valid accordingly."
+  },
+  {
+   "id": "quote:7300054",
+   "date": "2026-09-06",
+   "part": "part:350012",
+   "remarks": "Material covered until March 2027; price valid accordingly."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70520",
+  "source_hash": "8e0cdd8a9adddd73",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Vesmo Elektromotory a.s., Czech motor maker (1,200 staff, solid credit); we are 1.15 % of its turnover and growing 20 %. Copper is bought forward until March 2027, so index and copper arguments will not move it. Margins are thin (price 1.7-1.9 % over its should-cost). We have leverage: sup:70510 holds 70 % of the 4 kW motor and is qualified for the 15 kW. Use the quota shift, scorecard and binding volume.",
+  "notes": "It needs volume (it is reviewing small accounts) and fears losing share to sup:70510. Its hedge cuts both ways: it cannot claim copper-driven increases before April 2027. OTD sits at 81-85 % against a 95 % target, ppm rose to 764 and one 8D is open. Price moves above 2 % need its pricing committee.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "none",
+   "small_account": "weak",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "strong",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "free_capacity"
+  ],
+  "wants": [
+   "binding_volume",
+   "price_stability"
+  ],
+  "fears": [
+   "losing 4 kW quota to sup:70510",
+   "being dropped as a small account",
+   "thin margin"
+  ],
+  "hedge_until": "2027-03",
+  "evidence": [
+   {
+    "trait": "hedged_material",
+    "doc": "doc:20260620-70520-M1",
+    "quote": "our copper requirement is covered at fixed prices until March 2027."
+   },
+   {
+    "trait": "hedged_material",
+    "doc": "doc:20260701-70520-M4",
+    "quote": "they bought their copper forward until March 2027 and said the market price is 'not our reality'"
+   },
+   {
+    "trait": "hedged_material",
+    "doc": "quote:7300077",
+    "quote": "Material covered until March 2027; price valid accordingly."
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260426-70520-M5",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+   },
+   {
+    "trait": "small_account",
+    "doc": "doc:20260413-70520-M2",
+    "quote": "they are reviewing small accounts and will focus on customers with volume."
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "medium",
+   "levers": [
+    "4 kW quota shift from or to sup:70510",
+    "binding annual volume",
+    "contract length for price stability"
+   ],
+   "arguments": [
+    "second source sup:70510 (active 4 kW, qualified 15 kW); do not cite its 4 kW price, 239.21 is higher",
+    "scorecard: OTD 81 % vs 95 % target, ppm 764, open 8D",
+    "binding volume commitment",
+    "volume forecast (+20 % spend)"
+   ],
+   "avoid": [
+    "copper or index arguments (hedged until March 2027)",
+    "squeezing far below its 1.7-1.9 % margin",
+    "changing terms after a final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep; its prices are covered by the hedge, so reject any increase before April 2027.",
+    "Offer more of the 4 kW quota (sup:70510 holds 70 %) for a lower price; never cite 70510's higher 4 kW price.",
+    "Cite the Q3 scorecard (OTD 81.1 %, ppm 764, open 8D) once as the quality argument.",
+    "Offer a binding annual volume; it says it focuses on customers with volume.",
+    "Turn its own hedge letter against any copper-driven ask."
+   ],
+   "expected_concession": "No arena data; history shows it settled at about a third to a half of its ask (asked 2.7-4.7 %, settled 1.2-1.4 %); expect small moves given its thin margin."
+  }
+ },
+ "arena": null
+}

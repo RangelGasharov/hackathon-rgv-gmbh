@@ -1,0 +1,53 @@
+{
+  "supplier": "sup:70410",
+  "source_hash": "75058b2946f7fa68",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Seal maker in Ravensteiner Holding (650 staff, EUR 151 M); we are 0.54 % of its turnover. Capacity tight: allocating volumes, cannot confirm our forecast, extra volume only against a binding 12-month commitment. Pricing committee above 2 %. Price of the 24 mm seal is 23 % over the should-cost of its plant. Arena P10: barely moves, final offer in round 2, trades price for 56-day lead time, 36 months and binding volume. Open moderate.",
+  "notes": "Wants firm long-term commitments and longer lead time; fears unplanned volume. Group KAM: delivery and volume-record arguments 'do not change our calculation', but a should-cost citation is accepted. Refuses cost breakdowns. Contradiction: claims full capacity yet adds volume on 36 months. Rivals: sup:70440 on the 32 mm seal (1.9 % cheaper), sup:70430 qualified on the gasket.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "none",
+    "small_account": "strong",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "strong",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["hedged_material"],
+  "wants": ["binding_volume", "long_contract", "longer_lead_time"],
+  "fears": ["committing capacity without firm volume", "short lead times it cannot meet"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "capacity_tight", "doc": "doc:20260918-70410-P10", "quote": "We will prioritise customers with firm, long-term commitments."},
+    {"trait": "capacity_tight", "doc": "doc:20260327-70410-M2", "quote": "We can confirm additional volumes only against a binding 12-month commitment."},
+    {"trait": "capacity_tight", "doc": "news:20260822-23", "quote": "Dichtungswerk Ravensteiner GmbH allocates volumes"},
+    {"trait": "capacity_tight", "doc": "arena:case:P10", "quote": "This reflects the maximum adjustment possible under our current capacity constraints."},
+    {"trait": "approval_ladder", "doc": "doc:20260310-70410-M1", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "0.54"},
+    {"trait": "open_book", "doc": "arena:case:P10", "quote": "Our calculation is our property; we do not share a breakdown."}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "high",
+    "levers": ["56-day lead time (about EUR 1-2/unit better than 42 days in P10)", "36-month contract", "binding annual volume", "volume schedule data"],
+    "arguments": ["should-cost of its plant: EUR 24.31 vs 29.89 on part:340010 ('it holds and we took it into account')", "binding volume commitment with schedule CSV", "rival source sup:70440 on the 32 mm seal at EUR 37.55", "notice-period breach for any 2027 increase"],
+    "avoid": ["deep opening (P10: immediate final offer)", "changing any term after its final offer (walked in P10)", "demanding lead time below its standard", "delivery-record or volume-change arguments: 'does not change our calculation'", "asking for its cost breakdown"],
+    "mandatory_terms": ["binding volume for any extra volume", "lead time at or above its standard (54-56 days for best price)"],
+    "tactics": [
+      "Open moderately, a few percent below its price; a deep opening triggers an immediate final offer.",
+      "Offer 56-day lead time, 36 months and a binding annual volume in one package and send the volume schedule.",
+      "Cite the should-cost of its plant once; it accepts that argument.",
+      "Expect its final offer in round 2; accept it unchanged if it beats our target.",
+      "Never change lead time, term or volume after its final offer."
+    ],
+    "expected_concession": "Arena P10: first counter about 1.5 % below its open, final offer in round 2, 1.5-3 % total when we accept 56 days, 36 months and binding volume; keeping 42 days left its final offer 4-7 % higher."
+  }
+}

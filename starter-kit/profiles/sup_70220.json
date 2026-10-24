@@ -1,0 +1,372 @@
+{
+ "schema": 1,
+ "id": "sup:70220",
+ "name": "CNC-Technik Obermaier & Huber GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "acd71f0bada32bc2",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "machined parts",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "EXW",
+  "lead_time_days": 35
+ },
+ "company": {
+  "owner_type": "founder",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 2004,
+  "staff": 35,
+  "turnover_eur": null,
+  "turnover_band": "2-5 M EUR",
+  "equity_ratio_pct": 31.1,
+  "credit_index": 245,
+  "credit_index_12m_ago": 245,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 137182,
+   "FY2025": 151389,
+   "FY2026": 153472
+  },
+  "share_of_its_turnover_pct": null,
+  "share_of_its_turnover_range_pct": [
+   3.1,
+   7.7
+  ],
+  "spend_trend_pct": 11.9
+ },
+ "parts": [
+  {
+   "part": "part:320030",
+   "description": "Flange DN 65 PN 16, machined",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 16.02,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -4.1,
+   "should_cost": {
+    "unit_cost": 15.4,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 4.0
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.33,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.32,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.02,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 4.8,
+   "other_sources": [
+    {
+     "supplier": "sup:70240",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070220",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "EXW",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070220#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070220#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070220#5.1",
+    "type": "delivery",
+    "text": "Delivery EXW; standard lead time 35 days from order."
+   },
+   {
+    "id": "ctr:4600070220#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070220#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-23",
+    "part": "part:320030",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-20",
+    "part": "part:320030",
+    "type": "annual renewal",
+    "asked_pct": -0.4,
+    "settled_pct": -4.1,
+    "note": null
+   },
+   {
+    "date": "2024-11-19",
+    "part": "part:320030",
+    "type": "annual renewal",
+    "asked_pct": 3.1,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-12-04",
+    "part": "part:320030",
+    "type": "annual renewal",
+    "asked_pct": 3.5,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 2.1,
+  "settled_avg_pct": -1.4,
+  "kept_share_of_ask": 3.42
+ },
+ "payments": {
+  "invoices": 71,
+  "avg_days_late": 8.1,
+  "share_paid_over_5_days_late_pct": 73.2,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70220@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 61.5,
+    "ppm": 907,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70220@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 57.7,
+    "ppm": 1040,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70220@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 60.0,
+    "ppm": 626,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70220@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 56.0,
+    "ppm": 731,
+    "colour": "amber"
+   }
+  ],
+  "complaints_3y": 24,
+  "cost_recharged_eur": 1950,
+  "open_8d": 1
+ },
+ "news": [
+  {
+   "id": "news:20260320-04",
+   "date": "2026-03-20",
+   "topic": "full_order_book",
+   "headline": "CNC-Technik Obermaier & Huber GmbH fully booked into next year"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260915-70220-P09",
+   "date": "2026-09-15",
+   "kind": "email",
+   "subject": "Capacity situation and delivery dates",
+   "author": "CNC-Technik Obermaier & Huber GmbH",
+   "text": "Hello,\ndue to very high capacity utilisation we cannot confirm your full forecast for Flange DN 65 PN 16, machined (part:320030) for the coming months. Lead times are currently longer than agreed. We will prioritise customers with firm, long-term commitments.\nBest regards,\nCNC-Technik Obermaier & Huber GmbH"
+  },
+  {
+   "id": "doc:20260511-70220-M1",
+   "date": "2026-05-11",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "CNC-Technik Obermaier & Huber GmbH",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20260224-70220-M2",
+   "date": "2026-02-24",
+   "kind": "meeting_note",
+   "subject": "Supplier day",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "At our supplier day CNC-Technik Obermaier & Huber GmbH said Hollerau is an important reference customer for them."
+  },
+  {
+   "id": "doc:20251207-70220-N",
+   "date": "2025-12-07",
+   "kind": "email",
+   "subject": "New contact person",
+   "author": "CNC-Technik Obermaier & Huber GmbH",
+   "text": "From 1 October your contact in sales is our new colleague in inside sales; all other contacts stay the same."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70220",
+  "source_hash": "acd71f0bada32bc2",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Founder-led 35-staff CNC shop (2-5 M EUR); our ~EUR 153k is ~3-8 % of its turnover and it calls us a reference customer. Fully booked into next year, cannot confirm our forecast and prioritises firm long-term commitments. Sole active source of flange DN 65 (part:320030); sup:70240 is qualified but also fully booked. Price 4 % over its own should-cost. Open moderately, pay with lead time and a binding 12-month volume, use its terrible OTD as the price argument.",
+  "notes": "Wants firm, long commitments; fears being tied to unplanned volumes. OTD 56-61.5 % for four quarters (target 95 %). We pay 8 days late on average (73 % of invoices >5 days late) but it has not complained in writing; 10-day pay e-mail only.",
+  "traits": {
+   "cash_short": "weak",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "strong",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "strong",
+   "late_payment_grievance": "weak",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "approval_ladder",
+   "hedged_material",
+   "stale_costing"
+  ],
+  "wants": [
+   "binding_volume",
+   "long_contract",
+   "longer_lead_time"
+  ],
+  "fears": [
+   "committing capacity to unplanned forecast volumes"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "capacity_tight",
+    "doc": "doc:20260915-70220-P09",
+    "quote": "We will prioritise customers with firm, long-term commitments."
+   },
+   {
+    "trait": "capacity_tight",
+    "doc": "news:20260320-04",
+    "quote": "CNC-Technik Obermaier & Huber GmbH fully booked into next year"
+   },
+   {
+    "trait": "reference_customer",
+    "doc": "doc:20260224-70220-M2",
+    "quote": "said Hollerau is an important reference customer for them."
+   },
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260511-70220-M1",
+    "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "data:payments.avg_days_late",
+    "quote": "avg 8.1 days late, 73.2 % of invoices over 5 days late"
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "medium",
+   "levers": [
+    "longer lead time (~0.5 % of price per day)",
+    "binding 12-month volume",
+    "longer contract",
+    "paying on time"
+   ],
+   "arguments": [
+    "scorecard: OTD 56 % vs 95 % target, 24 complaints",
+    "own cost share: price 4 % over its plant should-cost",
+    "contract §3.1: no increase notice by 2 Oct",
+    "binding volume commitment"
+   ],
+   "avoid": [
+    "deep opening (capacity-tight bots jump to a final offer)",
+    "forecast-only volume talk",
+    "demanding shorter lead time",
+    "changing terms after a final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open moderately, a few percent below current price, not deep.",
+    "Offer a binding 12-month volume and accept its longer lead time in return for price.",
+    "Use the year of 56-61 % OTD as the quality argument, once.",
+    "Do not threaten a switch to sup:70240: it is fully booked too."
+   ],
+   "expected_concession": "Small: renewals asked +3 % and settled at 0 % twice; expect hold near current price, a few percent at most for lead time and volume."
+  }
+ },
+ "arena": null
+}

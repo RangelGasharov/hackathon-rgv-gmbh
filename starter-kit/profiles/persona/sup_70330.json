@@ -1,0 +1,49 @@
+{
+  "supplier": "sup:70330",
+  "source_hash": "103be693d8709162",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Hungarian laser/sheet shop (90 staff, EUR 3.9 M); we are 8.2 % of its turnover and growing 21 %. Second shift on hold since spring and it offered to take more parts at short notice: idle capacity. Gives way easily (kept 10 % of its asks; asked +1.5 %, settled -2.5 %). OTD sliding to 71 % (amber). Open deep; trade volume and forecast for price.",
+  "notes": "Needs work to restart its second shift; volume is the currency. Only the generic 10-day payment e-mail (equity 35 %, credit flat 248), so no real cash stress. Fears losing a growing account. Amber, falling OTD is a quality lever. 60-day payment terms already favour us.",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "strong",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["below_full_cost", "stale_costing", "hedged_material"],
+  "wants": ["binding_volume", "faster_payment"],
+  "fears": ["idle second shift", "losing a growing account"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "free_capacity", "doc": "doc:20260206-70330-M1", "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."},
+    {"trait": "cash_short", "doc": "doc:20260316-70330-M2", "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "8.23"}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["binding volume commitment", "additional parts / volume to fill second shift", "longer contract", "shorter lead time at no extra cost"],
+    "arguments": ["binding volume commitment with schedule", "volume forecast (+21 % spend)", "scorecard: OTD 70.8 % vs 95 % target", "material/energy index, only if it actually fell", "notice-period breach for any 2027 increase"],
+    "avoid": ["citing a cost driver that rose", "giving faster payment for free: it is not distressed"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep: it historically gives away most of its ask.",
+      "Offer a binding annual volume and send the volume schedule; that fills its idle shift.",
+      "Use the amber OTD (70.8 %) as a separate quality argument.",
+      "Ask for a shorter lead time as a free extra: it has spare capacity.",
+      "Move in small visible steps, one argument kind per round."
+    ],
+    "expected_concession": "No arena data; history shows it settles 3-4 points below its ask, so expect steady movement."
+  }
+}

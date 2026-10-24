@@ -1,0 +1,410 @@
+{
+ "schema": 1,
+ "id": "sup:70280",
+ "name": "Wälzhammer Präzision GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "148bbb504dfce435",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "machined parts",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": {
+   "pct": 3,
+   "days": 10
+  },
+  "incoterm": "EXW",
+  "lead_time_days": 28
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1973,
+  "staff": 55,
+  "turnover_eur": 6410000,
+  "turnover_band": "5-10 M EUR",
+  "equity_ratio_pct": 20.3,
+  "credit_index": 302,
+  "credit_index_12m_ago": 230,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 213715,
+   "FY2025": 229541,
+   "FY2026": 233337
+  },
+  "share_of_its_turnover_pct": 3.64,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 9.2
+ },
+ "parts": [
+  {
+   "part": "part:320011",
+   "description": "Pump shaft HN 32 mm",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 33.06,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -4.8,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.18,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.11,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.05,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 3.5,
+   "other_sources": [
+    {
+     "supplier": "sup:70210",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070280",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "EXW",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070280#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070280#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net, 3 % discount within 10 days."
+   },
+   {
+    "id": "ctr:4600070280#5.1",
+    "type": "delivery",
+    "text": "Delivery EXW; standard lead time 28 days from order."
+   },
+   {
+    "id": "ctr:4600070280#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070280#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-21",
+    "part": "part:320011",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-12-08",
+    "part": "part:320011",
+    "type": "annual renewal",
+    "asked_pct": 1.5,
+    "settled_pct": -1.9,
+    "note": null
+   },
+   {
+    "date": "2024-11-20",
+    "part": "part:320011",
+    "type": "annual renewal",
+    "asked_pct": -0.7,
+    "settled_pct": -3.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-24",
+    "part": "part:320011",
+    "type": "annual renewal",
+    "asked_pct": 3.5,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 1.4,
+  "settled_avg_pct": -1.6,
+  "kept_share_of_ask": 1.01
+ },
+ "payments": {
+  "invoices": 74,
+  "avg_days_late": -3.5,
+  "share_paid_over_5_days_late_pct": 43.2,
+  "cash_discounts_taken": 39
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70280@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 96.0,
+    "ppm": 1040,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70280@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 88.5,
+    "ppm": 623,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70280@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 85.7,
+    "ppm": 720,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70280@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 88.9,
+    "ppm": 425,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 10,
+  "cost_recharged_eur": 1050,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260926-38",
+   "date": "2026-09-26",
+   "topic": "short_time_work",
+   "headline": "Wälzhammer Präzision GmbH introduces short-time work"
+  },
+  {
+   "id": "news:20260725-20",
+   "date": "2026-07-25",
+   "topic": "credit_watch",
+   "headline": "Wälzhammer Präzision GmbH under pressure"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260720-70280-P",
+   "date": "2026-07-20",
+   "kind": "email",
+   "subject": "Overdue invoices",
+   "author": "Wälzhammer Präzision GmbH",
+   "text": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms; otherwise we will have to review our conditions."
+  },
+  {
+   "id": "doc:20260707-70280-M1",
+   "date": "2026-07-07",
+   "kind": "call_note",
+   "subject": "Liquidity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the managing director of Wälzhammer Präzision GmbH: he asked twice whether we could pay earlier and said the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"
+  },
+  {
+   "id": "doc:20260619-70280-M2",
+   "date": "2026-06-19",
+   "kind": "call_note",
+   "subject": "Capacity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with sales at Wälzhammer Präzision GmbH: they could take additional parts at short notice; the second shift has been on hold since spring."
+  },
+  {
+   "id": "doc:20260617-70280-M3",
+   "date": "2026-06-17",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Wälzhammer Präzision GmbH: he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+  },
+  {
+   "id": "doc:20251121-70280-N",
+   "date": "2025-11-21",
+   "kind": "email",
+   "subject": "New contact person",
+   "author": "Wälzhammer Präzision GmbH",
+   "text": "From 1 October your contact in sales is our new colleague in inside sales; all other contacts stay the same."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300056",
+   "date": "2026-09-08",
+   "part": "part:320011",
+   "remarks": "Payment within 10 days requested."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70280",
+  "source_hash": "148bbb504dfce435",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Family firm, 55 staff, EUR 6.41 M turnover; we are 3.64 % of it. In distress: credit index 230 -> 302, short-time work, bank watching monthly, MD 'cannot sign anything that lowers our margin now'. Second shift idle, owner offered open book. Sole active source of pump shaft HN 32 mm (33.06); sup:70210 is qualified with free capacity. Trade truly valuable fast payment for price, use the open book, avoid a supplier collapse.",
+  "notes": "Needs cash and work; fears the bank and losing margin. Standard terms already give 3 % discount for 10-day payment. Complains of overdue invoices; we pay 3.5 days early on average but 43 % >5 days late. Contract ends 2026-12-31 and auto-extends 12 months (90-day notice date passed).",
+  "traits": {
+   "cash_short": "strong",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "strong",
+   "free_capacity": "strong",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "strong",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "hedged_material",
+   "stale_costing"
+  ],
+  "wants": [
+   "faster_payment",
+   "binding_volume"
+  ],
+  "fears": [
+   "bank pressure and insolvency",
+   "lower margin",
+   "losing the shaft to sup:70210"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260707-70280-M1",
+    "quote": "the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "news:20260926-38",
+    "quote": "Wälzhammer Präzision GmbH introduces short-time work"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "data:company.credit_index",
+    "quote": "credit index 302, was 230 twelve months ago (+72)"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "quote:7300056",
+    "quote": "Payment within 10 days requested."
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "doc:20260619-70280-M2",
+    "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."
+   },
+   {
+    "trait": "open_book",
+    "doc": "doc:20260617-70280-M3",
+    "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "doc:20260720-70280-P",
+    "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "medium",
+   "levers": [
+    "10-day payment (worth more than 7-8 %/yr to it)",
+    "binding 12-month volume",
+    "more parts for the idle shift"
+   ],
+   "arguments": [
+    "faster payment priced into the unit price",
+    "its own cost shares (open book)",
+    "binding volume with schedule data",
+    "rival source: sup:70210 qualified with free capacity"
+   ],
+   "avoid": [
+    "deep cuts that threaten its survival",
+    "slow payment terms",
+    "hard switch threats that push it to the brink"
+   ],
+   "mandatory_terms": [
+    "fast payment (10 days)"
+   ],
+   "tactics": [
+    "Lead with 10-day payment and offer it explicitly in exchange for a price reduction.",
+    "Frame the reduction as cash-neutral for it: faster cash plus binding volume.",
+    "Take up its open-book offer and argue from its own hourly rate and material.",
+    "Mention sup:70210 is qualified only once, softly; we need this supplier alive."
+   ],
+   "expected_concession": "Moderate: renewals settled 2.3-3.5 pts below its ask; margin cuts resisted, price moves mainly when paid for with faster payment."
+  }
+ },
+ "arena": null
+}

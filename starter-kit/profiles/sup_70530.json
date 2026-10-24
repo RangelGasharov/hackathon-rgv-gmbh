@@ -1,0 +1,456 @@
+{
+ "schema": 1,
+ "id": "sup:70530",
+ "name": "Selvbrunn Drive Systems GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "0b5b2e8ce02c171e",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "electrical",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 49
+ },
+ "company": {
+  "owner_type": "group",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1983,
+  "staff": 2200,
+  "turnover_eur": 602000000,
+  "turnover_band": "250-1000 M EUR",
+  "equity_ratio_pct": 31.7,
+  "credit_index": 157,
+  "credit_index_12m_ago": 157,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 1417966,
+   "FY2025": 1694081,
+   "FY2026": 1693940
+  },
+  "share_of_its_turnover_pct": 0.28,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 19.5
+ },
+ "parts": [
+  {
+   "part": "part:350020",
+   "description": "Frequency converter 7.5 kW, IP55",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 412.74,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -0.5,
+   "should_cost": {
+    "unit_cost": 403.21,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 2.4
+   },
+   "cost_drivers": [
+    {
+     "series": "PPI-C2611",
+     "weight": 0.44,
+     "change_12m_pct": 13.5,
+     "ids": [
+      "idx:PPI-C2611@2025-08",
+      "idx:PPI-C2611@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.14,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.07,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 9.7,
+   "other_sources": [
+    {
+     "supplier": "sup:70540",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  },
+  {
+   "part": "part:350021",
+   "description": "Frequency converter 15 kW, IP55",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": {
+    "unit_cost": 692.92,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": null
+   },
+   "cost_drivers": [
+    {
+     "series": "PPI-C2611",
+     "weight": 0.43,
+     "change_12m_pct": 13.5,
+     "ids": [
+      "idx:PPI-C2611@2025-08",
+      "idx:PPI-C2611@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.15,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.08,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 10.0,
+   "other_sources": [
+    {
+     "supplier": "sup:70540",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070530",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070530#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070530#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070530#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 49 days from order."
+   },
+   {
+    "id": "ctr:4600070530#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070530#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-12-02",
+    "part": "part:350020",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-13",
+    "part": "part:350020",
+    "type": "annual renewal",
+    "asked_pct": 1.4,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-12-08",
+    "part": "part:350020",
+    "type": "annual renewal",
+    "asked_pct": -0.6,
+    "settled_pct": -3.5,
+    "note": null
+   },
+   {
+    "date": "2025-11-21",
+    "part": "part:350020",
+    "type": "annual renewal",
+    "asked_pct": 5.5,
+    "settled_pct": 3.1,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 2.1,
+  "settled_avg_pct": -0.1,
+  "kept_share_of_ask": 2.13
+ },
+ "payments": {
+  "invoices": 70,
+  "avg_days_late": 2.0,
+  "share_paid_over_5_days_late_pct": 7.1,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70530@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 91.7,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70530@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 88.0,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70530@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 88.9,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70530@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 84.6,
+    "ppm": 0,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 2,
+  "cost_recharged_eur": 300,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260612-13",
+   "date": "2026-06-12",
+   "topic": "noise",
+   "headline": "Selvbrunn Drive Systems GmbH trains apprentices"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260917-70530-P03",
+   "date": "2026-09-17",
+   "kind": "email",
+   "subject": "Renewal of framework agreement 4600070530",
+   "author": "Selvbrunn Drive Systems GmbH",
+   "text": "Hello,\nour framework agreement ctr:4600070530 for Frequency converter 7.5 kW, IP55 (part:350020) expires on 31 December 2026. We would like to agree the terms for the coming period and will send our offer when we meet. Please let us know your expected volumes.\nBest regards,\nSelvbrunn Drive Systems GmbH"
+  },
+  {
+   "id": "doc:20260909-70530-M2",
+   "date": "2026-09-09",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Selvbrunn Drive Systems GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20260826-70530-M1",
+   "date": "2026-08-26",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Selvbrunn Drive Systems GmbH. Their sales director said there is no room on price this year: head office has frozen all price reductions until December 2027. He was open on payment terms and call-off flexibility."
+  },
+  {
+   "id": "doc:20251201-70530-N",
+   "date": "2025-12-01",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Selvbrunn Drive Systems GmbH",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300003",
+   "date": "2026-09-05",
+   "part": "part:350020",
+   "remarks": "Prices as per current list; discounts not possible this year (head-office directive)."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70530",
+  "source_hash": "0b5b2e8ce02c171e",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Selvbrunn Drive Systems GmbH, group-owned converter maker (2,200 staff); we are 0.28 % of its turnover. Head office froze all price reductions until December 2027, yet in the arena it asked +6.2 % (412.74 to 438.21). It gives about 1.2-1.4 % for 90-day payment plus a 24-36 month contract, then holds flat. Contract ends 2026-12-31 and it wants volumes. Trade terms (contract length, firm volume, 30-day payment); expect little price.",
+  "notes": "Wants planning security: long contract and firm volume. Contradiction: it 'froze price reductions' but asks increases, so the freeze is one-way. It also gave a price cut for keeping 30-day payment. OTD fell to 84.6 % against a 95 % target. sup:70540 is qualified for this part but also freezes prices and quotes 84-day lead times.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "strong",
+   "small_account": "weak",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [],
+  "wants": [
+   "long_contract",
+   "binding_volume",
+   "faster_payment"
+  ],
+  "fears": [
+   "losing volume at renewal",
+   "price erosion against head-office directive"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "price_frozen",
+    "doc": "doc:20260826-70530-M1",
+    "quote": "head office has frozen all price reductions until December 2027."
+   },
+   {
+    "trait": "price_frozen",
+    "doc": "quote:7300003",
+    "quote": "Prices as per current list; discounts not possible this year (head-office directive)."
+   },
+   {
+    "trait": "price_frozen",
+    "doc": "arena:case:P03",
+    "quote": "the freeze on price reductions remains strictly in place."
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260909-70530-M2",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+   },
+   {
+    "trait": "small_account",
+    "doc": "data:our_weight.share_of_its_turnover_pct",
+    "quote": "0.28 % of its turnover"
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "contract length 24-36 months",
+    "binding annual volume above 4,580",
+    "30-day payment for a lower price",
+    "call-off flexibility"
+   ],
+   "arguments": [
+    "binding volume increase",
+    "volume forecast with data",
+    "should-cost (price only 2.4 % over cost)",
+    "scorecard: OTD 84.6 % vs 95 % target",
+    "qualified second source sup:70540"
+   ],
+   "avoid": [
+    "repeating price arguments against the freeze",
+    "asking for its cost breakdown",
+    "resending an unchanged proposal",
+    "changing terms after a final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep at the current 412.74; the freeze blocks cuts, not our refusal of an increase.",
+    "Offer a 36-month contract early; it moved to 432.15 for 36 months vs 432.94 for 24.",
+    "Offer a higher binding volume; it said a lower price needs more volume.",
+    "Test keeping 30-day payment: it offered a cut 'by maintaining our standard 30-day payment terms'.",
+    "Move something each round; it held flat for 5 rounds and sent a final offer in round 6."
+   ],
+   "expected_concession": "From 438.21 it drops to about 432 in round 1 when given 90 days plus a 24-36 month contract, then holds flat; best arena score 0.923 (4 deals in 4 sessions)."
+  }
+ },
+ "arena": {
+  "cases": [
+   "case:P03"
+  ],
+  "sessions": 4,
+  "deals": 4,
+  "best_score": 0.923,
+  "walked": 0,
+  "agreed_round1": 0,
+  "fair_point": 0,
+  "no_change": 0,
+  "duplicate": 0,
+  "first_counter_vs_opening": 0.986,
+  "final_offer_round_median": 6
+ }
+}

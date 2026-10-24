@@ -1,0 +1,49 @@
+{
+  "supplier": "sup:70550",
+  "source_hash": "cfc9d40aa8505d83",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Platinenwerk Lausitz GmbH, privately owned PCBA maker (320 staff); we are 0.72 % of its turnover; it is our sole source for the smart-pump control board. It asks +8.0 % (34.35 to 37.10), citing copper and electronics; notice was on time. It has sold below full cost for four years to keep the volume (should-cost 37.24). Concede part of the increase, but use its poor quality and our volume.",
+  "notes": "Needs volume; it fears losing the part. Quality is weak: 21 complaints in three years, ppm up to 701, two open 8D, OTD 84-92 %. We pay late (40.6 % of invoices over 5 days), though it has not complained yet. Squeezing below its cost is risky with no second source.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "none",
+    "small_account": "weak",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "weak",
+    "below_full_cost": "strong",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "weak",
+    "wants_clause": "none"
+  },
+  "unsure": ["stale_costing", "cash_short"],
+  "wants": ["binding_volume"],
+  "fears": ["losing the volume", "staying below full cost", "quality penalties"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "below_full_cost", "doc": "data:negotiations.events", "quote": "accepted below full cost to keep the volume"},
+    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:350030 should-cost 37.24 vs price 34.35 (-7.8 %)"},
+    {"trait": "approval_ladder", "doc": "doc:20260417-70550-M1", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."},
+    {"trait": "late_payment_grievance", "doc": "data:payments.share_paid_over_5_days_late_pct", "quote": "40.6 % of invoices paid over 5 days late"}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "medium",
+    "levers": ["binding annual volume", "longer contract", "on-time payment"],
+    "arguments": ["quality record: 21 complaints, ppm 701, 2 open 8D", "binding volume commitment", "volume forecast", "scorecard: OTD 85.7 % vs 95 % target"],
+    "avoid": ["copper or electronics index arguments (they rose)", "pushing below the current 34.35", "threatening a second source we do not have", "claiming a notice breach (letter on time)"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open moderately, at or just above 34.35; it is below cost and we have no second source.",
+      "Lead with the quality record: open 8D reports, rising ppm and 21 complaints.",
+      "Offer a binding annual volume; it has always traded price to keep the volume.",
+      "Aim to settle below its 2 % committee threshold (about 35.0)."
+    ],
+    "expected_concession": "No arena data; history shows it settles well below its ask (last year asked 2.1 %, settled 0.4 %), so expect it to give up most of the 8 %."
+  }
+}

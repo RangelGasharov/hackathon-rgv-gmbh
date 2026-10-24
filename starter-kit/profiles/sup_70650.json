@@ -1,0 +1,538 @@
+{
+ "schema": 1,
+ "id": "sup:70650",
+ "name": "Verbindungstechnik Mairhofer GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "e206211f2a209db2",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "C-parts",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 7
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1983,
+  "staff": 40,
+  "turnover_eur": 19500000,
+  "turnover_band": "10-25 M EUR",
+  "equity_ratio_pct": 39.8,
+  "credit_index": 156,
+  "credit_index_12m_ago": 156,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 139032,
+   "FY2025": 142353,
+   "FY2026": 140220
+  },
+  "share_of_its_turnover_pct": 0.72,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 0.9
+ },
+ "parts": [
+  {
+   "part": "part:360010",
+   "description": "Hex bolt ISO 4017 M12x40 8.8, zinc",
+   "status": "active",
+   "quota_pct": 60,
+   "tooling_owner": "n/a",
+   "price_unit": 100,
+   "current_price": 14.52,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 0.0,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2594",
+     "weight": 0.64,
+     "change_12m_pct": 1.7,
+     "ids": [
+      "idx:PPI-C2594@2025-08",
+      "idx:PPI-C2594@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.08,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.3,
+   "other_sources": [
+    {
+     "supplier": "sup:70610",
+     "status": "active",
+     "quota_pct": 40
+    }
+   ]
+  },
+  {
+   "part": "part:360011",
+   "description": "Hex bolt ISO 4017 M16x60 8.8, zinc",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 100,
+   "current_price": 37.64,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -0.4,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2594",
+     "weight": 0.61,
+     "change_12m_pct": 1.7,
+     "ids": [
+      "idx:PPI-C2594@2025-08",
+      "idx:PPI-C2594@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.12,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.4,
+   "other_sources": []
+  },
+  {
+   "part": "part:360012",
+   "description": "Hex nut ISO 4032 M12 8, zinc",
+   "status": "active",
+   "quota_pct": 70,
+   "tooling_owner": "n/a",
+   "price_unit": 100,
+   "current_price": 5.6,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -0.4,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2594",
+     "weight": 0.6,
+     "change_12m_pct": 1.7,
+     "ids": [
+      "idx:PPI-C2594@2025-08",
+      "idx:PPI-C2594@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.13,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.4,
+   "other_sources": [
+    {
+     "supplier": "sup:70610",
+     "status": "active",
+     "quota_pct": 30
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070650",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 60,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070650#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 60 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070650#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070650#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 7 days from order."
+   },
+   {
+    "id": "ctr:4600070650#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070650#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 60 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-12",
+    "part": "part:360012",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-11-27",
+    "part": "part:360010",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-12",
+    "part": "part:360011",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-24",
+    "part": "part:360011",
+    "type": "annual renewal",
+    "asked_pct": 3.6,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2023-11-26",
+    "part": "part:360010",
+    "type": "annual renewal",
+    "asked_pct": 2.8,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2023-11-29",
+    "part": "part:360012",
+    "type": "annual renewal",
+    "asked_pct": 5.0,
+    "settled_pct": 2.8,
+    "note": null
+   },
+   {
+    "date": "2024-11-27",
+    "part": "part:360011",
+    "type": "annual renewal",
+    "asked_pct": 3.9,
+    "settled_pct": 1.5,
+    "note": null
+   },
+   {
+    "date": "2024-12-06",
+    "part": "part:360012",
+    "type": "annual renewal",
+    "asked_pct": 3.7,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-12-08",
+    "part": "part:360010",
+    "type": "annual renewal",
+    "asked_pct": 3.4,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-27",
+    "part": "part:360012",
+    "type": "annual renewal",
+    "asked_pct": -1.8,
+    "settled_pct": -3.1,
+    "note": null
+   },
+   {
+    "date": "2025-11-29",
+    "part": "part:360010",
+    "type": "annual renewal",
+    "asked_pct": 1.7,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-12-02",
+    "part": "part:360011",
+    "type": "annual renewal",
+    "asked_pct": 0.5,
+    "settled_pct": -2.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 2.5,
+  "settled_avg_pct": -0.1,
+  "kept_share_of_ask": -0.15
+ },
+ "payments": {
+  "invoices": 228,
+  "avg_days_late": 6.1,
+  "share_paid_over_5_days_late_pct": 57.5,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70650@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 75.3,
+    "ppm": 264,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70650@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 78.0,
+    "ppm": 295,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70650@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 78.6,
+    "ppm": 235,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70650@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 84.1,
+    "ppm": 296,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 80,
+  "cost_recharged_eur": 7050,
+  "open_8d": 2
+ },
+ "news": [
+  {
+   "id": "news:20260803-21",
+   "date": "2026-08-03",
+   "topic": "refocus",
+   "headline": "Verbindungstechnik Mairhofer GmbH sharpens its focus"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260817-70650-M1",
+   "date": "2026-08-17",
+   "kind": "email",
+   "subject": "Range changes",
+   "author": "Verbindungstechnik Mairhofer GmbH",
+   "text": "We are reorganising our range around our key accounts. Standard items will be supplied from stock at list conditions; individual agreements will not be extended."
+  },
+  {
+   "id": "doc:20260602-70650-M4",
+   "date": "2026-06-02",
+   "kind": "meeting_note",
+   "subject": "Account review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Their new sales director said Hollerau's volumes are 'not strategic' for Verbindungstechnik Mairhofer GmbH any more; replies have become slower since the summer."
+  },
+  {
+   "id": "doc:20260511-70650-M2",
+   "date": "2026-05-11",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Verbindungstechnik Mairhofer GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260411-70650-M5",
+   "date": "2026-04-11",
+   "kind": "call_note",
+   "subject": "Capacity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with sales at Verbindungstechnik Mairhofer GmbH: they could take additional parts at short notice; the second shift has been on hold since spring."
+  },
+  {
+   "id": "doc:20260327-70650-M3",
+   "date": "2026-03-27",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Verbindungstechnik Mairhofer GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20260219-70650-M6",
+   "date": "2026-02-19",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Verbindungstechnik Mairhofer GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20251206-70650-N",
+   "date": "2025-12-06",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Verbindungstechnik Mairhofer GmbH",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300085",
+   "date": "2026-09-12",
+   "part": "part:360010",
+   "remarks": "List conditions; supply from stock only."
+  },
+  {
+   "id": "quote:7300072",
+   "date": "2026-09-24",
+   "part": "part:360012",
+   "remarks": "List conditions; supply from stock only."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70650",
+  "source_hash": "e206211f2a209db2",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Small family fastener firm (19.5 M EUR, 40 staff); we are 0.72 %. Calls us 'not strategic', quotes list conditions from stock only and won't extend individual agreements, yet its second shift is idle. 70610 is 14 % cheaper on the M12 bolt and 12 % on the M12 nut and is a candidate for our one-supplier kit; it is sole source only for the M16 bolt. Historically asked ~2.5 % and settled ~0 % on average. Lead with 70610.",
+  "notes": "Contradiction: refocus on key accounts vs idle second shift wanting work. We pay late (avg 6.1 days, 57.5 % of invoices over 5 days), Delivery poor: OTD 75-84 % vs 95 % target, 80 complaints, 2 open 8D.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "weak",
+   "small_account": "strong",
+   "open_book": "none",
+   "free_capacity": "strong",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "weak",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost",
+   "late_payment_grievance"
+  ],
+  "wants": [
+   "binding_volume"
+  ],
+  "fears": [
+   "losing M12 bolt and nut volume to 70610",
+   "idle second shift"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "small_account",
+    "doc": "doc:20260602-70650-M4",
+    "quote": "Their new sales director said Hollerau's volumes are 'not strategic' for Verbindungstechnik Mairhofer GmbH any more"
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260327-70650-M3",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks"
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "doc:20260411-70650-M5",
+    "quote": "they could take additional parts at short notice; the second shift has been on hold since spring"
+   },
+   {
+    "trait": "price_frozen",
+    "doc": "doc:20260817-70650-M1",
+    "quote": "Standard items will be supplied from stock at list conditions; individual agreements will not be extended."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "data:payments.avg_days_late",
+    "quote": "6.1"
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "medium",
+   "levers": [
+    "binding volume",
+    "keeping the sole-sourced M16 bolt and a kit share",
+    "paying on time"
+   ],
+   "arguments": [
+    "rival price: 70610 at 12.46 vs 14.52 (M12 bolt) and 4.91 vs 5.60 (M12 nut)",
+    "scorecard: OTD 84 % vs 95 % target, 80 complaints, 2 open 8D",
+    "notice period: price changes need written notice at least 60 days before year end (ctr 3.1)",
+    "binding volume commitment"
+   ],
+   "avoid": [
+    "volume forecasts alone (non-strategic account)",
+    "cost-breakdown requests",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Lead with 70610's lower prices for the same M12 bolt and nut and our plan for one kit supplier.",
+    "Expect 'half the step now, the rest next round' on the rival price; keep moving visibly.",
+    "Use the scorecard once: OTD 75-84 % against a 95 % target, 2 open 8D reports.",
+    "Offer a binding volume on the M16x60 bolt only in exchange for price on all three parts.",
+    "Keep steps near 2 % (pricing committee) and accept its final offer without reopening terms."
+   ],
+   "expected_concession": "No arena data; 70620, with the same refocus documents, barely moved in arena; its history (avg ask 2.5 %, settled ~0 %) gives no clear guide."
+  }
+ },
+ "arena": null
+}

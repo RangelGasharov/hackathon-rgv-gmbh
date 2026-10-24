@@ -1,0 +1,47 @@
+{
+  "supplier": "sup:70320",
+  "source_hash": "9cd704a3e3b02560",
+  "analysed": "deep read v1",
+  "confidence": "low",
+  "summary": "Family steel fabricator (110 staff, EUR 11.3 M); we are 3.4 % of its turnover, sole source of base frame HN 100 on our tooling. Solid supplier: green scorecard (OTD 88 %, 949 ppm), credit index flat 251. It has settled at or below its own ask every year (asked -3.9 %, gave -6.6 %). Few documents. Open deep; use index, forecast and OTD below the 95 % target.",
+  "notes": "Only signal is the generic 10-day payment e-mail (no distress). No should-cost and no second source, so no rival quote; our leverage is growing spend (+5.6 %) and its habit of settling below ask. We pay 4.4 days late on average (43 % over 5 days), no complaint.",
+  "traits": {
+    "cash_short": "weak",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "weak",
+    "wants_clause": "none"
+  },
+  "unsure": ["below_full_cost", "stale_costing", "free_capacity", "hedged_material"],
+  "wants": ["faster_payment"],
+  "fears": ["losing a growing account"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "cash_short", "doc": "doc:20260607-70320-M1", "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."},
+    {"trait": "late_payment_grievance", "doc": "data:payments.share_paid_over_5_days_late_pct", "quote": "43.1 % of invoices paid over 5 days late"}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["10-day payment against cash discount", "binding volume / forecast", "contract extension"],
+    "arguments": ["material/energy index, only if it actually fell", "volume forecast and spend growth", "scorecard: OTD 88 % vs 95 % target", "notice-period breach: any 2027 increase missed the 90-day deadline"],
+    "avoid": ["citing a cost driver that rose", "giving faster payment for free", "inventing a rival quote: there is no second source"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep: it historically settles below its own ask.",
+      "Use the index first, then forecast, then OTD below the 95 % target, one kind per round.",
+      "Offer 10-day payment only together with a cash discount or extra price step.",
+      "Move in small visible steps; stop when it signals a final offer."
+    ],
+    "expected_concession": "No arena data; history: settled 0 % on a +3.1 % ask and -1.9 % on a -0.7 % ask, so it gives a bit more than it offers."
+  }
+}

@@ -1,0 +1,600 @@
+{
+ "schema": 1,
+ "id": "sup:70210",
+ "name": "Zerspanung Dralveck GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "29ee703554f68426",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "machined parts",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": {
+   "pct": 2,
+   "days": 10
+  },
+  "incoterm": "EXW",
+  "lead_time_days": 28
+ },
+ "company": {
+  "owner_type": "founder",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1991,
+  "staff": 22,
+  "turnover_eur": null,
+  "turnover_band": "2-5 M EUR",
+  "equity_ratio_pct": 43.6,
+  "credit_index": 249,
+  "credit_index_12m_ago": 249,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 292286,
+   "FY2025": 330859,
+   "FY2026": 316635
+  },
+  "share_of_its_turnover_pct": null,
+  "share_of_its_turnover_range_pct": [
+   6.3,
+   15.8
+  ],
+  "spend_trend_pct": 8.3
+ },
+ "parts": [
+  {
+   "part": "part:320010",
+   "description": "Pump shaft HN 24 mm",
+   "status": "active",
+   "quota_pct": 30,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 24.37,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -7.4,
+   "should_cost": {
+    "unit_cost": 25.22,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": -3.4
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.33,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.19,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.12,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.01,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 3.9,
+   "other_sources": [
+    {
+     "supplier": "sup:70290",
+     "status": "active",
+     "quota_pct": 70
+    }
+   ]
+  },
+  {
+   "part": "part:320011",
+   "description": "Pump shaft HN 32 mm",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.18,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.11,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.05,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 3.5,
+   "other_sources": [
+    {
+     "supplier": "sup:70280",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  },
+  {
+   "part": "part:320080",
+   "description": "Lantern (motor stool) HN",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 41.63,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -2.1,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.37,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.28,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.03,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 4.3,
+   "other_sources": []
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070210",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "EXW",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070210#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070210#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net, 2 % discount within 10 days."
+   },
+   {
+    "id": "ctr:4600070210#5.1",
+    "type": "delivery",
+    "text": "Delivery EXW; standard lead time 28 days from order."
+   },
+   {
+    "id": "ctr:4600070210#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070210#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-15",
+    "part": "part:320010",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-12",
+    "part": "part:320080",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-30",
+    "part": "part:320010",
+    "type": "annual renewal",
+    "asked_pct": -3.2,
+    "settled_pct": -6.6,
+    "note": null
+   },
+   {
+    "date": "2023-12-02",
+    "part": "part:320080",
+    "type": "annual renewal",
+    "asked_pct": 0.2,
+    "settled_pct": -2.1,
+    "note": null
+   },
+   {
+    "date": "2024-11-28",
+    "part": "part:320080",
+    "type": "annual renewal",
+    "asked_pct": 1.2,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-12-10",
+    "part": "part:320010",
+    "type": "annual renewal",
+    "asked_pct": 4.6,
+    "settled_pct": 2.2,
+    "note": null
+   },
+   {
+    "date": "2025-11-23",
+    "part": "part:320010",
+    "type": "annual renewal",
+    "asked_pct": -0.9,
+    "settled_pct": -3.0,
+    "note": null
+   },
+   {
+    "date": "2025-12-08",
+    "part": "part:320080",
+    "type": "annual renewal",
+    "asked_pct": 1.2,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 0.5,
+  "settled_avg_pct": -1.6,
+  "kept_share_of_ask": -0.77
+ },
+ "payments": {
+  "invoices": 146,
+  "avg_days_late": -8.4,
+  "share_paid_over_5_days_late_pct": 30.1,
+  "cash_discounts_taken": 90
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70210@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 85.7,
+    "ppm": 1214,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70210@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 82.7,
+    "ppm": 1313,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70210@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 82.7,
+    "ppm": 1997,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70210@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 80.8,
+    "ppm": 1863,
+    "colour": "amber"
+   }
+  ],
+  "complaints_3y": 43,
+  "cost_recharged_eur": 4050,
+  "open_8d": 3
+ },
+ "news": [
+  {
+   "id": "news:20240514-00",
+   "date": "2024-05-14",
+   "topic": "renamed",
+   "headline": "Zerspanung Dralveck becomes a GmbH"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260923-70210-P05",
+   "date": "2026-09-23",
+   "kind": "rfq",
+   "subject": "Request for quotation: Pump shaft HX",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Request for quotation for Pump shaft HX (part:320070), series HX (start of production March 2027), drawing rev. B.\n- Annual volume: 4200 pc\n- Material: 1.4404, net weight 3.0 kg\n- Delivery DAP Hollerau; please state price, payment terms, lead time and any tooling.\nInvited: Zerspanung Dralveck GmbH, Strojírna Hrvelec s.r.o., Drehteile Fuchsreiter GmbH"
+  },
+  {
+   "id": "doc:20260910-70210-M3",
+   "date": "2026-09-10",
+   "kind": "meeting_note",
+   "subject": "Supplier day",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "At our supplier day Zerspanung Dralveck GmbH said Hollerau is an important reference customer for them."
+  },
+  {
+   "id": "doc:20260908-70210-M1",
+   "date": "2026-09-08",
+   "kind": "meeting_note",
+   "subject": "Visit by the owner",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The owner of Zerspanung Dralveck GmbH admitted he had not followed his material and energy prices closely since the 2022 peak; his office manager does the costing."
+  },
+  {
+   "id": "doc:20260722-70210-M2",
+   "date": "2026-07-22",
+   "kind": "call_note",
+   "subject": "Capacity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with sales at Zerspanung Dralveck GmbH: they could take additional parts at short notice; the second shift has been on hold since spring."
+  },
+  {
+   "id": "doc:20260504-70210-P",
+   "date": "2026-05-04",
+   "kind": "email",
+   "subject": "Overdue invoices",
+   "author": "Zerspanung Dralveck GmbH",
+   "text": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms; otherwise we will have to review our conditions."
+  },
+  {
+   "id": "doc:20251123-70210-N",
+   "date": "2025-11-23",
+   "kind": "email",
+   "subject": "ISO 9001 certificate",
+   "author": "Zerspanung Dralveck GmbH",
+   "text": "Please find attached our renewed ISO 9001 certificate."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70210",
+  "source_hash": "29ee703554f68426",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Founder-led 22-staff turner (2-5 M EUR turnover); our ~EUR 317k is roughly 6-16 % of its turnover, so we matter. Second shift idle since spring, owner admits stale costing, calls us a reference customer. In P05 it answered data with 'a fair point' and moved 36 -> 30.5 -> 28 by round 3; faster payment and binding volume bought more. Open deep, feed it index, scorecard and rival data one kind per round, never change terms after its final offer.",
+  "notes": "Needs work for the idle second shift and reliable cash. Grievance about overdue invoices although we pay on average 8 days early (30 % of invoices >5 days late). Quality slipping: OTD 85.7 -> 80.8 %, ppm up to 1,863, 3 open 8D. Should-cost 25.22 for part:320010 is not of its plant (price 24.37).",
+  "traits": {
+   "cash_short": "weak",
+   "approval_ladder": "weak",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "strong",
+   "reference_customer": "strong",
+   "stale_costing": "strong",
+   "reciprocity": "none",
+   "below_full_cost": "weak",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "strong",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "hedged_material"
+  ],
+  "wants": [
+   "faster_payment",
+   "binding_volume"
+  ],
+  "fears": [
+   "idle second shift",
+   "losing part:320010 share to sup:70290",
+   "late payments"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "stale_costing",
+    "doc": "doc:20260908-70210-M1",
+    "quote": "admitted he had not followed his material and energy prices closely since the 2022 peak"
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "doc:20260722-70210-M2",
+    "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "arena:case:P05",
+    "quote": "We have free capacity for your parts."
+   },
+   {
+    "trait": "reference_customer",
+    "doc": "doc:20260910-70210-M3",
+    "quote": "said Hollerau is an important reference customer for them."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "doc:20260504-70210-P",
+    "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "arena:case:P05",
+    "quote": "getting the cash in … days reliably is exactly what we need."
+   },
+   {
+    "trait": "cash_short",
+    "doc": "arena:case:P05",
+    "quote": "we can always use the cash faster."
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "arena:case:P05",
+    "quote": "We need to clarify this internally - we will come back to you on price."
+   },
+   {
+    "trait": "stale_costing",
+    "doc": "arena:case:P05",
+    "quote": "We did not know that - a fair point."
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "14-day payment",
+    "binding 12-month volume",
+    "more parts for the idle second shift",
+    "standard 28-day lead time"
+   ],
+   "arguments": [
+    "index change (in P05 it conceded electricity is down)",
+    "delivery record / scorecard (OTD 80.8 %, 1,863 ppm, 3 open 8D)",
+    "rival quote from other RFQ bidders (sup:70290 is dearer at 24.92 on the 24 mm shaft)",
+    "binding volume with schedule data",
+    "contract §3.1: no increase notice by 2 Oct"
+   ],
+   "avoid": [
+    "changing any term after its final offer (walked in P05)",
+    "accepting in round 1 (it agreed instantly at 32.57/31.51 = too much)",
+    "citing a cost driver that rose",
+    "repeating an argument kind"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep; its first counter does not depend on our opening.",
+    "Bring one new evidence kind per round (index, scorecard, rival quote); it calls each a fair point and moves.",
+    "Offer 14-day payment and a binding volume with the schedule attached in exchange for price.",
+    "When it says it must clarify internally, hold and wait for the next round; it comes back lower.",
+    "After its final offer accept or walk; do not touch payment or lead time again."
+   ],
+   "expected_concession": "In P05 first counter ~15 % below its opening, final ~22 % below by round 3 (best 27.66 vs 36.0); renewals settled ~2 pts below its ask."
+  }
+ },
+ "arena": {
+  "cases": [
+   "case:P05"
+  ],
+  "sessions": 7,
+  "deals": 5,
+  "best_score": 0.849,
+  "walked": 1,
+  "agreed_round1": 2,
+  "fair_point": 8,
+  "no_change": 1,
+  "duplicate": 0,
+  "first_counter_vs_opening": 0.847,
+  "final_offer_round_median": 3
+ }
+}

@@ -1,0 +1,459 @@
+{
+ "schema": 1,
+ "id": "sup:70710",
+ "name": "Edelstahl-Service Donautal GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "cbc325a1b5388d58",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "raw material",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 10
+ },
+ "company": {
+  "owner_type": "group",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1970,
+  "staff": 350,
+  "turnover_eur": 165000000,
+  "turnover_band": "100-250 M EUR",
+  "equity_ratio_pct": 33.9,
+  "credit_index": 177,
+  "credit_index_12m_ago": 177,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 507987,
+   "FY2025": 493091,
+   "FY2026": 493832
+  },
+  "share_of_its_turnover_pct": 0.3,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": -2.8
+ },
+ "parts": [
+  {
+   "part": "part:370010",
+   "description": "Round bar 1.4404 dia 30 mm, peeled",
+   "status": "active",
+   "quota_pct": 80,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 5.45,
+   "price_since": "2026-07-01",
+   "price_change_pct_since_first": -13.8,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "AS-14404",
+     "weight": 0.43,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.36,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.03,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 7.0,
+   "other_sources": [
+    {
+     "supplier": "sup:70740",
+     "status": "active",
+     "quota_pct": 20
+    }
+   ]
+  },
+  {
+   "part": "part:370021",
+   "description": "Sheet 1.4301 2 mm, 2B, cut to size",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "AS-14301",
+     "weight": 0.46,
+     "change_12m_pct": 8.6,
+     "ids": [
+      "idx:AS-14301@2025-09",
+      "idx:AS-14301@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.34,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.04,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 6.3,
+   "other_sources": [
+    {
+     "supplier": "sup:70730",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070710",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 60,
+  "price_basis": "index clause",
+  "clauses": [
+   {
+    "id": "ctr:4600070710#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 60 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070710#3.2",
+    "type": "index",
+    "text": "The price follows index AS-14404: P = P0 x (1 - 0.45 + 0.45 x I(m-2) / I(base)), base = the index two months before the price year starts, adjusted quarterly on the 1st of January, April, July and October if the change exceeds 0 %.",
+    "series": "AS-14404",
+    "material_share": 0.45
+   },
+   {
+    "id": "ctr:4600070710#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070710#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 10 days from order."
+   },
+   {
+    "id": "ctr:4600070710#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070710#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 60 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-27",
+    "part": "part:370010",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-29",
+    "part": "part:370010",
+    "type": "annual renewal",
+    "asked_pct": -3.1,
+    "settled_pct": -7.1,
+    "note": null
+   },
+   {
+    "date": "2024-12-04",
+    "part": "part:370010",
+    "type": "annual renewal",
+    "asked_pct": 2.0,
+    "settled_pct": -1.5,
+    "note": null
+   },
+   {
+    "date": "2025-12-05",
+    "part": "part:370010",
+    "type": "annual renewal",
+    "asked_pct": 3.2,
+    "settled_pct": 1.4,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 0.7,
+  "settled_avg_pct": -2.4,
+  "kept_share_of_ask": 0.66
+ },
+ "payments": {
+  "invoices": 75,
+  "avg_days_late": 2.1,
+  "share_paid_over_5_days_late_pct": 6.7,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70710@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 88.5,
+    "ppm": 76,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70710@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 92.0,
+    "ppm": 43,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70710@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 88.5,
+    "ppm": 92,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70710@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 88.0,
+    "ppm": 75,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 23,
+  "cost_recharged_eur": 2550,
+  "open_8d": 1
+ },
+ "news": [
+  {
+   "id": "news:20260822-24",
+   "date": "2026-08-22",
+   "topic": "noise",
+   "headline": "Edelstahl-Service Donautal GmbH at the trade fair"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260912-70710-P08",
+   "date": "2026-09-12",
+   "kind": "letter",
+   "subject": "Price basis and surcharge clause for the coming period",
+   "author": "Edelstahl-Service Donautal GmbH",
+   "text": "Dear Sir or Madam,\nfor Round bar 1.4404 dia 30 mm, peeled (part:370010) we propose to agree the price basis for the coming period, including a price adjustment clause based on AS-14404. Please let us know your view.\nYours faithfully,\nEdelstahl-Service Donautal GmbH"
+  },
+  {
+   "id": "doc:20260706-70710-M1",
+   "date": "2026-07-06",
+   "kind": "letter",
+   "subject": "Material costs",
+   "author": "Edelstahl-Service Donautal GmbH",
+   "text": "Dear Sir or Madam,\nfor your information: our nickel and alloys requirement is covered at fixed prices until March 2027. Market movements reach our costs only after that.\nYours faithfully,\nEdelstahl-Service Donautal GmbH"
+  },
+  {
+   "id": "doc:20260421-70710-M2",
+   "date": "2026-04-21",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Edelstahl-Service Donautal GmbH: he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+  },
+  {
+   "id": "doc:20251225-70710-N",
+   "date": "2025-12-25",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Edelstahl-Service Donautal GmbH",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300008",
+   "date": "2026-09-10",
+   "part": "part:370010",
+   "remarks": "Material covered until March 2027; price valid accordingly."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70710",
+  "source_hash": "cbc325a1b5388d58",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Group-owned stainless stockholder (165 M EUR); we are 0.3 %. Holds 80 % of 1.4404 bar at 5.45 (70740 dearer at 5.84) and is qualified for 1.4301 sheet. Alloys hedged to March 2027, so index-fall and rival arguments bounce. Proposes an AS-14404 clause. Arena P08: opened ~11 % above current price, first counter -6 %, final prices 5.44-5.70 with 60-90 days and the clause; walked twice in 11 sessions.",
+  "notes": "Wants the index clause and a long term; fears passing on alloy falls it cannot capture before its hedge ends. Contradictions: hedged yet cites rising AS-14404 as its cost; an 'owner' offered open book but arena refuses any breakdown beyond material share. OTD 88 % vs 95 %, 1 open 8D.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "weak",
+   "open_book": "weak",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "strong",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "strong"
+  },
+  "unsure": [
+   "below_full_cost"
+  ],
+  "wants": [
+   "index_clause",
+   "long_contract"
+  ],
+  "fears": [
+   "passing on alloy price falls before its hedge ends",
+   "losing bar quota to 70740"
+  ],
+  "hedge_until": "2027-03",
+  "evidence": [
+   {
+    "trait": "hedged_material",
+    "doc": "doc:20260706-70710-M1",
+    "quote": "our nickel and alloys requirement is covered at fixed prices until March 2027."
+   },
+   {
+    "trait": "hedged_material",
+    "doc": "quote:7300008",
+    "quote": "Material covered until March 2027; price valid accordingly."
+   },
+   {
+    "trait": "hedged_material",
+    "doc": "arena:case:P08",
+    "quote": "our AS-14404 is covered at fixed prices until March … so that fall does not reach our cost."
+   },
+   {
+    "trait": "wants_clause",
+    "doc": "doc:20260912-70710-P08",
+    "quote": "including a price adjustment clause based on AS-14404. Please let us know your view."
+   },
+   {
+    "trait": "wants_clause",
+    "doc": "arena:case:P08",
+    "quote": "We can offer a Preisgleitklausel on AS-14404"
+   },
+   {
+    "trait": "open_book",
+    "doc": "arena:case:P08",
+    "quote": "Material accounts for about … of our cost; more detail we do not share."
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "medium",
+   "levers": [
+    "AS-14404 index clause",
+    "36-month term",
+    "payment days (it prices each Zahlungsziel)",
+    "binding volume",
+    "1.4301 sheet volume (qualified, 0 % today)"
+   ],
+   "arguments": [
+    "binding volume with volume schedule CSV",
+    "its own cost shares: hedged, so AS-14404 rises do not reach it either",
+    "scorecard: OTD 88 % vs 95 % target, 1 open 8D",
+    "volume forecast"
+   ],
+   "avoid": [
+    "falling-index arguments (hedged to 2027-03)",
+    "rival quotes (answered 'does not concern this part')",
+    "changing any term after its final offer (a P08 walk trigger)",
+    "cost-breakdown requests"
+   ],
+   "mandatory_terms": [
+    "AS-14404 index clause, 45 % material share"
+   ],
+   "tactics": [
+    "Accept the AS-14404 clause (45 % material share, 5 % deadband as offered in P08) early; every P08 counter carried it.",
+    "Trade a 36-month term and a binding volume for price, and attach the volume data.",
+    "Treat payment days as a priced trade; 90-day deals still landed at 5.44-5.58 in arena.",
+    "Make one visible move per round; expect its final offer around round 4-5 and accept it unchanged.",
+    "Offer 1.4301 sheet volume (it is qualified) as an extra sweetener for a sharper bar price."
+   ],
+   "expected_concession": "First counter ~6 % below its opening, then ~1 % steps; P08 final prices 5.44-5.70 (6-10 % below opening) in rounds 3-6; 2 of 11 sessions walked."
+  }
+ },
+ "arena": {
+  "cases": [
+   "case:P08"
+  ],
+  "sessions": 11,
+  "deals": 9,
+  "best_score": 0.581,
+  "walked": 2,
+  "agreed_round1": 0,
+  "fair_point": 0,
+  "no_change": 5,
+  "duplicate": 0,
+  "first_counter_vs_opening": 0.94,
+  "final_offer_round_median": 4
+ }
+}

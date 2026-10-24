@@ -1,0 +1,455 @@
+{
+ "schema": 1,
+ "id": "sup:70430",
+ "name": "Elasto-Dicht Hermannsdorfer GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "167066b44330e980",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "seals",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 7
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1987,
+  "staff": 45,
+  "turnover_eur": 22900000,
+  "turnover_band": "10-25 M EUR",
+  "equity_ratio_pct": 38.9,
+  "credit_index": 167,
+  "credit_index_12m_ago": 167,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 43900,
+   "FY2025": 45915,
+   "FY2026": 46359
+  },
+  "share_of_its_turnover_pct": 0.2,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 5.6
+ },
+ "parts": [
+  {
+   "part": "part:340020",
+   "description": "O-ring set EPDM, drinking-water approved",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 100,
+   "current_price": 65.41,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 2.4,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2219",
+     "weight": 0.54,
+     "change_12m_pct": 3.9,
+     "ids": [
+      "idx:PPI-C2219@2025-08",
+      "idx:PPI-C2219@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.14,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.5,
+   "other_sources": []
+  },
+  {
+   "part": "part:340030",
+   "description": "Casing gasket, aramid fibre",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2219",
+     "weight": 0.56,
+     "change_12m_pct": 3.9,
+     "ids": [
+      "idx:PPI-C2219@2025-08",
+      "idx:PPI-C2219@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.11,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.5,
+   "other_sources": [
+    {
+     "supplier": "sup:70410",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  },
+  {
+   "part": "part:340040",
+   "description": "Lip seal 35x52x7",
+   "status": "active",
+   "quota_pct": 50,
+   "tooling_owner": "n/a",
+   "price_unit": 100,
+   "current_price": 100.98,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 2.6,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "PPI-C2219",
+     "weight": 0.54,
+     "change_12m_pct": 3.9,
+     "ids": [
+      "idx:PPI-C2219@2025-08",
+      "idx:PPI-C2219@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.12,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.4,
+   "other_sources": [
+    {
+     "supplier": "sup:70440",
+     "status": "active",
+     "quota_pct": 50
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070430",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070430#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070430#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070430#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 7 days from order."
+   },
+   {
+    "id": "ctr:4600070430#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070430#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-20",
+    "part": "part:340040",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-11-29",
+    "part": "part:340020",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-22",
+    "part": "part:340040",
+    "type": "annual renewal",
+    "asked_pct": 1.1,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2023-12-02",
+    "part": "part:340020",
+    "type": "annual renewal",
+    "asked_pct": 2.7,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-22",
+    "part": "part:340040",
+    "type": "annual renewal",
+    "asked_pct": 2.5,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-26",
+    "part": "part:340020",
+    "type": "annual renewal",
+    "asked_pct": 1.1,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-24",
+    "part": "part:340020",
+    "type": "annual renewal",
+    "asked_pct": 5.4,
+    "settled_pct": 2.4,
+    "note": null
+   },
+   {
+    "date": "2025-12-01",
+    "part": "part:340040",
+    "type": "annual renewal",
+    "asked_pct": 4.0,
+    "settled_pct": 2.6,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 2.8,
+  "settled_avg_pct": 0.8,
+  "kept_share_of_ask": 0.18
+ },
+ "payments": {
+  "invoices": 148,
+  "avg_days_late": 2.8,
+  "share_paid_over_5_days_late_pct": 9.5,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70430@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 83.7,
+    "ppm": 371,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70430@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 86.3,
+    "ppm": 325,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70430@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 83.0,
+    "ppm": 314,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70430@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 91.8,
+    "ppm": 291,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 39,
+  "cost_recharged_eur": 4050,
+  "open_8d": 0
+ },
+ "news": [],
+ "documents": [
+  {
+   "id": "doc:20260913-70430-P15",
+   "date": "2026-09-13",
+   "kind": "memo",
+   "subject": "One supplier for the kit",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Kit per unit (about 25000 kits a year):\n- 2 x O-ring set EPDM, drinking-water approved (part:340020)\n- 1 x Casing gasket, aramid fibre (part:340030)\n- 2 x Lip seal 35x52x7 (part:340040)\nToday these parts come from several suppliers. We want one supplier for the kit."
+  },
+  {
+   "id": "doc:20260515-70430-M1",
+   "date": "2026-05-15",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Elasto-Dicht Hermannsdorfer GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260326-70430-M2",
+   "date": "2026-03-26",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Elasto-Dicht Hermannsdorfer GmbH: he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+  },
+  {
+   "id": "doc:20251012-70430-N",
+   "date": "2025-10-12",
+   "kind": "email",
+   "subject": "New contact person",
+   "author": "Elasto-Dicht Hermannsdorfer GmbH",
+   "text": "From 1 October your contact in sales is our new colleague in inside sales; all other contacts stay the same."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70430",
+  "source_hash": "167066b44330e980",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family seal maker (45 staff, EUR 22.9 M); we are only 0.2 % of its turnover and it is reviewing small accounts. Owner offered an open-book walk-through. Supplies O-ring sets and half the lip seals (EUR 100.98/100, 9.6 % below Pirkheim) and is qualified on the casing gasket. Our kit plan (about 25 000 kits a year) would roughly triple its business with us: trade the kit for price. Open deep.",
+  "notes": "Wants volume, fears being a small, unprofitable account; the kit consolidation answers both. Gave way historically (kept 18 % of asks) but took +2.4-2.6 % last year. Fast 7-day lead time, green scorecard (OTD 92 %) yet 39 complaints in 3 years. Payment record fine (2.8 days late).",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "strong",
+   "open_book": "strong",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost",
+   "stale_costing",
+   "hedged_material"
+  ],
+  "wants": [
+   "binding_volume"
+  ],
+  "fears": [
+   "being dropped as a small account",
+   "losing lip-seal share"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "small_account",
+    "doc": "doc:20260515-70430-M1",
+    "quote": "they are reviewing small accounts and will focus on customers with volume."
+   },
+   {
+    "trait": "small_account",
+    "doc": "data:our_weight.share_of_its_turnover_pct",
+    "quote": "0.2"
+   },
+   {
+    "trait": "open_book",
+    "doc": "doc:20260326-70430-M2",
+    "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "medium",
+   "levers": [
+    "whole kit: O-ring sets, casing gasket and lip seals (about 25 000 kits a year)",
+    "100 % lip-seal quota",
+    "binding volume commitment",
+    "longer contract"
+   ],
+   "arguments": [
+    "kit volume: one supplier for 2 O-ring sets, 1 gasket, 2 lip seals per kit",
+    "binding volume commitment with schedule CSV",
+    "its own cost shares from the offered open-book walk-through",
+    "elastomer/material index, only if it actually fell",
+    "notice-period breach for any 2027 increase"
+   ],
+   "avoid": [
+    "citing a cost driver that rose",
+    "presenting us as a small one-part buyer",
+    "faster payment as a gift"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep and put the kit on the table early: it turns a small account into a volume customer.",
+    "Offer a binding annual kit volume and send the volume schedule.",
+    "Ask for the hourly-rate and material breakdown it offered and argue from its cost shares.",
+    "Trade 100 % lip-seal quota (taken from sup:70440) for the price step.",
+    "Move in small visible steps, one argument kind per round."
+   ],
+   "expected_concession": "No arena data; history: settled 0 % on most asks but took +2.4-2.6 % last year; volume should buy a real step."
+  }
+ },
+ "arena": null
+}

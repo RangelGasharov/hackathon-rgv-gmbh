@@ -1,0 +1,50 @@
+{
+  "supplier": "sup:70610",
+  "source_hash": "23676527d20f464c",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Family fastener distributor (139 M EUR); we are only 0.03 % of turnover. Holds 30-50 % of the M12 bolt, nut and washer; 70650 and 70630 are active second sources. Historically asks ~2.5 % and settles ~0 (kept 5 %). Second shift idle since spring, so it wants work: the one-supplier fastener kit (P07) and a binding volume move it. Arena: never walked, gave 2.4-5.2 % from its opening (median ~4.4 %) by round 3-4.",
+  "notes": "Needs volume to refill its idle second shift; the kit may go to one supplier only. KAM says moves above 2 % need its pricing committee, yet in arena it moved up to ~5 % within 4 rounds. Quality and index arguments did not move it in arena. OTD 88.6 % vs 95 % target, 71 complaints in 3 years.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "none",
+    "small_account": "strong",
+    "open_book": "none",
+    "free_capacity": "strong",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["below_full_cost"],
+  "wants": ["binding_volume", "long_contract"],
+  "fears": ["losing kit volume to another supplier", "idle second shift"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "approval_ladder", "doc": "doc:20260513-70610-M1", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks"},
+    {"trait": "free_capacity", "doc": "doc:20260514-70610-M3", "quote": "they could take additional parts at short notice; the second shift has been on hold since spring"},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "0.03"},
+    {"trait": "free_capacity", "doc": "arena:case:P07", "quote": "A binding higher volume would help us and can improve the price."}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["binding annual volume", "full fastener kit bundle (~30000 kits/yr)", "36-month term", "payment days (it prices each Zahlungsziel)"],
+    "arguments": ["binding volume commitment with volume schedule CSV", "kit volume forecast (4 parts, ~30000 kits/yr)", "washer: 70630 at 12.64 vs its 12.78 per 1000", "scorecard: OTD 88.6 % vs 95 % target"],
+    "avoid": ["index or cost-driver arguments (no change in arena)", "quality record as main argument", "changing any term after its final offer", "giving 90-day payment for free"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep and frame the deal as the whole fastener kit (bolts, nuts, washers) for 36 months.",
+      "State a binding annual volume early and attach the volume schedule; it asks 'Which volume can you commit to?' and moves on it.",
+      "Treat payment days as a priced trade: compare its Zahlungsziel alternatives at ~7-8 %/yr.",
+      "Make one visible move per round; expect its final offer around round 4 and accept it unchanged.",
+      "If a step above 2 % stalls, point to the added kit volume as the reason for its pricing committee."
+    ],
+    "expected_concession": "First counter only ~2.6 % below its opening, then small steps; ended 2.4-5.2 % below opening, final offer mostly in round 4 (P07: 5.74 to 5.44-5.60)."
+  }
+}

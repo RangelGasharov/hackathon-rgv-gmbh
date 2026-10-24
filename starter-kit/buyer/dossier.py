@@ -215,6 +215,9 @@ class Dossier:
         self.reply_hits = {}  # regex signals in its latest e-mail only (as calibrated on the arena)
         self.reply_traits = {}  # what the strategist read in its e-mails: kept for the rest of the case
         self.said = ""  # what the supplier has written to us so far
+        self.profile = None  # its profile (`profiles/sup_<no>.json`): the deep read made once, set by the agent
+        self.playbook = ""  # that profile's compact playbook, for the strategist
+        self.strategy_plan = ""  # one profile-selected bargaining approach and at most one fallback
         self.traits = self._traits()
         self.dead_kinds = set()  # `claims.dead_key`s this supplier rejected (contradicted, irrelevant, "no change")
         self.facts_case = case.get("facts") or {}
@@ -603,4 +606,8 @@ class Dossier:
             lines.append("Our read of this supplier: " + self.read["notes"])
         if self.wants:
             lines.append("It wants: " + ", ".join(sorted(self.wants)) + ".")
+        if self.playbook:
+            lines.append(self.playbook)
+        if self.strategy_plan:
+            lines.append(self.strategy_plan)
         return "\n".join(lines)

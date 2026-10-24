@@ -1,0 +1,49 @@
+{
+  "supplier": "sup:70270",
+  "source_hash": "1b35d649bcb5f99f",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Czech founder-led shop, 30 staff, 2-5 M EUR; our ~EUR 93k is ~2-5 % of its turnover and it says it is reviewing small accounts. Sole source of adapter piece HI (15.88). Owner prices from a two-year-old spreadsheet and asked where our index figures come from; he expects partnership for holding prices in 2022. Open moderately, bring sourced index data and the amber scorecard, offer volume; it may concede on facts it did not know.",
+  "notes": "Needs volume and recognition of the 2022 favour; says it is reviewing small accounts. Its spreadsheet is two years old, so current index data may be news to it. Quality amber all year (OTD 73-85 %, ppm ~1,500-1,900, 21 complaints). We pay 5.4 days late on average without written complaint.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "weak",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "strong",
+    "reciprocity": "strong",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "weak",
+    "wants_clause": "none"
+  },
+  "unsure": ["hedged_material", "approval_ladder", "free_capacity"],
+  "wants": ["binding_volume"],
+  "fears": ["being a small account", "partnership not returned"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "stale_costing", "doc": "doc:20260809-70270-M1", "quote": "he works from his own spreadsheet, last updated two years ago."},
+    {"trait": "reciprocity", "doc": "doc:20260318-70270-M3", "quote": "in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."},
+    {"trait": "small_account", "doc": "doc:20260223-70270-M2", "quote": "they are reviewing small accounts and will focus on customers with volume."},
+    {"trait": "late_payment_grievance", "doc": "data:payments.avg_days_late", "quote": "avg 5.4 days late, 51.5 % of invoices over 5 days late"}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "medium",
+    "levers": ["binding volume (spend up 23 %)", "on-time payment", "standard 42-day lead time"],
+    "arguments": ["index change with named sources (only drivers that fell)", "scorecard: amber, OTD 84.6 %, 1,531 ppm, 21 complaints", "binding volume with schedule data", "contract §3.1: no increase notice by 2 Oct"],
+    "avoid": ["threatening to resource (no second source)", "citing a driver that rose", "dismissing the 2022 favour"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Acknowledge the 2022 favour, then give index figures with their source; it asked where we get them.",
+      "Use the scorecard once as the quality argument.",
+      "Offer a binding volume to counter the small-account review.",
+      "Push steadily but stop short of a walk on a sole-source part."
+    ],
+    "expected_concession": "History mixed: 2024 asked +5.8 % settled +2.7 %, 2025 asked +2.8 % settled 0 %; average kept share of ask 0.59."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "supplier": "sup:70560",
+  "source_hash": "0c6a0dc03eb709b6",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Kabelwerk Rhönsberg GmbH, group-owned cable maker (400 staff); we are 0.85 % of its turnover; it is our sole source for motor cable. The contract has a CU-NOTATION index clause (55 % share), yet its copper is bought forward until March 2027. Price rose 21.9 % since the start and sits 3.9 % over its should-cost. The contract ends 2026-12-31 with 60-day notice. Push the hedge against index pass-through and use its complaint record.",
+  "notes": "Asked for our expected volumes for the renewal. Contradiction: the index passes market copper to us quarterly while its own copper is fixed until March 2027, so any pass-through before April 2027 is a windfall. Complaint record: 24 in three years, EUR 2,550 recharged) and OTD of 81-89 %.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "none",
+    "small_account": "weak",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "strong",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "weak"
+  },
+  "unsure": [],
+  "wants": ["binding_volume"],
+  "fears": ["volume uncertainty at renewal"],
+  "hedge_until": "2027-03",
+  "evidence": [
+    {"trait": "hedged_material", "doc": "doc:20260617-70560-M1", "quote": "they bought their copper forward until March 2027 and said the market price is 'not our reality'"},
+    {"trait": "hedged_material", "doc": "quote:7300014", "quote": "Material covered until March 2027; price valid accordingly."},
+    {"trait": "wants_clause", "doc": "data:contract.price_basis", "quote": "index clause: CU-NOTATION, material share 0.55, adjusted quarterly"},
+    {"trait": "approval_ladder", "doc": "doc:20260415-70560-M2", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "medium",
+    "levers": ["binding annual volume", "index terms: lower share, base reset, deadband", "contract length"],
+    "arguments": ["its own hedge: copper cost fixed until March 2027", "quality record: 24 complaints, EUR 2,550 recharged", "binding volume commitment", "should-cost (3.9 % over cost)", "scorecard: OTD vs 95 % target"],
+    "avoid": ["arguing that copper rose", "dropping the index entirely (it is in the current contract)", "threatening a second source we do not have", "changing terms after a final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Cite its hedge: no index pass-through or increase before April 2027.",
+      "Keep an index clause but cut the material share or add a deadband.",
+      "Use the complaint record (24 in three years) as the quality argument.",
+      "Answer its volume request with a binding annual volume in exchange for price."
+    ],
+    "expected_concession": "No arena data; it kept only 0.27 of its asks historically, but in 2025 it kept 6.0 % of an 8.6 % ask."
+  }
+}

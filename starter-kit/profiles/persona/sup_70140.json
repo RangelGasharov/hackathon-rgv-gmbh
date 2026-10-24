@@ -1,0 +1,52 @@
+{
+  "supplier": "sup:70140",
+  "source_hash": "f41433f376db6f39",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Polish private foundry (210 staff, EUR 9.8 M) under restructuring, bank watching monthly; we are 7 % of its turnover. Poor quality: red scorecard, OTD 63.5 %, 2376 ppm, 38 complaints, escalation letter sent. It owns the tooling; Bearing bracket HN has 70190 qualified, HN 200 runs 30/70 with 70120. It holds price (kept 91 % of asks) and moves in small ~EUR 0.50 steps; faster payment and paying overdue invoices are what buy price.",
+  "notes": "Needs cash: bank pressure, restructuring, repeated 10-day payment requests; resents our late payments (8.8 days avg, 76 % over 5 days). Fears margin loss. 3 open 8D (letter: none overdue). Trades a ppm commitment for a higher price.",
+  "traits": {
+    "cash_short": "strong",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "weak",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "strong",
+    "wants_clause": "none"
+  },
+  "unsure": ["below_full_cost"],
+  "wants": ["faster_payment", "binding_volume"],
+  "fears": ["bank pulling credit during restructuring", "margin loss", "chargebacks and losing the bearing bracket to 70190"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "cash_short", "doc": "doc:20260715-70140-M1", "quote": "the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"},
+    {"trait": "cash_short", "doc": "news:20260911-28", "quote": "Odlewnia Kalwisz Sp. z o.o. restructures"},
+    {"trait": "cash_short", "doc": "arena:case:P11", "quote": "We see your figures, but we cannot give up margin right now. Faster payment would help us more than anything."},
+    {"trait": "late_payment_grievance", "doc": "arena:case:P11", "quote": "in the past your payments have often been late, which hurts our cash flow."},
+    {"trait": "late_payment_grievance", "doc": "data:payments.avg_days_late", "quote": "8.8 days late on average, 76.3 % of invoices over 5 days late"},
+    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:310030 price 30.14 vs 35.98 should-cost of another plant (-16.2 %)"}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "low",
+    "levers": ["payment in 10-14 days written into the deal", "paying overdue invoices now", "binding volume with official volume figures", "ppm target traded against chargeback"],
+    "arguments": ["quality record: red scorecard, OTD 63.5 %, 2376 ppm, escalation letter", "faster payment / settling overdue invoices", "binding volume (send the volume schedule)", "qualified second source 70190 for the bearing bracket", "index that fell"],
+    "avoid": ["promising to pay on time without written faster terms", "asking for a margin cut without cash in return", "changing terms after its final offer", "demanding a tight ppm target for free (it prices extra checks)"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Offer written 10-14 day payment terms early; it says that helps more than anything.",
+      "Lead with the red scorecard and escalation letter; ask for a binding improvement plan.",
+      "Commit a binding volume and send the volume figures when asked.",
+      "Expect EUR 0.50 steps; keep moving visibly each round or it freezes.",
+      "Do not let it price a ppm commitment up; tie ppm to the chargeback clause instead."
+    ],
+    "expected_concession": "Arena P11 (7 deals, 0 walked): opened 47.0, R1 held or 46.5, then ~0.50 steps to 46.0-46.5 by R3-5 (one deal at 46.1; one held 47.0 with a 300 EUR chargeback); final offer median R5; best score 0.63."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "supplier": "sup:70150",
+  "source_hash": "0bcaf046f8c1f6ed",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Turkish family foundry (380 staff, EUR 15.8 M) in distress: restructuring, bank watching monthly, half the shop floor idle, second shift on hold. We are 3.2 % of its turnover. Pump housing HB 40 is 60/40 with active co-source 70190, so we can shift volume. Red scorecard four quarters running (OTD 52 %, 2652 ppm). Owner offered open-book costing. Trade volume and faster payment for price; past renewals settled 2.6-3.8 pts below its ask.",
+  "notes": "Needs cash and work for idle shifts; repeatedly asks 10-day payment. Fears margin loss ('cannot sign anything that lowers our margin') and losing HB 40 share to 70190. Price is 19 % under a German-cost should-cost, not its own plant, so no proof it is below its cost. Invited to the HX 80-200 RFQ (per 70120 file).",
+  "traits": {
+    "cash_short": "strong",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "none",
+    "open_book": "strong",
+    "free_capacity": "strong",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["below_full_cost"],
+  "wants": ["faster_payment", "binding_volume"],
+  "fears": ["bank pressure during restructuring", "margin loss", "losing HB 40 share to 70190", "idle shifts"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "cash_short", "doc": "doc:20260804-70150-M4", "quote": "the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"},
+    {"trait": "cash_short", "doc": "doc:20260610-70150-M1", "quote": "half the shop floor was idle, two shifts are on short hours"},
+    {"trait": "cash_short", "doc": "news:20260809-22", "quote": "Tarsevi Döküm Sanayi A.Ş. restructures"},
+    {"trait": "free_capacity", "doc": "doc:20260419-70150-M3", "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."},
+    {"trait": "open_book", "doc": "doc:20260418-70150-M2", "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "low",
+    "levers": ["HB 40 quota shift from 70190", "10-14 day payment", "binding volume to fill second shift", "HX 80-200 RFQ award"],
+    "arguments": ["quality record: red four quarters, OTD 52 %, 2652 ppm", "its own cost shares from the offered open book", "volume shift to active co-source 70190 (it is dearer at 43.39, no rival-price argument)", "binding volume / forecast fills idle capacity", "faster payment"],
+    "avoid": ["a bare margin cut with nothing in return", "citing cost drivers that rose", "changing terms after its final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Accept its open-book offer: ask for hourly rates and material shares, then argue from them.",
+      "Lead with the red scorecard; OTD 52 % is far below the 95 % target.",
+      "Offer extra HB 40 quota from 70190 as a binding volume for a visible price step.",
+      "Offer 10-14 day payment only against price; cash is its main need.",
+      "Frame the deal as cash plus volume, not as a margin cut."
+    ],
+    "expected_concession": "No arena data; past renewals settled 2.6-3.8 pts below its ask (2024: asked +3.0 %, settled 0 %)."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "supplier": "sup:70510",
+  "source_hash": "f4ce8d9c9838c659",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Nordmark group motor maker (4,800 staff, stable credit); we are 0.23 % of its turnover. Asks +6.5 % on the 7.5 kW motor (348.32 to 370.96) citing copper; notice was on time. Price already 7 % below its should-cost. Arena: 10/10 deals, about 362-366 with a CU-NOTATION index clause, about 372 without. Trade an index clause plus binding volume rather than argue.",
+  "notes": "Fears carrying copper risk and below-cost pricing. Asks above 2 % go to a pricing committee. It cites rising CU, LCI-C and PPI as cost drivers. It never shares a calculation; one arena reply promising a breakdown was LLM filler. The letter's 'reliably for many years' clashes with OTD of 83-94 %, below the 95 % target.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "none",
+    "small_account": "weak",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "strong",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "strong"
+  },
+  "unsure": [],
+  "wants": ["index_clause", "binding_volume"],
+  "fears": ["copper price risk", "selling below full cost", "losing 4 kW quota to sup:70520"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "approval_ladder", "doc": "doc:20260410-70510-M1", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."},
+    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:350011 should-cost 374.95 vs price 348.32 (-7.1 %); part:350010 -2.1 %"},
+    {"trait": "wants_clause", "doc": "arena:case:P02", "quote": "We agree to your proposed index clause on CU-NOTATION, which allows us to remove the material risk premium"},
+    {"trait": "wants_clause", "doc": "arena:case:P02", "quote": "Implementing this index clause aligns with our requirement to manage raw material volatility"},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "0.23 % of its turnover"}  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "low",
+    "levers": ["CU-NOTATION index clause (share 0.2, deadband 5 %)", "binding annual volume", "verified volume forecast", "shorter payment term for a lower price"],
+    "arguments": ["index clause sharing copper risk", "binding volume commitment", "volume forecast with data", "scorecard: OTD below 95 % target", "qualified second source sup:70580"],
+    "avoid": ["citing copper, LCI-C or PPI (they rose)", "asking for its cost breakdown", "claiming a notice breach (letter was on time)", "changing terms after a final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open deep at the current 348.32; the first counter does not depend on the opening.",
+      "Offer a CU-NOTATION index clause (material share 0.2, deadband 5 %): it then drops its risk premium; all 6 index deals in the arena sample closed at 361.7-366.0.",
+      "Pair the index clause with a stated binding annual volume; it asks for one every time.",
+      "Send the volume data it asks for; it confirms the data and takes it into account.",
+      "Do not ask for 90-day payment without the index; it raised the price to about 373 for that."
+    ],
+    "expected_concession": "From 370.96 it reaches about 362-366 within 1-4 rounds with the index clause; without one it holds near 372 and sends a final offer around round 4."
+  }
+}

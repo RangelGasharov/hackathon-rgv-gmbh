@@ -1,0 +1,372 @@
+{
+ "schema": 1,
+ "id": "sup:70350",
+ "name": "Oberflächentechnik Weißacher GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "e8c026030f37f4ff",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "sheet metal",
+ "abc_class": "B",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": {
+   "pct": 2,
+   "days": 10
+  },
+  "incoterm": "DAP",
+  "lead_time_days": 14
+ },
+ "company": {
+  "owner_type": "founder",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1990,
+  "staff": 30,
+  "turnover_eur": null,
+  "turnover_band": "2-5 M EUR",
+  "equity_ratio_pct": 24.9,
+  "credit_index": 343,
+  "credit_index_12m_ago": 248,
+  "vda63_grade": "C",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 227094,
+   "FY2025": 217642,
+   "FY2026": 217582
+  },
+  "share_of_its_turnover_pct": null,
+  "share_of_its_turnover_range_pct": [
+   4.4,
+   10.9
+  ],
+  "spend_trend_pct": -4.2
+ },
+ "parts": [
+  {
+   "part": "part:330060",
+   "description": "Cover plate set, powder coated",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 9.99,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -6.0,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.34,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.22,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.07,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.1,
+   "other_sources": []
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070350",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070350#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070350#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net, 2 % discount within 10 days."
+   },
+   {
+    "id": "ctr:4600070350#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 14 days from order."
+   },
+   {
+    "id": "ctr:4600070350#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070350#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-12-12",
+    "part": "part:330060",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-12-07",
+    "part": "part:330060",
+    "type": "annual renewal",
+    "asked_pct": -2.6,
+    "settled_pct": -6.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-20",
+    "part": "part:330060",
+    "type": "annual renewal",
+    "asked_pct": 2.8,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-21",
+    "part": "part:330060",
+    "type": "annual renewal",
+    "asked_pct": 1.9,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 0.7,
+  "settled_avg_pct": -2.0,
+  "kept_share_of_ask": 0.77
+ },
+ "payments": {
+  "invoices": 74,
+  "avg_days_late": -6.7,
+  "share_paid_over_5_days_late_pct": 39.2,
+  "cash_discounts_taken": 42
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70350@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 59.3,
+    "ppm": 1877,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70350@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 60.0,
+    "ppm": 2218,
+    "colour": "red"
+   },
+   {
+    "id": "sc:70350@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 60.0,
+    "ppm": 3850,
+    "colour": "red"
+   },
+   {
+    "id": "sc:70350@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 53.8,
+    "ppm": 5556,
+    "colour": "red"
+   }
+  ],
+  "complaints_3y": 18,
+  "cost_recharged_eur": 1650,
+  "open_8d": 3
+ },
+ "news": [
+  {
+   "id": "news:20260904-26",
+   "date": "2026-09-04",
+   "topic": "credit_downgrade",
+   "headline": "Credit agency lowers rating of Oberflächentechnik Weißacher GmbH"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260912-70350-M1",
+   "date": "2026-09-12",
+   "kind": "call_note",
+   "subject": "Liquidity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the managing director of Oberflächentechnik Weißacher GmbH: he asked twice whether we could pay earlier and said the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"
+  },
+  {
+   "id": "doc:20260821-70350-M2",
+   "date": "2026-08-21",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Oberflächentechnik Weißacher GmbH",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20260820-70350-P",
+   "date": "2026-08-20",
+   "kind": "email",
+   "subject": "Overdue invoices",
+   "author": "Oberflächentechnik Weißacher GmbH",
+   "text": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms; otherwise we will have to review our conditions."
+  },
+  {
+   "id": "doc:20251014-70350-N",
+   "date": "2025-10-14",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Oberflächentechnik Weißacher GmbH",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300070",
+   "date": "2026-09-22",
+   "part": "part:330060",
+   "remarks": "Payment within 10 days requested."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70350",
+  "source_hash": "e8c026030f37f4ff",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Founder-run coater (30 staff, EUR 2-5 M), sole source of our cover plate set. In financial distress: credit index jumped 248 to 343, rating downgraded, bank watching monthly, MD 'cannot sign anything that lowers our margin now'. Complains about overdue invoices. Quality is red and worsening (OTD 54 %, 5556 ppm, 3 open 8D). Open moderate: buy price with faster payment, use the scorecard, do not squeeze it into failure.",
+  "notes": "Needs cash: asked twice for earlier payment, quote remark requests 10-day payment. Fears the bank and late payers. Contradiction: says we pay late, yet we paid 6.7 days early on average taking 42 cash discounts; still 39 % of invoices over 5 days late. Contract already has 2 %/10 days. Sole source: supply risk if it fails.",
+  "traits": {
+   "cash_short": "strong",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "strong",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost",
+   "small_account",
+   "hedged_material"
+  ],
+  "wants": [
+   "faster_payment"
+  ],
+  "fears": [
+   "bank pressure on liquidity",
+   "late payment of invoices",
+   "any margin cut"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260912-70350-M1",
+    "quote": "said the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "data:company.credit_index",
+    "quote": "credit index 343, 248 twelve months ago"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "news:20260904-26",
+    "quote": "Credit agency lowers rating of Oberflächentechnik Weißacher GmbH"
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "doc:20260820-70350-P",
+    "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "quote:7300070",
+    "quote": "Payment within 10 days requested."
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "medium",
+   "levers": [
+    "guaranteed payment within 10 days on every invoice",
+    "on-time payment commitment",
+    "stable call-off volume"
+   ],
+   "arguments": [
+    "faster payment: guaranteed 10-day payment for a price step (it is truly cash-short)",
+    "red scorecard sc:70350@2026Q3: OTD 53.8 %, 5556 ppm, 3 open 8D",
+    "complaint cost recovery under clause 6.1",
+    "notice-period breach for any 2027 increase"
+   ],
+   "avoid": [
+    "hard margin squeeze on a distressed sole source",
+    "leading with index arguments",
+    "changing terms after its final offer",
+    "ignoring its overdue-invoice complaint"
+   ],
+   "mandatory_terms": [
+    "payment within 10 days"
+   ],
+   "tactics": [
+    "Open moderate and lead with guaranteed 10-day payment on all invoices: cash is what it needs.",
+    "Acknowledge the overdue invoices and commit to on-time payment as part of the package.",
+    "Use the red scorecard and 3 open 8D reports as the second argument.",
+    "Take a modest price step plus a quality improvement commitment; do not push it below a sustainable margin.",
+    "Accept its final offer if it is reasonable; walking risks supply of a sole-sourced part."
+   ],
+   "expected_concession": "History: asked +1.9-2.8 % and settled 0 %; now resists any margin cut, so expect small moves bought mainly with faster payment."
+  }
+ },
+ "arena": null
+}

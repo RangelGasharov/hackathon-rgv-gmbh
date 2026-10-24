@@ -1,0 +1,50 @@
+{
+  "supplier": "sup:70420",
+  "source_hash": "22421795c8f3bef4",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Swiss seal group (900 staff, EUR 247 M), sole source of our ATEX drinking-water cartridge seal; we are 0.17 % of its turnover. Head office froze all price reductions until December 2027 and quotes list price only; pricing committee above 2 %. Excellent quality (0 ppm, OTD 96-100 %). Price is 16.6 % over the should-cost of its plant. Open on payment terms and call-off flexibility: take value there, open moderate.",
+  "notes": "Wants price stability and to keep a frozen list; never got an increase from us (asked +1.3-3.3 %, settled 0). Contradiction: March note says committee approves changes above 2 %, August note and quote say no reductions at all. Contract auto-extended to 2027 (180-day notice passed). Hard to replace: drinking-water approvals.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "strong",
+    "price_frozen": "strong",
+    "small_account": "strong",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "none",
+    "below_full_cost": "none",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["hedged_material", "capacity_tight"],
+  "wants": ["price_stability"],
+  "fears": ["breaking the head-office price freeze", "precedent of discounts"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "price_frozen", "doc": "doc:20260823-70420-M1", "quote": "head office has frozen all price reductions until December 2027."},
+    {"trait": "price_frozen", "doc": "quote:7300055", "quote": "Prices as per current list; discounts not possible this year (head-office directive)."},
+    {"trait": "approval_ladder", "doc": "doc:20260302-70420-M2", "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "0.17"}
+  ],
+  "playbook": {
+    "opening": "moderate",
+    "walk_risk": "medium",
+    "levers": ["longer payment terms (it is open on them)", "call-off flexibility", "longer contract / volume commitment", "longer lead time"],
+    "arguments": ["should-cost of its plant: EUR 273.72 vs 319.11 (16.6 % above cost)", "spend growth +34 % since FY2024", "notice-period breach: 180-day notice for 2027 changes has passed", "volume forecast"],
+    "avoid": ["quality arguments (0 ppm, 0 complaints)", "price asks above 2 % that go to its committee", "changing terms after its final offer", "threatening to resource: no approved second source"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Open moderately; aim for a price step within 2 % to stay below its committee threshold.",
+      "Cite the should-cost of its plant once as the main price argument.",
+      "If price will not move, take value in longer payment terms (30 to 60 days) and call-off flexibility.",
+      "Reject any increase: the 180-day notice before year end has passed.",
+      "Accept a reasonable final offer; it is sole source with no approved alternative."
+    ],
+    "expected_concession": "No arena data; it has never moved on price either way, so expect little or no price movement and concessions on payment and call-off terms."
+  }
+}

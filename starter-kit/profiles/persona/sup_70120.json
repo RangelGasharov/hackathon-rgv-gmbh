@@ -1,0 +1,49 @@
+{
+  "supplier": "sup:70120",
+  "source_hash": "afe27458ef5f9494",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family foundry (240 staff, EUR 34.2 M, solid equity 38.5 %); we are only 1.4 % of its turnover but spend grew 30 %. Owner-led, expects partnership for the 2022 favour. Impeller HN 200 sells below its full cost (co-sourced 70 % with 70140, 70190 qualified); HN 250 is sole-sourced with no should-cost. Delivery is slipping badly (OTD 74.5 %, two amber quarters). It is invited to the HX 80-200 RFQ against Tarsevi: our best lever.",
+  "notes": "Expects partnership for the 2022 favour; the HX 80-200 RFQ (4200 pc/yr) is new volume we can offer. Fears losing HN 200 share to 70140/70190. Risk: we pay late (52 % of invoices over 5 days late), it may raise that. No price letter or cost claim on file.",
+  "traits": {
+    "cash_short": "none",
+    "approval_ladder": "none",
+    "price_frozen": "none",
+    "small_account": "weak",
+    "open_book": "none",
+    "free_capacity": "none",
+    "reference_customer": "none",
+    "stale_costing": "none",
+    "reciprocity": "strong",
+    "below_full_cost": "strong",
+    "hedged_material": "none",
+    "capacity_tight": "none",
+    "late_payment_grievance": "none",
+    "wants_clause": "none"
+  },
+  "unsure": ["stale_costing", "late_payment_grievance"],
+  "wants": [],
+  "fears": ["losing HN 200 quota to 70140 or 70190", "losing the new HX 80-200 business to Tarsevi"],
+  "hedge_until": null,
+  "evidence": [
+    {"trait": "reciprocity", "doc": "doc:20260719-70120-M1", "quote": "in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."},
+    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:310030 should-cost 35.98 vs price 34.26 (-4.8 %), own plant"},
+    {"trait": "small_account", "doc": "data:our_weight.share_of_its_turnover_pct", "quote": "1.43 % of its turnover"}
+  ],
+  "playbook": {
+    "opening": "deep",
+    "walk_risk": "medium",
+    "levers": ["award of HX 80-200 (4200 pc/yr, SOP Mar 2027)", "HN 200 quota shift from 70140", "binding volume", "paying on time"],
+    "arguments": ["delivery scorecard: OTD 74.5 % vs 95 % target, amber two quarters, 2 open 8D", "rival quote / active co-source 70140 on HN 200", "volume forecast (+30 % spend)", "notice period: prices fixed per calendar year"],
+    "avoid": ["pushing HN 200 further below its cost", "citing cost drivers that rose", "relying on HN 250 leverage (sole source, no should-cost)", "changing terms after its final offer"],
+    "mandatory_terms": [],
+    "tactics": [
+      "Lead with the delivery scorecard: two amber quarters and OTD falling to 74.5 %.",
+      "Link price to the HX 80-200 RFQ: competitive pricing now helps its HX quote.",
+      "Push HN 250 harder than HN 200; HN 200 is already below its cost.",
+      "Offer a binding volume or HN 200 quota from 70140 for a visible price step.",
+      "Do not offer faster payment as a gift; fix our late payments only if it raises them."
+    ],
+    "expected_concession": "No arena data; recent renewals asked +1.1 to +3.2 % and settled 0 to -1.4 % (2023: -3.9/-5.6 %); kept 43 % of its ask."
+  }
+}

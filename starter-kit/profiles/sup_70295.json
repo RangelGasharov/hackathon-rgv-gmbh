@@ -1,0 +1,596 @@
+{
+ "schema": 1,
+ "id": "sup:70295",
+ "name": "Drehzentrum Ilzauer GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "0090d743c85ab80b",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "machined parts",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "EXW",
+  "lead_time_days": 28
+ },
+ "company": {
+  "owner_type": "founder",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 2001,
+  "staff": 20,
+  "turnover_eur": null,
+  "turnover_band": "2-5 M EUR",
+  "equity_ratio_pct": 40.8,
+  "credit_index": 249,
+  "credit_index_12m_ago": 249,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 479819,
+   "FY2025": 555105,
+   "FY2026": 568803
+  },
+  "share_of_its_turnover_pct": null,
+  "share_of_its_turnover_range_pct": [
+   11.4,
+   28.4
+  ],
+  "spend_trend_pct": 18.5
+ },
+ "parts": [
+  {
+   "part": "part:320020",
+   "description": "Shaft sleeve",
+   "status": "active",
+   "quota_pct": 60,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 11.66,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -3.6,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.34,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.19,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.14,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.04,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 3.9,
+   "other_sources": [
+    {
+     "supplier": "sup:70230",
+     "status": "active",
+     "quota_pct": 40
+    }
+   ]
+  },
+  {
+   "part": "part:320040",
+   "description": "Wear ring set",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 13.59,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 8.5,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.32,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.3,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 15.2,
+   "other_sources": []
+  },
+  {
+   "part": "part:320090",
+   "description": "Spacer sleeve",
+   "status": "active",
+   "quota_pct": 50,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 4.6,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -4.8,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.35,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C2431",
+     "weight": 0.19,
+     "change_12m_pct": 12.3,
+     "ids": [
+      "idx:PPI-C2431@2025-08",
+      "idx:PPI-C2431@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.15,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.05,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 4.0,
+   "other_sources": [
+    {
+     "supplier": "sup:70250",
+     "status": "active",
+     "quota_pct": 50
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070295",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "EXW",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070295#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070295#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070295#5.1",
+    "type": "delivery",
+    "text": "Delivery EXW; standard lead time 28 days from order."
+   },
+   {
+    "id": "ctr:4600070295#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070295#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-13",
+    "part": "part:320020",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-11-23",
+    "part": "part:320040",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-11-28",
+    "part": "part:320090",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-12-01",
+    "part": "part:320040",
+    "type": "annual renewal",
+    "asked_pct": 1.9,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2023-12-08",
+    "part": "part:320020",
+    "type": "annual renewal",
+    "asked_pct": -1.2,
+    "settled_pct": -3.6,
+    "note": null
+   },
+   {
+    "date": "2023-12-09",
+    "part": "part:320090",
+    "type": "annual renewal",
+    "asked_pct": -0.1,
+    "settled_pct": -3.1,
+    "note": null
+   },
+   {
+    "date": "2024-11-17",
+    "part": "part:320090",
+    "type": "annual renewal",
+    "asked_pct": 1.7,
+    "settled_pct": -1.7,
+    "note": null
+   },
+   {
+    "date": "2024-11-24",
+    "part": "part:320040",
+    "type": "annual renewal",
+    "asked_pct": 6.6,
+    "settled_pct": 5.2,
+    "note": null
+   },
+   {
+    "date": "2024-12-08",
+    "part": "part:320020",
+    "type": "annual renewal",
+    "asked_pct": 2.4,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-12",
+    "part": "part:320020",
+    "type": "annual renewal",
+    "asked_pct": 3.0,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-15",
+    "part": "part:320040",
+    "type": "annual renewal",
+    "asked_pct": 5.2,
+    "settled_pct": 3.1,
+    "note": null
+   },
+   {
+    "date": "2025-11-18",
+    "part": "part:320090",
+    "type": "annual renewal",
+    "asked_pct": 3.3,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 2.5,
+  "settled_avg_pct": -0.0,
+  "kept_share_of_ask": 3.82
+ },
+ "payments": {
+  "invoices": 220,
+  "avg_days_late": 10.4,
+  "share_paid_over_5_days_late_pct": 80.9,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70295@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 82.1,
+    "ppm": 1210,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70295@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 82.1,
+    "ppm": 1227,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70295@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 80.5,
+    "ppm": 1083,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70295@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 84.4,
+    "ppm": 1000,
+    "colour": "amber"
+   }
+  ],
+  "complaints_3y": 58,
+  "cost_recharged_eur": 5700,
+  "open_8d": 5
+ },
+ "news": [
+  {
+   "id": "news:20260514-12",
+   "date": "2026-05-14",
+   "topic": "free_capacity",
+   "headline": "Drehzentrum Ilzauer GmbH looks for new customers"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260909-70295-M4",
+   "date": "2026-09-09",
+   "kind": "meeting_note",
+   "subject": "Visit by the owner",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The owner of Drehzentrum Ilzauer GmbH admitted he had not followed his material and energy prices closely since the 2022 peak; his office manager does the costing."
+  },
+  {
+   "id": "doc:20260828-70295-M3",
+   "date": "2026-08-28",
+   "kind": "meeting_note",
+   "subject": "Supplier day",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "At our supplier day Drehzentrum Ilzauer GmbH said Hollerau is an important reference customer for them."
+  },
+  {
+   "id": "doc:20260717-70295-M1",
+   "date": "2026-07-17",
+   "kind": "meeting_note",
+   "subject": "Visit by the owner",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The owner of Drehzentrum Ilzauer GmbH admitted he had not followed his material and energy prices closely since the 2022 peak; his office manager does the costing."
+  },
+  {
+   "id": "doc:20260515-70295-P",
+   "date": "2026-05-15",
+   "kind": "email",
+   "subject": "Overdue invoices",
+   "author": "Drehzentrum Ilzauer GmbH",
+   "text": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms; otherwise we will have to review our conditions."
+  },
+  {
+   "id": "doc:20260505-70295-M2",
+   "date": "2026-05-05",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Drehzentrum Ilzauer GmbH",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20260419-70295-M5",
+   "date": "2026-04-19",
+   "kind": "call_note",
+   "subject": "Capacity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with sales at Drehzentrum Ilzauer GmbH: they could take additional parts at short notice; the second shift has been on hold since spring."
+  },
+  {
+   "id": "doc:20260415-70295-M6",
+   "date": "2026-04-15",
+   "kind": "meeting_note",
+   "subject": "Supplier day",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "At our supplier day Drehzentrum Ilzauer GmbH said Hollerau is an important reference customer for them."
+  },
+  {
+   "id": "doc:20251028-70295-N",
+   "date": "2025-10-28",
+   "kind": "email",
+   "subject": "Packaging",
+   "author": "Drehzentrum Ilzauer GmbH",
+   "text": "From November we deliver in returnable boxes instead of cardboard."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70295",
+  "source_hash": "0090d743c85ab80b",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Founder-led 20-staff turner (2-5 M EUR), our A supplier: ~EUR 569k is ~11-28 % of its turnover. Looking for new customers, second shift idle, owner admits stale costing (twice) and calls us a reference customer. Wear ring set (single source) rose 8.5 % since 2022 while its other parts fell; shaft sleeve and spacer have active second sources. Open deep, use any indices that fell, the amber scorecard with 5 open 8D, and share shifts; pay on time as the sweetener.",
+  "notes": "Needs work and on-time cash; fears losing share on sleeve/spacer. Its overdue-invoice complaint is justified: we pay 10.4 days late on average, 81 % >5 days late. 58 complaints in 3 years, EUR 5,700 recharged, 5 open 8D. Wear ring settled +5.2 % (2024) and +3.1 % (2025).",
+  "traits": {
+   "cash_short": "weak",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "strong",
+   "reference_customer": "strong",
+   "stale_costing": "strong",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "strong",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "hedged_material",
+   "approval_ladder"
+  ],
+  "wants": [
+   "faster_payment",
+   "binding_volume"
+  ],
+  "fears": [
+   "idle second shift",
+   "losing shaft sleeve share to sup:70230",
+   "losing spacer share to sup:70250",
+   "late payment"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "stale_costing",
+    "doc": "doc:20260909-70295-M4",
+    "quote": "admitted he had not followed his material and energy prices closely since the 2022 peak"
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "doc:20260419-70295-M5",
+    "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "news:20260514-12",
+    "quote": "Drehzentrum Ilzauer GmbH looks for new customers"
+   },
+   {
+    "trait": "reference_customer",
+    "doc": "doc:20260828-70295-M3",
+    "quote": "said Hollerau is an important reference customer for them."
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "doc:20260515-70295-P",
+    "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260505-70295-M2",
+    "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "on-time or 14-day payment",
+    "binding volume / more parts for the idle shift",
+    "share on shaft sleeve and spacer sleeve"
+   ],
+   "arguments": [
+    "index change, only drivers that truly fell (owner has not tracked them since 2022)",
+    "scorecard: amber, ~1,000 ppm, 58 complaints, 5 open 8D",
+    "share shift to co-sources sup:70230 (sleeve) and sup:70250 (spacer); both are dearer, no rival-price argument",
+    "wear ring +8.5 % since 2022 while sleeve and spacer fell",
+    "contract §3.1: no increase notice by 2 Oct"
+   ],
+   "avoid": [
+    "citing a driver that rose",
+    "denying our late payments",
+    "repeating an argument kind"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep, especially on the wear ring set.",
+    "If indices fell since 2022, show them with sources; the owner does not track them.",
+    "Use the open 8Ds and complaint costs as the quality argument.",
+    "Acknowledge late payments and offer reliable on-time payment for price."
+   ],
+   "expected_concession": "Renewals settled 2-3 pts below its ask on sleeve/spacer but it won increases on the wear ring; expect solid moves once shown data."
+  }
+ },
+ "arena": null
+}

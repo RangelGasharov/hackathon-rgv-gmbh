@@ -1,0 +1,639 @@
+{
+ "schema": 1,
+ "id": "sup:70190",
+ "name": "Gießerei Pfaffenreuth GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "0a46c05273aa11c3",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "castings",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "FCA",
+  "lead_time_days": 42
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1949,
+  "staff": 95,
+  "turnover_eur": 14800000,
+  "turnover_band": "10-25 M EUR",
+  "equity_ratio_pct": 33.9,
+  "credit_index": 227,
+  "credit_index_12m_ago": 227,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001; ISO 50001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 1060689,
+   "FY2025": 1111179,
+   "FY2026": 1048066
+  },
+  "share_of_its_turnover_pct": 7.08,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": -1.2
+ },
+ "parts": [
+  {
+   "part": "part:310011",
+   "description": "Volute casing HN 65-250",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": {
+    "unit_cost": 180.19,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": null
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.25,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.1,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.1,
+   "other_sources": [
+    {
+     "supplier": "sup:70130",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  },
+  {
+   "part": "part:310020",
+   "description": "Bearing bracket HN",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.26,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.06,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.3,
+   "other_sources": [
+    {
+     "supplier": "sup:70140",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  },
+  {
+   "part": "part:310030",
+   "description": "Impeller HN 200",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": {
+    "unit_cost": 35.98,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": null
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.33,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.23,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.09,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.1,
+   "other_sources": [
+    {
+     "supplier": "sup:70120",
+     "status": "active",
+     "quota_pct": 70
+    },
+    {
+     "supplier": "sup:70140",
+     "status": "active",
+     "quota_pct": 30
+    }
+   ]
+  },
+  {
+   "part": "part:310040",
+   "description": "Casing cover HB",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 33.94,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -7.1,
+   "should_cost": {
+    "unit_cost": 33.93,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 0.0
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.23,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.1,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.0,
+   "other_sources": []
+  },
+  {
+   "part": "part:310060",
+   "description": "Pump housing HB 40",
+   "status": "active",
+   "quota_pct": 40,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 43.39,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -4.0,
+   "should_cost": {
+    "unit_cost": 39.82,
+    "of_this_supplier": false,
+    "confidence_pct": 12,
+    "method": "bottom-up estimate, German cost base, no margin included",
+    "price_over_cost_pct": 9.0
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.22,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.06,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.0,
+   "other_sources": [
+    {
+     "supplier": "sup:70150",
+     "status": "active",
+     "quota_pct": 60
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070190",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "FCA",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070190#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070190#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070190#5.1",
+    "type": "delivery",
+    "text": "Delivery FCA; standard lead time 42 days from order."
+   },
+   {
+    "id": "ctr:4600070190#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070190#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-20",
+    "part": "part:310060",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-03",
+    "part": "part:310040",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-18",
+    "part": "part:310060",
+    "type": "annual renewal",
+    "asked_pct": -2.3,
+    "settled_pct": -4.0,
+    "note": null
+   },
+   {
+    "date": "2023-11-22",
+    "part": "part:310040",
+    "type": "annual renewal",
+    "asked_pct": -3.1,
+    "settled_pct": -4.7,
+    "note": null
+   },
+   {
+    "date": "2024-11-24",
+    "part": "part:310060",
+    "type": "annual renewal",
+    "asked_pct": 1.6,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-26",
+    "part": "part:310040",
+    "type": "annual renewal",
+    "asked_pct": 4.0,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-20",
+    "part": "part:310060",
+    "type": "annual renewal",
+    "asked_pct": 1.5,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-12-04",
+    "part": "part:310040",
+    "type": "annual renewal",
+    "asked_pct": 1.3,
+    "settled_pct": -2.5,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 0.5,
+  "settled_avg_pct": -1.9,
+  "kept_share_of_ask": 0.22
+ },
+ "payments": {
+  "invoices": 139,
+  "avg_days_late": 3.0,
+  "share_paid_over_5_days_late_pct": 21.6,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70190@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 82.0,
+    "ppm": 937,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70190@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 82.4,
+    "ppm": 745,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70190@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 84.3,
+    "ppm": 630,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70190@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 85.1,
+    "ppm": 715,
+    "colour": "amber"
+   }
+  ],
+  "complaints_3y": 44,
+  "cost_recharged_eur": 3900,
+  "open_8d": 2
+ },
+ "news": [
+  {
+   "id": "news:20260426-10",
+   "date": "2026-04-26",
+   "topic": "energy_contract",
+   "headline": "Gießerei Pfaffenreuth GmbH secures power prices"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260623-70190-M1",
+   "date": "2026-06-23",
+   "kind": "call_note",
+   "subject": "Material purchasing",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with Gießerei Pfaffenreuth GmbH: they bought their electricity forward until December 2028 and said the market price is 'not our reality' before then."
+  },
+  {
+   "id": "doc:20251014-70190-N",
+   "date": "2025-10-14",
+   "kind": "email",
+   "subject": "New contact person",
+   "author": "Gießerei Pfaffenreuth GmbH",
+   "text": "From 1 October your contact in sales is our new colleague in inside sales; all other contacts stay the same."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300064",
+   "date": "2026-09-16",
+   "part": "part:310040",
+   "remarks": "Material covered until December 2028; price valid accordingly."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70190",
+  "source_hash": "0a46c05273aa11c3",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family foundry (95 staff, EUR 14.8 M); we are 7.1 % of its turnover, so we matter. Power and material bought forward until December 2028: it will dismiss index arguments and offers prices valid to 2028. Casing cover HB is sole-sourced at cost; Pump housing HB 40 is 35 % dearer than co-source 70150 (32.24 vs 43.39). Qualified but unused on three more parts, a strong volume carrot. 44 complaints in 3 years.",
+  "notes": "Wants price stability matched to its hedge through 2028. Fears losing HB 40 to 70150 and missing new volume. Casing cover has no second source.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "weak",
+   "hedged_material": "strong",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "free_capacity"
+  ],
+  "wants": [
+   "price_stability",
+   "long_contract"
+  ],
+  "fears": [
+   "losing HB 40 share to 70150",
+   "missing award of qualified parts"
+  ],
+  "hedge_until": "2028-12",
+  "evidence": [
+   {
+    "trait": "hedged_material",
+    "doc": "doc:20260623-70190-M1",
+    "quote": "they bought their electricity forward until December 2028 and said the market price is 'not our reality' before then."
+   },
+   {
+    "trait": "hedged_material",
+    "doc": "quote:7300064",
+    "quote": "Material covered until December 2028; price valid accordingly."
+   },
+   {
+    "trait": "below_full_cost",
+    "doc": "data:parts.should_cost",
+    "quote": "part:310040 should-cost 33.93 vs price 33.94 (0.0 %), own plant"
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "award of qualified parts (HN 65-250, bearing bracket, HN 200)",
+    "HB 40 quota from 70150",
+    "price fixed to Dec 2028 (long contract)"
+   ],
+   "arguments": [
+    "rival quote: 70150 HB 40 at 32.24 vs 43.39",
+    "quality record: 44 complaints in 3 years, amber Q3",
+    "binding volume / new part awards",
+    "hedge cuts its cost: fixed inputs mean no increase is justified"
+   ],
+   "avoid": [
+    "index or market-price arguments (it is hedged to Dec 2028)",
+    "squeezing casing cover HB (sole source, at cost)",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep on HB 40 with the 70150 price; argue rival quote, not index.",
+    "Turn the hedge around: inputs fixed to 2028, so any increase has no basis.",
+    "Offer a price fixed until Dec 2028 plus award of a qualified part for a cut.",
+    "Leave casing cover HB near its current price; it sells at cost."
+   ],
+   "expected_concession": "No arena data; it settles well below its asks (kept 22 %), but a hedged supplier ignores index moves, so volume and rival quotes do the work."
+  }
+ },
+ "arena": null
+}

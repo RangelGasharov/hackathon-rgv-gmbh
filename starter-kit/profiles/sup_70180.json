@@ -1,0 +1,414 @@
+{
+ "schema": 1,
+ "id": "sup:70180",
+ "name": "Feinguss Allgäu-Reiter GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "832441bbd199f75b",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "castings",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "FCA",
+  "lead_time_days": 49
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1962,
+  "staff": 160,
+  "turnover_eur": 24100000,
+  "turnover_band": "10-25 M EUR",
+  "equity_ratio_pct": 25.0,
+  "credit_index": 244,
+  "credit_index_12m_ago": 244,
+  "vda63_grade": "B",
+  "certifications": "ISO 9001; ISO 14001; ISO 50001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 583594,
+   "FY2025": 751199,
+   "FY2026": 798960
+  },
+  "share_of_its_turnover_pct": 3.32,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 36.9
+ },
+ "parts": [
+  {
+   "part": "part:310050",
+   "description": "Volute casing HI 80-250",
+   "status": "active",
+   "quota_pct": 75,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 654.52,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -5.7,
+   "should_cost": null,
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.26,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.24,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.06,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.9,
+   "other_sources": [
+    {
+     "supplier": "sup:70170",
+     "status": "active",
+     "quota_pct": 25
+    }
+   ]
+  },
+  {
+   "part": "part:310051",
+   "description": "Impeller HI 250",
+   "status": "active",
+   "quota_pct": 60,
+   "tooling_owner": "Hollerau",
+   "price_unit": 1,
+   "current_price": 118.73,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -9.3,
+   "should_cost": {
+    "unit_cost": 84.97,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 39.7
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.29,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "AS-14404",
+     "weight": 0.24,
+     "change_12m_pct": 5.9,
+     "ids": [
+      "idx:AS-14404@2025-09",
+      "idx:AS-14404@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.09,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 1.9,
+   "other_sources": [
+    {
+     "supplier": "sup:70160",
+     "status": "active",
+     "quota_pct": 40
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070180",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "FCA",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070180#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070180#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070180#5.1",
+    "type": "delivery",
+    "text": "Delivery FCA; standard lead time 49 days from order."
+   },
+   {
+    "id": "ctr:4600070180#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070180#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-12-04",
+    "part": "part:310051",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-12",
+    "part": "part:310050",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-23",
+    "part": "part:310050",
+    "type": "annual renewal",
+    "asked_pct": -2.1,
+    "settled_pct": -3.7,
+    "note": null
+   },
+   {
+    "date": "2023-11-29",
+    "part": "part:310051",
+    "type": "annual renewal",
+    "asked_pct": -5.1,
+    "settled_pct": -6.4,
+    "note": null
+   },
+   {
+    "date": "2024-11-15",
+    "part": "part:310051",
+    "type": "annual renewal",
+    "asked_pct": 4.0,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-19",
+    "part": "part:310050",
+    "type": "annual renewal",
+    "asked_pct": 1.5,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-18",
+    "part": "part:310050",
+    "type": "annual renewal",
+    "asked_pct": 0.0,
+    "settled_pct": -2.1,
+    "note": null
+   },
+   {
+    "date": "2025-12-09",
+    "part": "part:310051",
+    "type": "annual renewal",
+    "asked_pct": 0.1,
+    "settled_pct": -3.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": -0.3,
+  "settled_avg_pct": -2.6,
+  "kept_share_of_ask": -5.4
+ },
+ "payments": {
+  "invoices": 140,
+  "avg_days_late": 4.1,
+  "share_paid_over_5_days_late_pct": 32.9,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70180@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 79.6,
+    "ppm": 1106,
+    "colour": "amber"
+   },
+   {
+    "id": "sc:70180@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 81.5,
+    "ppm": 542,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70180@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 78.8,
+    "ppm": 539,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70180@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 73.1,
+    "ppm": 526,
+    "colour": "amber"
+   }
+  ],
+  "complaints_3y": 3,
+  "cost_recharged_eur": 150,
+  "open_8d": 1
+ },
+ "news": [],
+ "documents": [
+  {
+   "id": "doc:20260924-70180-M1",
+   "date": "2026-09-24",
+   "kind": "meeting_note",
+   "subject": "Visit by the owner",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Visit by the owner of Feinguss Allgäu-Reiter GmbH. He reminded us that in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."
+  },
+  {
+   "id": "doc:20251022-70180-N",
+   "date": "2025-10-22",
+   "kind": "email",
+   "subject": "Packaging",
+   "author": "Feinguss Allgäu-Reiter GmbH",
+   "text": "From November we deliver in returnable boxes instead of cardboard."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70180",
+  "source_hash": "832441bbd199f75b",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Family investment caster (160 staff, EUR 24.1 M); we are 3.3 % of its turnover, spend up 37 %. Owner expects partnership for the 2022 favour. Its prices are far above our co-sources: HI 80-250 at 654.52 vs 559.61 at 70170 (+17 %), Impeller HI 250 at 118.73 vs 79.44 at 70160 and 40 % over a should-cost not modelled on its plant. We own the tooling. Historically gives way fully (kept share -5.4). Open deep with rival prices.",
+  "notes": "Needs recognition of its 2022 hold-price favour; otherwise no stated need. Fears losing 75 % / 60 % quotas to 70170 and 70160. Delivery weak: OTD 73 %, amber Q3. Few documents, so traits beyond reciprocity are uncertain.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "strong",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "stale_costing",
+   "capacity_tight"
+  ],
+  "wants": [],
+  "fears": [
+   "losing HI 80-250 quota to 70170",
+   "losing HI 250 quota to 70160",
+   "partnership not honoured"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "reciprocity",
+    "doc": "doc:20260924-70180-M1",
+    "quote": "in 2022 they kept supplying at the old price for a quarter and said he expects partnership in return."
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "quota from 70170 / 70160 (we own the tooling)",
+    "binding volume",
+    "acknowledging the 2022 favour"
+   ],
+   "arguments": [
+    "rival prices: 70170 HI 80-250 at 559.61, 70160 HI 250 at 79.44",
+    "should-cost: HI 250 ~85 vs 118.73 (estimate not of its plant)",
+    "delivery scorecard: OTD 73 % vs 95 % target, amber Q3",
+    "volume forecast (+37 % spend)"
+   ],
+   "avoid": [
+    "dismissing the 2022 favour",
+    "citing cost drivers that rose",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep on HI 250: co-source 70160 sells it at 79.44, 33 % below.",
+    "Use the 70170 price on HI 80-250 as a rival quote, one argument per round.",
+    "Thank it for 2022, then say partnership means market prices for both sides.",
+    "Offer more quota or binding volume only for a visible price step."
+   ],
+   "expected_concession": "No arena data; past renewals settled well below its asks (kept share -5.4), so expect it to move readily."
+  }
+ },
+ "arena": null
+}

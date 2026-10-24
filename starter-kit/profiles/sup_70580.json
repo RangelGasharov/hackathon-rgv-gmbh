@@ -1,0 +1,455 @@
+{
+ "schema": 1,
+ "id": "sup:70580",
+ "name": "Motorenwerk Saalach GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "3879094630bdb93d",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "electrical",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 42
+ },
+ "company": {
+  "owner_type": "group",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1938,
+  "staff": 650,
+  "turnover_eur": 182000000,
+  "turnover_band": "100-250 M EUR",
+  "equity_ratio_pct": 30.2,
+  "credit_index": 171,
+  "credit_index_12m_ago": 171,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 897362,
+   "FY2025": 1154510,
+   "FY2026": 1151452
+  },
+  "share_of_its_turnover_pct": 0.63,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 28.3
+ },
+ "parts": [
+  {
+   "part": "part:350011",
+   "description": "Motor IE3 7.5 kW, 4-pole",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": {
+    "unit_cost": 374.95,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": null
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.21,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.2,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.16,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 11.1,
+   "other_sources": [
+    {
+     "supplier": "sup:70510",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  },
+  {
+   "part": "part:350013",
+   "description": "Motor IE4 30 kW, 4-pole",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 1608.32,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 0.1,
+   "should_cost": {
+    "unit_cost": 1567.9,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": 2.6
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.22,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.19,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.17,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 10.8,
+   "other_sources": [
+    {
+     "supplier": "sup:70510",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070580",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070580#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070580#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070580#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 42 days from order."
+   },
+   {
+    "id": "ctr:4600070580#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070580#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-28",
+    "part": "part:350013",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-23",
+    "part": "part:350013",
+    "type": "annual renewal",
+    "asked_pct": 2.4,
+    "settled_pct": -1.5,
+    "note": null
+   },
+   {
+    "date": "2024-11-19",
+    "part": "part:350013",
+    "type": "annual renewal",
+    "asked_pct": 3.9,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-11-18",
+    "part": "part:350013",
+    "type": "annual renewal",
+    "asked_pct": 3.3,
+    "settled_pct": 1.7,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 3.2,
+  "settled_avg_pct": 0.1,
+  "kept_share_of_ask": -0.04
+ },
+ "payments": {
+  "invoices": 70,
+  "avg_days_late": 19.4,
+  "share_paid_over_5_days_late_pct": 90.0,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70580@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 92.3,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70580@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 92.3,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70580@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 100.0,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70580@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 95.8,
+    "ppm": 0,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 1,
+  "cost_recharged_eur": 150,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260327-07",
+   "date": "2026-03-27",
+   "topic": "refocus",
+   "headline": "Motorenwerk Saalach GmbH sharpens its focus"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260926-70580-M1",
+   "date": "2026-09-26",
+   "kind": "meeting_note",
+   "subject": "Account review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Their new sales director said Hollerau's volumes are 'not strategic' for Motorenwerk Saalach GmbH any more; replies have become slower since the summer."
+  },
+  {
+   "id": "doc:20260908-70580-M3",
+   "date": "2026-09-08",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Motorenwerk Saalach GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20260612-70580-P",
+   "date": "2026-06-12",
+   "kind": "email",
+   "subject": "Overdue invoices",
+   "author": "Motorenwerk Saalach GmbH",
+   "text": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms; otherwise we will have to review our conditions."
+  },
+  {
+   "id": "doc:20260322-70580-M2",
+   "date": "2026-03-22",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Motorenwerk Saalach GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20251102-70580-N",
+   "date": "2025-11-02",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Motorenwerk Saalach GmbH",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300057",
+   "date": "2026-09-09",
+   "part": "part:350013",
+   "remarks": "List conditions; supply from stock only."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70580",
+  "source_hash": "3879094630bdb93d",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Motorenwerk Saalach GmbH, group-owned motor maker (650 staff) refocusing on key accounts; we are 0.63 % of its turnover and now 'not strategic'. We pay it 19.4 days late on average (90 % of invoices over 5 days late) and it threatened to review conditions. It quotes list conditions, stock supply only. Quality is excellent. Price is 2.6 % over its should-cost; sup:70510 is qualified for its 30 kW motor. Offer on-time payment; keep demands modest.",
+  "notes": "Needs on-time payment; it fears being tied to a small, late-paying account. Our grievance is self-inflicted. Its quality is excellent (0 ppm, OTD 92-100 %, 1 complaint in 3 years), so quality arguments backfire. 'Supply from stock only' hints it may cut service. Spend grew 28 %, yet it still calls us not strategic.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "weak",
+   "small_account": "strong",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "weak",
+   "late_payment_grievance": "strong",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "capacity_tight"
+  ],
+  "wants": [
+   "faster_payment"
+  ],
+  "fears": [
+   "late payment",
+   "small unprofitable accounts"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "late_payment_grievance",
+    "doc": "doc:20260612-70580-P",
+    "quote": "Several of our invoices are overdue again. We ask you to keep to the agreed payment terms"
+   },
+   {
+    "trait": "late_payment_grievance",
+    "doc": "data:payments.avg_days_late",
+    "quote": "19.4 days late on average, 90 % of invoices over 5 days late"
+   },
+   {
+    "trait": "small_account",
+    "doc": "doc:20260926-70580-M1",
+    "quote": "Hollerau's volumes are 'not strategic' for Motorenwerk Saalach GmbH any more"
+   },
+   {
+    "trait": "small_account",
+    "doc": "doc:20260908-70580-M3",
+    "quote": "they are reviewing small accounts and will focus on customers with volume."
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260322-70580-M2",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+   },
+   {
+    "trait": "price_frozen",
+    "doc": "quote:7300057",
+    "quote": "List conditions; supply from stock only."
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "high",
+   "levers": [
+    "on-time or faster payment",
+    "binding volume",
+    "7.5 kW motor volume (qualified here)"
+   ],
+   "arguments": [
+    "commitment to pay on time or faster",
+    "qualified second source sup:70510 for the 30 kW (no price on file)",
+    "binding volume commitment",
+    "volume forecast (+28 % spend)"
+   ],
+   "avoid": [
+    "quality or delivery arguments (record is excellent)",
+    "asking for longer payment terms",
+    "deep cuts or ultimatums",
+    "changing terms after a final offer"
+   ],
+   "mandatory_terms": [
+    "payment on agreed terms"
+   ],
+   "tactics": [
+    "Acknowledge the overdue invoices and commit to paying on time, or faster, as the opener.",
+    "Keep payment at 30 days or shorter; never ask for longer.",
+    "Hold current 1608.32; cite the sup:70510 alternative once, politely.",
+    "Offer volume or 7.5 kW share to counter 'not strategic'.",
+    "Accept a fair final offer early; it may walk."
+   ],
+   "expected_concession": "No arena data; it historically settled well below its asks (kept -0.04), but the new sales director and grievance make it firmer now."
+  }
+ },
+ "arena": null
+}

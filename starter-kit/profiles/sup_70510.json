@@ -1,0 +1,608 @@
+{
+ "schema": 1,
+ "id": "sup:70510",
+ "name": "Antriebstechnik Nordmark AG",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "f4ce8d9c9838c659",
+ "persona_stale": false,
+ "problems": [],
+ "country": "DE",
+ "category": "electrical",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 35
+ },
+ "company": {
+  "owner_type": "group",
+  "group_parent": "Nordmark Gruppe",
+  "legal_form": "AG",
+  "founded": 1911,
+  "staff": 4800,
+  "turnover_eur": 1380000000,
+  "turnover_band": ">1000 M EUR",
+  "equity_ratio_pct": 29.1,
+  "credit_index": 147,
+  "credit_index_12m_ago": 147,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 2684552,
+   "FY2025": 3173291,
+   "FY2026": 3213573
+  },
+  "share_of_its_turnover_pct": 0.23,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 19.7
+ },
+ "parts": [
+  {
+   "part": "part:350010",
+   "description": "Motor IE3 4 kW, 4-pole",
+   "status": "active",
+   "quota_pct": 70,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 239.21,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 0.0,
+   "should_cost": {
+    "unit_cost": 244.39,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": -2.1
+   },
+   "cost_drivers": [
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.21,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.19,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.16,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 11.6,
+   "other_sources": [
+    {
+     "supplier": "sup:70520",
+     "status": "active",
+     "quota_pct": 30
+    }
+   ]
+  },
+  {
+   "part": "part:350011",
+   "description": "Motor IE3 7.5 kW, 4-pole",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 348.32,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 0.0,
+   "should_cost": {
+    "unit_cost": 374.95,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": -7.1
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.21,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.2,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.16,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 11.1,
+   "other_sources": [
+    {
+     "supplier": "sup:70580",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  },
+  {
+   "part": "part:350012",
+   "description": "Motor IE3 15 kW, 4-pole",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": {
+    "unit_cost": 591.2,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": null
+   },
+   "cost_drivers": [
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.21,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.19,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.15,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 11.5,
+   "other_sources": [
+    {
+     "supplier": "sup:70520",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  },
+  {
+   "part": "part:350013",
+   "description": "Motor IE4 30 kW, 4-pole",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": {
+    "unit_cost": 1567.9,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": null
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.22,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.19,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.17,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 10.8,
+   "other_sources": [
+    {
+     "supplier": "sup:70580",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070510",
+  "type": "framework agreement",
+  "valid": [
+   "2024-01-01",
+   "2026-12-31"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070510#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070510#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070510#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 35 days from order."
+   },
+   {
+    "id": "ctr:4600070510#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070510#8.1",
+    "type": "term",
+    "text": "Valid from 2024-01-01 to 2026-12-31; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-27",
+    "part": "part:350011",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2022-12-03",
+    "part": "part:350010",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-12-09",
+    "part": "part:350011",
+    "type": "annual renewal",
+    "asked_pct": -0.4,
+    "settled_pct": -2.6,
+    "note": null
+   },
+   {
+    "date": "2023-12-12",
+    "part": "part:350010",
+    "type": "annual renewal",
+    "asked_pct": -1.2,
+    "settled_pct": -2.6,
+    "note": null
+   },
+   {
+    "date": "2024-11-29",
+    "part": "part:350011",
+    "type": "annual renewal",
+    "asked_pct": 3.5,
+    "settled_pct": 1.4,
+    "note": null
+   },
+   {
+    "date": "2024-12-01",
+    "part": "part:350010",
+    "type": "annual renewal",
+    "asked_pct": 3.7,
+    "settled_pct": 1.4,
+    "note": null
+   },
+   {
+    "date": "2025-11-12",
+    "part": "part:350011",
+    "type": "annual renewal",
+    "asked_pct": 4.7,
+    "settled_pct": 1.2,
+    "note": null
+   },
+   {
+    "date": "2025-11-13",
+    "part": "part:350010",
+    "type": "annual renewal",
+    "asked_pct": 3.8,
+    "settled_pct": 1.2,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 2.4,
+  "settled_avg_pct": -0.0,
+  "kept_share_of_ask": 1.67
+ },
+ "payments": {
+  "invoices": 143,
+  "avg_days_late": 1.0,
+  "share_paid_over_5_days_late_pct": 0.0,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70510@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 82.7,
+    "ppm": 181,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70510@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 89.8,
+    "ppm": 185,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70510@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 94.1,
+    "ppm": 270,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70510@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 90.4,
+    "ppm": 273,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 7,
+  "cost_recharged_eur": 900,
+  "open_8d": 0
+ },
+ "news": [],
+ "documents": [
+  {
+   "id": "doc:20260914-70510-P02",
+   "date": "2026-09-14",
+   "kind": "letter",
+   "subject": "Price adjustment from 01 January 2027",
+   "author": "Antriebstechnik Nordmark AG",
+   "text": "Dear Sir or Madam,\nwe have supplied Hollerau Pumpenwerke reliably for many years. Owing to the strong rise in copper and electronic component prices, we are forced to adjust our prices for Motor IE3 7.5 kW, 4-pole (part:350011) by **6.5 %** with effect from **01 January 2027**: from EUR 348.32 to EUR 370.96 per  pc.\nWe regret this step and ask for your understanding.\nYours faithfully,\nAntriebstechnik Nordmark AG"
+  },
+  {
+   "id": "doc:20260410-70510-M1",
+   "date": "2026-04-10",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Antriebstechnik Nordmark AG. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20260227-70510-M2",
+   "date": "2026-02-27",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Antriebstechnik Nordmark AG. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20251019-70510-N",
+   "date": "2025-10-19",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Antriebstechnik Nordmark AG",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [],
+ "persona": {
+  "supplier": "sup:70510",
+  "source_hash": "f4ce8d9c9838c659",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Nordmark group motor maker (4,800 staff, stable credit); we are 0.23 % of its turnover. Asks +6.5 % on the 7.5 kW motor (348.32 to 370.96) citing copper; notice was on time. Price already 7 % below its should-cost. Arena: 10/10 deals, about 362-366 with a CU-NOTATION index clause, about 372 without. Trade an index clause plus binding volume rather than argue.",
+  "notes": "Fears carrying copper risk and below-cost pricing. Asks above 2 % go to a pricing committee. It cites rising CU, LCI-C and PPI as cost drivers. It never shares a calculation; one arena reply promising a breakdown was LLM filler. The letter's 'reliably for many years' clashes with OTD of 83-94 %, below the 95 % target.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "none",
+   "small_account": "weak",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "strong",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "strong"
+  },
+  "unsure": [],
+  "wants": [
+   "index_clause",
+   "binding_volume"
+  ],
+  "fears": [
+   "copper price risk",
+   "selling below full cost",
+   "losing 4 kW quota to sup:70520"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260410-70510-M1",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+   },
+   {
+    "trait": "below_full_cost",
+    "doc": "data:parts.should_cost",
+    "quote": "part:350011 should-cost 374.95 vs price 348.32 (-7.1 %); part:350010 -2.1 %"
+   },
+   {
+    "trait": "wants_clause",
+    "doc": "arena:case:P02",
+    "quote": "We agree to your proposed index clause on CU-NOTATION, which allows us to remove the material risk premium"
+   },
+   {
+    "trait": "wants_clause",
+    "doc": "arena:case:P02",
+    "quote": "Implementing this index clause aligns with our requirement to manage raw material volatility"
+   },
+   {
+    "trait": "small_account",
+    "doc": "data:our_weight.share_of_its_turnover_pct",
+    "quote": "0.23 % of its turnover"
+   }
+  ],
+  "playbook": {
+   "opening": "deep",
+   "walk_risk": "low",
+   "levers": [
+    "CU-NOTATION index clause (share 0.2, deadband 5 %)",
+    "binding annual volume",
+    "verified volume forecast",
+    "shorter payment term for a lower price"
+   ],
+   "arguments": [
+    "index clause sharing copper risk",
+    "binding volume commitment",
+    "volume forecast with data",
+    "scorecard: OTD below 95 % target",
+    "qualified second source sup:70580"
+   ],
+   "avoid": [
+    "citing copper, LCI-C or PPI (they rose)",
+    "asking for its cost breakdown",
+    "claiming a notice breach (letter was on time)",
+    "changing terms after a final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Open deep at the current 348.32; the first counter does not depend on the opening.",
+    "Offer a CU-NOTATION index clause (material share 0.2, deadband 5 %): it then drops its risk premium; all 6 index deals in the arena sample closed at 361.7-366.0.",
+    "Pair the index clause with a stated binding annual volume; it asks for one every time.",
+    "Send the volume data it asks for; it confirms the data and takes it into account.",
+    "Do not ask for 90-day payment without the index; it raised the price to about 373 for that."
+   ],
+   "expected_concession": "From 370.96 it reaches about 362-366 within 1-4 rounds with the index clause; without one it holds near 372 and sends a final offer around round 4."
+  }
+ },
+ "arena": {
+  "cases": [
+   "case:P02"
+  ],
+  "sessions": 10,
+  "deals": 10,
+  "best_score": 0.735,
+  "walked": 0,
+  "agreed_round1": 3,
+  "fair_point": 0,
+  "no_change": 2,
+  "duplicate": 0,
+  "first_counter_vs_opening": 1.002,
+  "final_offer_round_median": 4
+ }
+}

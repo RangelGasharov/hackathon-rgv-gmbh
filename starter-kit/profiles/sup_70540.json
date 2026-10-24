@@ -1,0 +1,454 @@
+{
+ "schema": 1,
+ "id": "sup:70540",
+ "name": "Konvertek Antriebselektronik GmbH",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "d87c223de7324c49",
+ "persona_stale": false,
+ "problems": [],
+ "country": "AT",
+ "category": "electrical",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 30,
+  "cash_discount": null,
+  "incoterm": "DAP",
+  "lead_time_days": 84
+ },
+ "company": {
+  "owner_type": "group",
+  "group_parent": null,
+  "legal_form": "GmbH",
+  "founded": 1990,
+  "staff": 800,
+  "turnover_eur": 196000000,
+  "turnover_band": "100-250 M EUR",
+  "equity_ratio_pct": 38.4,
+  "credit_index": 178,
+  "credit_index_12m_ago": 178,
+  "vda63_grade": "A",
+  "certifications": "ISO 9001; ISO 14001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 993134,
+   "FY2025": 1255458,
+   "FY2026": 1267102
+  },
+  "share_of_its_turnover_pct": 0.65,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 27.6
+ },
+ "parts": [
+  {
+   "part": "part:350020",
+   "description": "Frequency converter 7.5 kW, IP55",
+   "status": "qualified",
+   "quota_pct": 0,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": null,
+   "price_since": null,
+   "price_change_pct_since_first": null,
+   "should_cost": {
+    "unit_cost": 403.21,
+    "of_this_supplier": false,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": null
+   },
+   "cost_drivers": [
+    {
+     "series": "PPI-C2611",
+     "weight": 0.44,
+     "change_12m_pct": 13.5,
+     "ids": [
+      "idx:PPI-C2611@2025-08",
+      "idx:PPI-C2611@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.14,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.07,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 9.7,
+   "other_sources": [
+    {
+     "supplier": "sup:70530",
+     "status": "active",
+     "quota_pct": 100
+    }
+   ]
+  },
+  {
+   "part": "part:350021",
+   "description": "Frequency converter 15 kW, IP55",
+   "status": "active",
+   "quota_pct": 100,
+   "tooling_owner": "n/a",
+   "price_unit": 1,
+   "current_price": 684.92,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": 0.0,
+   "should_cost": {
+    "unit_cost": 692.92,
+    "of_this_supplier": true,
+    "confidence_pct": 5,
+    "method": "bottom-up estimate of this supplier's plant, no margin included",
+    "price_over_cost_pct": -1.2
+   },
+   "cost_drivers": [
+    {
+     "series": "PPI-C2611",
+     "weight": 0.43,
+     "change_12m_pct": 13.5,
+     "ids": [
+      "idx:PPI-C2611@2025-08",
+      "idx:PPI-C2611@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "LCI-C",
+     "weight": 0.15,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "CU-NOTATION",
+     "weight": 0.08,
+     "change_12m_pct": 47.7,
+     "ids": [
+      "idx:CU-NOTATION@2025-09",
+      "idx:CU-NOTATION@2026-09"
+     ],
+     "months": [
+      "2025-09",
+      "2026-09"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 10.0,
+   "other_sources": [
+    {
+     "supplier": "sup:70530",
+     "status": "qualified",
+     "quota_pct": 0
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070540",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 30,
+  "incoterm": "DAP",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070540#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070540#4.1",
+    "type": "payment",
+    "text": "Payment: 30 days net."
+   },
+   {
+    "id": "ctr:4600070540#5.1",
+    "type": "delivery",
+    "text": "Delivery DAP; standard lead time 84 days from order."
+   },
+   {
+    "id": "ctr:4600070540#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070540#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-12-02",
+    "part": "part:350021",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-18",
+    "part": "part:350021",
+    "type": "annual renewal",
+    "asked_pct": 3.2,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2024-11-26",
+    "part": "part:350021",
+    "type": "annual renewal",
+    "asked_pct": 1.0,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-12-09",
+    "part": "part:350021",
+    "type": "annual renewal",
+    "asked_pct": 2.8,
+    "settled_pct": 0.0,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 2.3,
+  "settled_avg_pct": 0.0,
+  "kept_share_of_ask": 0.0
+ },
+ "payments": {
+  "invoices": 73,
+  "avg_days_late": 1.9,
+  "share_paid_over_5_days_late_pct": 1.4,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70540@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 81.5,
+    "ppm": 543,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70540@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 88.0,
+    "ppm": 563,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70540@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 81.5,
+    "ppm": 0,
+    "colour": "green"
+   },
+   {
+    "id": "sc:70540@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 81.5,
+    "ppm": 0,
+    "colour": "green"
+   }
+  ],
+  "complaints_3y": 2,
+  "cost_recharged_eur": 300,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260302-01",
+   "date": "2026-03-02",
+   "topic": "chip_shortage",
+   "headline": "Konvertek Antriebselektronik GmbH warns of longer delivery times"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260906-70540-M1",
+   "date": "2026-09-06",
+   "kind": "email",
+   "subject": "Price list 2027",
+   "author": "Konvertek Antriebselektronik GmbH",
+   "text": "Our price list applies to all customers without exception until June 2027. We are happy to discuss logistics and payment conditions."
+  },
+  {
+   "id": "doc:20260711-70540-M3",
+   "date": "2026-07-11",
+   "kind": "meeting_note",
+   "subject": "Annual review",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Annual review with Konvertek Antriebselektronik GmbH. Their key account manager explained that price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+  },
+  {
+   "id": "doc:20260223-70540-M2",
+   "date": "2026-02-23",
+   "kind": "meeting_note",
+   "subject": "Customer portfolio",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "The sales director of Konvertek Antriebselektronik GmbH said they are reviewing small accounts and will focus on customers with volume."
+  },
+  {
+   "id": "doc:20251005-70540-N",
+   "date": "2025-10-05",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Konvertek Antriebselektronik GmbH",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300067",
+   "date": "2026-09-19",
+   "part": "part:350021",
+   "remarks": "Prices as per current list; discounts not possible this year (head-office directive)."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70540",
+  "source_hash": "d87c223de7324c49",
+  "analysed": "deep read v1",
+  "confidence": "medium",
+  "summary": "Konvertek Antriebselektronik GmbH, Austrian group-owned converter maker (800 staff, solid credit); we are 0.65 % of its turnover. Its price list applies to all customers without exception until June 2027, and it has held our 15 kW price flat for three years. It is reviewing small accounts and warned of longer delivery times (chip shortage news); standard lead time is already 84 days. Price is 1.2 % below its should-cost. Negotiate payment, logistics and lead time, not price.",
+  "notes": "Wants us to stay on list and accept its terms; it will talk logistics and payment. Contradiction: it held price flat although it asked +1 to +3.2 % each year, so flat is its norm. OTD is 81.5 % against a 95 % target. sup:70530 is qualified for the 15 kW but freezes prices too.",
+  "traits": {
+   "cash_short": "none",
+   "approval_ladder": "strong",
+   "price_frozen": "strong",
+   "small_account": "strong",
+   "open_book": "none",
+   "free_capacity": "none",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "weak",
+   "hedged_material": "none",
+   "capacity_tight": "weak",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "capacity_tight"
+  ],
+  "wants": [
+   "price_stability",
+   "longer_lead_time"
+  ],
+  "fears": [
+   "chip shortage",
+   "low-volume small accounts",
+   "exceptions to its price list"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "price_frozen",
+    "doc": "doc:20260906-70540-M1",
+    "quote": "Our price list applies to all customers without exception until June 2027."
+   },
+   {
+    "trait": "price_frozen",
+    "doc": "quote:7300067",
+    "quote": "Prices as per current list; discounts not possible this year (head-office directive)."
+   },
+   {
+    "trait": "approval_ladder",
+    "doc": "doc:20260711-70540-M3",
+    "quote": "price changes above 2 % need the approval of their pricing committee, which meets every two weeks."
+   },
+   {
+    "trait": "small_account",
+    "doc": "doc:20260223-70540-M2",
+    "quote": "they are reviewing small accounts and will focus on customers with volume."
+   },
+   {
+    "trait": "small_account",
+    "doc": "data:our_weight.share_of_its_turnover_pct",
+    "quote": "0.65 % of its turnover"
+   },
+   {
+    "trait": "capacity_tight",
+    "doc": "news:20260302-01",
+    "quote": "Konvertek Antriebselektronik GmbH warns of longer delivery times"
+   },
+   {
+    "trait": "below_full_cost",
+    "doc": "data:parts.should_cost",
+    "quote": "part:350021 should-cost 692.92 vs price 684.92 (-1.2 %)"
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "medium",
+   "levers": [
+    "payment terms",
+    "logistics and call-off terms",
+    "longer lead time or forecast-based call-offs",
+    "binding volume"
+   ],
+   "arguments": [
+    "scorecard: OTD 81.5 % vs 95 % target",
+    "binding volume commitment",
+    "volume forecast (+28 % spend)",
+    "qualified second source sup:70530"
+   ],
+   "avoid": [
+    "demanding a list-price cut",
+    "should-cost arguments (price is below its cost)",
+    "threats it can read as small-account exit",
+    "changing terms after a final offer"
+   ],
+   "mandatory_terms": [
+    "list price until June 2027"
+   ],
+   "tactics": [
+    "Hold the 684.92 list price; reject any increase until the list ends in June 2027.",
+    "Seek value in terms: longer payment days, logistics and call-off flexibility.",
+    "Offer a longer lead time or a firm forecast in exchange for supply security on chips.",
+    "Use the OTD record (81.5 %) once as a quality argument."
+   ],
+   "expected_concession": "No arena data; price settled at 0.0 % in all three renewals, so expect no price move, only terms."
+  }
+ },
+ "arena": null
+}

@@ -1,0 +1,401 @@
+{
+ "schema": 1,
+ "id": "sup:70150",
+ "name": "Tarsevi Döküm Sanayi A.Ş.",
+ "built": "2026-10-24T20:09Z",
+ "source_hash": "0bcaf046f8c1f6ed",
+ "persona_stale": false,
+ "problems": [],
+ "country": "TR",
+ "category": "castings",
+ "abc_class": "A",
+ "standard_terms": {
+  "payment_days": 60,
+  "cash_discount": null,
+  "incoterm": "FCA",
+  "lead_time_days": 70
+ },
+ "company": {
+  "owner_type": "family",
+  "group_parent": null,
+  "legal_form": "A.Ş.",
+  "founded": 1988,
+  "staff": 380,
+  "turnover_eur": 15800000,
+  "turnover_band": "10-25 M EUR",
+  "equity_ratio_pct": 30.7,
+  "credit_index": 228,
+  "credit_index_12m_ago": 228,
+  "vda63_grade": "C",
+  "certifications": "ISO 9001; ISO 14001; ISO 50001"
+ },
+ "our_weight": {
+  "spend_eur_by_year": {
+   "FY2024": 455143,
+   "FY2025": 503568,
+   "FY2026": 503212
+  },
+  "share_of_its_turnover_pct": 3.18,
+  "share_of_its_turnover_range_pct": null,
+  "spend_trend_pct": 10.6
+ },
+ "parts": [
+  {
+   "part": "part:310060",
+   "description": "Pump housing HB 40",
+   "status": "active",
+   "quota_pct": 60,
+   "tooling_owner": "supplier",
+   "price_unit": 1,
+   "current_price": 32.24,
+   "price_since": "2026-01-01",
+   "price_change_pct_since_first": -6.3,
+   "should_cost": {
+    "unit_cost": 39.82,
+    "of_this_supplier": false,
+    "confidence_pct": 12,
+    "method": "bottom-up estimate, German cost base, no margin included",
+    "price_over_cost_pct": -19.0
+   },
+   "cost_drivers": [
+    {
+     "series": "LCI-C",
+     "weight": 0.31,
+     "change_12m_pct": 2.7,
+     "ids": [
+      "idx:LCI-C@2025-06",
+      "idx:LCI-C@2026-06"
+     ],
+     "months": [
+      "2025-06",
+      "2026-06"
+     ]
+    },
+    {
+     "series": "PPI-C241",
+     "weight": 0.22,
+     "change_12m_pct": 6.5,
+     "ids": [
+      "idx:PPI-C241@2025-08",
+      "idx:PPI-C241@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    },
+    {
+     "series": "PPI-D351",
+     "weight": 0.06,
+     "change_12m_pct": -3.7,
+     "ids": [
+      "idx:PPI-D351@2025-08",
+      "idx:PPI-D351@2026-08"
+     ],
+     "months": [
+      "2025-08",
+      "2026-08"
+     ]
+    }
+   ],
+   "drivers_weighted_change_pct": 2.0,
+   "other_sources": [
+    {
+     "supplier": "sup:70190",
+     "status": "active",
+     "quota_pct": 40
+    }
+   ]
+  }
+ ],
+ "contract": {
+  "id": "ctr:4600070150",
+  "type": "framework agreement",
+  "valid": [
+   "2025-07-01",
+   "2027-06-30"
+  ],
+  "payment_days": 60,
+  "incoterm": "FCA",
+  "notice_days": 90,
+  "price_basis": "fixed per year",
+  "clauses": [
+   {
+    "id": "ctr:4600070150#3.1",
+    "type": "price",
+    "text": "Prices as per the price annex, fixed for each calendar year. Changes require written notice of at least 90 days before the end of the calendar year."
+   },
+   {
+    "id": "ctr:4600070150#4.1",
+    "type": "payment",
+    "text": "Payment: 60 days net."
+   },
+   {
+    "id": "ctr:4600070150#5.1",
+    "type": "delivery",
+    "text": "Delivery FCA; standard lead time 70 days from order."
+   },
+   {
+    "id": "ctr:4600070150#6.1",
+    "type": "quality",
+    "text": "The quality agreement applies: on-time delivery target 95 %, flat fee of EUR 150 per supplier-caused complaint."
+   },
+   {
+    "id": "ctr:4600070150#8.1",
+    "type": "term",
+    "text": "Valid from 2025-07-01 to 2027-06-30; extends by 12 months unless terminated with 90 days' notice."
+   }
+  ]
+ },
+ "negotiations": {
+  "events": [
+   {
+    "date": "2022-11-14",
+    "part": "part:310060",
+    "type": "initial price",
+    "asked_pct": null,
+    "settled_pct": null,
+    "note": null
+   },
+   {
+    "date": "2023-11-19",
+    "part": "part:310060",
+    "type": "annual renewal",
+    "asked_pct": -0.7,
+    "settled_pct": -4.5,
+    "note": null
+   },
+   {
+    "date": "2024-11-17",
+    "part": "part:310060",
+    "type": "annual renewal",
+    "asked_pct": 3.0,
+    "settled_pct": 0.0,
+    "note": null
+   },
+   {
+    "date": "2025-12-08",
+    "part": "part:310060",
+    "type": "annual renewal",
+    "asked_pct": 0.7,
+    "settled_pct": -1.9,
+    "note": null
+   }
+  ],
+  "asked_avg_pct": 1.0,
+  "settled_avg_pct": -2.1,
+  "kept_share_of_ask": 1.24
+ },
+ "payments": {
+  "invoices": 66,
+  "avg_days_late": 4.9,
+  "share_paid_over_5_days_late_pct": 43.9,
+  "cash_discounts_taken": 0
+ },
+ "quality": {
+  "scorecards": [
+   {
+    "id": "sc:70150@2025Q4",
+    "quarter": "2025Q4",
+    "otd_pct": 68.0,
+    "ppm": 2390,
+    "colour": "red"
+   },
+   {
+    "id": "sc:70150@2026Q1",
+    "quarter": "2026Q1",
+    "otd_pct": 64.0,
+    "ppm": 2471,
+    "colour": "red"
+   },
+   {
+    "id": "sc:70150@2026Q2",
+    "quarter": "2026Q2",
+    "otd_pct": 60.0,
+    "ppm": 2842,
+    "colour": "red"
+   },
+   {
+    "id": "sc:70150@2026Q3",
+    "quarter": "2026Q3",
+    "otd_pct": 52.0,
+    "ppm": 2652,
+    "colour": "red"
+   }
+  ],
+  "complaints_3y": 19,
+  "cost_recharged_eur": 1950,
+  "open_8d": 0
+ },
+ "news": [
+  {
+   "id": "news:20260809-22",
+   "date": "2026-08-09",
+   "topic": "restructuring",
+   "headline": "Tarsevi Döküm Sanayi A.Ş. restructures"
+  }
+ ],
+ "documents": [
+  {
+   "id": "doc:20260905-70150-M6",
+   "date": "2026-09-05",
+   "kind": "email",
+   "subject": "Payment of invoices",
+   "author": "Tarsevi Döküm Sanayi A.Ş.",
+   "text": "Could you pay our invoices within 10 days? In return we would grant a cash discount."
+  },
+  {
+   "id": "doc:20260804-70150-M4",
+   "date": "2026-08-04",
+   "kind": "call_note",
+   "subject": "Liquidity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the managing director of Tarsevi Döküm Sanayi A.Ş.: he asked twice whether we could pay earlier and said the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"
+  },
+  {
+   "id": "doc:20260610-70150-M1",
+   "date": "2026-06-10",
+   "kind": "meeting_note",
+   "subject": "Supplier visit",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Visit at Tarsevi Döküm Sanayi A.Ş.: half the shop floor was idle, two shifts are on short hours, and the MD spoke mostly about cash and the banks."
+  },
+  {
+   "id": "doc:20260419-70150-M3",
+   "date": "2026-04-19",
+   "kind": "call_note",
+   "subject": "Capacity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with sales at Tarsevi Döküm Sanayi A.Ş.: they could take additional parts at short notice; the second shift has been on hold since spring."
+  },
+  {
+   "id": "doc:20260418-70150-M2",
+   "date": "2026-04-18",
+   "kind": "call_note",
+   "subject": "Price discussion",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with the owner of Tarsevi Döküm Sanayi A.Ş.: he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+  },
+  {
+   "id": "doc:20260414-70150-M5",
+   "date": "2026-04-14",
+   "kind": "call_note",
+   "subject": "Capacity",
+   "author": "Hollerau Pumpenwerke, Purchasing",
+   "text": "Call with sales at Tarsevi Döküm Sanayi A.Ş.: they could take additional parts at short notice; the second shift has been on hold since spring."
+  },
+  {
+   "id": "doc:20251017-70150-N",
+   "date": "2025-10-17",
+   "kind": "email",
+   "subject": "Holiday shutdown",
+   "author": "Tarsevi Döküm Sanayi A.Ş.",
+   "text": "Our plant is closed from 23 December to 6 January. Please place call-offs for January by 10 December."
+  }
+ ],
+ "quote_remarks": [
+  {
+   "id": "quote:7300068",
+   "date": "2026-09-20",
+   "part": "part:310060",
+   "remarks": "Payment within 10 days requested."
+  }
+ ],
+ "persona": {
+  "supplier": "sup:70150",
+  "source_hash": "0bcaf046f8c1f6ed",
+  "analysed": "deep read v1",
+  "confidence": "high",
+  "summary": "Turkish family foundry (380 staff, EUR 15.8 M) in distress: restructuring, bank watching monthly, half the shop floor idle, second shift on hold. We are 3.2 % of its turnover. Pump housing HB 40 is 60/40 with active co-source 70190, so we can shift volume. Red scorecard four quarters running (OTD 52 %, 2652 ppm). Owner offered open-book costing. Trade volume and faster payment for price; past renewals settled 2.6-3.8 pts below its ask.",
+  "notes": "Needs cash and work for idle shifts; repeatedly asks 10-day payment. Fears margin loss ('cannot sign anything that lowers our margin') and losing HB 40 share to 70190. Price is 19 % under a German-cost should-cost, not its own plant, so no proof it is below its cost. Invited to the HX 80-200 RFQ (per 70120 file).",
+  "traits": {
+   "cash_short": "strong",
+   "approval_ladder": "none",
+   "price_frozen": "none",
+   "small_account": "none",
+   "open_book": "strong",
+   "free_capacity": "strong",
+   "reference_customer": "none",
+   "stale_costing": "none",
+   "reciprocity": "none",
+   "below_full_cost": "none",
+   "hedged_material": "none",
+   "capacity_tight": "none",
+   "late_payment_grievance": "none",
+   "wants_clause": "none"
+  },
+  "unsure": [
+   "below_full_cost"
+  ],
+  "wants": [
+   "faster_payment",
+   "binding_volume"
+  ],
+  "fears": [
+   "bank pressure during restructuring",
+   "margin loss",
+   "losing HB 40 share to 70190",
+   "idle shifts"
+  ],
+  "hedge_until": null,
+  "evidence": [
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260804-70150-M4",
+    "quote": "the bank is watching every month. 'I cannot sign anything that lowers our margin now.'"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "doc:20260610-70150-M1",
+    "quote": "half the shop floor was idle, two shifts are on short hours"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "news:20260809-22",
+    "quote": "Tarsevi Döküm Sanayi A.Ş. restructures"
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "doc:20260419-70150-M3",
+    "quote": "they could take additional parts at short notice; the second shift has been on hold since spring."
+   },
+   {
+    "trait": "open_book",
+    "doc": "doc:20260418-70150-M2",
+    "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+   }
+  ],
+  "playbook": {
+   "opening": "moderate",
+   "walk_risk": "low",
+   "levers": [
+    "HB 40 quota shift from 70190",
+    "10-14 day payment",
+    "binding volume to fill second shift",
+    "HX 80-200 RFQ award"
+   ],
+   "arguments": [
+    "quality record: red four quarters, OTD 52 %, 2652 ppm",
+    "its own cost shares from the offered open book",
+    "volume shift to active co-source 70190 (it is dearer at 43.39, no rival-price argument)",
+    "binding volume / forecast fills idle capacity",
+    "faster payment"
+   ],
+   "avoid": [
+    "a bare margin cut with nothing in return",
+    "citing cost drivers that rose",
+    "changing terms after its final offer"
+   ],
+   "mandatory_terms": [],
+   "tactics": [
+    "Accept its open-book offer: ask for hourly rates and material shares, then argue from them.",
+    "Lead with the red scorecard; OTD 52 % is far below the 95 % target.",
+    "Offer extra HB 40 quota from 70190 as a binding volume for a visible price step.",
+    "Offer 10-14 day payment only against price; cash is its main need.",
+    "Frame the deal as cash plus volume, not as a margin cut."
+   ],
+   "expected_concession": "No arena data; past renewals settled 2.6-3.8 pts below its ask (2024: asked +3.0 %, settled 0 %)."
+  }
+ },
+ "arena": null
+}
