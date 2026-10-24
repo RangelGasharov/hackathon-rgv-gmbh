@@ -311,7 +311,7 @@ class StrategistWriter(ClaudeWriter):
         claims, kinds = [], set()
         for cid in choice.get("claims") or []:
             c = cl.get(cid)
-            if c and kind_key(c) not in kinds and len(claims) < 3:  # each index series is a kind of its own
+            if c and kind_key(c) not in kinds and len(claims) < getattr(plan, "max_claims", 3):  # a series: a kind
                 claims.append(c)
                 kinds.add(kind_key(c))
         pts = {f"P{i}": p for i, p in enumerate(plan.points, 1)}

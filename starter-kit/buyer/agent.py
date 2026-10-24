@@ -14,7 +14,7 @@ import time
 from arena_kit.cost import RELATIONSHIP_GOALS, must_haves_ok
 from arena_kit.docs import quote_terms
 
-from . import profiles
+from . import flags, profiles
 from .claims import candidates, dead_key, kind_key, no_change_kinds, ration
 from .dossier import Dossier
 from .persona import opening_text, read_all
@@ -140,8 +140,10 @@ class BuyerAgent:
         self.writer = writer or TemplateWriter()
         self.read_timeout = read_timeout_s  # live persona read, only for suppliers without a profile
         self.profiles_root = profiles_root
-        # BUYER_PROFILES=0 plays without them (A/B on the twin)
-        self.use_profiles = os.environ.get("BUYER_PROFILES", "1") != "0" if use_profiles is None else use_profiles
+        # BUYER_PROFILES=0 or BUYER_OFF=profiles plays without them (A/B)
+        if use_profiles is None:
+            use_profiles = os.environ.get("BUYER_PROFILES", "1") != "0" and flags.on("profiles")
+        self.use_profiles = use_profiles
         self.deadline, self.close_margin = deadline, close_margin_s
         self.case = None
         self.t = {}
@@ -172,7 +174,7 @@ class BuyerAgent:
             d.apply_read(read)
             self.log.append((sid, "profile", {"merged": d.traits, "regex": before}))
         complete = getattr(self.writer, "complete", None)
-        if complete and self.read_timeout and live:
+        if complete and self.read_timeout and live and flags.on("persona"):
             items = [(sid, dossiers[sid], opening_text((threads or {}).get(sid))) for sid in live]
             for sid, read in read_all(complete, items, self.read_timeout).items():
                 before = dict(dossiers[sid].traits)
@@ -520,17 +522,17 @@ class BuyerAgent:
             # no message left: decide. Our last message may still be a counter - the supplier answers it, and after
             # the round limit we may still accept (api.md: 409 "you reached the round limit (you may still accept)")
             return None if wait_best else settle()
-        if rounds_left <= 2 and not ts.matched and (m := self.match(threads, sid)):
+        if rounds_left <= 2 and not ts.matched and flags.on("match") and (m := self.match(threads, sid)):
             return m
         sheets = ts.plan.sheets(ts.k, rounds_left=rounds_left)
         if sheets and ts.last_sent and all(t in ts.last_sent for t in sheets):
             sheets = []  # never resend the same sheets: suppliers read that as no move
-        if not sheets and ts.k < 2 and rounds_left > 2 and math.isfinite(reservation):
+        if not sheets and ts.k < 2 and rounds_left > 2 and math.isfinite(reservation) and flags.on("probe"):
             # every package looks dearer than our walk-away, but that rests on a guess of its floor: put up to two
             # real offers just under the walk-away before settling (accepting still needs a sheet that beats it)
             sheets = [t for t in ts.plan.probe(reservation * 0.97) if not ts.last_sent or t not in ts.last_sent]
         if not sheets:  # nothing better left to offer within our limits
-            if not ts.matched and (m := self.match(threads, sid)):
+            if not ts.matched and flags.on("match") and (m := self.match(threads, sid)):
                 return m
             if ts.sent == 0:  # first contact: ask our questions before deciding anything
                 return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[])}
@@ -602,7 +604,7 @@ class BuyerAgent:
             allc = [c for c in allc if c.kind not in RISKY_KINDS]  # supplier and only read as nagging
         if final:
             allc = []  # no new arguments after its last word: we only take what it offered
-        claims = ration(allc, self.used_ids, ts.sent, ts.used_kinds)
+        claims = ration(allc, self.used_ids, ts.sent, ts.used_kinds)[: flags.claims_per_message()]
         answered, lever_lines = self.answers(ts, sheets, threads[sid]), self.levers(ts, sheets)
         if any("binding volume" in a for a in answered):  # one volume sentence a message (arena replays: it was twice)
             lever_lines = [x for x in lever_lines if "binding volume" not in x and "annual volume" not in x]
@@ -622,7 +624,9 @@ class BuyerAgent:
         files = self.attachments(ts)  # what its last e-mail asked for, by keyword
         if sheets:  # the strategist's options: priced by code, inside our limits
             # after a final offer exactly what we take, no other package (the strategist could pick changed terms)
-            plan.menu = [(t, 0.0) for t in sheets] if final else ts.plan.menu(sheets, ts.k)
+            only = final or not flags.on("menu")
+            plan.menu = [(t, 0.0) for t in sheets] if only else ts.plan.menu(sheets, ts.k)
+            plan.max_claims = flags.claims_per_message()
             fresh = [c for c in allc if not any(i in self.used_ids for i in c.ids) and kind_key(c) not in ts.used_kinds]
             plan.menu_claims = fresh[:8]
             # it reads what the supplier asked for itself: every answer and every data file we could give
@@ -711,7 +715,7 @@ class BuyerAgent:
     def keep_alive(self, threads, sid):
         """A short holding note to a supplier nobody answers for now, before its 60 s run out."""
         ts = self.t[sid]
-        if ts.dead or latest(threads[sid]).get("status") in ENDED:
+        if ts.dead or latest(threads[sid]).get("status") in ENDED or not flags.on("keepalive"):
             return None
         if round_cap(self.case) - ts.sent <= 1:
             return None  # the last round is for a decision, not for a note

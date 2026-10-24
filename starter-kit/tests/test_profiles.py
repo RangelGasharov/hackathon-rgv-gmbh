@@ -303,3 +303,33 @@ def test_a_trusted_supplier_hears_no_risky_arguments(world, monkeypatch):
         kinds[cid] = {c.kind for c in msg["_plan"].claims} | {c.kind for c in msg["_plan"].menu_claims}
     assert kinds["P01"] == {"fc"}  # trusted: no price history, no news
     assert {"po", "news"} <= kinds["P18"]
+
+
+def test_lean_concessions_step_small_and_keep_a_gap(world, monkeypatch):
+    from buyer.strategy import LEAN_GAP, LEAN_STEP
+
+    monkeypatch.setenv("BUYER_LEAN", "1")
+    p = _planner(world, "P18", "sup:70740", None)
+    p.asks, p.ask_value = [6.1, 5.6], 5.6
+    p.last_value, p.last_sheets = 5.27, []
+    t = p.target_value(2)
+    assert t == pytest.approx(5.27 + LEAN_STEP * 6.1)  # one small step, not a run at its limit
+    p.last_value = 5.45
+    assert p.target_value(3) == pytest.approx(5.45 * 1.003)  # the gap binds: only the minimal visible move
+    assert 5.6 - LEAN_GAP * 6.1 < 5.45 * 1.003
+
+
+def test_the_clause_sheet_sits_at_its_cheapest_price_for_us(world):
+    from buyer.strategy import cost
+
+    case = _case("P02")  # stabilise: below its healthy margin the relationship charge rises, so no clause price is
+    agent = BuyerAgent(
+        world
+    )  # equal-cost; the fallback discount sent 357.12 (live: taken at once, charge 66,941, 0.63)
+    agent.start(case)
+    p, est = agent.t["sup:70510"].plan, agent.t["sup:70510"].est
+    base = p._complete({**p.packages[0].combo, "unit_price": 360.0})
+    pair = p._clause_pair(base, cost(case, base, est))
+    assert pair and pair["index_clause"] and pair["unit_price"] > 357.12  # the trial stays (clause-free limit ~372)
+    for d in (-1.0, 1.0):  # and no nearby price costs us less
+        assert cost(case, {**pair, "unit_price": pair["unit_price"] + d}, est) >= cost(case, pair, est)

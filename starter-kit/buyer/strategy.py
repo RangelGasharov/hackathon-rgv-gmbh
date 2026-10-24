@@ -16,9 +16,14 @@ import statistics
 
 from arena_kit.cost import RELATIONSHIP_GOALS, _soft, _years, closing_terms, must_haves_ok, supplier_value, total_cost
 
+from . import flags
 from .dossier import NEWS_SITUATION
 
 PRICE = "unit_price"
+# the arena supplier's own rule (back office, 294 decisions in 83 sessions): it counters by one fixed increment when our
+# step is >= 0.5 % of its opening (P(counter) 0.87 vs 0.54) and its price stays >= 2 % above our best sheet (P(hold)
+# 0.06 vs 0.52); a bigger step buys no bigger counter, and its final offer comes after a set number of rounds
+LEAN_STEP, LEAN_GAP = 0.007, 0.022
 CLAUSE_VALUE = 0.015  # share of the price an index clause is worth to a supplier that wants one (arena P02: >= 1.6 %)
 # Our belief about a supplier's full cost, for the relationship charge: one sigma = SIGMA_K x the error band of the
 # estimate (generic should-cost 15 % -> 7.5 %), and SIGMA_OWN for the should-cost of its own plant (the charges of 17
@@ -655,7 +660,11 @@ class Planner:
             # moving a little every round until the final offer comes.
             v0 = self.asks[0] if self.asks else ask
             lim = self.limit_hat
-            if lim is None:
+            if flags.lean():  # small fixed steps that keep it countering, instead of heading for its limit
+                target = min(self.last_value + LEAN_STEP * v0, ask - LEAN_GAP * v0)
+                if self.second_step:  # "we will come back to you on price": its next step comes anyway
+                    target = self.last_value + 0.001 * v0
+            elif lim is None:
                 target = max(self.last_value + 0.004 * v0, ask - 0.015 * v0)
             else:
                 nxt = ask - 0.4 * max(0.0, ask - lim)
@@ -760,11 +769,24 @@ class Planner:
         t = {**best, "index_clause": self.pref_clause}
         same = self.reprice_to_cost(t, c0)
         if not same:
-            b = self.case["buyer"]
-            path = b.get("index_paths", {}).get(self.pref_clause["series"], 0.0)
-            moved = max(0.0, abs(path) - self.pref_clause["deadband_pct"] / 100) * math.copysign(1, path)
-            share = self.pref_clause["material_share"] * (moved + b.get("index_risk_pct", 0) / 100)
-            same = {**t, PRICE: round(best[PRICE] * (1 - share), 2)}
+            # no clause price costs what the best does (it sits low on a relationship charge): the clause sheet at the
+            # price where it costs us least. Not the best's price less the clause's cost share: live P02 (stabilise)
+            # took that at once, 357.12 with the clause, relationship charge EUR 66,941, score 0.63 (FINDINGS: its
+            # optimum with the clause is ~361-363; this package's is 360.36)
+            rest = {f: v for f, v in t.items() if f != PRICE}
+            opt = [
+                k.p_opt
+                for k in self.packages
+                if {f: v for f, v in self._complete(k.combo).items() if f != PRICE} == rest
+            ]
+            if opt:
+                same = {**t, PRICE: round(opt[0], 2)}
+            else:
+                b = self.case["buyer"]
+                path = b.get("index_paths", {}).get(self.pref_clause["series"], 0.0)
+                moved = max(0.0, abs(path) - self.pref_clause["deadband_pct"] / 100) * math.copysign(1, path)
+                share = self.pref_clause["material_share"] * (moved + b.get("index_risk_pct", 0) / 100)
+                same = {**t, PRICE: round(best[PRICE] * (1 - share), 2)}
             if cost(self.case, same, self.est) > c0 * 1.012:
                 return None
         return same if 0.85 * best[PRICE] <= same[PRICE] <= 1.15 * best[PRICE] else None

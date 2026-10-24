@@ -12,6 +12,8 @@ from functools import cached_property
 
 from arena_kit.data import DataPackage
 
+from . import flags
+
 # trait -> (strong pattern, weak pattern); a strong hit is evidence, a weak one only a hint
 TRAITS = {
     "cash_short": (
@@ -662,8 +664,8 @@ class Dossier:
             lines.append("Our read of this supplier: " + self.read["notes"])
         if self.wants:
             lines.append("It wants: " + ", ".join(sorted(self.wants)) + ".")
-        if self.playbook:
+        if self.playbook and flags.on("playbook"):
             lines.append(self.playbook)
-        if self.strategy_plan:
+        if self.strategy_plan and flags.on("plan"):
             lines.append(self.strategy_plan)
         return "\n".join(lines)
