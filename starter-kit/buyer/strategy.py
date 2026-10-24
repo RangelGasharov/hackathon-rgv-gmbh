@@ -293,7 +293,10 @@ class Planner:
         # and deep openings only bring its final offer sooner (P10: final in round 1 after -19 %)
         gap = {
             "rfq": 0.18,  # arena v3: P05-70210 accepted our first offer 12.5 % below its ask
-            "raw_material": 0.10,  # 0.14 lost on the twin (P08 0.451 -> 0.386): its final offer lands at its limit anyway
+            # team sessions (24 Oct): opening at 5.05-5.20, then ~1 % a round, kept both raw-material suppliers
+            # conceding (P08 5.64 -> 5.44, P18 5.60 -> 5.40). 14 % in our value model lands there; the twin, fitted
+            # on our faster pacing, had preferred 10 %
+            "raw_material": 0.14,
             "bundling": 0.10,
             "capacity": 0.10,
             "quality": 0.10,
@@ -319,8 +322,9 @@ class Planner:
             gap = min(gap, 0.08)  # no alternative and a +25 % fallback: commitment, not a squeeze
         elif d.has("capacity_tight"):
             gap = min(gap, 0.10)  # far below a capacity-tight bidder: its final offer at once (P10: -19 %)
-        if d.has("approval_ladder") and ctype != "rfq":
+        if d.has("approval_ladder") and ctype not in ("rfq", "raw_material"):
             gap = min(gap, 0.10)  # a pricing committee decides above 2 %: stay in a range it can approve
+            # (P18's committee supplier gave its usual first counter to a 17 % opening)
         return gap
 
     def _anchor(self):
@@ -675,12 +679,16 @@ class Planner:
             return None
         rho = 0.35 if self.est.d.has("cash_short", strong=True) else 0.75
         v0, a1 = self.asks[0], self.asks[1]
+        # raw material: 3.3 % of the opening below the first counter in the team's best P08 and P18 sessions (one new
+        # argument a round, a steady gap), 5.6 % for the best P18 deal on the board; our own 2 % rule came from
+        # sessions where we closed in on the supplier by round 3 and it signed or made its final offer there
+        room = 0.035 if self.case.get("type") == "raw_material" else 0.02
         # and never above 2 % under its first counter: in 47 real sessions no supplier gave more than 2.6 % of
         # its opening after round 1, and one that barely moved at first (a committee, b4 P02: 0.4 %) still
         # has that room - the 75 % rule alone put its limit at its ask, we offered that, and it agreed at once
         # an index or forecast argument it counted after that first counter is not in it yet: about 0.5 % of its
         # opening each (real P18: a third counted argument took its limit from above 5.45 to 5.45 or below)
-        return min(v0 - max(0.0, v0 - a1) / rho, a1 - 0.02 * v0) - LATE_ARG * self.late_args * v0
+        return min(v0 - max(0.0, v0 - a1) / rho, a1 - room * v0) - LATE_ARG * self.late_args * v0
 
     def near_floor(self):
         """Its ask is within 15 % of the room above our floor estimate: take it."""

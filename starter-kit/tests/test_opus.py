@@ -199,18 +199,30 @@ def test_strategist_chooses_the_attachments_and_its_reading_is_kept(world):
 def test_code_arguments_fill_the_slots_the_strategist_leaves(world):
     # real P18: Opus sent the two index arguments only and dropped the +1.9 % forecast the supplier had counted
     agent = BuyerAgent(world, writer=StrategistWriter(fake_strategist({"claims": ["C1"]})), read_timeout_s=0)
-    sid = "sup:70740"
-    threads = {sid: [msg(6.10, payment_days=30, contract_months=12, index_clause=None)]}
-    agent.start(case("P18"), threads)
+    sid = "sup:70110"
+    threads = {sid: [msg(138.55, effective_date="2026-11-01")]}
+    agent.start(case("P01"), threads)
     out = agent.write(agent.decide(threads, sid)["message"])
-    assert "(fc:370010@2026-09)" in out["body"] and "idx:AS-14404@2026-06" in out["body"]
-    assert len(re.findall(r"\((?:idx|fc):", out["body"])) == 3
+    assert "doc:20260911-70110-P01" in out["body"] and "(fc:310010@2026-09)" in out["body"]
+    assert len(re.findall(r"\((?:idx|fc|doc):", out["body"])) == 3
     # an argument code itself rates weak stays out when the strategist skips it (P04: "not strategic")
     agent = BuyerAgent(world, writer=StrategistWriter(fake_strategist({"claims": []})), read_timeout_s=0)
     sid = "sup:70620"
     threads = {sid: [msg(4.61, payment_days=30, contract_months=12)]}
     agent.start(case("P04"), threads)
     assert "fc:" not in agent.write(agent.decide(threads, sid)["message"])["body"]
+
+
+def test_raw_material_sends_one_argument_a_round_whatever_the_strategist_picks(world):
+    # team P18: 5.60, then 5.50 after the forecast in round 2, 5.40 after PPI-C2431 in round 3; its first counter
+    # is a fixed step, so more arguments in round 1 are spent for nothing
+    sid = "sup:70740"
+    for picks, first in ((["C2", "C1"], "idx:PPI-C2431@2026-06"), ([], "idx:AS-14404@2026-06")):
+        agent = BuyerAgent(world, writer=StrategistWriter(fake_strategist({"claims": picks})), read_timeout_s=0)
+        threads = {sid: [msg(6.10, payment_days=30, contract_months=12, index_clause=None)]}
+        agent.start(case("P18"), threads)
+        body = agent.write(agent.decide(threads, sid)["message"])["body"]
+        assert len(re.findall(r"\((?:idx|fc|po):", body)) == 1 and first in body
 
 
 def test_an_argument_counted_after_its_first_counter_lowers_the_limit_estimate(world):

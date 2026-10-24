@@ -306,6 +306,46 @@ Hosted, Opus strategist (24 Oct, 22:34):
   small account, so the forecast fell to 0.2, too weak to send. Only "not strategic" (P04) now makes a forecast
   weak, whatever the read says, so P18 sends AS-14404, PPI-C2431 and the forecast in round 1 and LCI-C in round 2.
 
+### Raw material: one argument a round, a steady gap
+
+The practice board showed P18 at 0.688 (best on the board) and P08 at 0.769 for other teams, and our team's own
+sessions (not in `runs/`, read with `GET /v1/sessions` and `/v1/sessions/<id>`) at 0.532 and 0.581. What
+those team sessions did differently, and what the supplier answered:
+
+- **First counter is a fixed step.** P18 gave €5.60 at 90 days with one argument or with three. Arguments sent in
+  round 1 beyond the first are spent for little.
+- **Each later argument took one more step.** Team P18: €5.60, then €5.50 after the forecast in round 2, €5.40 after
+  PPI-C2431 in round 3, final €5.40.
+- **Low opening, small steps.** Openings at €5.05–5.20, then about 1 % a round, kept both suppliers conceding. Our
+  agent opened at €5.36, closed in by round 3 and got its final offer or signed at its own price there.
+- **Price history counts as an argument.** "We pay you EUR 5.45 per unit today (po:…)" came back "we took it into
+  account" (team P08).
+
+Changes, raw-material cases only (P08, P16, P18):
+
+- One new argument a message, strongest first, by code and strategist alike; later rounds take arguments down to
+  weight 0.3.
+- Opening 14 % below its ask in our value model (was 10 %, and the committee cap no longer applies here). That
+  lands at €5.11–5.13.
+- Limit estimate: its first counter minus 3.5 % of the opening (was 2 %), minus 0.5 % for each argument counted
+  later.
+- Price history (weight 0.6) while what we pay today is below its standing price: P08 at €5.45. For P18 (€5.84) it
+  never goes out.
+
+The twin cannot judge this pacing: its limits were fitted on our old, faster sessions, and it does not model a
+later argument buying a step. It now rates P18 at 0.473, against 0.539 and 0.598 on the arena. The other 8
+hosted cases are unchanged on it.
+
+Hosted, Opus strategist (24 Oct, 23:05):
+
+| case | session | arguments, one a round | supplier's asks | deal | score |
+|---|---|---|---|---|---|
+| P18 | 19babd2964dbae78 | AS-14404, PPI-C2431, forecast, LCI-C | 5.60, 5.50, 5.40, final 5.30 | €5.30, 90 days | **0.598** (team best was 0.532) |
+| P18 | c61076dd334baf17 | the same | 5.70, 5.60, 5.50, final 5.40 (or 5.30 at 14 days) | €5.30, 14 days | 0.539 |
+| P08 | 544cfcd8ec19d82e | forecast, price history, PPI-C2431, LCI-C | 5.62, 5.59, 5.54, 5.50, final 5.45 | €5.45, 90 days | 0.570 (team best 0.581) |
+
+Price history came back "does not change our calculation" in this P08 session; PPI-C2431 and LCI-C counted.
+
 ## Not yet done
 
 - Relationship-goal cases with only a generic cost estimate (e.g. P06): the agent can squeeze below the

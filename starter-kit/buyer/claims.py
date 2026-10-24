@@ -262,16 +262,21 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
     if d.recent_orders and len(d.recent_orders) >= 2 and ctype in ("price_increase", "renewal", "raw_material"):
         ids = [o[0] for o in d.recent_orders[:3]]
         price = d.recent_orders[0][1]
-        out.append(
-            Claim(
-                "po",
-                ids,
-                price,
-                f"Our recent orders for this part were placed at €{price:.2f} ({', '.join(ids)}).",
-                0.1,
-                "history",
+        # raw material, while what we pay today is below its standing price: team P08 "We pay you EUR 5.45 per unit
+        # today (po:..., po:...)" came back "we checked the price history you cited; it holds and we took it into
+        # account"
+        below = ctype == "raw_material" and stated and price < stated * 0.99
+        if below or ctype != "raw_material":
+            out.append(
+                Claim(
+                    "po",
+                    ids[:2] if below else ids,
+                    price,
+                    f"We pay you €{price:.2f} per unit today ({', '.join(ids[:2] if below else ids)}).",
+                    0.6 if below else 0.1,
+                    "history",
+                )
             )
-        )
     # 8. news about the supplier that speaks for us (free capacity, secured energy, new plant)
     for nid, _topic, headline in d.news_items[:1]:
         w = 0.1
@@ -326,16 +331,16 @@ def no_change_kinds(body):
     return out
 
 
-def ration(claims, used, round_no, kinds=()):
-    """The three strongest fresh claims (the arena checks three arguments per message, each ID once per
-    case), at most one of each kind per supplier: `kinds` are the kind keys this supplier has already
-    heard."""
+def ration(claims, used, round_no, kinds=(), per_message=3, later_min=0.5):
+    """The strongest fresh claims, `per_message` of them (the arena checks three arguments per message, each ID
+    once per case), at most one of each kind per supplier: `kinds` are the kind keys this supplier has already
+    heard. After the first message only claims of weight `later_min` or more."""
     fresh = [c for c in claims if not any(i in used for i in c.ids)]
     picked, ids, seen = [], set(), set(kinds)
     for c in fresh:
-        if len(picked) >= 3:
+        if len(picked) >= per_message:
             break
-        if ids & set(c.ids) or kind_key(c) in seen or (round_no and c.weight < 0.5):
+        if ids & set(c.ids) or kind_key(c) in seen or (round_no and c.weight < later_min):
             continue
         picked.append(c)
         ids |= set(c.ids)

@@ -265,7 +265,12 @@ class StrategistWriter(ClaudeWriter):
                 "ARGUMENTS WE SENT LAST (kinds): " + (", ".join(plan.last_kinds) or "none"),
                 f"KEEPABLE TERMS: {', '.join(keepable) or '-'}. TRAITS: {', '.join(TRAITS)}.",
                 "MENU:\n" + (menu or "-"),
-                "CHECKED ARGUMENTS:\n" + (claims or "-"),
+                "CHECKED ARGUMENTS:\n" + (claims or "-")
+                + (  # raw material: each argument counted after its first counter took one more step off its price
+                    "\nThis round: at most ONE argument; the others follow one a round."
+                    if getattr(plan, "max_claims", 3) == 1
+                    else ""
+                ),
                 "POINTS:\n" + (points or "-"),
                 "ATTACHMENTS (true data):\n" + (files or "-"),
             ]
@@ -306,17 +311,17 @@ class StrategistWriter(ClaudeWriter):
         if not sheets:
             return super().write(plan, timeout)
         cl = {f"C{i}": c for i, c in enumerate(plan.menu_claims, 1)}
-        claims, kinds = [], set()
+        claims, kinds, cap = [], set(), getattr(plan, "max_claims", 3)  # raw material: one a round
         for cid in choice.get("claims") or []:
             c = cl.get(cid)
-            if c and kind_key(c) not in kinds and len(claims) < 3:  # each index series is a kind of its own
+            if c and kind_key(c) not in kinds and len(claims) < cap:  # each index series is a kind of its own
                 claims.append(c)
                 kinds.add(kind_key(c))
         # the code's own picks fill the free slots: real P18, Opus left out the +1.9 % forecast the supplier had
         # counted (0.467 vs 0.500 with it). Below 0.3 (the prompt's skip line) it stays the strategist's call
         for c in plan.claims:
             ids = {i for x in claims for i in x.ids}
-            if len(claims) < 3 and kind_key(c) not in kinds and not ids & set(c.ids) and c.weight >= 0.3:
+            if len(claims) < cap and kind_key(c) not in kinds and not ids & set(c.ids) and c.weight >= 0.3:
                 claims.append(c)
                 kinds.add(kind_key(c))
         pts = {f"P{i}": p for i, p in enumerate(plan.points, 1)}

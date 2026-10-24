@@ -533,7 +533,12 @@ class BuyerAgent:
                 ):
                     rivals[oid] = terms["unit_price"]
         allc = candidates(self.world, d, case, rivals, own_price=own.get("unit_price"))
-        claims = ration(allc, self.used_ids, ts.sent, ts.used_kinds)
+        # raw material: one new argument a round. Its first counter is a fixed step (P18: 5.60 at 90 days with one
+        # argument or three), and each argument counted later took one more grid step off (team P18: 5.60, then
+        # 5.50 after the forecast, 5.40 after PPI-C2431)
+        per = 1 if case.get("type") == "raw_material" else 3
+        later = 0.3 if per == 1 else 0.5
+        claims = ration(allc, self.used_ids, ts.sent, ts.used_kinds, per_message=per, later_min=later)
         answered, lever_lines = self.answers(ts, sheets, threads[sid]), self.levers(ts, sheets)
         if any("binding volume" in a for a in answered):  # one volume sentence a message (arena replays: it was twice)
             lever_lines = [x for x in lever_lines if "binding volume" not in x and "annual volume" not in x]
@@ -562,6 +567,7 @@ class BuyerAgent:
             plan.thread = threads[sid]
             plan.used_kinds = {k[0] if k[0] != "idx" else f"idx {k[1]}" for k in ts.used_kinds}
             plan.last_kinds = sorted({c.kind for c in ts.last_claims})
+            plan.max_claims = per
         ts.k += 1 if sheets else 0
         ts.sent += 1
         # the body is written by `write()` outside the case lock, so a slow model never holds up other threads
