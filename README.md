@@ -346,6 +346,31 @@ Hosted, Opus strategist (24 Oct, 23:05):
 
 Price history came back "does not change our calculation" in this P08 session; PPI-C2431 and LCI-C counted.
 
+### Raw material: payment terms from the supplier's own cost of money
+
+P08 `60a9bbb3a082a042` scored 0.523 at €5.44, a cent below the 0.570 session's €5.45. Its final came on our
+60-day sheet, the agent signed its 45-day alternative, and 45 days earlier than 90 cost us about €10,000. Donautal's
+money costs about 7 %, ours 8 %, so at the same value to it the longest term is always our cheapest package.
+
+- Each two-sheet answer that differs only in price and payment days gives its cost of money: P08 6.8–7.7 %, P18
+  8.6–10.7 % (the 0.10 grid inflates it). Same-price pairs on the grid are no reading.
+- Below our rate, once its first counter is in: 90-day sheets only. Above: shorter sheets stay, as in P18's best
+  deals.
+- The rate decides only that. Priced at P18's grid-inflated 10.7 %, the agent dropped every 90-day sheet on the
+  twin, and P18's best deal (0.598) was at 90 days.
+
+Hosted, Opus strategist (24 Oct, 23:15 and 23:28):
+
+| case | session | deal | score |
+|---|---|---|---|
+| P08 | 60a9bbb3a082a042 (before) | €5.44, 45 days | 0.523 |
+| P08 | 42cbc95a790fb3f1 (after) | €5.48, 90 days (all sheets 90 days from round 2) | 0.538 |
+| P18 | 25e718bc6491c6d0 | €5.30, 14 days | 0.539 |
+| P18 | d7307833d4495c89 | €5.40, 90 days (LCI-C bought no step this time) | 0.532 |
+
+Session to session, the supplier's first counter moves by a grid step (P08 €5.62–5.69, P18 €5.60–5.70), and the
+score moves with it: P08 0.523–0.570 and P18 0.532–0.598 over the sessions with the new pacing.
+
 ## Not yet done
 
 - Relationship-goal cases with only a generic cost estimate (e.g. P06): the agent can squeeze below the

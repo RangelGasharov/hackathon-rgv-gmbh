@@ -34,6 +34,10 @@ class Estimate:
         self.d = dossier
         self.full_cost, self.err = dossier.full_cost
         self.rate = dossier.cash_rate
+        # its cost of money read off its own two-sheet answers (raw material). It decides only whether shorter payment
+        # is worth offering: priced at the rate read off P18's 0.10 grid (~10.7 %) the agent dropped every 90-day
+        # sheet, and P18's best deal (0.598) was at 90 days
+        self.rate_seen = None
         self.min_margin = dossier.min_margin
         self.standard = dict(dossier.standard_guess)
         self.set_standard(standard)
@@ -196,6 +200,20 @@ class Estimate:
         v2 = self.value(case, {**terms, PRICE: 200.0})
         slope = (v2 - v1) / 100.0
         return max(0.01, 100.0 + (target - v1) / slope) if slope > 0 else None
+
+
+def rate_from_pairs(sheets):
+    """Its cost of money from sheets of one reply that differ only in price and payment days (its MESO answer), or
+    None. On a coarse price grid a pair can show the same price for both terms: no reading, not a rate of 0."""
+    rates = []
+    for a, b in itertools.combinations([t for t in sheets if t.get(PRICE) and t.get("payment_days")], 2):
+        if {f for f in set(a) | set(b) if a.get(f) != b.get(f)} != {PRICE, "payment_days"}:
+            continue
+        (p1, d1), (p2, d2) = sorted(((a[PRICE], a["payment_days"]), (b[PRICE], b["payment_days"])), key=lambda x: -x[1])
+        if p1 > p2:  # the longer term costs more
+            rates.append((p1 - p2) / (p2 * (d1 - d2) / 360))
+    rates = [r for r in rates if 0.02 <= r <= 0.4]
+    return round(sum(rates) / len(rates), 4) if rates else None
 
 
 def grid(case, std, strict=False):
@@ -828,9 +846,26 @@ class Planner:
         if any(t.get("index_clause") for t in sheets):
             self.clause_seen = True
             self.want_clause()  # it asks for a clause: now it is worth something to it
+        raw = self.case.get("type") == "raw_material"
+        if raw and (r := rate_from_pairs(sheets)) is not None:
+            seen = self.est.rate_seen
+            self.est.rate_seen = r if seen is None else round((seen + r) / 2, 4)
         values = [self.est.value(self.case, t) for t in sheets]
         self.asks.append(min(values))
         self.ask_sheets.append([dict(t) for t in sheets])
+        pays = self.case.get("term_options", {}).get("payment_days") or []
+        if raw and pays and len(self.asks) >= 2 and self.est.rate_seen is not None:
+            # its money is cheaper than ours (P08 ~7 % vs 8 %): at the same value to it, the longest payment term is
+            # always our cheapest package, and a shorter sheet only invites its final on worse terms (P08 60a9bbb3:
+            # final at 60 days, signed at 45, 0.523 against 0.570 at 90). Dearer money (P18 ~9 %): shorter sheets stay
+            cheap = self.est.rate_seen < self.case["buyer"].get("interest_rate", 0.08)
+            bound = (">=", max(pays)) if cheap else None
+            if self.bounds.get("payment_days") != bound:
+                if bound:
+                    self.bounds["payment_days"] = bound
+                else:
+                    self.bounds.pop("payment_days", None)
+                self.refresh()
         if len(self.asks) == 1:
             self.est.open_value = self.asks[0]
             self.refresh()  # the opening quote caps what we believe its full cost to be

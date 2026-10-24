@@ -225,6 +225,27 @@ def test_raw_material_sends_one_argument_a_round_whatever_the_strategist_picks(w
         assert len(re.findall(r"\((?:idx|fc|po):", body)) == 1 and first in body
 
 
+def test_cheap_money_keeps_our_sheets_on_ninety_days(world):
+    # P08 60a9bbb3: its final came on our 60-day sheet and we signed at 45 days (0.523, against 0.570 at 90): its money
+    # costs ~7 %, ours 8 %, so the longest term is our cheapest package. P18's costs ~9 %: shorter sheets stay
+    clause = {"series": "AS-14404", "material_share": 0.45, "deadband_pct": 5, "base_month": "2026-08"}
+    for cid, sid, opening, pair, ninety_only in (
+        ("P08", "sup:70710", 6.05, (5.65, 5.57), True),  # real P08 544cfcd8 round 2
+        ("P18", "sup:70740", 6.10, (5.60, 5.50), False),  # real P18 6fdd12d9 round 1
+    ):
+        agent = BuyerAgent(world, read_timeout_s=0)
+        first = msg(opening, payment_days=30, contract_months=12, index_clause=None)
+        agent.start(case(cid), {sid: [first]})
+        counter = msg(pair[0], payment_days=90, contract_months=36, index_clause=clause)
+        alt = msg(pair[1], sid="alt", payment_days=14, contract_months=36, index_clause=clause)
+        counter["term_sheets"] += alt["term_sheets"]
+        agent.ingest(sid, [first, BUYER, counter])
+        plan = agent.t[sid].plan
+        assert (plan.est.rate_seen < 0.08) == ninety_only
+        pays = {t["payment_days"] for t in plan.sheets(1)}
+        assert (pays == {90}) == ninety_only and (plan.est.rate == 0.07)  # the rate prices nothing
+
+
 def test_an_argument_counted_after_its_first_counter_lowers_the_limit_estimate(world):
     agent = BuyerAgent(world, read_timeout_s=0)
     sid = "sup:70740"
