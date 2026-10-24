@@ -86,8 +86,43 @@ What the replay taught, now in the code:
 - The supplier answered with two alternative term sheets; the agent now reads all of them and takes the
   cheapest for us.
 
+## Hosted practice, v3 (24 Oct, 17:38, one session per case)
+
+Agent v3 (commit 0e295d2), Opus 5.5 writer, all 10 hosted cases in parallel: **10 deals, mean 0.655**.
+The first sessions (v1) averaged 0.428, and the best per case before this run averaged 0.547.
+`buyer/twin_real.py` had predicted 0.669. LLM spend for the run: $0.45 (32 calls).
+
+| case | v3 score | twin prediction | best before | deal |
+|---|---|---|---|---|
+| P01 price increase | **0.875** | 0.855 | 0.78 | €132.70, 14 days |
+| P02 price increase | **0.723** | 0.555 | 0.26 | €362.81, agreed in round 1 |
+| P03 renewal | **0.923** | 0.993 | 0.90 | €432.15, 36 months |
+| P04 renewal | 0.860 | 1.000 | 0.86 | €4.94, final offer |
+| P05 RFQ (3 bidders) | **0.451** | 0.441 | 0.34 | €31.51 from 70210, our first offer accepted |
+| P07 bundling (kit) | 0.624 | 0.728 | 0.70 | €5.60, final offer |
+| P08 raw material | **0.473** | 0.430 | 0.26 | €5.54 |
+| P10 capacity | **0.694** | 0.671 | 0.59 | €31.30, final offer |
+| P11 quality | **0.536** | 0.536 | 0.44 | €46.00 |
+| P18 raw material | **0.395** | 0.480 | 0.34 | €5.61 |
+
+Best score per case on the practice board is now 0.663 on average.
+
+What these sessions taught:
+- **Suppliers count each kind of argument once.** A second forecast (another kit part) or a second
+  scorecard row (ppm after on-time delivery) came back `duplicate` with "we have already taken that
+  volume change data into account". This happened even with new IDs and even within one message. One
+  argument of each kind per supplier is enough. Further slots should go to a different kind.
+- **An offer accepted at once was too generous.** P05-70210 accepted our first RFQ offer (12 % below its
+  ask), and P02 and P18 agreed in one step too. In RFQs the anchor can go deeper.
+- **Effective date given up.** P01 opened with "valid from 1 April 2027" (the notice argument), and the
+  supplier accepted it with 1 January 2027 as an alternative. In round 2 we fell back to 1 November 2026.
+- **The writer answers questions nobody asked.** "To your question on our figures" appeared when the
+  supplier only wrote "these figures" in its opening. Only a real request for data should trigger it.
+
 ## Not yet done
 
-- The case files in `cases/practice` are built from the data, not the arena's real files: pull the real ones with `arena cases` once the team key exists.
-- Supplier twin is our own model of a supplier; hosted suppliers will differ. Calibrate on practice replays.
-- No replay-mining loop yet; no Sunday-release handling beyond what `DataPackage` merges automatically.
+- Supplier twin: refit with these 10 sessions (`uv run python -m buyer.twin_real calibrate --write`).
+- Dedupe arguments by kind per supplier; deeper RFQ anchor; keep a won effective date; fix the "figures" trigger.
+- Relationship-goal cases with only a generic cost estimate (e.g. P06): the agent can squeeze below the
+  supplier's full cost, which the relationship charge punishes. Not hosted in practice, so not checked live.
+- No Sunday-release handling beyond what `DataPackage` merges automatically.
