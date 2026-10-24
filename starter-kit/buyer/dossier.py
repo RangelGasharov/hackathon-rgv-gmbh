@@ -61,6 +61,14 @@ HEDGE_UNTIL = re.compile(r"until (January|March|June|December) (\d{4})")
 MONTHS = {"January": 1, "March": 3, "June": 6, "December": 12}
 
 
+REPLY_SIGNALS = {  # phrases in a supplier's own e-mail that reveal what it needs
+    "cash_short": r"faster payment|cash ?flow|pay(?:ment)? earlier|would help us more than anything|liquidity",
+    "capacity_tight": r"binding (?:\d+-month )?commitment|firm,? long-term commitment|prioriti[sz]e customers|allocat",
+    "price_frozen": r"frozen all price|no room on price|price list applies|cannot reduce our list",
+    "approval_ladder": r"pricing committee|management approval|needs? (?:the )?approval",
+}
+
+
 class World:
     """Read-only access to the data package (and the Sunday release, merged by DataPackage)."""
 
@@ -110,6 +118,43 @@ class World:
             return None
         return round((v1 / v0 - 1) * 100, 1), i0, i1, first, last
 
+    def index_change_since(self, series, start_month):
+        """(change %, ids, months) from `start_month` (or the first month after it with a value) to the
+        latest month, if that window is at most 12 months: the arena checks windows up to 12 months."""
+        last = self.series_last.get(series)
+        if not last or not start_month or start_month >= last:
+            return None
+        if (int(last[:4]) - int(start_month[:4])) * 12 + int(last[5:7]) - int(start_month[5:7]) > 12:
+            return None
+        r = self.one(
+            "SELECT id, month, value FROM index_values WHERE series_id=? AND month>=? ORDER BY month LIMIT 1",
+            series,
+            start_month,
+        )
+        (i1, v1) = self.idx(series, last)
+        if not r or not v1 or r["month"] >= last:
+            return None
+        return round((v1 / r["value"] - 1) * 100, 1), r["id"], i1, r["month"], last
+
+    def index_best_window(self, series):
+        """The most favourable (most negative) change from any month in the last 12 to the latest month."""
+        last = self.series_last.get(series)
+        if not last:
+            return None
+        y, m = int(last[:4]), int(last[5:7])
+        best = None
+        for back in range(1, 13):
+            yy, mm = y, m - back
+            while mm <= 0:
+                yy, mm = yy - 1, mm + 12
+            first = f"{yy}-{mm:02d}"
+            (i0, v0), (i1, v1) = self.idx(series, first), self.idx(series, last)
+            if v0 and v1:
+                ch = round((v1 / v0 - 1) * 100, 1)
+                if best is None or ch < best[0]:
+                    best = (ch, i0, i1, first, last)
+        return best
+
     def doc_text(self, doc_id):
         try:
             with self._doc_lock:  # DataPackage shares one SQLite connection
@@ -139,6 +184,7 @@ class Dossier:
         self.contract = world.one("SELECT * FROM contracts WHERE supplier_id=?", supplier)
         self.texts = self._texts()
         self.traits = self._traits()
+        self.dead_kinds = set()  # claim kinds this supplier rejected (contradicted, irrelevant, "does not change")
         self.facts_case = case.get("facts") or {}
 
     # -- evidence ---------------------------------------------------------------------------------
@@ -155,7 +201,31 @@ class Dossier:
         for f in (self.case.get("facts") or {}).values():  # hidden cases may carry their own letters
             if isinstance(f, dict) and f.get("supplier") == self.sid:
                 out.append(json.dumps(f))
+        if self.w.pkg.release:  # the Sunday release: letters, e-mails and news only in its CSVs
+            for ref, row in self.w.pkg._ids.items():
+                if row.get("root") and (row.get("supplier_id") == self.sid or row.get("supplier") == self.sid):
+                    if row.get("table") == "documents":
+                        out.append(self.w.doc_text(ref))
+                    elif row.get("table") == "news" and row.get("topic") != "noise":
+                        out.append(f"{row.get('headline', '')} {row.get('body', '')}")
         return "\n".join(out)
+
+    def add_text(self, text):
+        """What the supplier writes during the negotiation updates its profile (arena: "faster payment
+        would help us", "only against a binding commitment", "the index clause is mandatory")."""
+        if not text:
+            return False
+        before = dict(self.traits)
+        self.texts += "\n" + text
+        self.traits = self._traits()
+        for name, pattern in REPLY_SIGNALS.items():
+            if re.search(pattern, text, re.I):
+                self.traits[name] = "strong"
+        if self.traits != before:
+            for prop in ("cash_rate", "min_margin"):
+                self.__dict__.pop(prop, None)
+            return True
+        return False
 
     def _traits(self):
         t = {}
@@ -201,7 +271,7 @@ class Dossier:
         """Our estimate of its full cost per unit, and how sure we are (relative error)."""
         sc, how = self.should_cost
         if sc:
-            return sc, 0.05 if how.startswith("own") else 0.10
+            return sc, 0.10 if how.startswith("own") else 0.15  # arena: real floors 10-37 % off
         m = OWNER_MARGIN.get(self.intel["owner_type"] if self.intel else "", 0.09)
         if self.has("below_full_cost"):
             m = -0.04
@@ -212,7 +282,7 @@ class Dossier:
         if self.has("cash_short", strong=True):
             return 0.25
         if self.has("cash_short") or (self.sup and self.sup["skonto_pct"]):
-            return 0.14
+            return 0.10  # a "pay in 10 days?" mail is a weak signal: 17 suppliers sent it
         return 0.07
 
     @cached_property
@@ -251,19 +321,92 @@ class Dossier:
     @cached_property
     def drivers(self):
         """[(series, weight, change %, id0, id1, m0, m1)] of the part's cost drivers over 12 months."""
-        out = []
-        for p in [self.part] if not self.kit else self.case["parts"]:
+        weights, best = {}, {}
+        parts = self.case["parts"]  # a kit has several parts: all of them count
+        for p in parts:
             for r in self.w.all("SELECT series_id, weight FROM cost_drivers WHERE part_id=? ORDER BY weight DESC", p):
-                ch = self.w.index_change(r[0])
-                if ch:
-                    out.append((r[0], r[1], *ch))
-            if out:
-                break
-        return out
+                windows = [self.w.index_change(r[0])]
+                if self.price_since:  # also the window since the current price was agreed: often the fairer base
+                    windows.append(self.w.index_change_since(r[0], self.price_since))
+                windows = [w for w in windows if w]
+                if windows:
+                    weights.setdefault(r[0], []).append(r[1])
+                    best[r[0]] = min(windows + ([best[r[0]]] if r[0] in best else []), key=lambda w: w[0])
+        out = [(sr, round(sum(ws) / len(parts), 3), *best[sr]) for sr, ws in weights.items()]
+        return sorted(out, key=lambda x: -x[1])
+
+    @cached_property
+    def price_since(self):
+        """Month the current price of this part with this supplier took effect (YYYY-MM), if known."""
+        r = self.w.one(
+            "SELECT valid_from FROM price_conditions WHERE part_id=? AND supplier_id=? ORDER BY valid_from DESC LIMIT 1",
+            self.part,
+            self.sid,
+        )
+        return r[0][:7] if r and r[0] else None
 
     @cached_property
     def justified_pct(self):
-        return round(sum(w * ch for _, w, ch, *_ in self.drivers), 1)
+        """Weighted 12-month change of the cost drivers (the fair yardstick, not the cherry-picked windows)."""
+        out = 0.0
+        for series, w, *_ in self.drivers:
+            ch = self.w.index_change(series)
+            out += w * (ch[0] if ch else 0.0)
+        return round(out, 1)
+
+    @cached_property
+    def hedge_doc(self):
+        """(doc id, date) of the supplier's own note that its material is covered at fixed prices."""
+        for r in self.w.all("SELECT id, date FROM documents WHERE supplier_id=? ORDER BY date DESC", self.sid):
+            if re.search(r"covered at fixed prices|bought their \w+(?: and \w+)? forward", self.w.doc_text(r[0]), re.I):
+                return r[0], r[1]
+        return None
+
+    def schedule_csv(self):
+        """Our latest monthly demand forecast per part, as a CSV a supplier can read (true data, no IDs)."""
+        lines = ["part,description,month,forecast_qty"]
+        for part in self.case["parts"]:
+            fc = self.w.one("SELECT id FROM forecasts WHERE part_id=? ORDER BY snapshot_month DESC LIMIT 1", part)
+            desc = (self.w.one("SELECT description FROM parts WHERE id=?", part) or ["-"])[0]
+            if fc:
+                for r in self.w.all(
+                    "SELECT target_month, qty FROM forecast_lines WHERE fc_id=? ORDER BY target_month", fc[0]
+                ):
+                    lines.append(f"{part.split(':')[1]},{desc.replace(',', ' ')},{r[0]},{r[1]}")
+        return "\n".join(lines) + "\n" if len(lines) > 1 else None
+
+    def drivers_csv(self):
+        """The part's cost drivers with their latest index values and 12-month changes (true data)."""
+        lines = ["series,description,weight_in_part_cost,month_from,value_from,month_to,value_to,change_pct"]
+        for series, w, *_ in self.drivers:
+            ch = self.w.index_change(series)
+            if not ch:
+                continue
+            pct, i0, i1, m0, m1 = ch
+            v0, v1 = self.w.facts[i0]["value"], self.w.facts[i1]["value"]
+            name = (self.w.one("SELECT name FROM index_series WHERE id=?", series) or [series])[0].replace(",", " ")
+            lines.append(f"{series},{name},{w},{m0},{v0},{m1},{v1},{pct}")
+        return "\n".join(lines) + "\n" if len(lines) > 1 else None
+
+    @cached_property
+    def recent_orders(self):
+        """The last 2-3 order lines of this part with this supplier: [(po id, price)]."""
+        rows = self.w.all(
+            "SELECT id, price FROM po_lines WHERE part_id=? AND supplier_id=? ORDER BY order_date DESC LIMIT 3",
+            self.part,
+            self.sid,
+        )
+        return [(r[0], r[1]) for r in rows]
+
+    @cached_property
+    def news_items(self):
+        """News about this supplier that speaks for us: [(id, topic, headline)]."""
+        good = ("free_capacity", "energy_contract", "new_plant", "refocus")
+        return [
+            (r[0], r[1], r[2])
+            for r in self.w.all("SELECT id, topic, headline FROM news WHERE supplier_id=? ORDER BY date DESC", self.sid)
+            if r[1] in good
+        ]
 
     @cached_property
     def letter(self):
@@ -272,6 +415,13 @@ class Dossier:
             return None
         f = self.w.facts.get(trig) or self.facts_case.get(trig) or {}
         return {"id": trig, **f, "text": self.w.doc_text(trig)}
+
+    @cached_property
+    def own_letter(self):
+        """The trigger document is ours (e.g. our quality escalation), not the supplier's."""
+        trig = self.case.get("trigger_doc")
+        r = self.w.one("SELECT author FROM documents WHERE id=?", trig) if trig else None
+        return bool(r and r[0] and r[0].startswith("Hollerau"))
 
     @cached_property
     def notice(self):
@@ -305,6 +455,16 @@ class Dossier:
             self.sid,
         )
         return round(r[0], 1) if r and r[0] is not None else 0.0
+
+    @cached_property
+    def forecasts(self):
+        """Latest forecast change per part of the case: [(fc id, change %)] (kits have several parts)."""
+        out = []
+        for part in self.case["parts"]:
+            fc = sorted((k, v) for k, v in self.w.facts.items() if k.startswith("fc:") and v.get("part") == part)
+            if fc:
+                out.append((fc[-1][0], fc[-1][1]["change_pct"]))
+        return out
 
     @cached_property
     def forecast(self):

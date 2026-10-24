@@ -39,6 +39,7 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
     agent = agent_factory(deadline)
     agent.start(case)
     lock, done, result = threading.Lock(), threading.Event(), {}
+    reply_at = {sid: time.monotonic() for sid in threads}  # when each supplier last answered
 
     def finish(res):
         if not done.is_set():
@@ -61,7 +62,11 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
             with lock:
                 if done.is_set():
                     return
-                decision = agent.decide(threads, sid)
+                try:
+                    decision = agent.decide(threads, sid)
+                except Exception:  # one odd reply must not leave this supplier unanswered
+                    log.exception("%s %s: decide failed; using the safe fallback", case_id, sid)
+                    decision = agent.safe_fallback(threads, sid)
                 if decision and decision["message"].get("action"):
                     try:  # close while holding the lock: no other thread can change a standing sheet now
                         finish(table.close(decision["supplier_id"], decision["message"]))
@@ -81,7 +86,10 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
                     return
                 time.sleep(1.0)  # another thread decides this case; check back
                 continue
-            target, msg = decision["supplier_id"], agent.write(decision["message"])
+            target = decision["supplier_id"]
+            # the 60 s per message run from the supplier's last reply: give the writer what is left of them
+            budget = 60.0 - (time.monotonic() - reply_at.get(target, time.monotonic())) - 12.0
+            msg = agent.write(decision["message"], budget)
             took = time.monotonic() - t0
             if took > MOVE_BUDGET_S:
                 log.warning("%s %s: decision took %.0fs", case_id, sid, took)
@@ -96,13 +104,25 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
                         continue
                     finish(table.result())
                     return
-                reply = table.missed(target, e)
+                agent.t[target].in_flight = False  # late or ended: read what the arena really holds
+                try:
+                    state = table.client.session(table.session_id)
+                except ArenaError:
+                    state = {}
+                if state.get("status") == "ended":
+                    finish(state.get("result") or table.result())
+                    return
+                with lock:
+                    refresh(target)
+                    reply_at[target] = time.monotonic()
+                continue
             if "result" in reply:
                 finish(reply["result"])
                 return
             with lock:
                 threads[target] += [{**msg, "from": "buyer"}, fetch_documents(table, reply)]
                 agent.t[target].in_flight = False
+                reply_at[target] = time.monotonic()
                 agent.note_round(time.monotonic() - t0)
             if reply.get("status") in ENDED and all(latest(ev).get("status") in ENDED for ev in threads.values()):
                 finish(table.result())
@@ -123,7 +143,14 @@ def make_factory(world, writer_name="template"):
     if writer_name == "claude":
         from .llm import Claude
 
-        writer = ClaudeWriter(Claude().complete)
+        llm = Claude()
+        try:  # warm up before any clock runs: connection, and whether the fallback beta is accepted
+            t0 = time.monotonic()
+            llm.complete("Reply with OK.", "OK", max_tokens=50)
+            log.warning("Claude %s ready (%.1fs warm-up)", llm.model, time.monotonic() - t0)
+        except Exception as e:  # noqa: BLE001 - the template writer still works
+            log.warning("Claude warm-up failed (%s): e-mails fall back to the template", e)
+        writer = ClaudeWriter(llm.complete)
 
     def factory(deadline=None):
         return BuyerAgent(world, writer=writer, deadline=deadline)
@@ -148,7 +175,10 @@ def play_waves(client, factory, waves=5, parallel=10, poll=5.0):
                 cases = client.cases("final")
             except ArenaError as e:
                 if e.status != 403:
-                    raise
+                    log.warning("case list failed (%s); retrying", e)
+                cases = []
+            except Exception as e:  # noqa: BLE001 - a network drop must not end the final
+                log.warning("case list failed (%s); retrying", e)
                 cases = []
             for case in cases:
                 if not case.get("open"):
@@ -176,8 +206,12 @@ def play_and_record(client, case_id, factory):
                 back = {"error": str(e)}
             stamp = int(time.time())
             Path(f"runs/arena-{case_id.split(':')[-1]}-{stamp}.json").write_text(
-                json.dumps({"result": result, "state": state, "threads": threads, "backoffice": back},
-                           default=str, indent=1, ensure_ascii=False)
+                json.dumps(
+                    {"result": result, "state": state, "threads": threads, "backoffice": back},
+                    default=str,
+                    indent=1,
+                    ensure_ascii=False,
+                )
             )
         except Exception as e:  # noqa: BLE001 - the result counts, the record is a bonus
             log.warning("%s: could not save the record: %s", case_id, e)
@@ -193,12 +227,18 @@ def main(argv=None):
     ap.add_argument("--cases", default="", help="run: only these case ids, e.g. P02,P03 (each played once)")
     ap.add_argument("--writer", default=os.environ.get("BUYER_WRITER", "template"), choices=["template", "claude"])
     ap.add_argument("--data", default=os.environ.get("ARENA_DATA", "data/package"))
-    ap.add_argument("-p", "--parallel", type=int, default=8)
+    ap.add_argument("-p", "--parallel", type=int, default=10)
     ap.add_argument("--waves", type=int, default=5)
     ap.add_argument("-v", "--verbose", action="store_true")
     a = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO if a.verbose else logging.WARNING, format="%(asctime)s %(message)s")
+    if not (Path(a.data) / "facts.json").is_file():
+        raise SystemExit(f"no data package at {Path(a.data).resolve()}: run `uv run arena data` or set ARENA_DATA")
     world = World(a.data)
+    if world.pkg.release:
+        log.warning("Sunday release loaded from %s", world.pkg.release)
+    elif time.time() > 1792904400:  # 2026-10-25 07:00 UTC: the release should be there by now
+        log.warning("no Sunday release found next to %s: run `uv run arena data` again", a.data)
     factory = make_factory(world, a.writer)
     client = ArenaClient()
     Path("runs").mkdir(exist_ok=True)

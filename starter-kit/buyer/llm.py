@@ -52,7 +52,7 @@ def _record(model, usage):
 class Claude:
     """`complete(system, user) -> str` with a budget, a timeout and the refusal fallback."""
 
-    def __init__(self, model=None, effort=None, budget=None, timeout=30.0):
+    def __init__(self, model=None, effort=None, budget=None, timeout=25.0):
         self.model = model or os.environ.get("LLM_MODEL", "claude-opus-5-5")
         self.effort = effort or os.environ.get("LLM_EFFORT", "low")
         self.budget = float(budget or os.environ.get("BUYER_BUDGET_USD", 14))
@@ -60,7 +60,7 @@ class Claude:
         self.client = anthropic.Anthropic(timeout=timeout, max_retries=0)
         self.fallbacks = True
 
-    def complete(self, system, user, max_tokens=4000):
+    def complete(self, system, user, max_tokens=4000, timeout=None):
         if spent() >= self.budget:
             raise BudgetExceeded(f"LLM budget of ${self.budget} used up")
         kwargs = dict(
@@ -71,16 +71,17 @@ class Claude:
             output_config={"effort": self.effort},
         )
         t0 = time.monotonic()
+        client = self.client.with_options(timeout=timeout) if timeout else self.client
         if self.fallbacks:
             try:
-                r = self.client.beta.messages.create(
+                r = client.beta.messages.create(
                     betas=["server-side-fallback-2026-07-01"], fallbacks="default", **kwargs
                 )
             except anthropic.BadRequestError:
                 self.fallbacks = False  # this account or SDK does not take it: plain calls from now on
-                r = self.client.messages.create(**kwargs)
+                r = client.messages.create(**kwargs)
         else:
-            r = self.client.messages.create(**kwargs)
+            r = client.messages.create(**kwargs)
         usd = _record(r.model or self.model, r.usage)
         if r.stop_reason == "refusal":
             raise RuntimeError("the model declined this request")

@@ -128,24 +128,42 @@ def candidates(world, dossier, case, rivals=None):
                 )
             )
         if sc["otd_pct"] and sc["otd_pct"] < 85:
-            out.append(
-                Claim(
-                    "sc_otd",
-                    [sc["id"]],
-                    sc["otd_pct"],
-                    f"Your on-time delivery over the last twelve months was {sc['otd_pct']:.1f}% ({sc['id']}).",
-                    0.8 if ctype in ("quality", "capacity") else 0.4,
-                    "delivery",
-                )
+            # its own scorecard rows (not the one the ppm claim uses: each ID counts once per case)
+            prev = world.all(
+                "SELECT id, otd_pct FROM scorecards WHERE supplier_id=? AND id!=? ORDER BY quarter DESC LIMIT 2",
+                d.sid,
+                sc["id"],
             )
+            if len(prev) == 2:
+                mean = round(sum(r[1] for r in prev) / 2, 1)
+                ids = [r[0] for r in prev]
+                out.append(
+                    Claim(
+                        "sc_otd",
+                        ids,
+                        mean,
+                        f"Your on-time delivery averaged {mean:.1f}% against the 95% target ({ids[0]}, {ids[1]}).",
+                        0.8 if ctype in ("quality", "capacity") else 0.4,
+                        "delivery",
+                    )
+                )
     # 4. our volume outlook: what volume-hungry and capacity-rich suppliers want to hear
-    if d.forecast and d.forecast[1] > 3:
-        fid, ch = d.forecast
-        w = 0.7 if (d.has("small_account") or d.has("free_capacity") or d.has("price_frozen")) else 0.35
+    for n, (fid, ch) in enumerate(sorted(d.forecasts, key=lambda x: -x[1])):
+        if ch <= 3:
+            continue
+        w = 0.7 if (d.has("small_account") or d.has("free_capacity") or d.has("price_frozen")) else 0.4
         if d.has("capacity_tight"):
             w = 0.5  # with a binding commitment, volume buys priority
+        what = "this part" if len(d.forecasts) == 1 else f"part {world.facts[fid]['part'].split(':')[1]} of the kit"
         out.append(
-            Claim("fc", [fid], ch, f"Our demand forecast for this part has risen {ch:+.1f}% ({fid}).", w, "volume")
+            Claim(
+                "fc",
+                [fid],
+                ch,
+                f"Our demand forecast for {what} has risen {ch:+.1f}% ({fid}).",
+                round(w - 0.05 * n, 2),
+                "volume",
+            )
         )
     # 5. should-cost, only when it speaks for us
     sc_cost, how = d.should_cost
@@ -189,6 +207,30 @@ def candidates(world, dossier, case, rivals=None):
                 "competition",
             )
         )
+    # 7. order history: what we paid so far (a price letter asks for more than that)
+    if d.recent_orders and len(d.recent_orders) >= 2 and ctype in ("price_increase", "renewal", "raw_material"):
+        ids = [o[0] for o in d.recent_orders[:3]]
+        price = d.recent_orders[0][1]
+        out.append(
+            Claim(
+                "po",
+                ids,
+                price,
+                f"Our recent orders for this part were placed at €{price:.2f} ({', '.join(ids)}).",
+                0.3,
+                "history",
+            )
+        )
+    # 8. news about the supplier that speaks for us (free capacity, secured energy, new plant)
+    for nid, topic, headline in d.news_items[:1]:
+        w = 0.45 if topic in ("free_capacity", "new_plant") else 0.35
+        out.append(
+            Claim("news", [nid], None, f"We read that {headline[0].lower() + headline[1:]} ({nid}).", w, "context")
+        )
+    if d.has("capacity_tight"):
+        out = [c for c in out if c.kind not in ("sc_otd", "cost")]
+    dead = getattr(d, "dead_kinds", set())  # claim kinds the supplier marked contradicted or irrelevant
+    out = [c for c in out if c.kind not in dead]
     good = [c for c in out if c.weight >= 0.15 and check(world, c, case.get("facts"))]
     return sorted(good, key=lambda c: -c.weight)
 
@@ -196,7 +238,7 @@ def candidates(world, dossier, case, rivals=None):
 def ration(claims, used, round_no):
     """At most three claims per message, each ID once per case; the strongest early, one in reserve."""
     fresh = [c for c in claims if not any(i in used for i in c.ids)]
-    limit = 3 if round_no == 0 else 2
+    limit = 3 if round_no == 0 else 2  # suppliers move on new verified arguments: keep bringing fresh ones
     picked, ids = [], set()
     for c in fresh:
         if len(picked) >= limit:

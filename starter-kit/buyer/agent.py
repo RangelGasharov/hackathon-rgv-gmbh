@@ -66,6 +66,12 @@ class ThreadState:
         self.dead = False
         self.matched = False  # we have offered its own value level on our terms
         self.in_flight = False  # a message to this supplier is on its way: its standing sheet may change
+        self.held = False  # RFQ: we asked an agreeing bidder to wait while the others answer
+        self.last_sent = []  # our last sheets: never resend them unchanged
+        self.sent_claims = []  # claim sentences already sent: to answer "which figures?"
+        self.sent_schedule = self.sent_drivers = False
+        self.last_claims = []
+        self.last_body = ""
 
 
 class BuyerAgent:
@@ -105,18 +111,25 @@ class BuyerAgent:
                     ts.has_breakdown = True
                     ts.est.learn_cost(c)
                     ts.plan.refresh()
-            for r in m.get("claim_results") or []:
-                if r.get("result") == "contradicted":
-                    ts.contradicted.add(r.get("index"))
+            body = m.get("body") or ""
+            for r in m.get("claim_results") or []:  # arguments that failed are not repeated in kind
+                i, res = r.get("index"), r.get("result")
+                if res == "contradicted":
+                    ts.contradicted.add(i)
+                if res in ("contradicted", "irrelevant") and i is not None and i < len(ts.last_claims):
+                    ts.d.dead_kinds.add(ts.last_claims[i].kind)
+            if "does not change our calculation" in body and "fair point" not in body:
+                ts.d.dead_kinds.update(
+                    c.kind for c in ts.last_claims if c.kind in ("fc", "sc_otd", "cost", "quote", "offer")
+                )
+            if ts.d.add_text(body):  # its own words update the profile and the packages
+                ts.est.rate, ts.est.min_margin = ts.d.cash_rate, ts.d.min_margin
+                ts.plan.refresh()
             if m.get("status") in ENDED:
                 ts.dead = True
-            _, terms = (
-                (m["term_sheets"][0]["term_sheet_id"], m["term_sheets"][0]["terms"])
-                if m.get("term_sheets")
-                else (None, {})
-            )
-            if terms:
-                ts.plan.observe(terms, m.get("status"))
+            if m.get("term_sheets"):  # every alternative it sent, not just the first
+                ts.plan.observe_reply([x.get("terms") or {} for x in m["term_sheets"]], m.get("status"))
+            ts.last_body = m.get("body") or ""
         ts.seen = len(incoming)
         _, terms = standing(events, self._price(sid))
         if terms.get("unit_price") is not None and must_haves_ok(self.case, terms, ts.est.standard):
@@ -140,6 +153,13 @@ class BuyerAgent:
         """The next message for thread `sid`, an action that closes the case, or None (leave it)."""
         for s, ev in threads.items():
             self.ingest(s, ev)
+            mine = [m for m in ev if m.get("from") == "buyer"]
+            x = self.t[s]
+            if len(mine) > x.sent:  # resumed after a crash: count what was already sent
+                x.sent, x.k = len(mine), max(x.k, sum(bool(m.get("term_sheets")) for m in mine))
+                sent = [t.get("terms") or t for m in mine for t in (m.get("term_sheets") or [])]
+                if sent and not x.plan.last_value:
+                    x.plan.commit(sent[-3:])
         if self.c_open is None:  # the opening quotes, in both views of C
             self.c_open = min((x.c_norel for x in self.t.values()), default=math.inf)
             self.c_open_rel = min((x.c_standing for x in self.t.values()), default=math.inf)
@@ -189,31 +209,42 @@ class BuyerAgent:
             return settle()
         if ts.dead:
             return None
-        if status == "agreed" and measure(ts) <= reservation * 1.02 and ts.c_standing <= best.c_standing * 1.001:
-            return accept(sid)  # it agreed to our own sheet
         rounds_left = self.case.get("round_limit", 10) - ts.sent
+        # in an RFQ, keep going while another bidder's next package is clearly cheaper than this sheet
+        rival_better = any(  # another bidder's real standing offer is clearly cheaper and it can still move
+            s != sid
+            and x.c_standing < ts.c_standing * 0.98
+            and x.sent < self.case.get("round_limit", 10) - 1
+            and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)
+            for s, x in live.items()
+        )
+        if status == "agreed" and measure(ts) <= reservation * 1.02 and ts.c_standing <= best.c_standing * 1.001:
+            if rival_better and not ts.held:  # RFQ: let the other bidders answer before we sign
+                ts.held = True
+                return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[], hold=True)}
+            return accept(sid)  # it agreed to our own sheet
         if self.deadline:  # rounds that still fit before we must close, at the pace measured so far
             pace = max(10.0, 1.3 * self.round_seconds)
             rounds_left = min(rounds_left, int(max(0, time_left - self.close_margin) // pace))
         if status == "final_offer":
             # wait for another bidder only if it can still move (not on its own final offer)
-            others = [x for s, x in live.items() if s != sid and math.isfinite(x.c_standing)
-                      and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)]
-            if not ts.matched and rounds_left >= 1 and (m := self.safe_match(threads, sid)):
-                return m  # its last word, on our terms, at its exact price
+            others = [
+                x
+                for s, x in live.items()
+                if s != sid
+                and math.isfinite(x.c_standing)
+                and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)
+            ]
+            # arena replays P08, P10, P18: any change to a final offer (even "neutral" ones like dropping
+            # its index clause or a shorter lead time) made the supplier walk. Its last word is take-or-leave.
             if measure(ts) <= reservation and ts.c_standing <= best.c_standing * 1.001:
                 return accept(sid)
             if others:
+                if not ts.held:  # one polite holding note, so the thread does not run into timeouts
+                    ts.held = True
+                    return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[], hold=True)}
                 return None  # leave it standing; another bidder is better
             return settle()
-        # in an RFQ, keep going while another bidder's next package is clearly cheaper than this sheet
-        rival_better = any(
-            s != sid
-            and x.sent < self.case.get("round_limit", 10) - 1
-            and (nxt := x.plan.sheets(x.k, n=1))
-            and cost(self.case, nxt[0], x.est) < ts.c_standing * 0.98
-            for s, x in live.items()
-        )
         if (
             ts.k >= 1
             and sid == best_sid
@@ -227,7 +258,9 @@ class BuyerAgent:
             return settle()
         if rounds_left <= 2 and not ts.matched and (m := self.match(threads, sid)):
             return m
-        sheets = ts.plan.sheets(ts.k)
+        sheets = ts.plan.sheets(ts.k, rounds_left=rounds_left)
+        if sheets and ts.last_sent and all(t in ts.last_sent for t in sheets):
+            sheets = []  # never resend the same sheets: suppliers read that as no move
         if not sheets:  # nothing better left to offer within our limits
             if not ts.matched and (m := self.match(threads, sid)):
                 return m
@@ -258,20 +291,29 @@ class BuyerAgent:
         return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[sheet])}
 
     # -- writing ----------------------------------------------------------------------------------
-    def compose(self, threads, sid, sheets=None):
+    def compose(self, threads, sid, sheets=None, hold=False):
         ts, case, d = self.t[sid], self.case, self.t[sid].d
         sheets = ts.plan.sheets(ts.k) if sheets is None else sheets
         ts.plan.commit(sheets)
+        if sheets:
+            ts.last_sent = [dict(t) for t in sheets]
+        _, own = standing(threads[sid], self._price(sid))
         rivals = {}
-        for s, x in self.t.items():  # other bidders' standing offers, citable in an RFQ
+        for s, x in self.t.items():  # other bidders' standing offers, cited only when cheaper than this one's
             if s != sid and math.isfinite(x.c_standing):
                 oid, terms = standing(threads[s], self._price(s))
-                if oid and terms.get("unit_price"):
+                if (
+                    oid
+                    and terms.get("unit_price")
+                    and (not own.get("unit_price") or terms["unit_price"] < own["unit_price"])
+                ):
                     rivals[oid] = terms["unit_price"]
         allc = candidates(self.world, d, case, rivals)
         claims = ration(allc, self.used_ids, ts.sent)
+        ts.last_claims = list(claims)
         for c in claims:
             self.used_ids.update(i for i in c.ids if not i.startswith(("offer:", "quote:")))
+            ts.sent_claims.append(c.sentence)
         plan = Plan(
             case=case,
             dossier=d,
@@ -279,7 +321,9 @@ class BuyerAgent:
             sheets=sheets,
             claims=claims,
             questions=self.questions(ts),
-            levers=self.levers(ts, sheets),
+            levers=self.answers(ts, sheets, threads[sid])
+            + self.levers(ts, sheets)
+            + (["Thank you, we are reviewing all offers and will confirm shortly."] if hold else []),
             tone=self.tone(ts, threads[sid]),
             last_reply=latest(threads[sid]).get("body", ""),
         )
@@ -293,22 +337,49 @@ class BuyerAgent:
             "term_sheets": [{"terms": t} for t in sheets],
             "refs": sorted({i for c in claims for i in c.ids})[:20],
         }
+        files = self.attachments(ts)
+        if files:
+            msg["attachments"] = files
+            plan.levers.append("Attached: " + " and ".join(f["name"] for f in files) + " with the data you asked for.")
         self.log.append((sid, "send", [t["unit_price"] for t in sheets]))
         return msg
 
-    def write(self, msg):
-        """Fill in the e-mail body of a message from `decide` (call it without holding the case lock)."""
+    def write(self, msg, budget=None):
+        """Fill in the e-mail body of a message from `decide` (call it without holding the case lock).
+        `budget`: seconds left for writing; too little and the template writes it at once."""
         plan = msg.pop("_plan", None)
         if plan is not None and msg.get("body") is None:
-            msg["body"] = self.writer.write(plan)
+            if budget is not None and budget < 8:
+                msg["body"] = TemplateWriter().write(plan)
+            else:
+                try:
+                    msg["body"] = self.writer.write(plan, timeout=None if budget is None else min(25.0, budget))
+                except TypeError:  # a writer without a timeout parameter
+                    msg["body"] = self.writer.write(plan)
         return msg
+
+    def safe_fallback(self, threads, sid):
+        """After an internal error: take this supplier's standing sheet if it keeps the must-haves and beats
+        the alternative, else wait and decide again."""
+        try:
+            sheet_id, terms = standing(threads[sid])
+            ts = self.t[sid]
+            if sheet_id and terms.get("unit_price") and must_haves_ok(self.case, terms, ts.est.standard):
+                if cost(self.case, terms, ts.est, rel=False) <= ts.plan.c_alt:
+                    return {"supplier_id": sid, "message": {"action": {"type": "accept", "term_sheet_id": sheet_id}}}
+        except Exception:  # noqa: BLE001 - nothing more to do safely
+            log.exception("safe fallback failed")
+        return None
 
     def tone(self, ts, events):
         d, first = ts.d, ts.sent == 0
         out = []
         if first:
-            trig = "letter" if (d.letter and d.letter.get("type") == "letter") else "quote"
-            out.append(f"Thank you for your {trig}.")
+            if d.own_letter:
+                out.append("Thank you for your reply to our letter.")
+            else:
+                trig = "letter" if (d.letter and d.letter.get("type") == "letter") else "quote"
+                out.append(f"Thank you for your {trig}.")
             if d.has("reciprocity"):
                 out.append(
                     "We have not forgotten that you held your prices for a quarter in 2022, and we want an outcome that is fair to both sides."
@@ -316,11 +387,11 @@ class BuyerAgent:
             elif d.has("reference_customer"):
                 out.append("We value our cooperation and want to continue it on a sound basis.")
             if d.late_days > 5 or d.has("late_payment_grievance"):
-                out.append("We have also put our payments to you on a fixed schedule; you will be paid on time.")
+                out.append("We will pay every invoice on the agreed due date.")
         else:
             out.append("Thank you for your reply.")
-            if latest(events).get("status") == "final_offer":
-                out.append("We understand this is close to your final position.")
+            if d.has("cash_short", strong=True) or d.has("late_payment_grievance"):
+                out.append("We will pay every invoice on the agreed due date.")
         return out
 
     def levers(self, ts, sheets):
@@ -343,22 +414,70 @@ class BuyerAgent:
             )
         elif (d.has("free_capacity") or d.has("small_account")) and months and months >= 24:
             out.append(f"We are ready to place the full annual volume of {need:,} with you for {months} months.")
-        if d.has("price_frozen"):
+        if d.has("price_frozen") and d.current and s.get("unit_price", 0) >= d.current:
             out.append(
                 "We understand that your list price is fixed; our proposals therefore work through the other terms."
             )
         if self.case["buyer"].get("category_goal") in ("stabilise", "secure_supply") and d.has("below_full_cost"):
             out.append("We want a price that keeps this part healthy for both of us.")
+        if d.has("approval_ladder") and ts.sent >= 1:
+            out.append(
+                "We understand that moves above 2 % go to your pricing committee: please submit this package; "
+                "we hold our offer until its decision."
+            )
+        if d.hedge_doc and ts.sent == 0:
+            doc, when = d.hedge_doc
+            out.append(
+                f"In your note of {human_date(when)} ({doc}) you wrote that your material is covered at fixed "
+                "prices until early 2027, so current market moves do not reach your costs yet."
+            )
+        if ts.sent >= 2:
+            out.append("If you confirm this package, we accept it in our next message.")
+        return out
+
+    def attachments(self, ts):
+        """Arena: suppliers asked 11 times for data, schedules or calculations and got none. Attach true
+        data (our monthly forecast, the part's cost drivers) once, when it is asked for."""
+        import base64
+
+        body, out = (ts.last_body or "").lower(), []
+        asks_volume = any(
+            w in body for w in ("schedule", "call-off", "monthly quantit", "volume release", "consumption")
+        )
+        asks_data = any(w in body for w in ("which figures", "send us the data", "provide data", "calculation"))
+        if asks_volume and not ts.sent_schedule and (csv := ts.d.schedule_csv()):
+            out.append(
+                {"name": "volume_schedule.csv", "type": "csv", "content_b64": base64.b64encode(csv.encode()).decode()}
+            )
+            ts.sent_schedule = True
+        if asks_data and not ts.sent_drivers and (csv := ts.d.drivers_csv()):
+            out.append(
+                {"name": "cost_drivers.csv", "type": "csv", "content_b64": base64.b64encode(csv.encode()).decode()}
+            )
+            ts.sent_drivers = True
+        return out
+
+    def answers(self, ts, sheets, events):
+        """Answer what the supplier asked in its last e-mail (arena: "which volume can you commit to?",
+        "which figures is that based on? please send us the data")."""
+        body, out = (ts.last_body or "").lower(), []
+        need = self.case["buyer"]["need_per_year"]
+        s = sheets[0] if sheets else {}
+        months = s.get("contract_months") or (self.case.get("fixed_terms") or {}).get("contract_months")
+        vol = s.get("volume_per_year") or (self.case.get("fixed_terms") or {}).get("volume_per_year") or need
+        if "volume" in body and ("commit" in body or "which" in body or "release" in body):
+            out.append(
+                f"To your question: we commit to a binding volume of {vol:,} a year"
+                + (f" for {months} months." if months else ".")
+            )
+        if ("figures" in body or "send us the data" in body or "which data" in body) and ts.sent_claims:
+            out.append("To your question on our figures: " + " ".join(ts.sent_claims[-2:]))
         return out
 
     def questions(self, ts):
         out, d = [], ts.d
         ctype = self.case["type"]
-        wants_cost = (
-            d.has("open_book")
-            or self.case["buyer"].get("category_goal") in ("stabilise", "secure_supply")
-            or ctype == "price_increase"
-        )
+        wants_cost = d.has("open_book")  # arena: 0 of 7 non-open-book suppliers sent a breakdown
         if wants_cost and not ts.asked_breakdown and not ts.has_breakdown:
             out.append("Could you send us your cost breakdown for this part?")
             ts.asked_breakdown = True
