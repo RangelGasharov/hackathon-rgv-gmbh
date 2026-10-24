@@ -8,11 +8,30 @@ Use a supplier's cached profile and past negotiation behavior to choose a focuse
 
 ## Strategy model
 
-- `BuyerAgent.start` loads usable profiles before creating each `ThreadState`; a missing or stale profile uses the existing bounded live-read fallback. The Live Final's new suppliers have no profile, so there the plan is always `reciprocal` with no profile evidence.
-- `Planner` chooses one primary policy and one fallback in `profile_strategy`: `fast_close` when the persona read flags high walk risk or a close opening, or the arena record shows 20 %+ walks over 5+ sessions; otherwise `reciprocal`. How often a supplier agreed to our round-1 offer is not a cue: that means our opening was above its first counter (we overpaid).
-- The plan can switch once from observed behavior: a one-reply concession of 4 %+ of its opening moves `fast_close` to `reciprocal`; two replies in a row with negligible movement (a raised ask does not count) move `reciprocal` to `fast_close`. Never on a final offer, and not while it said it will come back on price.
-- Pricing effect: only one. A `reciprocal` supplier whose arena record shows a first counter at 92 % of its opening or lower, with 15 % walks or fewer, opens up to 2 points deeper (the case's protective caps still apply). `fast_close` changes no price: neither the opening nor the step size. Code prices every sheet either way, so the plan tells the strategist how to write (tone, which package to lead with), not what to offer.
-- The strategist receives the active plan in the dossier brief, with what each approach means. Code still prices every sheet and enforces the procurement reservation; the writer may choose only from that menu.
+- `BuyerAgent.start` loads usable profiles before creating each `ThreadState`; a missing or stale profile uses the existing bounded live-read fallback.
+- `Planner` chooses one primary approach and one fallback in `profile_strategy`, from the supplier's record, its current news and letters, and (when it has one) its profile. Everything except the profile comes from the data package, so the Live Final's new suppliers get a plan too.
+  - **Current news** (newest item per kind, `Dossier.current_news`): full order book, allocation or a big order -> `fast_close`, lead with the binding-volume or lead-time package; refocusing on bigger customers (news or a strong small-account trait) -> `fast_close`, lead with volume and a long contract; restructuring, credit watch or short-time work -> `fast_close` for a strategic supplier (stabilise, secure_supply: the arena charges for one left below its margin), otherwise a reason only, lead with faster payment; idle capacity or a new plant -> reason, lead with volume for price.
+  - **Its letter**: asked % at least 2 points above what its cost drivers moved in 12 months -> lead with the drivers that fell; a notice period shorter than our contract's -> lead with the notice.
+  - **Past negotiations with us** (`Dossier.deals`, 4+ events): asked minus settled 2 points or more -> "it gives way"; 0.5 or less -> `fast_close` (it settles near its ask).
+  - **Profile and arena**: high walk risk, a close opening, or 20 %+ walks over 5+ sessions -> `fast_close`. How often it agreed to our round-1 offer is not a cue: that means our opening was above its first counter (we overpaid).
+  - Otherwise `reciprocal`, with the reasons above as its explanation.
+- The plan can switch once from observed behavior: a one-reply concession of 4 %+ of its opening moves `fast_close` to `reciprocal`; two replies in a row with negligible movement (a raised ask does not count) move `reciprocal` to `fast_close`. Never on a final offer or an agreement, and not while it said it will come back on price.
+- Pricing effect: only one. A `reciprocal`, untrusted supplier whose arena record shows a first counter at 92 % of its opening or lower, with 15 % walks or fewer, opens up to 2 points deeper (the case's protective caps still apply). `fast_close` changes no price. Code prices every sheet either way, so the plan tells the strategist how to write: the approach, the evidence, what to lead with and, for a trusted supplier, the tone.
+
+## Trusted suppliers: no risky trades
+
+`Dossier.relationship` marks a supplier trusted when its goodwill is worth more than the last cent: a strategic category goal (stabilise, secure_supply), a supplier that kept supplying at the old price, or our active source of the part for 8+ years. A red scorecard is never trusted. On the hosted cases that is 14 of 22 suppliers (not P05's three bidders, P06's 70150, P11, P12, P18, P19).
+
+For a trusted supplier:
+- no deeper opening from the arena record;
+- no arguments from our own price history or its news (`RISKY_KINDS`): the first never moved an arena supplier, the second reads as prying. The delivery record stays (offered only to stale-costing owners, the one kind it moved);
+- the plan tells the strategist: partnership tone, no pressure, deadlines or threats, never question its figures without our own data.
+
+For every supplier, after a final offer:
+- only its own terms go back. Changed terms after a final offer ended in a walk 3 times in 5 (P08, P10, P18); its own terms were agreed 2 of 2. `compose` drops any other sheet (`final_guard`), offers the strategist no other package and sends no new argument;
+- an alternative sheet it sent (`offer:...-a`) cannot be accepted directly (the arena accepts only the standing sheet). The agent sends its exact terms back once and accepts the agreement; without a message or the time left, it accepts the standing sheet.
+
+Rival offers are cited by their standing ID only, never an alternative's: an unknown ID comes back "contradicted", which costs trust.
 
 ## Shared procurement behavior
 
@@ -25,8 +44,8 @@ Use a supplier's cached profile and past negotiation behavior to choose a focuse
 
 - `starter-kit/buyer/profiles.py` and `starter-kit/profiles/` hold the 46 supplier profiles and their builder/checker.
 - `starter-kit/buyer/strategy.py` selects and adapts the two-policy plan, uses it in offer pricing, and adds `probe` (two offers just under the walk-away when every package looks dearer than it, first two offers only).
-- `starter-kit/buyer/agent.py` loads profiles, records the selected plan, logs a fallback switch, caps rounds at 10, and calls `probe`.
-- `starter-kit/buyer/dossier.py` includes the profile brief and the active plan in the strategist's context.
+- `starter-kit/buyer/agent.py` loads profiles, records the selected plan, logs a fallback switch, caps rounds at 10, calls `probe`, takes a sheet's alternative by sending its terms back, guards final offers and filters a trusted supplier's arguments.
+- `starter-kit/buyer/dossier.py` includes the profile brief and the active plan in the strategist's context, and reads past negotiations (`deals`), current news (`current_news`) and trust (`relationship`) from the data.
 - `starter-kit/buyer/writer.py` tells the strategist to follow the assigned plan and priced menu.
 - `starter-kit/buyer/runner.py` drops sibling drafts after a case result.
 - `buyer_agent_v5_flow_updated.svg` and `.png` show the updated process; the root `README.md` summarizes the behavior.
@@ -58,9 +77,10 @@ The generated Graphify report and graph are local only (`graphify-out/` is in `.
 
 ## Validation status
 
-- `uv run pytest`: 125 passed, 3 skipped (the branch had 120; the new tests cover the strategy layer).
-- Persona twin, 19 cases (`uv run python -m buyer.bench --sim twin --agents buyer --cases-dir cases/real --seed N`), mean x 100 for seeds 0 / 1 / 2: `main` 68.1 / 69.6 / 67.8; this branch before the audit 66.9 / 67.1 / 66.1 (P10 and P05's 70240, both `fast_close`); after the audit 68.0 / 69.5 / 67.7. The remaining 0.01-0.02 on P05 comes from the profile trait reads, not the plan (same with the deeper-opening bonus off).
-- Calibrated twin (`uv run python -m buyer.twin_real bench`, 10 hosted cases): mean 0.731, identical per case to `main`. Its fitted limits make it insensitive to the opening, so it could not show the anchor regression.
+- `uv run pytest`: 130 passed, 2 skipped. `tests/test_profiles.py` covers the plan's cues (news, letters, past deals), who is trusted, the unchanged fast-close opening, the deeper opening (not for trusted or capped suppliers), at most one switch, taking an alternative, the final-offer guard and the trusted argument filter.
+- `test_twin_real.py::test_replay_matches_the_real_suppliers` runs only when `runs/` holds real transcripts. With the team's current 80 transcripts it fails on `main` too (4 deal mismatches, limit 2), so the limit is pinned to an older session set.
+- Persona twin, 19 cases (`uv run python -m buyer.bench --sim twin --agents buyer --cases-dir cases/real --seed N`), mean x 100 for seeds 0 / 1 / 2: `main` 68.1 / 69.6 / 67.8; this branch before the audit 66.9 / 67.1 / 66.1; after the audit, and with the trusted rules and news/letter/history plan, 68.0 / 69.5 / 67.7. The remaining 0.01-0.02 on P05 comes from the profile trait reads.
+- Calibrated twin (`uv run python -m buyer.twin_real bench`, 10 hosted cases): mean 0.731, identical per case to `main`. Neither twin sends alternatives in a final offer, so that path is covered by the unit test and the live P18 rerun only.
 - `uv run python -m buyer.profiles check --data data/package`: 46 suppliers, 46 clean.
 
 ## P18 live run: diagnosis for the next agent
@@ -87,11 +107,12 @@ Run on commit f6767e8 with the Opus writer: `starter-kit/runs/play-1792878476.js
   €5.50/60 days). Best agent run on P18 so far 0.497 (€5.40/45 days); best probe 0.532 (€5.40/90 days); another team 0.688.
 - Flow: supplier 6.10 -> 5.60 -> 5.60 -> 5.50 (90d) -> final 5.50 (60d). Ours 5.27/5.32 -> 5.41 -> 5.43 -> 5.44/5.41.
   Plan `reciprocal` throughout; two verified index claims in round 1, none counted after that.
-- **Pre-existing bug, not from this branch:** after the final offer, `standing()` picked the supplier's earlier, cheaper
-  €5.50/90d sheet (offer 3), which was no longer standing. The accept failed twice (422 "not a standing offer"), and the
-  runner's `reoffer` then sent those terms back as a counter to the final offer. The supplier agreed, so the deal kept 90
-  days, but countering a final offer ended in a walk in 3 of 4 earlier sessions. Decide deliberately: accept the final
-  sheet, or re-offer the supplier's own earlier sheet on purpose (it worked here and in session 1792870212).
+- **Correction (after reading the raw thread):** the final offer carried two sheets, `offer:70740-4` (€5.50/60d) and
+  an alternative `offer:70740-4-a` (€5.50/90d). The agent rightly chose the alternative, the arena refused to accept
+  the `-a` ID (twice, 422), and the runner's re-offer sent the supplier's own alternative terms back, which it agreed
+  to. Not a stale sheet and not a risky counter. Fixed: the agent now sends the alternative's terms back at once, once.
+  The risky path was elsewhere: the strategist's menu after a final offer could hold changed terms. Closed (see
+  "Trusted suppliers: no risky trades").
 - The plan logged a switch on the closing "agreed" reply; fixed (no switch on `agreed` or `final_offer`).
 - Diagnosis of the gap to `c_best` (about €4.65/unit): the supplier's first counter is fixed near 5.60 whatever we open
   with, and after round 1 it gives only 2-4 %. What moved it in other sessions was a concrete binding-volume answer

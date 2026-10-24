@@ -56,6 +56,20 @@ NEWS_TRAITS = {
     "energy_contract": "hedged_material",
     "new_plant": "free_capacity",
 }
+# news topics that describe a supplier's situation now (the plan reads them; `NEWS_TRAITS` turns them into traits)
+NEWS_SITUATION = {
+    "restructuring": "distress",
+    "credit_watch": "distress",
+    "credit_downgrade": "distress",
+    "short_time_work": "distress",
+    "full_order_book": "capacity",
+    "allocation": "capacity",
+    "big_order": "capacity",
+    "free_capacity": "slack",
+    "new_plant": "slack",
+    "refocus": "refocus",
+}
+TRUSTED_YEARS = 8  # an active source of the part for this long is a partner, not a vendor
 COUNTRY_COST = {"DE": 1.0, "AT": 1.05, "CH": 1.1, "CZ": 0.83, "PL": 0.83, "HU": 0.83, "TR": 0.75, "CN": 0.7}
 OWNER_MARGIN = {"group": 0.12, "private": 0.10, "family": 0.09, "founder": 0.08}
 HEDGE_UNTIL = re.compile(r"until (January|March|June|December) (\d{4})")
@@ -584,6 +598,48 @@ class Dossier:
         )
         s = [r[1] for r in rows if r[1] is not None]
         return round(sum(s) / len(s), 1) if s else None
+
+    @cached_property
+    def deals(self):
+        """Its past negotiations with us (negotiation_history, the Sunday release included): (count, mean asked %,
+        mean settled %), or None. Not a ratio: asks near or below zero make settled/asked meaningless."""
+        rows = [r for r in self.w.rows("negotiation_history", self.sid) if r.get("asked_pct") is not None]
+        rows = [r for r in rows if r.get("settled_pct") is not None]
+        if not rows:
+            return None
+        n = len(rows)
+        return n, round(sum(r["asked_pct"] for r in rows) / n, 1), round(sum(r["settled_pct"] for r in rows) / n, 1)
+
+    @cached_property
+    def current_news(self):
+        """Its news that tells us its situation now, newest first: [(id, date, topic, headline)]."""
+        return [
+            (r.get("id"), r.get("date"), r.get("topic"), r.get("headline"))
+            for r in self.w.rows("news", self.sid)
+            if r.get("topic") in NEWS_SITUATION
+        ]
+
+    @cached_property
+    def relationship(self):
+        """(trusted, reasons). A trusted supplier is one whose goodwill is worth more than the last cent: a
+        strategic category goal (the arena charges for a supplier left below a healthy margin), a supplier that
+        kept supplying at the old price, or a long-standing active source of this part. A red scorecard is
+        never trusted. Trusted suppliers get no risky trades (`Planner`, `BuyerAgent.compose`)."""
+        if (self.scorecard or {}).get("colour") == "red":
+            return False, ["red scorecard"]
+        reasons = []
+        if self.goal in ("stabilise", "secure_supply"):
+            reasons.append(f"category goal {self.goal}")
+        if self.has("reciprocity", strong=True):
+            reasons.append("it kept supplying at the old price and expects partnership")
+        years = []
+        for p in self.case["parts"]:
+            r = self.w.one("SELECT status, approved_since FROM sourcing WHERE part_id=? AND supplier_id=?", p, self.sid)
+            if r and r["status"] == "active" and r["approved_since"]:
+                years.append((date.today() - date.fromisoformat(r["approved_since"][:10])).days / 365.25)
+        if years and max(years) >= TRUSTED_YEARS:
+            reasons.append(f"our active source of this part for {int(max(years))} years")
+        return bool(reasons), reasons
 
     def brief(self):
         """A compact text for the writer model."""

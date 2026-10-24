@@ -16,6 +16,8 @@ import statistics
 
 from arena_kit.cost import RELATIONSHIP_GOALS, _soft, _years, closing_terms, must_haves_ok, supplier_value, total_cost
 
+from .dossier import NEWS_SITUATION
+
 PRICE = "unit_price"
 CLAUSE_VALUE = 0.015  # share of the price an index clause is worth to a supplier that wants one (arena P02: >= 1.6 %)
 # Our belief about a supplier's full cost, for the relationship charge: one sigma = SIGMA_K x the error band of the
@@ -249,11 +251,14 @@ RECIPROCAL = "reciprocal"
 
 
 def profile_strategy(dossier):
-    """Choose one primary bargaining policy and one fallback from supplier-profile evidence.
+    """Choose one primary bargaining approach and one fallback before the first message, from what we know of the
+    supplier: its profile and arena record, its past negotiations with us, and its current news and letters. All
+    but the profile come from the data package, so a new supplier (the Live Final) gets a plan too.
 
-    This is a finite-horizon repeated-bargaining policy: the profile is the prior, observed offers update it,
-    and our outside option remains the hard ceiling. Selecting and pricing a strategy needs no model call.
-    """
+    Returns (primary, fallback, reason, evidence). `evidence["lead"]` is what the strategist should lead with,
+    `evidence["trusted"]` (with `why_trusted`) switches risky trades off. The plan shapes how we write; code
+    prices every sheet either way. Its only pricing effect: a slightly deeper opening for a reciprocal, untrusted
+    supplier whose arena record shows room below its first counter (`room`)."""
     profile = getattr(dossier, "profile", None) or {}
     playbook = (profile.get("persona") or {}).get("playbook") or {}
     arena = profile.get("arena") or {}
@@ -269,30 +274,78 @@ def profile_strategy(dossier):
     walk_rate = walked / sessions if sessions else None
     # a supplier whose first counter gives 8 %+ of its opening and rarely walks has room below its counter
     room = sessions >= 5 and first is not None and first <= 0.92 and walk_rate is not None and walk_rate <= 0.15
+    trusted, why_trusted = getattr(dossier, "relationship", (False, []))
 
-    # Not a cue: how often it agreed to our round-1 offer. That says our opening was above its first counter
-    # (we overpaid: P02, P05-70210, P18), so it argues for a deeper anchor, never a quicker close.
-    cues = []
+    cues, reasons, lead = [], [], []  # cues pick fast close; reasons only explain the reciprocal default
+    # its situation now, from the news (newest item per kind)
+    news = {}
+    for nid, day, topic, headline in getattr(dossier, "current_news", None) or []:
+        news.setdefault(NEWS_SITUATION[topic], f"{headline} ({nid}, {day})")
+    if "capacity" in news:
+        cues.append(f"capacity is its constraint: {news['capacity']}")
+        lead.append("the binding-volume or lead-time package rather than a price squeeze")
+    if "refocus" in news or dossier.has("small_account", strong=True):
+        cues.append("it is refocusing on bigger customers" + (f": {news['refocus']}" if "refocus" in news else ""))
+        lead.append("our binding volume and a long contract")
+    if "distress" in news:
+        if dossier.goal in RELATIONSHIP_GOALS:  # the arena charges for a strategic supplier left below its margin
+            cues.append(f"a strategic supplier under financial pressure: {news['distress']}")
+        else:
+            reasons.append(f"it is under financial pressure: {news['distress']}")
+        lead.append("faster payment, which helps it more than a price step")
+    if "slack" in news:
+        reasons.append(f"it has idle capacity: {news['slack']}")
+        lead.append("volume for price")
+    # its letter: what it asks against what its own cost drivers justify, and the notice it gave
+    letter = getattr(dossier, "letter", None) or {}
+    if letter.get("supplier") == dossier.sid and letter.get("asked_pct") is not None:
+        just = dossier.justified_pct
+        if letter["asked_pct"] - just >= 2:
+            reasons.append(
+                f"its letter asks +{letter['asked_pct']} %, its cost drivers moved {just:+.1f} % in 12 months"
+            )
+            lead.append("the cost drivers that fell, with their index ids")
+    if notice := getattr(dossier, "notice", None):
+        reasons.append(f"its letter gives {notice[1]} days' notice, our contract {notice[3]}")
+        lead.append("the notice period of our contract")
+    # how our past negotiations with it went
+    if (deals := getattr(dossier, "deals", None)) and deals[0] >= 4:
+        n, asked, settled = deals
+        if asked - settled >= 2:
+            reasons.append(
+                f"in {n} past negotiations it asked {asked:+.1f} % and settled at {settled:+.1f} %: it gives way"
+            )
+        elif asked - settled <= 0.5:
+            cues.append(
+                f"in {n} past negotiations it settled close to its ask ({asked:+.1f} %, settled {settled:+.1f} %)"
+            )
+    # its profile and our arena sessions with it. Not a cue: how often it agreed to our round-1 offer. That says
+    # our opening was above its first counter (we overpaid: P02, P05-70210, P18), never that we should close fast.
     if playbook.get("walk_risk") == "high":
         cues.append("the profile flags high walk risk")
     if playbook.get("opening") == "close":
         cues.append("the profile describes a close opening")
     if sessions >= 5 and walk_rate is not None and walk_rate >= 0.20:
         cues.append(f"the arena record shows {walked}/{sessions} walks")
-    evidence = {"first_counter_vs_opening": first, "walk_rate": walk_rate, "sessions": sessions, "room": room}
-    if cues:
-        return FAST_CLOSE, RECIPROCAL, "; ".join(cues), evidence
-
     if room:
-        reason = (
+        reasons.append(
             f"its first counter is at {first:.0%} of its opening (median) and it rarely walks ({walked}/{sessions})"
         )
-    elif playbook.get("opening") == "deep" and playbook.get("walk_risk") == "low":
-        reason = "profile shows a deep-opening supplier with low walk risk"
-    elif profile:
-        reason = "profile does not signal elevated walk risk; test reciprocity against its first counter"
-    else:
-        reason = "no usable profile; use the case-calibrated reciprocal policy and observe the first counter"
+    evidence = {
+        "first_counter_vs_opening": first,
+        "walk_rate": walk_rate,
+        "sessions": sessions,
+        "room": room,
+        "trusted": trusted,
+        "why_trusted": why_trusted,
+        "lead": list(dict.fromkeys(lead)),
+        "reasons": reasons,
+    }
+    if cues:
+        return FAST_CLOSE, RECIPROCAL, "; ".join(cues), evidence
+    reason = (
+        "; ".join(reasons) or "no warning signs in its record, news or letters; test reciprocity on its first counter"
+    )
     return RECIPROCAL, FAST_CLOSE, reason, evidence
 
 
@@ -351,22 +404,33 @@ class Planner:
             "lead with the package it wants; no pressure or deadlines)",
             RECIPROCAL: "reciprocal bargaining (acknowledge each concession it makes and show ours in return)",
         }
+        ev = self.strategy_evidence
+        extra = []
+        if ev.get("lead"):
+            extra.append("Lead with: " + "; ".join(ev["lead"]) + ".")
+        if ev.get("trusted"):
+            extra.append(
+                f"Trusted supplier ({'; '.join(ev['why_trusted'])}): no risky trades. Partnership tone; no pressure, "
+                "deadlines or threats; never question its figures without our own data."
+            )
         if self.strategy_switched:
-            return (
+            head = (
                 f"Negotiation plan: started with {labels[self.primary_strategy]}, then switched once to "
                 f"{labels[self.strategy]} because {self.strategy_switch_reason}. Do not add a third approach; "
                 "price and terms stay inside the planned menu and our walk-away ceiling."
             )
-        trigger = (
-            "a meaningful supplier concession (at least 4% of its opening)"
-            if self.strategy == FAST_CLOSE
-            else "two consecutive replies with negligible supplier movement"
-        )
-        return (
-            f"Negotiation plan: use {labels[self.strategy]} first ({self.strategy_reason}). One fallback is "
-            f"{labels[self.fallback_strategy]}, used only after {trigger}. The profile chooses the approach; "
-            "the priced menu and our walk-away ceiling choose the offer."
-        )
+        else:
+            trigger = (
+                "a meaningful supplier concession (at least 4% of its opening)"
+                if self.strategy == FAST_CLOSE
+                else "two consecutive replies with negligible supplier movement"
+            )
+            head = (
+                f"Negotiation plan: use {labels[self.strategy]} first ({self.strategy_reason}). One fallback is "
+                f"{labels[self.fallback_strategy]}, used only after {trigger}. Its record, news and letters choose "
+                "the approach; the priced menu and our walk-away ceiling choose the offer."
+            )
+        return " ".join([head, *extra])
 
     def _switch_to_fallback(self, reason):
         if self.strategy_switched or self.strategy == self.fallback_strategy:
@@ -405,11 +469,13 @@ class Planner:
         ):
             gap += 0.05
         # where the arena record shows room below its first counter and few walks, open slightly deeper (at most
-        # two points; the caps below still apply). No shallower opening for a fast-close supplier: its first
-        # counter does not depend on ours, an opening above it is agreed at once, and the only real walk after an
-        # opening was P10's -19 % to a capacity-tight supplier (capped below). Twin: a 4 % cap cost P10 and P05.
-        if self.strategy == RECIPROCAL and self.strategy_evidence["room"]:
-            gap += min(0.02, (0.92 - self.strategy_evidence["first_counter_vs_opening"]) * 0.15)
+        # two points; the caps below still apply) - not to a trusted supplier, whose goodwill is worth more. No
+        # shallower opening for a fast-close supplier: its first counter does not depend on ours, an opening above
+        # it is agreed at once, and the only real walk after an opening was P10's -19 % to a capacity-tight
+        # supplier (capped below). Twin: a 4 % cap cost P10 and P05.
+        ev = self.strategy_evidence
+        if self.strategy == RECIPROCAL and ev["room"] and not ev.get("trusted"):
+            gap += min(0.02, (0.92 - ev["first_counter_vs_opening"]) * 0.15)
         if ctype == "price_increase" and d.notice:
             gap = max(gap, 0.06)
         if ctype == "quality" or (d.has("cash_short", strong=True) and ctype != "rfq"):

@@ -173,8 +173,8 @@ def test_agreeing_to_our_first_offer_is_no_reason_to_close_fast(world):
 
 
 def test_fast_close_does_not_open_closer_to_the_ask(world):
-    plain = _planner(world, "P10", "sup:70410", None)
-    fast = _planner(world, "P10", "sup:70410", {"persona": {"playbook": {"walk_risk": "high"}}})
+    plain = _planner(world, "P07", "sup:70610", None)  # no warning signs in its record, news or letters
+    fast = _planner(world, "P07", "sup:70610", {"persona": {"playbook": {"walk_risk": "high"}}})
     assert fast.primary_strategy == FAST_CLOSE and plain.primary_strategy == RECIPROCAL
     assert fast.anchor_gap == plain.anchor_gap
 
@@ -184,9 +184,44 @@ def test_room_below_the_first_counter_opens_a_little_deeper(world):
     roomy = _planner(world, "P05", "sup:70250", {"arena": _arena(first_counter_vs_opening=0.80)})
     assert roomy.primary_strategy == RECIPROCAL and roomy.strategy_evidence["room"]
     assert plain.anchor_gap < roomy.anchor_gap <= plain.anchor_gap + 0.02
-    # a committee or capacity-tight supplier keeps its cap (P10's 70410: approval ladder, capacity tight)
-    capped = _planner(world, "P10", "sup:70410", {"arena": _arena(first_counter_vs_opening=0.80)})
-    assert capped.anchor_gap == _planner(world, "P10", "sup:70410", None).anchor_gap
+    # a committee supplier keeps its cap (P18's 70740: approval ladder, raw material 10 %)
+    capped = _planner(world, "P18", "sup:70740", {"arena": _arena(first_counter_vs_opening=0.80)})
+    assert (
+        capped.strategy_evidence["room"] and capped.anchor_gap == _planner(world, "P18", "sup:70740", None).anchor_gap
+    )
+    # and a trusted supplier gets no deeper opening at all (P07's 70610: our source for 14 years)
+    trusted = _planner(world, "P07", "sup:70610", {"arena": _arena(first_counter_vs_opening=0.80)})
+    assert (
+        trusted.strategy_evidence["trusted"]
+        and trusted.anchor_gap == _planner(world, "P07", "sup:70610", None).anchor_gap
+    )
+
+
+def test_news_letters_and_past_deals_choose_the_plan(world):
+    p10 = _planner(world, "P10", "sup:70410", None)  # "allocates volumes" (news, 2026-08)
+    assert p10.primary_strategy == FAST_CLOSE and "capacity is its constraint" in p10.strategy_reason
+    assert any("lead-time" in x for x in p10.strategy_evidence["lead"])
+    p01 = _planner(world, "P01", "sup:70110", None)  # asks +9.5 %, drivers +2.3 %, 51 days' notice against 90
+    ev = p01.strategy_evidence
+    assert p01.primary_strategy == RECIPROCAL and "its letter asks +9.5 %" in p01.strategy_reason
+    assert any("cost drivers that fell" in x for x in ev["lead"]) and any("notice" in x for x in ev["lead"])
+    assert "Lead with:" in p01.est.d.strategy_plan and "Trusted supplier" in p01.est.d.strategy_plan
+    p07 = _planner(world, "P07", "sup:70610", None)  # 9 negotiations: asked +2.5 %, settled +0.2 %
+    assert "it gives way" in p07.strategy_reason
+    # restructuring news: a strategic supplier (P06's 70150) is handled with care, a quality case only explained
+    p06 = _planner(world, "P06", "sup:70150", None)
+    assert p06.primary_strategy == FAST_CLOSE and "financial pressure" in p06.strategy_reason
+    p11 = _planner(world, "P11", "sup:70140", None)
+    assert p11.primary_strategy == RECIPROCAL and any("faster payment" in x for x in p11.strategy_evidence["lead"])
+
+
+def test_who_is_trusted(world):
+    trusted = {cid: _planner(world, cid, sid, None).strategy_evidence for cid, sid in
+               [("P01", "sup:70110"), ("P18", "sup:70740"), ("P11", "sup:70140"), ("P13", "sup:70230")]}  # fmt: skip
+    assert trusted["P01"]["trusted"] and "category goal stabilise" in trusted["P01"]["why_trusted"]
+    assert trusted["P13"]["trusted"]  # leverage case, but our active source of the part for 12 years
+    assert not trusted["P18"]["trusted"]  # active source only since 2021-2022
+    assert not trusted["P11"]["trusted"] and trusted["P11"]["why_trusted"] == ["red scorecard"]
 
 
 def test_one_switch_at_most_and_never_on_a_final_offer(world):
@@ -211,3 +246,60 @@ def test_two_stalled_replies_switch_reciprocal_to_fast_close(world):
     assert p._adapt_strategy("open") is None  # it raised its ask: resistance, not "negligible movement"
     p.asks = [100.0, 96.0, 96.0, 95.95]
     assert p._adapt_strategy("open")["to"] == FAST_CLOSE
+
+
+# -- final offers and trusted suppliers: no risky trades ------------------------------------------------------------
+CLAUSE = {"series": "AS-14404", "material_share": 0.45, "deadband_pct": 5.0, "base_month": "2026-08"}
+
+
+def _final(*sheets):
+    return {
+        "from": "sales",
+        "status": "final_offer",
+        "body": "Our final offer.",
+        "term_sheets": [{"term_sheet_id": i, "terms": t} for i, t in sheets],
+    }
+
+
+def test_an_alternative_in_a_final_offer_is_taken_by_sending_its_own_terms(world):
+    agent = BuyerAgent(world, use_profiles=False)
+    agent.start(_case("P18"))
+    main = {"unit_price": 5.5, "payment_days": 60, "contract_months": 36, "index_clause": CLAUSE}
+    alt = {**main, "payment_days": 90}  # live P18 rerun: the arena refused to accept "offer:70740-4-a" twice
+    threads = {"sup:70740": [_msg(6.1), {"from": "buyer"}, _final(("offer:70740-4", main), ("offer:70740-4-a", alt))]}
+    d = agent.decide(threads, "sup:70740")
+    assert ("sup:70740", "take_alternative", 5.5) in agent.log
+    assert not d["message"].get("action") and d["message"]["term_sheets"] == [{"terms": alt}]
+    assert d["message"]["_plan"].menu == [(alt, 0.0)] and d["message"]["refs"] == []  # no other package, no claim
+    d = agent.decide(threads, "sup:70740")  # it answers with the same final offer again: take the standing sheet
+    assert d["message"]["action"] == {"type": "accept", "term_sheet_id": "offer:70740-4"}
+
+
+def test_after_a_final_offer_no_changed_terms_go_out(world):
+    agent = BuyerAgent(world, use_profiles=False)
+    agent.start(_case("P18"))
+    main = {"unit_price": 5.5, "payment_days": 60, "contract_months": 36, "index_clause": CLAUSE}
+    threads = {"sup:70740": [_msg(6.1), {"from": "buyer"}, _final(("offer:70740-4", main))]}
+    agent.decide(threads, "sup:70740")
+    msg = agent.compose(threads, "sup:70740", sheets=[{**main, "unit_price": 5.4}])
+    assert msg["term_sheets"] == [] and ("sup:70740", "final_guard", [5.4]) in agent.log
+
+
+def test_a_trusted_supplier_hears_no_risky_arguments(world, monkeypatch):
+    import buyer.agent as agent_mod
+    from buyer.claims import Claim
+
+    fake = [
+        Claim("po", ["po:4500000001-10"], 130.0, "Our last order was at EUR 130.", 0.9),
+        Claim("news", ["news:1"], None, "We read that you restructure.", 0.8),
+        Claim("fc", ["fc:1"], 12.0, "Our forecast rises 12 %.", 0.7),
+    ]
+    monkeypatch.setattr(agent_mod, "candidates", lambda *a, **k: list(fake))
+    kinds = {}
+    for cid, sid in (("P01", "sup:70110"), ("P18", "sup:70740")):
+        agent = BuyerAgent(world, use_profiles=False)
+        agent.start(_case(cid))
+        msg = agent.compose({sid: [_msg(100.0)]}, sid)
+        kinds[cid] = {c.kind for c in msg["_plan"].claims} | {c.kind for c in msg["_plan"].menu_claims}
+    assert kinds["P01"] == {"fc"}  # trusted: no price history, no news
+    assert {"po", "news"} <= kinds["P18"]

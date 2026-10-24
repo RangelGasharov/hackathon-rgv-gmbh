@@ -47,6 +47,10 @@ ASKS_DATA = re.compile(
 )
 LEARN_OPENING_LEAD = True  # a supplier's opening lead time is its standard (see `learn_opening_standard`)
 MAX_ROUNDS = 10  # the arena's round limit: never plan for more messages per thread, whatever a case file says
+# argument kinds a trusted supplier does not hear: our own price history never moved an arena supplier, and citing
+# its news reads as prying. (The delivery record stays: `claims` offers it only to stale-costing owners, the one
+# kind of supplier it moved.)
+RISKY_KINDS = {"po", "news"}
 
 
 def round_cap(case):
@@ -102,6 +106,7 @@ class ThreadState:
         self.plan = Planner(case, self.est, horizon_rounds=rounds)
         self.k = 0  # messages with term sheets sent
         self.sent = 0  # messages sent
+        self.took_alt = False  # we sent back an alternative it offered, to take it: once
         self.seen = 0  # supplier messages processed
         self.asked_breakdown = False
         self.opened_lead = None  # the lead time of its opening quote: the standard it prices a shorter one against
@@ -368,7 +373,18 @@ class BuyerAgent:
         def accept(s):
             if self.t[s].in_flight:
                 return None  # its reply is still coming: decide again then
-            sheet_id, _ = standing(threads[s], self._price(s))
+            sheet_id, terms = standing(threads[s], self._price(s))
+            main_id, _ = standing(threads[s])  # its standing offer: the first sheet of its last message
+            if main_id and sheet_id != main_id:
+                # the arena accepts only the standing sheet (api.md; P18 rerun: two 422s on "offer:70740-4-a"). An
+                # alternative it sent is ours by sending its exact terms back: agreed 2 of 2 (P08, P18), also after
+                # a final offer. Without a message or the time left for that, its standing sheet.
+                x = self.t[s]
+                if not x.took_alt and round_cap(self.case) - x.sent > 0 and time_left > self.close_margin:
+                    x.took_alt = True
+                    self.log.append((s, "take_alternative", terms.get("unit_price")))
+                    return {"supplier_id": s, "message": self.compose(threads, s, sheets=[dict(terms)])}
+                sheet_id = main_id
             self.log.append((s, "accept", round(self.t[s].c_standing)))
             return {"supplier_id": s, "message": {"action": {"type": "accept", "term_sheet_id": sheet_id}}}
 
@@ -560,11 +576,21 @@ class BuyerAgent:
                    set(self.used_ids), set(ts.used_kinds))  # fmt: skip
         sheets = ts.plan.sheets(ts.k) if sheets is None else sheets
         _, own = standing(threads[sid], self._price(sid))
+        # after its final offer only its own terms go back (taking an alternative it sent): changed terms after a
+        # final offer ended in a walk 3 times in 5 (P08, P10, P18), its own terms were agreed 2 of 2
+        final = latest(threads[sid]).get("status") == "final_offer"
+        if final and sheets:
+            mine = [x.get("terms") or {} for x in latest(threads[sid]).get("term_sheets") or []]
+            keep = [t for t in sheets if any(m and all(t.get(f) == v for f, v in m.items()) for m in mine)]
+            if keep != sheets:
+                self.log.append((sid, "final_guard", [t.get("unit_price") for t in sheets if t not in keep]))
+            sheets = keep
         rivals = {}
         for s in self.t:  # other bidders' standing offers, cited only when cheaper than this one's (even
-            # when their other terms do not suit us: the arena checks the price, the supplier hears "cheaper")
+            # when their other terms do not suit us: the arena checks the price, the supplier hears "cheaper").
+            # Their standing sheet, not an alternative: an unknown ID comes back "contradicted", which costs trust
             if s != sid and latest(threads[s]).get("status") not in ENDED:
-                oid, terms = standing(threads[s], self._price(s))
+                oid, terms = standing(threads[s])
                 if (
                     oid
                     and terms.get("unit_price")
@@ -572,6 +598,10 @@ class BuyerAgent:
                 ):
                     rivals[oid] = terms["unit_price"]
         allc = candidates(self.world, d, case, rivals, own_price=own.get("unit_price"))
+        if ts.plan.strategy_evidence.get("trusted"):  # no risky arguments to a partner: kinds that never moved a
+            allc = [c for c in allc if c.kind not in RISKY_KINDS]  # supplier and only read as nagging
+        if final:
+            allc = []  # no new arguments after its last word: we only take what it offered
         claims = ration(allc, self.used_ids, ts.sent, ts.used_kinds)
         answered, lever_lines = self.answers(ts, sheets, threads[sid]), self.levers(ts, sheets)
         if any("binding volume" in a for a in answered):  # one volume sentence a message (arena replays: it was twice)
@@ -591,7 +621,8 @@ class BuyerAgent:
         )
         files = self.attachments(ts)  # what its last e-mail asked for, by keyword
         if sheets:  # the strategist's options: priced by code, inside our limits
-            plan.menu = ts.plan.menu(sheets, ts.k)
+            # after a final offer exactly what we take, no other package (the strategist could pick changed terms)
+            plan.menu = [(t, 0.0) for t in sheets] if final else ts.plan.menu(sheets, ts.k)
             fresh = [c for c in allc if not any(i in self.used_ids for i in c.ids) and kind_key(c) not in ts.used_kinds]
             plan.menu_claims = fresh[:8]
             # it reads what the supplier asked for itself: every answer and every data file we could give
