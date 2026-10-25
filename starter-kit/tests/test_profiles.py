@@ -325,3 +325,12 @@ def test_the_clause_sheet_sits_at_its_cheapest_price_for_us(world):
 def _strat_off(monkeypatch):
     """These tests cover the single switches / the case-level strategy; BUYER_STRAT (on by default) overrides them."""
     monkeypatch.setenv("BUYER_STRAT", "0")
+
+
+def test_every_situation_topic_of_the_data_is_read():
+    """Each news topic in the data that says what a supplier needs maps to a situation (the Sunday release added
+    customer_loss; chip_shortage was unmapped)."""
+    from buyer.dossier import NEWS_SITUATION, NEWS_TRAITS
+
+    for topic in ("customer_loss", "chip_shortage", "short_time_work", "credit_downgrade", "free_capacity"):
+        assert topic in NEWS_SITUATION and topic in NEWS_TRAITS

@@ -57,6 +57,8 @@ NEWS_TRAITS = {
     "refocus": "small_account",
     "energy_contract": "hedged_material",
     "new_plant": "free_capacity",
+    "customer_loss": "free_capacity",  # Sunday release: a customer cancelled its orders (70190 Pfaffenreuth)
+    "chip_shortage": "capacity_tight",
 }
 # news topics that describe a supplier's situation now (the plan reads them; `NEWS_TRAITS` turns them into traits)
 NEWS_SITUATION = {
@@ -69,6 +71,8 @@ NEWS_SITUATION = {
     "big_order": "capacity",
     "free_capacity": "slack",
     "new_plant": "slack",
+    "customer_loss": "slack",  # it lost a customer and needs work (Sunday release: 70190)
+    "chip_shortage": "capacity",
     "refocus": "refocus",
 }
 TRUSTED_YEARS = 8  # an active source of the part for this long is a partner, not a vendor
