@@ -799,11 +799,20 @@ def msg_body(case, p, status, stated, alt, say, th, keep):
 
 
 # -- the real transcripts ---------------------------------------------------------------------------------
+def read_text_any(path):
+    """Read a text file as UTF-8, falling back to cp1252 for files written by Windows tools before the UTF-8 fix."""
+    raw = Path(path).read_bytes()
+    try:
+        return raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return raw.decode("cp1252")
+
+
 def load_runs(runs_dir="runs"):
     """Every saved real arena session, oldest first: [(file, record)]."""
     out = []
     for f in sorted(glob.glob(str(_path(runs_dir) / "arena-P*.json"))):
-        rec = json.loads(Path(f).read_text(encoding="utf-8"))
+        rec = json.loads(read_text_any(f))
         if rec.get("state", {}).get("case_id") and rec.get("result", {}).get("c_best") is not None:
             out.append((Path(f).name, rec))
     return out

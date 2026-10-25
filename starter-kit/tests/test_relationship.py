@@ -125,3 +125,19 @@ def test_a_bidder_heading_lower_holds_back_the_signature():
     assert not BuyerAgent.heading_below(x, ts)  # no clear gain left
     x.plan.limit_hat = None
     assert not BuyerAgent.heading_below(x, ts)  # one reply is not a trend
+
+
+def test_tight_estimate_prices_the_charge_and_allows_a_bid_above_the_ask(world):
+    """P17: letter 37.10 is below its full cost over (1 - sustainable margin); the opening-quote cap used to price the
+    charge at 0 and the ask caps forbade any bid above the letter."""
+    case = json.loads(json.dumps(CASES["case:P17"]))
+    case["buyer"]["sustainable_margin_pct"] = 8  # the twin's draw; the case file says 0.5
+    est = Estimate(Dossier(world, case, case["suppliers"][0]))
+    assert est.err <= 0.05
+    est.open_value = 37.10
+    assert max(f for _, f in est.f_nodes()) > est.open_value * (1 - case["buyer"]["sustainable_margin_pct"] / 100)
+    plan = Planner(case, est)
+    plan.observe_reply([{"unit_price": 37.10, "payment_days": 30, "lead_time_days": 14}], "open")
+    assert plan.fair_price_case
+    assert plan.ask_cap == float("inf")
+    assert plan.packages[0].p_opt > 37.10

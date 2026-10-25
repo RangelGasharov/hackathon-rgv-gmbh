@@ -614,6 +614,10 @@ class BuyerAgent:
             # every package looks dearer than our walk-away, but that rests on a guess of its floor: put up to two
             # real offers just under the walk-away before settling (accepting still needs a sheet that beats it)
             sheets = [t for t in ts.plan.probe(reservation * 0.97) if not ts.last_sent or t not in ts.last_sent]
+        if not sheets and ts.sent <= 1 and not ts.last_sent and rounds_left > 2 and status not in ("agreed", "final_offer"):
+            # always procure: a real offer before any walk, in every approach, one step up from our last (it only
+            # stays under our walk-away if it ends cheaper than the alternative - settle() checks that)
+            sheets = [t for t in ts.plan.cheapest(ts.last_sent) if not ts.last_sent or t not in ts.last_sent]
         if status == "agreed" and sheets:
             # it agreed to our own sheet and that is still over our limit: the concession path would now step UP
             # (minimum step, "no step back") - P08 went 6.08 -> 6.35 over ten "agreed". Never a sheet dearer than

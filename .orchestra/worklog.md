@@ -1,5 +1,14 @@
 # Worklog
 
+## 2026-10-25 08:05 — M8 block A (API-key workers)
+- T-050 twin_real reads cp1252 records too; calibrated twin `python -m buyer.twin_real bench` = 69.5.
+- T-052/T-055 tests only (tests/test_no_deal.py, tests/test_tco.py): no-deal guard, clause by index direction, payment
+  days, every C lever in the grid, tenders awarded on C — all already held.
+- T-053 relationship cases: charge from our own cost estimate; may pay above the ask when C is lower (P17 0 -> 0.8-0.9).
+- T-057 no floor from one tiny move (f_hat capped, >= 2 moves, settlement history); always make a first offer.
+- T-056 scripts/gate.py + gate_baseline.json: tests + 6 benchmarks + per-category means; run before every push.
+- Live P02 defaults 0.735 (was 0.724).
+
 ## 2026-10-25 06:35 — M7 T-044 (API-key worker)
 - BUYER_STRAT on by default (BUYER_STRAT=0 turns it off); single-switch tests pin it off.
 - P12: Floor-chase jump capped at 1.5 % of the supplier's opening per round (it jumped 91.34 -> 98.11).

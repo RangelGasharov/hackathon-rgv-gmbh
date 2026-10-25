@@ -31,6 +31,18 @@
 - M7 (06:30) T-044: BUYER_STRAT default on; P12 jump capped at 1.5 %; tenders keep base opening; approach-aware tender hold.
   156 tests; twin 53.2/48.9/50.4/55.3, kit 62.1 (was off 45.7/45.7/47.7/46.6, 53.7); P05 0.62-0.72; P12 seed 1 0.90 vs 0.95. $0.91.
 
+## M8 Block A: offline hardening (user 06:50; no live sessions)
+| Task | Tier | Status | Tries | Files | Notes |
+|---|---|---|---|---|---|
+| T-050 calibrated twin loads on Windows | haiku | done | 1 | twin_real.py read helpers | $0.01; `python -m buyer.twin_real bench` = 69.5 |
+| T-051 P17/P01/P02 ~0 on twin: agent or twin? | sonnet | done | 1 | runs/analysis/lowcases.md | $0.65; P17 agent (relationship), P01 twin, P02 both; P07/P13 open |
+| T-052 no-deal guard, clause direction, payment days | sonnet | done | 1 | tests/test_no_deal.py | $0.22; all 4 already held |
+| T-053 relationship cases: charge from own estimate, bid above ask | sonnet | done (accepted by manager) | 1 | strategy, tests/test_relationship.py | $0.37; twin 62.3/59.0/64.4/68.9, real-twin 69.5 =, kit 62.1->58.9 (kit sim has no relationship charge) |
+| T-054 P07/P13 + every no-deal across benchmarks | sonnet | done | 1 | runs/analysis/lowcases2.md | $0.75; P07 agent (f_hat), P13 mostly twin, kit P09/P18 wrong no-deals |
+| T-057 floor guess + always-procure fixes | sonnet | done | 1 | strategy, agent | $0.43; twin 64.9/61.4/66.7/71.0, kit 61.7, real 69.5; P07 0.58-0.65 |
+| T-055 total-cost levers: is every C term negotiated (Incoterm/freight, lead time, tooling, chargeback, effective date), tenders by C | sonnet | done | 1 | tests/test_tco.py | $0.38; all levers held, tenders by C |
+| T-056 regression gate scripts/gate.py + baseline | haiku | done | 1 | scripts/gate.py, gate_baseline.json | $0.02; PASS, ~5 min, per-category check |
+
 ## Next (not started; see TUNING.md top 3)
 - One new verified argument per later round; answer volume asks concretely; minimum 0.5 % late steps
 - Compare with the other agent's LLM-led negotiator before the 13:00 freeze (team decision)

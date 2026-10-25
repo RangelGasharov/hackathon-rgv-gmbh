@@ -69,7 +69,7 @@ class Estimate:
             sigma = SIGMA_OWN if self.err <= 0.05 else SIGMA_K * self.err
             nodes = [(1 / len(Z5), self.full_cost * max(0.3, 1 + sigma * z)) for z in Z5]
             sust = self.d.case["buyer"].get("sustainable_margin_pct")
-            if self.open_value and sust:
+            if self.open_value and sust and self.err > 0.05:  # a tight own-plant estimate is trusted over the quote
                 cap = self.open_value * (1 - sust / 100)
                 nodes = [(w, min(f, cap)) for w, f in nodes]
             self._nodes_key, self._nodes = key, nodes
@@ -667,7 +667,14 @@ class Planner:
         when the supplier is under water, not merely below a sustainable margin.)"""
         if not (self.relationship and self.confident and self.ask_value and self.packages):
             return False
-        return self.ask_value < self.est.full_cost
+        sust = self.case["buyer"].get("sustainable_margin_pct") or 0
+        return self.ask_value < self.est.full_cost / (1 - sust / 100)
+
+    @property
+    def ask_cap(self):
+        """Highest supplier value we offer: just under its ask, or no cap when its ask leaves it below the sustainable
+        margin and a price above it removes the relationship charge for less than it costs."""
+        return math.inf if self.fair_price_case else (self.ask_value or math.inf) * 0.997
 
     # -- offers -----------------------------------------------------------------------------------
     def level(self, k):
@@ -722,7 +729,7 @@ class Planner:
         target = max(target, 0.75 * self.est.floor_value)
         if self.last_value:
             target = max(target, self.last_value * 1.003)  # never a step back
-        return min(target, ask * 0.997)
+        return min(target, self.ask_cap)
 
     def price_at(self, pkg, k, rounds_left=10):
         """Our price for a package in round k, at this round's supplier-value target."""
@@ -732,7 +739,7 @@ class Planner:
                 target,
                 min(
                     self.est.value(self.case, self._complete({**pkg.combo, PRICE: pkg.p_opt})),
-                    (self.ask_value or math.inf) * 0.997,
+                    self.ask_cap,
                 ),
             )
         p = self.est.price_for_value(self.case, pkg.combo, target) or pkg.p_floor
@@ -917,13 +924,28 @@ class Planner:
         F = V0 - (V0 - A1) / k, k ~0.335 for leverage-type cases, ~0.75 for routine and strategic ones;
         price letters: today's price plus the data-justified change."""
         if self.anchor_value and self.case.get("type") == "price_increase":
-            return self.anchor_value
+            f, share = self.anchor_value, self.settle_share()
+            if share is not None and self.asks:  # its past settlements say where it ends up relative to its ask
+                f = min(f, self.asks[0] * share)
+            return f
         if len(self.asks) < 2:
             return None
         v0, a1 = self.asks[0], self.asks[1]
         wide = self.case.get("type") in ("rfq", "raw_material", "bundling", "capacity", "quality")
         k = 0.335 if wide else 0.75
-        return v0 - max(0.0, v0 - a1) / k
+        f = v0 - max(0.0, v0 - a1) / k
+        if self.est.err <= 0.10 and self.est.floor_value:  # one tiny first move extrapolates to a "floor" barely
+            f = min(f, self.est.floor_value)  # under its ask; our own cost estimate says where it can sign (P07)
+        return f
+
+    def settle_share(self):
+        """Share of its asking price this supplier kept in past negotiations (profile: settled vs asked, both
+        against today's price), or None when it has too little history or never gave way."""
+        n = (self.est.d.profile or {}).get("negotiations") or {}
+        a, s = n.get("asked_avg_pct"), n.get("settled_avg_pct")
+        if a is None or s is None or len(n.get("events") or []) < 3 or s >= a:
+            return None
+        return max(0.9, (1 + s / 100) / (1 + a / 100))
 
     @property
     def limit_hat(self):
@@ -944,6 +966,8 @@ class Planner:
         if f is None or not self.asks or not self.ask_value:
             return False
         v0 = self.asks[0]
+        if len(self.asks) < 3:  # its opening plus two moves: one counter is no trend (P13 took the first)
+            return False
         if v0 - f < 0.02 * v0:  # it barely moved in round 1 (a committee, a frozen list): no floor to read
             return False  # (b2 P02: this took its ask at once, above its opening price)
         return self.ask_value <= f + 0.15 * max(0.0, v0 - f)
@@ -1035,6 +1059,29 @@ class Planner:
             if len(out) >= n:
                 break
         return [self._no_step_back(t) for t in out]
+
+    def cheapest(self, last_sent=None):
+        """Always procure: when probe and match find nothing, the package cheapest for us as one real offer (kit P09
+        walked after the opening and never made one; the reservation still blocks a bad accept). First at its price
+        floor, then each time a quarter of the way up to its ask."""
+        best = None
+        for pkg in self.packages[:12]:
+            t = self._complete({**pkg.combo, PRICE: round(pkg.p_floor, 2)})
+            if not must_haves_ok(self.case, t, self.est.standard):
+                continue
+            if self.ask_value and not self.fair_price_case and self.est.value(self.case, t) > self.ask_value:
+                continue
+            c = cost(self.case, t, self.est)
+            if best is None or c < best[0]:
+                best = (c, t)
+        if not best:
+            return []
+        t = best[1]
+        prev = [x[PRICE] for x in last_sent or []]
+        ask = self.asks[-1] if self.asks else None
+        if prev and ask and ask > max(prev):
+            t = {**t, PRICE: round(max(prev) + 0.25 * (ask - max(prev)), 2)}
+        return [self._no_step_back(t)]
 
     def reprice_to_cost(self, terms, target_c):
         lo, hi = terms[PRICE] * 0.6, terms[PRICE] * 1.6  # C misbehaves far from real prices: stay near
