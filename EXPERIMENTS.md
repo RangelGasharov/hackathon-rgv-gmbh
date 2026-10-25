@@ -199,7 +199,23 @@ not come below 29.00 in either, so the band to it never applied - no evidence ei
 28.93 sliver to 70250 (its 29.00, 70210's reply in flight) is what the second part now avoids; there 70250 answered
 with a final 29.00 and agreed. (The other agent's analysis of 25 Oct pointed at P05 too, but its cause - 14-day
 payment mispriced - does not hold here: our C uses the kit's `total_cost`, which charges the arena's EUR 2,375 for
-14 days.)
+14 days.) Two more live P05 sessions on 8d9a62c: **0.744 and 0.744** (70250 at 28.74 both times). The band again was
+not reached, but the RFQ two-step hold (4.0) got its first live evidence: both times 70250 said it would clarify
+internally at 30.00, we resent our exact sheets, and it agreed at our 28.74 (earlier 70250 closes: 28.92-29.00,
+0.717-0.725).
+
+### 4.0c The far bidder's rival quote was dropped from the first mail (`BuyerAgent.compose`, `far`)
+Why 70210 reached 27.50 in three runs and stopped at 29.00-31.00 in today's four: in the three, our first mail cited
+the rival's quote (`offer:70240-0`, 31.50 against its 36.00) and its back office said "The buyer shows a much lower
+rival quote. I give half the step now" (30.00), then "Checked: give the rest of the step" (27.50). In today's four the
+first mail cited index facts only and it countered 31.50-32.00. The `far` rule (29bf84c) already says a bidder quoting
+far above the cheapest rival hears that rival in the first mail, but Leverage paces its first mail to 2 arguments
+by weight and two index facts (0.96, 0.95) outweighed the quote, so the rule never took effect for a paced bidder.
+The older test `test_rival_price_held_until_it_holds` (87e563a) passed only through that cap: its rival (30.00
+against 36.00) is far; its rivals are now within 8 %, which keeps its point (no rival price to a near bidder before
+it holds). Fix: when `far`, the strongest rival quote takes the first slot. Regression test
+`test_a_far_bidder_hears_the_rival_quote_in_the_first_mail_under_the_pace_cap` (fails without: index facts only).
+Since each ID is cited once per case, 70240 now gets the AS-14404 fact 70210 used to get. Not live-tested yet.
 
 
 ### 4.1 Clause sheet priced below the supplier's healthy margin (P02, `Planner._clause_pair`)

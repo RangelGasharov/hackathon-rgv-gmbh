@@ -820,6 +820,12 @@ class BuyerAgent:
             allc = [c for c in allc if c.kind not in RISKY_KINDS]  # supplier and only read as nagging
         if final:
             allc = []  # no new arguments after its last word: we only take what it offered
+        if far:
+            # the far bidder's rival quote takes one of the first mail's slots: under a pace cap of 2 two index facts
+            # outweighed it (live P05, 4 of 4: 70210 countered 31.50-32.00 and stopped at 29.00-31.00; with the quote,
+            # 3 of 3: "a much lower rival quote. I give half the step now", then the rest: 36.00 -> 30.00 -> 27.50)
+            lead = [c for c in allc if c.kind in ("offer", "quote")][:1]
+            allc = lead + [c for c in allc if c not in lead]
         cap = flags.claims_per_message()
         if approach and approach.name == QUICK_CLOSE:
             cap = min(cap, 2 if ts.k == 0 else 1)  # one MESO pair, nothing else: few arguments

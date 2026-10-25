@@ -64,6 +64,9 @@ live practice sessions, document what works and what doesn't. Score per case = (
   for a rival's in-flight reply instead of a sliver counter; single-supplier cases keep 0.2 % (twins lost 0.6-1.6
   with 1 % everywhere). Live P05 x2: 0.717, 0.614, band not reached (70210 stayed >= 29.00). 36 practice sessions
   used by this session (user allowed "a couple" more at 09:55). EXPERIMENTS.md 4.0b.
+- 2026-10-25 10:25 Live P05 x2 more (user asked): 0.744, 0.744 - the RFQ two-step hold worked (70250 agreed at our
+  held 28.74). Found why 70210 stopped at 29-31: Leverage's pace cap of 2 dropped the rival quote the `far` rule
+  wants in the first mail (with it, 3 of 3 reached 27.50). Fixed (EXPERIMENTS.md 4.0c), not live-tested. 38 used.
 - 2026-10-25 07:50 (Claude, A/B session): spreading arguments (2 first, then 1 per message; = BUYER_PACE) lost live on
   build 9652365: P01 0.981/0.978 vs 0.992, P05 0.762/0.717 vs 0.723. Details in EXPERIMENTS.md. 34 practice sessions used by that session.
 - 2026-10-25 07:30 Kept T-053 (relationship charge from own cost estimate, bid above ask when C is lower) despite kit
