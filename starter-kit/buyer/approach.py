@@ -177,10 +177,15 @@ def choose(profile, case, rivals=None, dossier=None, base_gap=0.08, quote=None):
         add(0 if relationship else 1, "its finances are weak")  # a strategic supplier is protected by the charge
     # news: what weakens it gives us room, what strengthens it takes room away
     news = news_kinds(profile, d)
-    weak = [news[k] for k in WEAKENING if k in news]
+    own_items = getattr(d, "own_news", None)
+    if own_items is None:
+        own_items = getattr(d, "current_news", None) or []
+    own = {NEWS_SITUATION[t] for _i, _d, t, _h in own_items if t in NEWS_SITUATION}
+    own |= {NEWS_SITUATION[x.get("topic")] for x in (profile or {}).get("news") or [] if x.get("topic") in NEWS_SITUATION}
+    weak = [news[k] for k in WEAKENING if k in news and k in own]  # market news counts for less than its own
     strong = [news[k] for k in STRENGTHENING if k in news]
     for k in WEAKENING & news.keys():
-        add(1 if (k == "distress" and relationship) else 2, f"news: {news[k]}")
+        add(1 if (k == "distress" and relationship) or k not in own else 2, f"news: {news[k]}")
     for k in STRENGTHENING & news.keys():
         add(-2, f"news: {news[k]}")
     # b. what it shows now (its traits from its documents and the read)

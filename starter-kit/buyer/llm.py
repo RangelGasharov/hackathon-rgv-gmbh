@@ -2,6 +2,7 @@
 once the cap is reached, calls raise BudgetExceeded and the agent falls back to its template writer."""
 
 import json
+import logging
 import os
 import threading
 import time
@@ -16,6 +17,22 @@ PRICES = {  # USD per million tokens: input, output, cache read, cache write (5 
 }
 SPEND = Path(os.environ.get("BUYER_SPEND_FILE", "runs/spend.json"))
 _lock = threading.Lock()
+log = logging.getLogger("buyer")
+FINAL_MIN_BUDGET_USD = 40.0  # a 19-case wave at ~$0.037 per strategist call needs far more than the practice default
+
+
+def warn_final_budget(budget=None):
+    """At the start of a Live Final run: say loudly if the LLM budget is practice-sized or already spent.
+    Returns the warnings (also logged as errors)."""
+    budget = float(budget or os.environ.get("BUYER_BUDGET_USD", 14))
+    used, out = spent(), []
+    if budget < FINAL_MIN_BUDGET_USD:
+        out.append(f"BUYER_BUDGET_USD is {budget:g}, below {FINAL_MIN_BUDGET_USD:g}: the strategist may be cut mid-wave")
+    if used > 0:
+        out.append(f"{SPEND} already holds ${used:.2f} of earlier spend: reset it or raise BUYER_BUDGET_USD")
+    for w in out:
+        log.error("LIVE FINAL BUDGET WARNING: %s", w)
+    return out
 
 
 class BudgetExceeded(RuntimeError):
@@ -62,6 +79,8 @@ class Claude:
 
     def complete(self, system, user, max_tokens=4000, timeout=None):
         if spent() >= self.budget:
+            log.error("LLM BUDGET USED UP ($%.2f of $%g): the strategist is off, the template writer takes over",
+                      spent(), self.budget)
             raise BudgetExceeded(f"LLM budget of ${self.budget} used up")
         kwargs = dict(
             model=self.model,

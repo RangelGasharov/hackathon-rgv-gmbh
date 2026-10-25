@@ -35,10 +35,12 @@ Team mirror refreshed: runs/team 319 sessions.
 | T-081 wave 1b: C1 units, C2 hedge, C3 alias, C4 horizon, C5 news claims, C11, A5 rel, A6 clause tol, A1 tender f_hat | sonnet | done | 1 | dossier, claims, profiles, approach, strategy, tests/test_wave1_inputs.py | A5 reverted (P01 twin); C4 -> free give = longest contract; gate PASS |
 | wave 3: profiles build (70210 trend -10.4) + T-083 deep reads of 6 release suppliers | opus | done, gate PASS | 1 | profiles/ | $0.63; 46/46 clean; 70340 hedged to 2027-12; 70170/70190/70270 cash_short strong |
 | T-082 wave 2: A2 payment-day rules + B4 answer every ask | opus | done | 1 | strategy, writer, agent | $2.90; benchmarks PASS; replay test small-record rule widened |
-| T-084 levers: volume shift from a rival source + committee business case (records P04/P10) | sonnet | pending (T-082) | 0 | agent, writer, claims, approach, tests/test_levers.py | user 11:00 |
+| T-084 levers: volume shift from a rival source + committee business case (records P04/P10) | sonnet | ON HOLD (user 11:40: config approaches, no code) | 0 | agent, writer, claims, approach, tests/test_levers.py | user 11:00 |
 | live record attempts A (after merge gate): P01 P02 P03 P05 P07 P08 P18 defaults + P11 BUYER_QSTEP=1, up to 3 tries each (.claude/runs/records.py) | manager | pending | 0 | | user: records P11 0.794, P07 0.769, P03 0.936, P05 0.852 |
-| T-085 Live Final wave rules: every rule checked, gaps fixed, 19-case wave simulated | sonnet | pending (T-082; parallel with T-084) | 0 | runner, llm, client, tests/test_waves.py | user 11:10 |
-| live record attempts B (after T-084 gate): P04 x2, P10 x2 | manager | pending | 0 | | user: records P04 0.860, P10 0.694 |
+| T-085 Live Final wave rules: every rule checked, gaps fixed, 19-case wave simulated | sonnet | done (gate + push pending) | 1 | runner, llm, client, tests/test_waves.py | $0.43; 19/19 closed by 284 s of 480; banned-endpoint guard; budget warning |
+| T-086 BUYER_NIBBLE (one small counter below a close open offer, then close) | sonnet | done | 1 | flags, agent, tests/test_nibble.py | $0.23; default off; live via sets C and D |
+| T-087 every news item: market news -> suppliers, owner/succession/rename kinds, bundles, memo | sonnet | done | 1 | dossier, approach, writer, tests/test_news.py | $0.40; sets C/D play on it (fresh processes) |
+| live record attempts B: out-of-the-box config per case (.claude/runs/outofbox.json), all 10 hosted, 2 tries; was: P04 x2, P10 x2 | manager | pending | 0 | | user: records P04 0.860, P10 0.694 |
 
 ## Done
 - M0 Audit of improve/supplier-levers — fixes, trusted-supplier rules, plan from history/news/letters · commit f8169b1

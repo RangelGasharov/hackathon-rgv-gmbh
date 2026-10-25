@@ -12,7 +12,8 @@ BUYER_FINALC=1             after its final offer take the sheet (standing or alt
 BUYER_LIKE=1               read the supplier's first move on like terms for the floor/limit estimates (`first_move`)
 BUYER_QSTEP=1              quality cases: steps >= 0.55 % of its opening while it is >= 2 % above ours
                            (both W3b, off: see EXPERIMENTS.md 3.2)
-BUYER_STRAT=0             on by default, 0 turns it off: one approach per supplier thread (Leverage, Floor-chase, Quick-close; `buyer/approach.py`),
+BUYER_NIBBLE=1             before accepting a single supplier's open offer, one counter a small step below it (`nibble`)
+BUYER_STRAT=0            on by default, 0 turns it off: one approach per supplier thread (Leverage, Floor-chase, Quick-close; `buyer/approach.py`),
                            chosen at case start: it sets the opening depth, sheets per message, stop rule, tactics and
                            which of PACE / FLOOR / FINALC apply to that thread (the variables above are then ignored)
 
@@ -72,6 +73,10 @@ def like():
     """BUYER_LIKE=1: read the supplier's first move on like terms (`Planner.first_move`). Off by default: on P11's
     0.794 replies it raised the floor estimate and accepted 45.50 a round before the supplier came down to 45.00."""
     return os.environ.get("BUYER_LIKE") == "1"
+
+
+def nibble():
+    return os.environ.get("BUYER_NIBBLE") == "1"
 
 
 def qstep():

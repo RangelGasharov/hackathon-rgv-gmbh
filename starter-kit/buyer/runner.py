@@ -10,6 +10,7 @@ import argparse
 import functools
 import json
 import logging
+import math
 import os
 import threading
 import time
@@ -25,6 +26,8 @@ from .agent import ENDED, HOLD_AFTER_S, BuyerAgent, latest, round_cap
 from .dossier import World
 
 log = logging.getLogger("buyer")
+MARGIN_PER_LATENCY = 2.5  # the close margin grows with the slowest supplier reply seen: 2.5 x latency + fixed
+MARGIN_FIXED_S = 20.0
 MOVE_BUDGET_S = 45  # our own deadline per message, well inside the arena's 60 s
 
 
@@ -105,11 +108,20 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
             log.warning("refresh %s failed: %s", sid, e)
 
     failed = {}  # (supplier, sheet id) -> failed accepts
+    slowest = [0.0]  # the slowest supplier reply (our send to its answer) seen in this case
+
+    def clock(cap):
+        """The wave's cap, pulled in so the last move lands before it: the agent's own margin is 90 s; when replies
+        are slow, 2.5 x the slowest reply + 20 s is more. Returns (deadline for the agent, seconds left to close)."""
+        if not cap:
+            return cap, math.inf
+        extra = max(0.0, MARGIN_PER_LATENCY * slowest[0] + MARGIN_FIXED_S - agent.close_margin)
+        return cap - extra, cap - extra - time.time() - agent.close_margin
 
     def worker(sid):
         while not done.is_set():
             cap = deadline() if callable(deadline) else deadline
-            agent.deadline = cap
+            agent.deadline, slack = clock(cap)
             t0 = time.monotonic()
             with lock:
                 if done.is_set():
@@ -148,8 +160,10 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
                 # timeout repeats our last offer and costs patience; three end the thread - arena b2 P05)
                 if time.monotonic() - reply_at.get(sid, time.monotonic()) > HOLD_AFTER_S and not agent.t[sid].in_flight:
                     with lock:
-                        decision = agent.keep_alive(threads, sid)
-                        if decision is None and round_cap(agent.case) - agent.t[sid].sent <= 1:
+                        # a short wave clock: no new holding notes, close the best standing sheet that beats the alternative
+                        short = slack <= 0
+                        decision = None if short else agent.keep_alive(threads, sid)
+                        if decision is None and (short or round_cap(agent.case) - agent.t[sid].sent <= 1):
                             # no note left to send and the reply is aging: close the best sheet instead of timing out
                             decision = agent.close_now(threads, sid)
                             if decision:
@@ -177,6 +191,7 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
             took = time.monotonic() - t0
             if took > MOVE_BUDGET_S:
                 log.warning("%s %s: decision took %.0fs", case_id, sid, took)
+            sent_at = time.monotonic()
             try:
                 reply = table.send(target, msg)
             except ArenaError as e:
@@ -206,6 +221,7 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
             if "result" in reply:
                 finish(reply["result"])
                 return
+            slowest[0] = max(slowest[0], time.monotonic() - sent_at)
             with lock:
                 threads[target] += [{**msg, "from": "buyer"}, fetch_documents(table, reply)]
                 agent.t[target].in_flight = False
@@ -366,6 +382,11 @@ def main(argv=None):
         log.warning("Sunday release loaded from %s", world.pkg.release)
     elif time.time() > 1792904400:  # 2026-10-25 07:00 UTC: the release should be there by now
         log.warning("no Sunday release found next to %s: run `uv run arena data` again", a.data)
+    if a.set == "final" and a.cmd == "run":
+        from .llm import warn_final_budget
+
+        for w in warn_final_budget():
+            print("WARNING:", w)
     factory = make_factory(world, a.writer)
     client = ArenaClient()
     Path("runs").mkdir(exist_ok=True)

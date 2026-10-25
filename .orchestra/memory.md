@@ -28,6 +28,15 @@ live practice sessions, document what works and what doesn't. Score per case = (
   and merge the other agent's commits first; no .env/runs/.claude, no keys).
 - Records (user 11:15): squeeze the maximum in record attempts and retry a case (up to 3 tries) if no record.
   BUYER_BUDGET_USD raised to 40 in this checkout's .env ($3.48 spent at 11:12).
+- Records (user 11:35): keep trying different approaches until at least one case beats our team best: set A default
+  (3 tries), set B .claude/runs/outofbox.json, set C outofbox2.json (2 tries each); stop new tries at 12:30 CET.
+- 8-minute rule (user 11:45): only adopt approaches whose live sessions finish well inside the 8-min wave cap; measure
+  session durations from runs/live logs (default build: 0:26-4:06 per session).
+- Lesson 11:45: the same approach repeats almost the same live result (P02 0.735 x3, P03 0.919 x3): vary the approach
+  per try, don't repeat it. Set A default 3 tries: no record (best P01 .978, P03 .919, P07 .734, P05 .675, P11 .710).
+- Plan 11:55 (user): sets C and D already run on the T-087 news build + nibble (fresh runner processes), so set E is
+  only for spare time; then
+  gate ~12:25, push ~12:40, pre-flight, freeze 13:00. Never run live and the gate at the same time.
 - **Live sessions (user, 03:55): run only the live tests the user names, nothing extra** (no unrequested A/B).
   Done 08:00: live P02 defaults 0.735 (was 0.724; 361.25/90 d/clause, relationship charge 36.7k vs 66.9k before).
   Done 06:10: live BUYER_STRAT=1 P18 0.552 (Leverage, opened 4.88, deal 5.30/30 d), P10 0.679 (Quick-close, = base).

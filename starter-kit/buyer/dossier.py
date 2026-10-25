@@ -64,6 +64,9 @@ NEWS_TRAITS = {
     "new_plant": "free_capacity",
     "customer_loss": "free_capacity",  # Sunday release: a customer cancelled its orders (70190 Pfaffenreuth)
     "chip_shortage": "capacity_tight",
+    "new_owner": "free_capacity",  # a new owner wants volume and quick wins
+    "succession": "approval_ladder",  # uncertain leadership: decisions wait for approval
+    "approvals": "approval_ladder",
 }
 # news topics that describe a supplier's situation now (the plan reads them; `NEWS_TRAITS` turns them into traits)
 NEWS_SITUATION = {
@@ -79,7 +82,55 @@ NEWS_SITUATION = {
     "customer_loss": "slack",  # it lost a customer and needs work (Sunday release: 70190)
     "chip_shortage": "capacity",
     "refocus": "refocus",
+    "new_owner": "slack",  # the price policy may reset and the new owner wants volume
+    "succession": "approval",
+    "approvals": "approval",
+    # market news mapped to the suppliers it concerns (`market_situation`); "renamed" is an alias only (World.aliases)
+    "market_slack": "slack",
+    "market_cost_up": "cost_up",
+    "market_cost_down": "cost_down",
 }
+MARKET_MAX = 2  # market items per dossier: one broad item must not dominate the supplier's own news
+COST_MOVE_MIN = 3.0  # % a market price must move to count as news for a supplier
+# market item keywords -> the suppliers it concerns (a regex over their parts' material group / category, or a flag)
+MARKET_RULES = [
+    (r"copper|cable", r"cable|motor|drive|electrical"),
+    (r"electronic (?:board|component)|pcba|semiconductor|chip", r"pcba|sensor|drive|electrical"),
+    (r"iron cast|castings?|foundry", r"cast"),
+    (r"1\.4\d\d|stainless|inox|nickel|alloy", r"inox"),
+    (r"\bsteel\b|iron and steel", r"steel|sheet|bar_|fastener|bearing|mach|cast"),
+    (r"alumin", r"alumin"),
+    (r"bearing", r"bearing"),
+    (r"seal|rubber|elastomer", r"seal"),
+    (r"pump", "pump"),  # pump makers' demand: suppliers of parts that go into pumps
+    (r"labou?r|wage|energy|power|electricity|gas price", "all"),
+]
+SLACK_WORDS = r"postpone|delay|slow|cancel|weaker demand|weak demand|declin|shrink|push[^.]{0,30}into"
+
+
+def market_situation(row, groups, pump):
+    """The topic a market news `row` becomes for a supplier whose parts have these material groups / categories
+    (`groups`, lower case) and which supplies pump parts (`pump`): "market_slack" (demand pushed out), "market_cost_up"
+    (its inputs got dearer), "market_cost_down", or None when it does not concern the supplier."""
+    text = f"{row.get('headline') or ''} {row.get('body') or ''}"
+    low = text.lower()
+    hit = any(
+        re.search(kw, low) and (scope == "all" or (scope == "pump" and pump) or (scope not in ("all", "pump") and re.search(scope, groups)))
+        for kw, scope in MARKET_RULES
+    )
+    if not hit:
+        return None
+    if re.search(SLACK_WORDS, low):
+        return "market_slack"
+    m = re.search(r"([+\-−]?)\s?(\d+(?:[.,]\d+)?)\s*%", text)
+    if not m:
+        return None
+    pct = float(m.group(2).replace(",", ".")) * (-1 if m.group(1) in ("-", "−") else 1)
+    if pct >= COST_MOVE_MIN:
+        return "market_cost_up"
+    return "market_cost_down" if pct <= -COST_MOVE_MIN else None
+
+
 TRUSTED_YEARS = 8  # an active source of the part for this long is a partner, not a vendor
 COUNTRY_COST = {"DE": 1.0, "AT": 1.05, "CH": 1.1, "CZ": 0.83, "PL": 0.83, "HU": 0.83, "TR": 0.75, "CN": 0.7}
 OWNER_MARGIN = {"group": 0.12, "private": 0.10, "family": 0.09, "founder": 0.08}
@@ -205,6 +256,31 @@ class World:
 
     def all(self, sql, *a):
         return self.db.execute(sql, a).fetchall()
+
+    @cached_property
+    def market_rows(self):
+        """Market news that names no supplier (the database and the Sunday release), newest first."""
+        out = [dict(r) for r in self.all("SELECT * FROM news WHERE topic='market' AND COALESCE(supplier_id,'')=''")]
+        if self.pkg.release:
+            out += [
+                dict(r)
+                for r in self.pkg._ids.values()
+                if r.get("root")
+                and r.get("table") == "news"
+                and r.get("topic") == "market"
+                and not (r.get("supplier_id") or r.get("supplier"))
+            ]
+        return sorted(out, key=lambda r: str(r.get("date") or ""), reverse=True)
+
+    @cached_property
+    def memos(self):
+        """Our own memos of the Sunday release, newest first: [(id, text)]. Case-level context for the strategist."""
+        if not self.pkg.release:
+            return []
+        rows = [
+            r for r in self.pkg._ids.values() if r.get("root") and r.get("table") == "documents" and r.get("kind") == "memo"
+        ]
+        return [(r["id"], self.doc_text(r["id"])) for r in sorted(rows, key=lambda r: str(r.get("date")), reverse=True)]
 
     @cached_property
     def series_last(self):
@@ -727,13 +803,37 @@ class Dossier:
         return n, round(sum(r["asked_pct"] for r in rows) / n, 1), round(sum(r["settled_pct"] for r in rows) / n, 1)
 
     @cached_property
-    def current_news(self):
-        """Its news that tells us its situation now, newest first: [(id, date, topic, headline)]."""
+    def own_news(self):
+        """Its own news that tells us its situation now, newest first: [(id, date, topic, headline)]."""
         return [
             (r.get("id"), r.get("date"), r.get("topic"), r.get("headline"))
             for r in self.w.rows("news", self.sid)
             if r.get("topic") in NEWS_SITUATION
         ]
+
+    @cached_property
+    def market_news(self):
+        """Market news that concerns this supplier (by the material groups and categories of all the case's parts and
+        its own category), at most `MARKET_MAX`, demand news first: [(id, date, topic, headline)], topics `market_*`."""
+        groups, pump = [(self.sup["category"] if self.sup else None) or ""], False
+        for p in self.case["parts"]:
+            r = self.w.one("SELECT category, material_group, pump_series FROM parts WHERE id=?", p)
+            if r:
+                groups += [r["category"] or "", r["material_group"] or ""]
+                pump = pump or bool(r["pump_series"])
+        groups = " ".join(groups).lower()
+        out = []
+        for r in self.w.market_rows:
+            topic = market_situation(r, groups, pump)
+            if topic and topic != "market_cost_down":
+                out.append((r.get("id"), r.get("date"), topic, r.get("headline")))
+        out.sort(key=lambda x: x[2] != "market_slack")  # stable: newest first within a kind
+        return out[:MARKET_MAX]
+
+    @cached_property
+    def current_news(self):
+        """Its news that tells us its situation now, its own first, then the market's: [(id, date, topic, headline)]."""
+        return self.own_news + self.market_news
 
     @cached_property
     def relationship(self):

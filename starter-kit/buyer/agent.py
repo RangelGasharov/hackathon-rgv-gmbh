@@ -198,6 +198,7 @@ class ThreadState:
         self.said_once = set()  # standing commitments already said in this thread (`once`)
         self.final_holds = 0  # holding notes sent after its final offer: at most one
         self.took_earlier = False  # at its final offer we sent back its own earlier, cheaper sheet: once
+        self.nibble = None  # BUYER_NIBBLE: (its price before, our nibble price) once we sent our one small counter
         self.band_waited = -1  # the reply (`seen`) we last waited on inside `CLOSE_BAND` for a rival's reply
 
 
@@ -488,6 +489,8 @@ class BuyerAgent:
                     self.log.append((s, "take_alternative", terms.get("unit_price")))
                     return {"supplier_id": s, "message": self.compose(threads, s, sheets=[dict(terms)])}
                 sheet_id = main_id
+            if (nib := self.nibble(threads, s, sheet_id, time_left, force)) is not None:
+                return nib
             self.log.append((s, "accept", round(self.t[s].c_standing)))
             return {"supplier_id": s, "message": {"action": {"type": "accept", "term_sheet_id": sheet_id}}}
 
@@ -519,6 +522,13 @@ class BuyerAgent:
             return settle(force=True)
         if ts.dead:
             return None
+        if ts.nibble and status in ("open", "agreed", "final_offer") and measure(ts) <= reservation:
+            # BUYER_NIBBLE: the reply to our one small counter: its standing sheet when it is no dearer than before
+            # the nibble (agreed, held, final at its price or a counter between); a dearer one takes the normal path
+            _, now = standing(threads[sid])
+            if (now.get("unit_price") or math.inf) <= ts.nibble[0] + 1e-9:
+                self.log.append((sid, "nibble_close", now.get("unit_price")))
+                return accept(sid)
         rounds_left = round_cap(self.case) - ts.sent
         # in an RFQ, keep going while another bidder's next package is clearly cheaper than this sheet
         rival_better = any(  # another bidder's real standing offer is clearly cheaper and it can still move,
@@ -782,6 +792,41 @@ class BuyerAgent:
         msg = self.compose(threads, sid, sheets=sheets, trade=True)
         if ts.plan.ask_value and ts.plan.last_value and ts.plan.last_value >= ts.plan.ask_value * 0.99:
             ts.matched = True  # the concession path has reached its own offer
+        return {"supplier_id": sid, "message": msg}
+
+    def nibble(self, threads, sid, sheet_id, time_left, force):
+        """BUYER_NIBBLE: before accepting its open offer, one counter a small step below it on the same terms
+        (`decide` closes on the best standing sheet whatever comes back). None: accept as planned."""
+        ts = self.t[sid]
+        if not flags.nibble() or force or ts.nibble:
+            return None
+        tender = self.case.get("type") == "rfq" or len(self.case.get("suppliers") or []) > 1 or len(self.t) > 1
+        main_id, terms = standing(threads[sid])
+        price = terms.get("unit_price")
+        if (
+            tender
+            or not price
+            or sheet_id != main_id
+            or latest(threads[sid]).get("status") != "open"
+            or ts.plan.fair_price_case
+            or round_cap(self.case) - ts.sent < 2
+            or time_left <= 120
+        ):
+            return None
+        prices = [
+            m["term_sheets"][0]["terms"].get("unit_price")
+            for m in threads[sid]
+            if m.get("from") != "buyer" and m.get("term_sheets")
+        ]
+        steps = [a - b for a, b in zip(prices, prices[1:]) if a and b and a > b]
+        step = max(0.005 * price, (steps[-1] / 2) if steps else 0.0)
+        low = round(price - step, 2)
+        if low >= price:
+            return None
+        ts.nibble = (price, low)
+        self.log.append((sid, "nibble", (price, low)))
+        msg = self.compose(threads, sid, sheets=[{**terms, "unit_price": low}], exact=True)
+        msg["_plan"].levers.append(f"If you can meet {low:.2f} per unit, we sign now.")
         return {"supplier_id": sid, "message": msg}
 
     @staticmethod

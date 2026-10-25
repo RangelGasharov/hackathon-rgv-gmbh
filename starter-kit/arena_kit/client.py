@@ -24,6 +24,21 @@ ME_PATH = "/me"
 MAX_RETRY_AFTER_S = 5
 
 
+# The Live Final rules ban the agent from reading the event feed, the screen and the results; the final's
+# leaderboard too. Checked on every call, so no code path can reach them by accident.
+BANNED_PATHS = ("/events", "/screen", "/results")
+
+
+class BannedEndpoint(RuntimeError):
+    """The agent tried to call an endpoint the Live Final rules forbid."""
+
+
+def check_allowed(method, path, params=None):
+    p = "/" + path.strip("/")
+    if p.startswith(BANNED_PATHS) or (p.startswith("/leaderboard") and (params or {}).get("set") == "final"):
+        raise BannedEndpoint(f"{method} {p} is banned for the agent during the Live Final")
+
+
 class ArenaError(Exception):
     def __init__(self, status: int, detail):
         super().__init__(f"HTTP {status}: {detail}")
@@ -58,6 +73,7 @@ class ArenaClient:
             time.sleep(wait)
 
     def _call(self, method, path, body=None, params=None, raw=False):
+        check_allowed(method, path, params)
         headers = {MOVE_ID_HEADER: uuid.uuid4().hex} if method == "POST" else {}
         for attempt in range(self.retries + 1):
             self._pace()

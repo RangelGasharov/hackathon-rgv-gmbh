@@ -271,7 +271,11 @@ class StrategistWriter(ClaudeWriter):
     def system(self, plan):
         d = plan.d
         texts = re.sub(r"\s+", " ", d.texts or "")[:6000]
-        return f"{STRATEGIST}\n\nWHAT WE KNOW ABOUT THIS SUPPLIER:\n{d.brief()}\n\nITS DOCUMENTS (notes, letters, quote remarks, news):\n{texts}"
+        memo = "".join(
+            f"\n\nOUR PURCHASING MEMO ({i}; background for the whole case, nothing to cite):\n{t[:1500]}"
+            for i, t in d.w.memos[:1]
+        )
+        return f"{STRATEGIST}\n\nWHAT WE KNOW ABOUT THIS SUPPLIER:\n{d.brief()}\n\nITS DOCUMENTS (notes, letters, quote remarks, news):\n{texts}{memo}"
 
     def user(self, plan):
         case, b = plan.case, plan.case["buyer"]
