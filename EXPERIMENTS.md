@@ -215,7 +215,25 @@ The older test `test_rival_price_held_until_it_holds` (87e563a) passed only thro
 against 36.00) is far; its rivals are now within 8 %, which keeps its point (no rival price to a near bidder before
 it holds). Fix: when `far`, the strongest rival quote takes the first slot. Regression test
 `test_a_far_bidder_hears_the_rival_quote_in_the_first_mail_under_the_pace_cap` (fails without: index facts only).
-Since each ID is cited once per case, 70240 now gets the AS-14404 fact 70210 used to get. Not live-tested yet.
+Since each ID is cited once per case, 70240 now gets the AS-14404 fact 70210 used to get. Gate: twin_real +1.79
+(P05 0.588 -> 0.769), persona twins -0.16..+0.37.
+
+Live, 2 P05 sessions on 424a4c0: **0.814** and **0.484**. Both first mails cited the rival quote and both times
+70210's back office said "a much lower rival quote. I give half the step now", then gave the rest (36.00 -> 30.50 ->
+28.00): the fix works. 0.814: its final 28.00, our holding note, it agreed, we took it (best P05 of the day). 0.484:
+after its 28.00 (open) we countered 27.27 - a step of 0.08 from our 27.19, 0.2 % of its opening - its call was a
+final offer and it withdrew on reading our sheet. Separately 70250 walked: after its "clarify internally" 30.00 our
+two-step hold was composed and written but never reached the arena (no second buyer message; three timeouts, it
+agreed to 28.74 on the first, then walked). A late send ends in a silent 409, so the log shows nothing: open, the
+runner should log 409s and send times. We closed 70240 at 31.00.
+
+**Next (not done): no dead counter after the rest of the step.** Across all saved runs, after a back office "gave
+the rest of the step" it never called a counter again for 70210: of 6 lower sheets we sent it there, 3 drew a
+withdrawal, 1 a walk, 1 a timeout loss, 1 a hold and then its own price; holding notes got its price agreed every
+time. 70250 moved once more (29.50 -> 29.00, our step 0.5 % of its opening, gap 2 %) and never withdrew. This is the
+T-004 rule (it counters only for a step >= 0.5 % of its opening and a gap >= 2 %): a sheet below it can only draw a
+hold, a final offer or a withdrawal. Candidate rule: in a tender, when our next step is below 0.5 % of its opening,
+take its sheet if it is the best and acceptable (else a holding note), never the small step.
 
 
 ### 4.1 Clause sheet priced below the supplier's healthy margin (P02, `Planner._clause_pair`)

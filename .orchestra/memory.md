@@ -67,6 +67,9 @@ live practice sessions, document what works and what doesn't. Score per case = (
 - 2026-10-25 10:25 Live P05 x2 more (user asked): 0.744, 0.744 - the RFQ two-step hold worked (70250 agreed at our
   held 28.74). Found why 70210 stopped at 29-31: Leverage's pace cap of 2 dropped the rival quote the `far` rule
   wants in the first mail (with it, 3 of 3 reached 27.50). Fixed (EXPERIMENTS.md 4.0c), not live-tested. 38 used.
+- 2026-10-25 10:35 Live P05 x2 on 424a4c0 (user asked, last 2): 0.814 (70210 at 28.00) and 0.484 (our 0.2 % step
+  after its rest-of-step drew a withdrawal; 70250's hold message never reached the arena). **40 of 40 used: no
+  more live sessions without a new budget from the user.** Next candidate: no sub-0.5 % step in tenders (4.0c).
 - 2026-10-25 07:50 (Claude, A/B session): spreading arguments (2 first, then 1 per message; = BUYER_PACE) lost live on
   build 9652365: P01 0.981/0.978 vs 0.992, P05 0.762/0.717 vs 0.723. Details in EXPERIMENTS.md. 34 practice sessions used by that session.
 - 2026-10-25 07:30 Kept T-053 (relationship charge from own cost estimate, bid above ask when C is lower) despite kit
