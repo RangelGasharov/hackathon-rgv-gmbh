@@ -1,5 +1,17 @@
 # Worklog
 
+## 2026-10-25 09:30 — M9 toward first place
+- Live all 10 hosted cases (defaults, 08:30): mean 0.683 (team best per case 0.792); gaps P05 -0.42, P11 -0.17, P08 -0.14.
+- T-060 runner.py `play_waves`: cases start most valuable first (no alternative first, then spend), max 10 open,
+  failed starts retried; tests/test_waves.py. 19-case timed simulation not run.
+- T-061: tender signs a final only if it is the cheapest standing sheet; cheapest rival quote cited in round 1 when a
+  bidder is >= 8 % above it; tenders open at least the base depth; never dearer than a supplier's own sheet after it
+  meets our price; a cheaper bidder missing a must-have still counts as a rival; Floor-chase paces one fact per mail;
+  a term locks only if the supplier insists on something other than our proposal; supplier cash rate learned from
+  its own payment-term price gap. P11 still open.
+- Data-dependent tests (relationship vs real deals, twin_real replay) scale with the local record size.
+- Gate PASS: twin 65.4/66.5/71.7/70.8, kit 62.4, calibrated twin 71.8 (was 69.5); warn P16 twin 0.96 -> 0.87.
+
 ## 2026-10-25 08:05 — M8 block A (API-key workers)
 - T-050 twin_real reads cp1252 records too; calibrated twin `python -m buyer.twin_real bench` = 69.5.
 - T-052/T-055 tests only (tests/test_no_deal.py, tests/test_tco.py): no-deal guard, clause by index direction, payment

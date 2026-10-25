@@ -37,6 +37,7 @@ class Estimate:
         self.d = dossier
         self.full_cost, self.err = dossier.full_cost
         self.rate = dossier.cash_rate
+        self.rate_learnt = None  # its own price gap between two payment terms beats our trait guess (`learn_cash_rate`)
         self.min_margin = dossier.min_margin
         self.standard = dict(dossier.standard_guess)
         self.set_standard(standard)
@@ -113,6 +114,30 @@ class Estimate:
         prem = round(min(0.02, max(0.0, statistics.median(found))), 5)
         changed = abs(prem - self.lead_prem) > 0.0005
         self.lead_prem, self.lead_prem_learnt = prem, True
+        return changed
+
+    def learn_cash_rate(self, sheets):
+        """Two sheets of one reply that differ only in payment days and price are worth the same to the supplier:
+        the gap is what a day of payment is worth to it (live P03: 432.29 @ 90 days / 430.82 @ 60 = 4 % a year,
+        where our trait guess made 14 days look cheap for us and the deal closed at 30 days, EUR 26k dearer in C
+        than its own 90-day sheet). True if the estimate changed."""
+        found = []
+        for a, b in itertools.combinations([t for t in sheets if t.get(PRICE)], 2):
+            if any(a.get(f) != b.get(f) for f in set(a) | set(b) if f not in (PRICE, "payment_days")):
+                continue
+            da, db = a.get("payment_days"), b.get("payment_days")
+            if da is None or db is None or da == db:
+                continue
+            if da > db:
+                a, b, da, db = b, a, db, da  # a pays sooner
+            gap = (b[PRICE] - a[PRICE]) / a[PRICE]
+            if gap > 0:
+                found.append(gap * 360 / (db - da))
+        if not found:
+            return False
+        rate = round(min(0.30, max(0.01, statistics.median(found))), 4)
+        changed = abs(rate - self.rate) > 0.005
+        self.rate = self.rate_learnt = rate
         return changed
 
     def tight_capacity_seen(self):
@@ -1134,6 +1159,10 @@ class Planner:
                 v = next(t.get(f) for t in sheets if f in t)
                 if f == "index_clause" and v is None:
                     continue  # never lock ourselves out of a clause we did not want anyway
+                if self.last_sheets and all(t.get(f) == v for t in self.last_sheets if f in t):
+                    # it only kept what we proposed ourselves: no insistence (live P04: our 30-day sheet came back
+                    # twice and locked 30 days, so the 90-day package it gave others at +1.2 % was never offered)
+                    continue
                 locked[f] = v
         if locked != self.locked:
             self.locked = locked
@@ -1145,6 +1174,9 @@ class Planner:
             if min(dates) > self.open_date and min(dates) > (self.min_date or ""):
                 self.min_date = min(dates)
                 self.refresh()
+        if "payment_days" in self.case["negotiable"] and self.est.learn_cash_rate(sheets):
+            self._revalue()  # what a payment day is worth to it changed: old asks and our last offer on the new model
+            self.refresh()
         if "lead_time_days" in self.case["negotiable"] and self.est.learn_lead_premium(sheets):
             self._revalue()  # what a lead time is worth to it changed: old asks and our last offer on the new model
             self.refresh()

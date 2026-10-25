@@ -18,7 +18,9 @@ from .dossier import NEWS_SITUATION
 
 LEVERAGE, FLOOR_CHASE, QUICK_CLOSE = "leverage", "floor_chase", "quick_close"
 LABELS = {LEVERAGE: "Leverage", FLOOR_CHASE: "Floor-chase", QUICK_CLOSE: "Quick-close"}
-SWITCHES = {LEVERAGE: {"pace", "finalc"}, FLOOR_CHASE: {"floor", "finalc"}, QUICK_CLOSE: {"finalc"}}
+# Floor-chase paces its facts too (one fresh verified fact per later mail): live P08 cited none in four mails and closed
+# at 5.54 where the best team session, a fact a round, got 5.24 (gaps.md: P18/P08/P11 top sessions 1.1-1.5 per mail)
+SWITCHES = {LEVERAGE: {"pace", "finalc"}, FLOOR_CHASE: {"floor", "finalc", "pace"}, QUICK_CLOSE: {"finalc"}}
 SHEETS = {LEVERAGE: 2, FLOOR_CHASE: 3, QUICK_CLOSE: 2}  # MESO sheets per message
 # code-side tactics each approach may use (beyond its 3 named ones): the clause trial is the MESO pair of a copper part
 # (P02's fix, a quick close), so it stays in Leverage and Quick-close; the deadband-0 sheet only in Leverage
@@ -249,6 +251,7 @@ def choose(profile, case, rivals=None, dossier=None, base_gap=0.08, quote=None):
     else:
         name = QUICK_CLOSE
     nudge = (0.01 if weak else 0.0) - (0.01 if strong else 0.0)  # news counts for more leverage
+    tender = ctype == "rfq" or len(case.get("suppliers") or []) > 1
     if name == LEVERAGE:
         gap = min(0.19, 0.16 + 0.01 * min(3, score - 4) + nudge)
     elif name == FLOOR_CHASE:
@@ -258,9 +261,12 @@ def choose(profile, case, rivals=None, dossier=None, base_gap=0.08, quote=None):
         gap = min(0.16, max(own, min(base_gap, 0.15)) + nudge)
     else:
         # a tender keeps today's opening (twin P05: 0.07 instead of its 0.15 lost the capacity-tight bidder 0.67 -> 0.47)
-        tender = ctype == "rfq" or len(case.get("suppliers") or []) > 1
         gap = max(0.03, base_gap) if tender else min(0.08, max(0.03, base_gap))
         gap = min(0.16, gap) + nudge
+    if tender and name != QUICK_CLOSE:
+        # every approach in a tender opens at least as deep as the case's opening: Leverage's 18 % to the 36.00 bidder
+        # (29.37) drew 32.00 and a final 30.50 in live P05, the base 23 % (27.58) drew 30.50 and an agreed 27.66
+        gap = max(gap, min(0.25, base_gap))
     term = trade_term(case, d) if d is not None else None
     a = Approach(
         name=name,

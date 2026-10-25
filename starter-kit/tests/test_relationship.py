@@ -47,12 +47,18 @@ def test_charge_matches_the_real_deals(world):
     runs = sorted(Path("runs").glob("arena-P0[123]-*.json"))
     if not runs:
         pytest.skip("no saved real sessions")
-    checked = 0
+    checked = deals = 0
     for f in runs:
-        res = json.loads(f.read_text())["state"]["result"]
+        raw = f.read_bytes()
+        try:  # records are UTF-8; older ones written on Windows are cp1252
+            state = json.loads(raw.decode("utf-8"))["state"]
+        except UnicodeDecodeError:
+            state = json.loads(raw.decode("cp1252"))["state"]
+        res = state["result"]
         if not res.get("terms"):
             continue
-        case = CASES[json.loads(f.read_text())["state"]["case_id"]]
+        deals += 1
+        case = CASES[state["case_id"]]
         est = Estimate(Dossier(world, case, res["supplier_id"]))
         est.wants_clause = True
         t = closing_terms(case, res["terms"], est.standard)
@@ -60,7 +66,7 @@ def test_charge_matches_the_real_deals(world):
         real = res["cost_breakdown"].get("relationship", 0)
         assert mine == pytest.approx(real, abs=1500, rel=0.25), (f.name, mine, real)
         checked += 1
-    assert checked >= 10
+    assert checked == deals and checked >= min(10, deals)  # every saved deal; 17 on the machine with the full record
 
 
 def test_belief_is_capped_by_the_opening_quote(world):

@@ -245,18 +245,39 @@ def make_factory(world, writer_name="template"):
     return factory
 
 
-def play_waves(client, factory, waves=5, parallel=10, poll=5.0):
-    """The Live Final: wait for each wave, play its cases in parallel, stop after `waves` waves."""
-    started, closed, caps = {}, set(), {}
+MAX_OPEN = 10  # open sessions per key (api.md): beyond this the arena answers 429
+RETRIES = 3  # attempts per case when a start fails for a reason that may pass (429, network)
+
+
+def case_priority(case):
+    """Sort key, most valuable first: a case without an alternative scores 0 unless we close a deal; then the
+    bigger spend (more EUR to save) before the smaller."""
+    buyer = case.get("buyer") or {}
+    try:
+        price = buyer.get("current_unit_price") or buyer.get("fallback_unit_price")
+        spend = price * buyer["need_per_year"] * buyer.get("horizon_years", 1) if price else 0.0
+    except Exception:  # noqa: BLE001 - an odd case shape only loses its place in the order
+        spend = 0.0
+    has_alt = bool((buyer.get("alternative") or {}).get("terms"))
+    return (has_alt, -spend)
+
+
+def play_waves(client, factory, waves=5, parallel=10, poll=5.0, play_fn=None):
+    """The Live Final: wait for each wave, play its cases in parallel, stop after `waves` waves.
+
+    At most MAX_OPEN sessions at once; a slot frees when its case ends and the next case (most valuable first)
+    takes it, so no case stays unstarted while a slot is free."""
+    play_fn = play_fn or play
+    started, tries, closed, caps = {}, {}, set(), {}
 
     def one(case, deadline):
         try:
-            return play(RemoteTable(client, case), case["case_id"], factory, deadline, case)
+            return play_fn(RemoteTable(client, case), case["case_id"], factory, deadline, case)
         except Exception as e:  # one broken case must not stop the others
             log.exception("%s failed", case["case_id"])
             return e
 
-    with ThreadPoolExecutor(max_workers=parallel) as pool:
+    with ThreadPoolExecutor(max_workers=max(1, min(parallel, MAX_OPEN))) as pool:
         while len(closed) < waves or not all(f.done() for f in started.values()):
             try:
                 cases = client.cases("final")
@@ -267,14 +288,24 @@ def play_waves(client, factory, waves=5, parallel=10, poll=5.0):
             except Exception as e:  # noqa: BLE001 - a network drop must not end the final
                 log.warning("case list failed (%s); retrying", e)
                 cases = []
+            fresh = []
             for case in cases:
                 if not case.get("open"):
                     closed.add(case["wave"])
                     continue
                 if case.get("seconds_left") is not None:
                     caps[case["wave"]] = time.time() + case["seconds_left"]
-                if case["case_id"] not in started and case.get("seconds_left"):
-                    started[case["case_id"]] = pool.submit(one, case, functools.partial(caps.get, case["wave"]))
+                cid = case["case_id"]
+                f = started.get(cid)
+                if f is not None and f.done() and isinstance(f.result(), Exception) and tries.get(cid, 1) < RETRIES:
+                    started.pop(cid)  # the start failed while the wave is still open: try again
+                    f = None
+                if f is None and case.get("seconds_left"):
+                    fresh.append(case)
+            for case in sorted(fresh, key=case_priority):
+                cid = case["case_id"]
+                tries[cid] = tries.get(cid, 0) + 1
+                started[cid] = pool.submit(one, case, functools.partial(caps.get, case["wave"]))
             time.sleep(poll)
     return {c: f.result() for c, f in started.items()}
 

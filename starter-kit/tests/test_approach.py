@@ -58,7 +58,7 @@ def test_choice_follows_its_record_the_case_and_room():
     keeps = appr.choose(_gives_way(asked=2.0, settled=2.0), LETTER, {}, _dossier(price=10.0, full=9.3), base_gap=0.05)
     assert keeps.name == appr.QUICK_CLOSE and 0.03 <= keeps.opening_gap <= 0.08 and keeps.switches == {"finalc"}
     chase = appr.choose(_gives_way(), QUALITY, {}, _dossier(price=10.0, full=8.0), base_gap=0.10)
-    assert chase.name == appr.FLOOR_CHASE and chase.switches == {"floor", "finalc"} and chase.opening_gap >= 0.07
+    assert chase.name == appr.FLOOR_CHASE and chase.switches == {"floor", "finalc", "pace"} and chase.opening_gap >= 0.07
     # a capacity-tight supplier never gets the deep opening, whatever its record
     tight = appr.choose(_gives_way(), RAW, {}, _dossier(traits={"capacity_tight"}, price=10.0, full=7.0))
     assert tight.name != appr.LEVERAGE and not tight.leverage_ok

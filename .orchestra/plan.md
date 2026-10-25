@@ -1,5 +1,22 @@
 # Plan
 
+## HANDOFF (25 Oct, 08:10 CET) — read this first
+The next agent continues from **WINNING_PLAN.md** (repo root): workstreams W1-W7, CET timeline to 15:10, live budget,
+checklists, runbook. State at handoff:
+- Pushed build = this commit: BUYER_STRAT default on, T-060 wave ordering, T-061 tender/raw/renewal fixes, gate PASS
+  (twin 65.4/66.5/71.7/70.8, kit 62.4, calibrated twin 71.8); baseline in starter-kit/scripts/gate_baseline.json.
+- Live (build 7e45c3d, before T-061): all 10 hosted mean 0.683. T-061 changes are NOT live-tested yet.
+- Next steps in order: W1 release (`uv run arena data` after 08:00 CET -> profiles build + check -> test release facts
+  reach the agent), W2 final ops (BUYER_BUDGET_USD=40 + fresh runs/spend.json; timed 19-case wave sim; pre-flight),
+  W3 categories raw material / quality (P11 open) / tenders, W4 live L1 (10) + L2 (5), W6 pitch + README.
+- MUST CHECK (teammate's live test 07:50, EXPERIMENTS.md "Does not work" 5): holding arguments back from round 1
+  raised P01's first counter by 0.60 and lost; extra kinds in later rounds are fine. BUYER_STRAT applies pacing to
+  Leverage and Floor-chase (approach.py switches): make pacing send all strong (weight >= 0.5) arguments in round 1
+  and use later rounds only for extra kinds, then gate + live P01/P18.
+- Every code change must pass `python scripts/gate.py` (tests + 6 benchmarks + per-category means) before push.
+- Practice quota ~94 left team-wide at 08:00 CET (resets 15:16 CET). Ask the user before any live session.
+
+
 ## Done
 - M0 Audit of improve/supplier-levers — fixes, trusted-supplier rules, plan from history/news/letters · commit f8169b1
 - M1+M2 Evidence and live A/B — 28 sessions; kept clause-pair fix (P02 0.724 x2) and no 5 % quality/cash-short cap (P11
@@ -42,6 +59,13 @@
 | T-057 floor guess + always-procure fixes | sonnet | done | 1 | strategy, agent | $0.43; twin 64.9/61.4/66.7/71.0, kit 61.7, real 69.5; P07 0.58-0.65 |
 | T-055 total-cost levers: is every C term negotiated (Incoterm/freight, lead time, tooling, chargeback, effective date), tenders by C | sonnet | done | 1 | tests/test_tco.py | $0.38; all levers held, tenders by C |
 | T-056 regression gate scripts/gate.py + baseline | haiku | done | 1 | scripts/gate.py, gate_baseline.json | $0.02; PASS, ~5 min, per-category check |
+
+## M9 Toward first place (user 08:15: steps 1, 3, 4; release block B on hold)
+| Task | Tier | Status | Tries | Files | Notes |
+|---|---|---|---|---|---|
+| live run all 10 hosted cases, defaults | manager | done | 1 | runs/live/all10-0815.log | mean 0.683; gaps P05 -0.42, P11 -0.17, P08 -0.14 |
+| T-060 waves finish in time (offline) | sonnet | done | 1 | runner, agent timing, tests/test_waves.py | |
+| T-061 general fixes for the weakest live cases (P05, P11, P08, P03/P04) | opus | done | 1 | strategy, approach, agent | $7.44; P11 still open; gate PASS: twin 65.4/66.5/71.7/70.8, kit 62.4, real 71.8 |
 
 ## Next (not started; see TUNING.md top 3)
 - One new verified argument per later round; answer volume asks concretely; minimum 0.5 % late steps

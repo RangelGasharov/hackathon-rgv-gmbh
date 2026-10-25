@@ -69,6 +69,14 @@ live practice sessions, document what works and what doesn't. Score per case = (
 - 2026-10-25 After a final offer only the supplier's own terms go back (changed: 3 walks/5; own: 2/2 agreed).
 
 ## Constraints & gotchas
+- Time zone: the final runs on CET (UTC+1 since 03:00 today). Git Bash on the Windows checkout prints UTC; times
+  in this file before 08:00 were written from that clock and may be an hour early.
+- Windows checkout specifics: uv is at C:/Users/gersi/AppData/Roaming/Python/Python314/Scripts/uv.exe; workers ran via
+  a local launcher (.claude/api_worker.sh, not in git) on the user's Anthropic API key. Another machine needs its own.
+- LLM budget: BUYER_BUDGET_USD=14 with $3.06 spent (83 calls, ~$0.037/call): set 40 and a fresh runs/spend.json
+  for the final, or the template writer takes over mid-final.
+- Sunday release: public 07:00 UTC; the code merges it (arena_kit/data.py, dossier.py) but it must be downloaded
+  (`uv run arena data`) and profiles rebuilt on the machine that plays.
 - Suppliers (user, 03:40/03:45): each has a hard minimum price, but we cannot know it (f_hat is a guess; don't stop on
   it while the supplier still steps; its floor shows as final_offer, "rock bottom" or two flat replies). Big
   concessions need its manager or pricing committee: an approval/"come back to you" reply is not a refusal or a flat round.
@@ -85,7 +93,7 @@ live practice sessions, document what works and what doesn't. Score per case = (
 
 - Never run twin benchmarks or tests while live sessions run: round 2's three 0-score sessions (P04, P05 x2) stalled
   after round 1 (sends never landed, all threads timed out) exactly while 6 twin processes + pytest loaded the CPU.
-- Sessions used for this project (budget 40): 35 (+7 on Windows; P02 0.735 default 08:00; latest P18 0.443 pace/floor/finalc, P18 0.552 + P10 0.679 STRAT; P07 0.728, P10 0.679, P18 0.467, 02:27) (rounds 1-3: 22, P11 deep 2, deep+lean 3, final P02 1).
+- Sessions used for this project (budget 40): 45 (+17 on Windows; all-10 live 08:30 mean 0.683; P02 0.735 default 08:00; latest P18 0.443 pace/floor/finalc, P18 0.552 + P10 0.679 STRAT; P07 0.728, P10 0.679, P18 0.467, 02:27) (rounds 1-3: 22, P11 deep 2, deep+lean 3, final P02 1).
   User 02:10: sessions are scarce, ~20 left for me in total -> at most 16 more; spend only on strong candidates.
 
 ## Management rules (learned from retros)

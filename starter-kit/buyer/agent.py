@@ -279,7 +279,7 @@ class BuyerAgent:
             if CLAUSE_MANDATORY.search(body):
                 ts.plan.require_clause()
             if ts.d.add_text(body):  # its own words update the profile and the packages
-                ts.est.rate, ts.est.min_margin = ts.d.cash_rate, ts.d.min_margin
+                ts.est.rate, ts.est.min_margin = ts.est.rate_learnt or ts.d.cash_rate, ts.d.min_margin
                 if ts.d.has("capacity_tight"):
                     ts.est.tight_capacity_seen()
                 ts.plan.refresh()
@@ -323,7 +323,7 @@ class BuyerAgent:
             if field in terms:
                 ts.plan.keep(field, terms[field])
         if s.get("traits") and ts.d.note_traits(s["traits"]):
-            ts.est.rate, ts.est.min_margin = ts.d.cash_rate, ts.d.min_margin
+            ts.est.rate, ts.est.min_margin = ts.est.rate_learnt or ts.d.cash_rate, ts.d.min_margin
             ts.plan.refresh()
 
     def learn_opening_standard(self, ts, m):
@@ -467,6 +467,7 @@ class BuyerAgent:
                 x.c_standing < ts.c_standing * 0.98
                 or ((x.plan.second_step or x.in_flight) and x.c_standing < ts.c_standing * 1.06)
                 or self.heading_below(x, ts)
+                or self.short_of_must_have(threads, s, ts)
             )
             and x.sent < round_cap(self.case) - 1
             and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)
@@ -511,7 +512,15 @@ class BuyerAgent:
             ]
             # arena replays P08, P10, P18: any change to a final offer (even "neutral" ones like dropping
             # its index clause or a shorter lead time) made the supplier walk. Its last word is take-or-leave.
-            if ts.plan.sw("finalc") and not ts.in_flight and not pending and not untouched:
+            # (never this bidder's final sheet while another bidder's standing sheet is cheaper: live P05 signed
+            # 70240's final 31.50 at 42 days while 70250 stood at 31.08 and 28 days)
+            if (
+                ts.plan.sw("finalc")
+                and not ts.in_flight
+                and not pending
+                and not untouched
+                and ts.c_standing <= best.c_standing * 1.001
+            ):
                 # BUYER_FINALC: of its sheets (standing or alternatives) the one with the lowest C for us
                 sheets = latest(threads[sid]).get("term_sheets") or []
                 priced = [
@@ -618,10 +627,13 @@ class BuyerAgent:
             # always procure: a real offer before any walk, in every approach, one step up from our last (it only
             # stays under our walk-away if it ends cheaper than the alternative - settle() checks that)
             sheets = [t for t in ts.plan.cheapest(ts.last_sent) if not ts.last_sent or t not in ts.last_sent]
-        if status == "agreed" and sheets:
-            # it agreed to our own sheet and that is still over our limit: the concession path would now step UP
-            # (minimum step, "no step back") - P08 went 6.08 -> 6.35 over ten "agreed". Never a sheet dearer than
-            # the one it agreed to; nothing left means we settle (walk, or its sheet if that beats the alternative).
+        met = bool(ts.plan.last_value and ts.plan.ask_value and ts.plan.ask_value <= ts.plan.last_value * 1.001)
+        if sheets and (status == "agreed" or met) and math.isfinite(ts.c_standing):
+            # never a sheet dearer for us than its own standing sheet once it agreed to our sheet or repeated our
+            # price as its offer (`met`; any earlier and twin P06 settled on a dear bidder after round 1): the path
+            # would step UP (minimum step, "no step back") - P08 went 6.08 -> 6.35 over ten "agreed", live P05
+            # 31.05 -> 31.09 a cent a round; nothing left means we settle (walk, or its sheet if that beats the
+            # alternative), or hold while other bidders still move.
             sheets = [t for t in sheets if cost(self.case, t, ts.est, rel=confident) <= ts.c_standing * 1.0005]
         if status == "agreed" and not sheets and self.tender_hold(threads, sid, live, rounds_left, time_left):
             # Leverage in a tender with live rivals: do not settle at once and give up their leverage. Hold the price
@@ -636,6 +648,17 @@ class BuyerAgent:
                 return m
             if ts.sent == 0:  # first contact: ask our questions before deciding anything
                 return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[])}
+            if (
+                (rival_better or pending)
+                and (status == "agreed" or met)
+                and status != "final_offer"
+                and not ts.in_flight
+                and (not ts.held or self.hold_again(ts, rounds_left, time_left))
+            ):
+                # RFQ: it stands at our own price, but another bidder still moves: a holding note, not a signature
+                ts.held = True
+                ts.agreed_holds += 1
+                return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[], hold=True)}
             return None if wait_best else settle()
         msg = self.compose(threads, sid, sheets=sheets, trade=True)
         if ts.plan.ask_value and ts.plan.last_value and ts.plan.last_value >= ts.plan.ask_value * 0.99:
@@ -672,6 +695,18 @@ class BuyerAgent:
             and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)
             for s, x in live.items()
         )
+
+    def short_of_must_have(self, threads, s, ts):
+        """Another bidder whose standing sheet still misses a must-have (its quoted lead time, say) but is clearly
+        cheaper on its own terms: it is negotiating, not out (twin P06: its 167.10 at 70 days read as no offer and we
+        signed the 217.07 bidder after one counter; that bidder took our 162.63 at a lead time we can use)."""
+        x = self.t[s]
+        if math.isfinite(x.c_standing) or not math.isfinite(ts.c_standing):
+            return False
+        _, terms = standing(threads[s], None)
+        if terms.get("unit_price") is None:
+            return False
+        return cost(self.case, terms, x.est) < ts.c_standing * 0.98
 
     @staticmethod
     def heading_below(x, ts):
@@ -735,7 +770,17 @@ class BuyerAgent:
         allc = candidates(
             self.world, d, case, rivals, own_price=own.get("unit_price"), pace=pace, news_boost=bool(approach)
         )
-        if approach and not rival and not (ts.k >= 1 and ts.plan.stalled()):
+        # a tender bidder quoting far above the cheapest rival hears that rival in our first mail: there it moves most
+        # (team P05, 9 of 9 sessions over 0.66 cited it to the 36.00 and 38.50 bidders against 31.50: first counters
+        # 30.50-31.00 and finals 28.00-29.50; held back, 70210 countered 32.00 and stopped at 30.50)
+        far = (
+            ts.k == 0
+            and len(case.get("suppliers") or []) > 1
+            and rivals
+            and own.get("unit_price")
+            and min(rivals.values()) <= own["unit_price"] * 0.92
+        )
+        if approach and not rival and not far and not (ts.k >= 1 and ts.plan.stalled()):
             # rival prices and our alternative count once per supplier: hold them until it starts holding
             allc = [c for c in allc if c.kind not in ("offer", "quote")]
         if approach and approach.name == LEVERAGE and not approach.active("paced_facts"):
