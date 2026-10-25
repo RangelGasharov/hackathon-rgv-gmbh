@@ -106,7 +106,9 @@ def test_counter_is_at_most_one_of_its_steps_below_its_ask(world, p11, monkeypat
     monkeypatch.setenv("BUYER_FLOOR", "1")
     hi = plan.target_value(3)
     assert hi >= lo
-    assert hi >= plan.ask_value - (plan.asks[-2] - plan.asks[-1]) - 1e-9
+    # the jump is capped at 1.5 % of its opening above our last offer (twin P12: the uncapped one went 91 -> 98)
+    cap = plan.last_value + 0.015 * plan.asks[0]
+    assert hi >= min(plan.ask_value - (plan.asks[-2] - plan.asks[-1]), cap) - 1e-9
 
 
 def _agent(world, case):
@@ -171,3 +173,9 @@ def ts_cost(agent, ts, terms):
     from buyer.strategy import cost
 
     return cost(agent.case, terms, ts.est)
+
+
+@pytest.fixture(autouse=True)
+def _strat_off(monkeypatch):
+    """These tests cover the single switches / the case-level strategy; BUYER_STRAT (on by default) overrides them."""
+    monkeypatch.setenv("BUYER_STRAT", "0")

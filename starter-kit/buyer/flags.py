@@ -9,7 +9,7 @@ BUYER_FLOOR=1              chase a supplier that still steps to its floor: no ea
                            steady steps; quality cases offer only the tightest ppm (`Planner.chasing`, `refresh`)
 BUYER_FINALC=1             after its final offer take the sheet (standing or alternative) with the lowest C for us
                            All but the last lost live (EXPERIMENTS.md) and are off by default; they stay for further A/B tests.
-BUYER_STRAT=1             one approach per supplier thread (Leverage, Floor-chase, Quick-close; `buyer/approach.py`),
+BUYER_STRAT=0             on by default, 0 turns it off: one approach per supplier thread (Leverage, Floor-chase, Quick-close; `buyer/approach.py`),
                            chosen at case start: it sets the opening depth, sheets per message, stop rule, tactics and
                            which of PACE / FLOOR / FINALC apply to that thread (the variables above are then ignored)
 
@@ -62,4 +62,4 @@ def finalc():
 
 
 def strat():
-    return os.environ.get("BUYER_STRAT") == "1"
+    return os.environ.get("BUYER_STRAT", "1") != "0"

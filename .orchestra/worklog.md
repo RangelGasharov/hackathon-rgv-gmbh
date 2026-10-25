@@ -1,5 +1,12 @@
 # Worklog
 
+## 2026-10-25 06:35 — M7 T-044 (API-key worker)
+- BUYER_STRAT on by default (BUYER_STRAT=0 turns it off); single-switch tests pin it off.
+- P12: Floor-chase jump capped at 1.5 % of the supplier's opening per round (it jumped 91.34 -> 98.11).
+- P05: tenders keep the base opening under Quick-close; approach-aware holding notes; Leverage in a tender holds the
+  agreed sheet once and cites the rival (`tender_hold`); no near-floor accept while a bidder still steps.
+- 156 tests; twin seeds 0-3 53.2/48.9/50.4/55.3, kit 62.1 (old agent 45.7/45.7/47.7/46.6, 53.7).
+
 ## 2026-10-25 06:10 — M6 (API-key workers)
 - T-043 runner.py: records as UTF-8; backoffice skipped when state set == final.
 - T-040 agent.py: after `agreed`, no dearer sheet (min-step rule pushed the price up); accept or settle. tests/test_agreed.py.

@@ -716,8 +716,9 @@ class Planner:
                 target = max(self.last_value + step, aim)
         if self.sw("floor") and self.last_value and self.stepping():
             # BUYER_FLOOR: modest counters, at most one of its own last steps below its ask (never a jump that
-            # makes it walk)
-            target = max(target, ask - (self.asks[-2] - self.asks[-1]))
+            # makes it walk), but never more than 1.5 % of its opening above our last offer: the uncapped jump took
+            # twin P12 from 91.34 to 98.11 in one round (0.95 -> 0.63) and sent the price up, not the quality term
+            target = max(target, min(ask - (self.asks[-2] - self.asks[-1]), self.last_value + 0.015 * (self.asks[0] or ask)))
         target = max(target, 0.75 * self.est.floor_value)
         if self.last_value:
             target = max(target, self.last_value * 1.003)  # never a step back

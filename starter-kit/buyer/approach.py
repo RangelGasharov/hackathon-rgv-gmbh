@@ -257,7 +257,10 @@ def choose(profile, case, rivals=None, dossier=None, base_gap=0.08, quote=None):
         own = min(0.09, 0.07 + 0.01 * max(0, score - 1))
         gap = min(0.16, max(own, min(base_gap, 0.15)) + nudge)
     else:
-        gap = min(0.08, max(0.03, base_gap)) + nudge
+        # a tender keeps today's opening (twin P05: 0.07 instead of its 0.15 lost the capacity-tight bidder 0.67 -> 0.47)
+        tender = ctype == "rfq" or len(case.get("suppliers") or []) > 1
+        gap = max(0.03, base_gap) if tender else min(0.08, max(0.03, base_gap))
+        gap = min(0.16, gap) + nudge
     term = trade_term(case, d) if d is not None else None
     a = Approach(
         name=name,

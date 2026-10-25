@@ -1,5 +1,7 @@
 """BUYER_PACE: 2 claims in the first message with a sheet, then 1 fresh claim (weight >= 0.2); off: unchanged."""
 
+import pytest
+
 from buyer import flags
 from buyer.claims import Claim, kind_key, ration
 
@@ -82,3 +84,9 @@ def test_p18_has_a_fresh_fact_in_messages_two_to_four(monkeypatch):
     assert kinds == [["idx", "idx"], ["fc"], ["sc_otd"], ["po"]]
     ids = sum(refs, [])
     assert len(ids) == len(set(ids))  # every ID once per case
+
+
+@pytest.fixture(autouse=True)
+def _strat_off(monkeypatch):
+    """These tests cover the single switches / the case-level strategy; BUYER_STRAT (on by default) overrides them."""
+    monkeypatch.setenv("BUYER_STRAT", "0")

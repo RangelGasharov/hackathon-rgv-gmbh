@@ -319,3 +319,9 @@ def test_the_clause_sheet_sits_at_its_cheapest_price_for_us(world):
     assert pair and pair["index_clause"] and pair["unit_price"] > 357.12  # the trial stays (clause-free limit ~372)
     for d in (-1.0, 1.0):  # and no nearby price costs us less
         assert cost(case, {**pair, "unit_price": pair["unit_price"] + d}, est) >= cost(case, pair, est)
+
+
+@pytest.fixture(autouse=True)
+def _strat_off(monkeypatch):
+    """These tests cover the single switches / the case-level strategy; BUYER_STRAT (on by default) overrides them."""
+    monkeypatch.setenv("BUYER_STRAT", "0")

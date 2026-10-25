@@ -28,6 +28,9 @@
   no backoffice in final; 153 tests pass; twin seed0 45.7 -> 51.1 with STRAT; live STRAT: P18 0.552 (base 0.467), P10 0.679 (=);
   API cost $3.93. Open: P05 twin 0.62 -> 0.44 after T-040; P12 under Floor-chase jump; nothing committed.
 
+- M7 (06:30) T-044: BUYER_STRAT default on; P12 jump capped at 1.5 %; tenders keep base opening; approach-aware tender hold.
+  156 tests; twin 53.2/48.9/50.4/55.3, kit 62.1 (was off 45.7/45.7/47.7/46.6, 53.7); P05 0.62-0.72; P12 seed 1 0.90 vs 0.95. $0.91.
+
 ## Next (not started; see TUNING.md top 3)
 - One new verified argument per later round; answer volume asks concretely; minimum 0.5 % late steps
 - Compare with the other agent's LLM-led negotiator before the 13:00 freeze (team decision)

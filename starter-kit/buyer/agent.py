@@ -146,6 +146,7 @@ class ThreadState:
         self.signals = None  # the strategist's reading of its last e-mail, applied at the next `ingest`
         self.asks = []  # BUYER_STRAT: what its last e-mail asked us for (`writer.asks_for`), each priced as a trade
         self.said_main_source = False
+        self.agreed_holds = 0  # Leverage in a tender: times we held our price after an "agreed" above our limit
 
 
 class BuyerAgent:
@@ -489,8 +490,11 @@ class BuyerAgent:
         )
         rival_better = rival_better or untouched
         if status == "agreed" and measure(ts) <= reservation * slack and ts.c_standing <= best.c_standing * 1.001:
-            if (rival_better or pending) and not ts.held:  # RFQ: let the other bidders answer before we sign
+            # RFQ: let the other bidders answer before we sign; how long depends on the supplier's approach (Quick-close,
+            # a walk risk: one note; else up to 3 while rounds and time remain, twin P05: its rivals' finals came later)
+            if (rival_better or pending) and (not ts.held or self.hold_again(ts, rounds_left, time_left)):
                 ts.held = True
+                ts.agreed_holds += 1
                 return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[], hold=True)}
             return accept(sid)  # it agreed to our own sheet
         if self.deadline:  # rounds that still fit before we must close, at the pace measured so far
@@ -568,6 +572,9 @@ class BuyerAgent:
             and not rival_better
             and not ts.in_flight
             and (ts.plan.near_floor() or ts.plan.holding())
+            # Leverage-or-chase in a tender: a bidder that still steps in even amounts has not reached its floor (the
+            # floor estimate read twin P05's 70240 as done at its third step)
+            and not (len(live) > 1 and ts.plan.approach and ts.plan.stepping() and rounds_left >= 3)
         ):
             return accept(sid)  # close to its estimated floor, or it stopped moving
         if (
@@ -612,6 +619,14 @@ class BuyerAgent:
             # (minimum step, "no step back") - P08 went 6.08 -> 6.35 over ten "agreed". Never a sheet dearer than
             # the one it agreed to; nothing left means we settle (walk, or its sheet if that beats the alternative).
             sheets = [t for t in sheets if cost(self.case, t, ts.est, rel=confident) <= ts.c_standing * 1.0005]
+        if status == "agreed" and not sheets and self.tender_hold(threads, sid, live, rounds_left, time_left):
+            # Leverage in a tender with live rivals: do not settle at once and give up their leverage. Hold the price
+            # it agreed to (never dearer), cite the best rival once, keep the other threads going. Quick-close, a
+            # single supplier and a trusted supplier keep the settle below.
+            ts.agreed_holds += 1
+            sheets = [dict(standing(threads[sid], self._price(sid))[1])]
+            self.log.append((sid, "agreed_hold", sheets[0].get("unit_price")))
+            return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=sheets, rival=True)}
         if not sheets:  # nothing better left to offer within our limits
             if not ts.matched and self._may(ts, "match") and (m := self.match(threads, sid)):
                 return m
@@ -627,6 +642,32 @@ class BuyerAgent:
     def _may(ts, gate):
         """probe / match: on (BUYER_OFF) and, under BUYER_STRAT, allowed by the thread's approach."""
         return flags.on(gate) and ts.plan.allows(gate)
+
+    def hold_again(self, ts, rounds_left, time_left):
+        """Another holding note to an agreeing bidder while the others answer: not for Quick-close or a thread that
+        cannot take Leverage (walk risk, capacity, trusted), at most 3 in all, only with messages and time to spare."""
+        a = ts.plan.approach
+        if not a or ts.plan.strategy_evidence.get("trusted"):
+            return False
+        cap = 3 if a.name != QUICK_CLOSE and a.leverage_ok else 2
+        return ts.agreed_holds < cap and rounds_left >= 3 and time_left > self.close_margin + 60 and not ts.in_flight
+
+    def tender_hold(self, threads, sid, live, rounds_left, time_left):
+        """After `agreed` above our limit: hold once (Leverage, a tender, a rival that can still move, a trusted-free
+        supplier, messages and time left) instead of settling."""
+        ts = self.t[sid]
+        a = ts.plan.approach
+        if not a or a.name != LEVERAGE or ts.agreed_holds >= 1 or len(self.case.get("suppliers") or []) < 2:
+            return False
+        if ts.plan.strategy_evidence.get("trusted") or ts.in_flight or rounds_left < 3 or time_left < self.close_margin + 60:
+            return False
+        return any(
+            s != sid
+            and math.isfinite(x.c_standing)
+            and x.sent < round_cap(self.case) - 1
+            and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)
+            for s, x in live.items()
+        )
 
     @staticmethod
     def heading_below(x, ts):
@@ -655,7 +696,7 @@ class BuyerAgent:
         return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[sheet])}
 
     # -- writing ----------------------------------------------------------------------------------
-    def compose(self, threads, sid, sheets=None, hold=False, trade=False):
+    def compose(self, threads, sid, sheets=None, hold=False, trade=False, rival=False):
         """The next message: code's default choice of sheets, arguments and points, plus the menu the
         strategist (Opus) may choose from instead. State is committed in `write`, once the choice is made.
         `trade` (BUYER_STRAT, our own concession sheets only): each ask of its last e-mail gets a priced sheet."""
@@ -690,7 +731,7 @@ class BuyerAgent:
         allc = candidates(
             self.world, d, case, rivals, own_price=own.get("unit_price"), pace=pace, news_boost=bool(approach)
         )
-        if approach and not (ts.k >= 1 and ts.plan.stalled()):
+        if approach and not rival and not (ts.k >= 1 and ts.plan.stalled()):
             # rival prices and our alternative count once per supplier: hold them until it starts holding
             allc = [c for c in allc if c.kind not in ("offer", "quote")]
         if approach and approach.name == LEVERAGE and not approach.active("paced_facts"):

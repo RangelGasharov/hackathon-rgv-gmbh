@@ -119,8 +119,8 @@ def test_max_three_tactics_and_sheets_by_approach(world, monkeypatch):
             assert len(ts.plan.sheets(0)) <= a.sheets_n
 
 
-def test_unset_keeps_todays_behaviour(world, monkeypatch):
-    monkeypatch.delenv("BUYER_STRAT", raising=False)
+def test_zero_keeps_todays_behaviour(world, monkeypatch):
+    monkeypatch.setenv("BUYER_STRAT", "0")
     plan = ThreadState(world, _case("P18"), "sup:70740").plan
     assert plan.approach is None and plan.anchor_gap == plan._base_gap() and plan.allows("probe")
 

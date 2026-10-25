@@ -67,3 +67,59 @@ def test_agreed_far_over_the_limit_settles(world):
     msg = dec["message"]
     assert msg.get("action", {}).get("type") in ("accept", "walk_away")
     assert not msg.get("term_sheets")
+
+
+def _tender(world, name, **kw):
+    """P05 (three bidders) with the first bidder's approach set to `name`."""
+    from dataclasses import replace
+
+    case = json.loads(Path("cases/real/P05.json").read_text())
+    agent = BuyerAgent(world, deadline=None)
+    agent.start(case)
+    sid = case["suppliers"][0]
+    ts = agent.t[sid]
+    ts.plan.approach = replace(ts.plan.approach, name=name, leverage_ok=kw.get("leverage_ok", True))
+    return agent, sid, ts
+
+
+def _open(sid):
+    return [{"from": "sales", "status": "open", "body": "Our offer.", "term_sheets": []}]
+
+
+def test_tender_leverage_holds_after_agreed_quick_close_settles(world):
+    from buyer.approach import LEVERAGE, QUICK_CLOSE
+
+    agent, sid, ts = _tender(world, LEVERAGE)
+    threads = {s: _open(s) for s in agent.t}
+    for x in agent.t.values():
+        x.c_standing = 100.0
+    live = dict(agent.t)
+    assert agent.tender_hold(threads, sid, live, 6, float("inf"))
+    ts.agreed_holds = 1
+    assert not agent.tender_hold(threads, sid, live, 6, float("inf"))  # once
+    ts.agreed_holds = 0
+    assert not agent.tender_hold(threads, sid, live, 2, float("inf"))  # no messages left: settle
+    ts.plan.approach.name = QUICK_CLOSE
+    assert not agent.tender_hold(threads, sid, live, 6, float("inf"))  # Quick-close keeps T-040's settle
+
+
+def test_tender_holding_notes_by_approach(world):
+    from buyer.approach import LEVERAGE, QUICK_CLOSE
+
+    agent, sid, ts = _tender(world, LEVERAGE)
+    ts.agreed_holds = 2
+    assert agent.hold_again(ts, 6, float("inf"))  # Leverage: up to 3
+    ts.agreed_holds = 3
+    assert not agent.hold_again(ts, 6, float("inf"))
+    ts.plan.approach.name = QUICK_CLOSE
+    ts.agreed_holds = 1
+    assert agent.hold_again(ts, 6, float("inf"))  # Quick-close: 2
+    ts.agreed_holds = 2
+    assert not agent.hold_again(ts, 6, float("inf"))
+    ts.agreed_holds = 0
+    assert not agent.hold_again(ts, 2, float("inf"))  # rounds are short
+
+
+def test_single_supplier_never_holds_after_agreed(world):
+    agent, _, _ = _decide(world, [6.08, 6.11])
+    assert not agent.tender_hold({}, SID, {SID: agent.t[SID]}, 6, float("inf"))
