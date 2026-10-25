@@ -2,6 +2,8 @@
 
 Branch: `improve/supplier-levers`
 
+**Latest:** live A/B results, what works and what to try next are in [`EXPERIMENTS.md`](EXPERIMENTS.md) (25 Oct, 28 sessions).
+
 ## Goal
 
 Use a supplier's cached profile and past negotiation behavior to choose a focused opening approach, then adapt to the supplier's actual replies. Keep the offer costed by the existing planner, preserve the 60-second move window and 10-message thread cap, and coordinate parallel supplier threads as one procurement.

@@ -2,6 +2,10 @@
 
 BUYER_OFF=probe,match      components to turn off (names below); default: everything on
 BUYER_CLAIMS=1             at most this many new arguments per message (default 3, the arena checks 3)
+BUYER_LEAN=1               small fixed steps that keep a gap, single-supplier cases only (`Planner.target_value`)
+BUYER_CLAUSE0=1            a required index clause: also offer its deadband-0 variant at equal cost (`Planner.sheets`)
+BUYER_DEEP=1               raw material opens 18 % below, without the committee cap (`Planner._anchor_gap`)
+All three lost live (EXPERIMENTS.md) and are off by default; they stay for further A/B tests.
 
 profiles   the prebuilt supplier profiles (`profiles/`); off: the live read for every supplier
 persona    the live persona read at case start (Opus); off: regex traits only for suppliers without a profile

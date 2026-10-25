@@ -1,4 +1,10 @@
 # Worklog
+
+## 2026-10-25 — M2 Live A/B (28 sessions)
+- strategy.py: `_clause_pair` prices the fallback clause sheet at the package's relationship-optimal price (P02 0.724 x2).
+- strategy.py: no 5 % opening cap for quality / cash-short suppliers (P11 0.794, 0.620, 0.620).
+- flags.py: BUYER_LEAN (single-supplier only), BUYER_CLAUSE0, BUYER_DEEP (raw material) - all off, all lost live.
+- tests/test_profiles.py: clause-pair price, lean target; EXPERIMENTS.md with every result.
 <!-- What was implemented, newest first. For the user to read; no session needs to load this to resume work.
      One entry per batch of finished work, a few lines per task, taken from worker reports. -->
 

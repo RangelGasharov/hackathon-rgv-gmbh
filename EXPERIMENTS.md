@@ -1,5 +1,42 @@
 # Experiments: what helps, what hurts (25 Oct, night before the Live Final)
 
+## Summary
+
+**Works (kept, default on):**
+1. **Clause sheet at its cheapest price for us** (`Planner._clause_pair`, bug fix): P02 0.630 -> 0.724 live, twice
+   (final build, 02:07: 0.724 again, it took 359.92 at once).
+2. **No 5 % opening cap for quality cases and cash-short suppliers** (`Planner._anchor_gap`): P11 0.794 / 0.620 /
+   0.620 (mean 0.68) against 0.626 / 0.635; matches the LLM-led team best (0.794, opened 7.5 % below).
+3. **After a final offer only its own terms go back; its alternative is taken by sending its terms back** (e099702):
+   own terms agreed 2 of 2, changed terms walked 3 of 5; P18 0.467 instead of 0.443 on the standing sheet.
+4. Earlier audit fixes (no 4 % fast-close cap, no inverted round-1 cue, the 10th counter kept): persona twin back to
+   `main` (68.0 vs 66.9 before).
+
+**Does not work (rejected live, off behind switches in `buyer/flags.py`):**
+1. Lean concessions (small fixed steps that keep a 2.2 % gap): P05 0.381 vs 0.725; elsewhere +-0.03.
+2. Deadband-0 index clause trial: P08 0.438 vs 0.462, P18 0.430 vs 0.467 (the other agent: 0.614, 0.569, 0.449).
+3. Deep raw-material openings (18 %): P08 0.379 vs 0.462 (its counters shrank to 0.03), P18 0.497 vs 0.467.
+4. Fewer arguments per message: twins -0.02 to -0.03.
+
+**No measurable effect (twins):** `probe` never fires on the hosted cases; profiles off +0.1 on the persona twin;
+`match` off -1.3 on one seed (kept).
+
+**Operational:** keep the machine that plays idle (three sessions stalled to 0 under local CPU load); at most 10 open
+sessions per API key (the team shares them).
+
+**Add or iterate next (evidence, untested here):**
+1. A new verified argument in each later round instead of all in round 1: transcripts +1.4 pp of opening per new
+   argument after round 1 (n = 12); the LLM-led P18 0.618 did this. Our twins reward front-loading by construction.
+2. Answer the supplier's own asks with a concrete trade: volume (asked in 83 replies, followed up 5 times) and
+   faster payment where it is a term; the P18 volume answer reached 5.40/90 days (0.532).
+3. Late steps of at least 0.5 % of its opening while its price is >= 2 % above ours (P11's 0.620 held after 0.13 steps).
+4. P02: the clause-free path at 90 days reached 0.743 (other agent) against the clause path's ~0.735 ceiling.
+5. Offer main-source status (moving another supplier's volume of the same part): P08's biggest step (0.12).
+6. The other agent's LLM-led negotiator beats this rule agent on P02, P03, P08, P11, P18; worth comparing on the
+   final's case types before the 13:00 freeze.
+
+Sessions used for this log: 28 of the 40 allowed.
+
 Branch `improve/supplier-levers`. Every claim below names its evidence: real arena transcripts (84 sessions, 100
 supplier threads, saved by several agent versions), the two local twins, or live A/B sessions run for this log.
 Practice budget for this log: 40 sessions.

@@ -38,9 +38,10 @@ live practice sessions, document what works and what doesn't. Score per case = (
 
 - Never run twin benchmarks or tests while live sessions run: round 2's three 0-score sessions (P04, P05 x2) stalled
   after round 1 (sends never landed, all threads timed out) exactly while 6 twin processes + pytest loaded the CPU.
-- Sessions used for this project (budget 40): round 1 = 10, round 2 = 7, round 3 = 5, P11 deep x2 -> 24.
+- Sessions used for this project (budget 40): 28 (rounds 1-3: 22, P11 deep 2, deep+lean 3, final P02 1).
   User 02:10: sessions are scarce, ~20 left for me in total -> at most 16 more; spend only on strong candidates.
 
 ## Management rules (learned from retros)
 - Subagents cannot write report files (Write refuses 'report' files for subagents): cards ask for findings in the
   NOTES reply, or have the worker's script print them, instead of a report.md.
+- Never edit a shell script while it runs (zsh reads it as it goes: round 1's ab.sh broke).
