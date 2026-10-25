@@ -48,6 +48,7 @@ procurement stops work on sibling threads.
 cd starter-kit
 uv sync --all-extras
 cp .env.example .env          # ARENA_URL, ARENA_API_KEY, ANTHROPIC_API_KEY, BUYER_BUDGET_USD
+uv run arena data             # download the data package and, once public, the Sunday release into data/
 uv run python -m buyer.cases  # local stand-ins for the 19 practice case files (cases/practice)
 ```
 
