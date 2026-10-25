@@ -60,6 +60,10 @@ live practice sessions, document what works and what doesn't. Score per case = (
 - **No timeouts (user, 04:20)**: a thread or case must never end by timeout; guards always on.
 
 ## Decisions
+- 2026-10-25 10:10 (Claude, A/B session): tenders take a sheet within 1 % of our next one (`CLOSE_BAND`), and wait
+  for a rival's in-flight reply instead of a sliver counter; single-supplier cases keep 0.2 % (twins lost 0.6-1.6
+  with 1 % everywhere). Live P05 x2: 0.717, 0.614, band not reached (70210 stayed >= 29.00). 36 practice sessions
+  used by this session (user allowed "a couple" more at 09:55). EXPERIMENTS.md 4.0b.
 - 2026-10-25 07:50 (Claude, A/B session): spreading arguments (2 first, then 1 per message; = BUYER_PACE) lost live on
   build 9652365: P01 0.981/0.978 vs 0.992, P05 0.762/0.717 vs 0.723. Details in EXPERIMENTS.md. 34 practice sessions used by that session.
 - 2026-10-25 07:30 Kept T-053 (relationship charge from own cost estimate, bid above ask when C is lower) despite kit

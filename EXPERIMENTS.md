@@ -177,6 +177,30 @@ announces the check (and more than two rounds remain), resend our exact last she
 strategist's menu. Regression test `test_rfq_two_step_holds_our_exact_sheets` (fails without the fix: 29.41 -> 29.50).
 Not live-tested (no sessions for this fix).
 
+### 4.0b Sliver counters inside 1 % of the supplier's price (`Planner.close_enough`, `accept_now`, chase)
+P05's cheapest bidder (70210) came down 36 -> 30 -> 27.50 in 4 of our 7 P05 runs (27.50 scores ~0.865) and we lost
+it every time; we closed the next bidder at 28.92-29.00 (0.72). Three times our next sheet was 27.34 (0.58 % under
+its price): its back office's call was a final offer, and on reading our e-mail it withdrew ("Which figures is that
+based on?"). The fourth time it made the final offer, we held it for a rival and it timed out (that run used the
+local branch without the 30 s holding note of 87e563a, which the branch has now). Across 240 saved sessions of four
+clones (back-office logs): our sheet within 1 % of its price - 6 of 64 withdrew, 15 accepted ours; 1-2 % - 0 of 67;
+beyond 2 % - 1 of 387. A counter inside 1 % wins less than 1 % of the price and risks the thread. Fix, in tenders
+only: its standing sheet within `CLOSE_BAND` (1 %) of our next sheet is taken (`accept_now`, was 0.2 %), and the
+Floor-chase stops there. Single-supplier cases keep 0.2 % (`CLOSE_BAND_ONE`): with 1 % everywhere every twin lost
+0.6-1.6 x100 (P01, P02, P04, P10, P12, P15 - no twin supplier walks, and live P01's 132.45 sliver against 132.60
+did win). Replays of the three withdrawn runs now accept 27.50. Second part: when the only thing that kept us from
+taking a sheet inside the band was a rival's reply on its way (`rival_better`), we now wait for that reply
+(`band_wait`, the runner's 30 s holding note keeps the clock) instead of sending a sliver. Regression tests
+`test_inside_one_percent_of_its_price_we_take_it_instead_of_a_sliver_counter` (fails without: 27.34) and
+`test_inside_the_band_a_rivals_reply_on_its_way_means_wait_not_a_sliver` (fails without: 28.93). Gate: equal to
+the baseline (twin-s1 -0.16, within tolerance; the one failing test is the old `test_twin_real` replay, which needs
+`runs/`). Live, 2 P05 sessions on the first part: 0.717 and 0.614 (both closed 70250 at 29.00 / 30.00); 70210 did
+not come below 29.00 in either, so the band to it never applied - no evidence either way yet. In the 0.717 run the
+28.93 sliver to 70250 (its 29.00, 70210's reply in flight) is what the second part now avoids; there 70250 answered
+with a final 29.00 and agreed. (The other agent's analysis of 25 Oct pointed at P05 too, but its cause - 14-day
+payment mispriced - does not hold here: our C uses the kit's `total_cost`, which charges the arena's EUR 2,375 for
+14 days.)
+
 
 ### 4.1 Clause sheet priced below the supplier's healthy margin (P02, `Planner._clause_pair`)
 In a stabilise case the relationship charge rises as the price falls, so no clause price costs us what the clause-free

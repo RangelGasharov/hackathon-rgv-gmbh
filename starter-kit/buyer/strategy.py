@@ -22,6 +22,13 @@ from .dossier import NEWS_SITUATION
 
 PRICE = "unit_price"
 CLAUSE_VALUE = 0.015  # share of the price an index clause is worth to a supplier that wants one (arena P02: >= 1.6 %)
+# In a tender, its standing sheet within this share of our next sheet is taken, never a sliver counter. Arena back
+# offices on 240 saved sessions: our sheet within 1 % of its price - 6 of 64 withdrew (P05 70210 at 27.50 three times
+# of three: its call was a final offer, our 27.34 read as a push; 0.14 of score to the next bidder); 1-2 % - 0 of 67.
+# Single-supplier cases keep `CLOSE_BAND_ONE`: there the sliver still wins (live P01 132.45 against 132.60, the twins
+# lose 0.6-1.6 x100 with the wider band) and its walk evidence is one P08 session.
+CLOSE_BAND = 0.01
+CLOSE_BAND_ONE = 0.002
 # Our belief about a supplier's full cost, for the relationship charge: one sigma = SIGMA_K x the error band of the
 # estimate (generic should-cost 15 % -> 7.5 %), and SIGMA_OWN for the should-cost of its own plant (the charges of 17
 # real deals in P01, P02 and P03 put the full cost at 0.977-0.979 x it, to 0.1 %). Five equal-weight quintile nodes.
@@ -1346,9 +1353,17 @@ class Planner:
     def reservation(self, c_open):
         return min(self.c_alt, c_open) if c_open and math.isfinite(c_open) else self.c_alt
 
-    def accept_now(self, c_standing, k_next, c_open, rounds_left):
-        if c_standing is None or not math.isfinite(c_standing) or c_standing > self.reservation(c_open):
+    def close_enough(self, c_standing, k_next, rounds_left):
+        """Its standing sheet costs at most `CLOSE_BAND` (a tender) or `CLOSE_BAND_ONE` (one supplier) more than our
+        next sheet: a counter there risks a walk for less than the band."""
+        if c_standing is None or not math.isfinite(c_standing):
             return False
         nxt = self.sheets(k_next, n=1, rounds_left=rounds_left)
         c_next = cost(self.case, nxt[0], self.est) if nxt else math.inf
-        return c_standing <= c_next * 1.002 or rounds_left <= 1
+        band = CLOSE_BAND if len(self.case.get("suppliers") or []) > 1 else CLOSE_BAND_ONE
+        return c_standing <= c_next * (1 + band)
+
+    def accept_now(self, c_standing, k_next, c_open, rounds_left):
+        if c_standing is None or not math.isfinite(c_standing) or c_standing > self.reservation(c_open):
+            return False
+        return self.close_enough(c_standing, k_next, rounds_left) or rounds_left <= 1

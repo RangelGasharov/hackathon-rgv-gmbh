@@ -384,3 +384,64 @@ def test_rfq_two_step_holds_our_exact_sheets(world):
     assert [t["terms"] for t in d["message"]["term_sheets"]] == sent  # the same sheets, not a step up
     assert [t for t, _ in d["message"]["_plan"].menu] == sent
     assert any(k == "two_step_hold" for _, k, _ in agent.log)
+
+
+def test_inside_one_percent_of_its_price_we_take_it_instead_of_a_sliver_counter(world):
+    """Live P05 (three of three): 70210 came down 36 -> 30 -> 27.50; our 27.34 counter met its back office's final-offer
+    call and it withdrew. Inside `CLOSE_BAND` of our next sheet its standing sheet is taken."""
+    agent = BuyerAgent(world)
+    agent.start(_case("P05"))
+
+    def s(price, pay=None, lead=None):
+        return {k: v for k, v in (("unit_price", price), ("payment_days", pay), ("lead_time_days", lead)) if v}
+
+    def sup(*terms, i):
+        return {"from": "sales", "status": "open", "body": "Our offer.",
+                "term_sheets": [{"term_sheet_id": f"offer:{i}-{j}", "terms": t} for j, t in enumerate(terms)]}
+
+    def us(*terms):
+        return {"from": "buyer", "body": "Our offer.", "term_sheets": [{"terms": t} for t in terms]}
+
+    threads = {
+        "sup:70210": [sup(s(36.0), i=0), us(s(27.18, 14, 28), s(27.02, 14, 42)), sup(s(30.0, 14, 28), i=1),
+                      us(s(27.26, 14, 28), s(27.10, 14, 42)), sup(s(27.5, 14, 28), i=2)],
+        "sup:70240": [sup(s(31.5, None, 52), i=0), us(s(29.62, 14, 42), s(29.92, 60, 42)),
+                      sup(s(32.5, 14, 42), s(30.5, 14, 52), i=1), us(s(29.93, 14, 42)), sup(s(32.0, 14, 42), i=2)],
+        "sup:70250": [sup(s(38.5), i=0), us(s(28.74, 14, 28), s(29.03, 60, 28)), sup(s(30.5, 14, 28), i=1),
+                      us(s(28.83, 14, 28), s(29.12, 60, 28)), sup(s(29.5, 14, 28), i=2)],
+    }
+    d = agent.decide(threads, "sup:70210")
+    assert d and d["message"].get("action") == {"type": "accept", "term_sheet_id": "offer:2-0"}
+
+
+def test_inside_the_band_a_rivals_reply_on_its_way_means_wait_not_a_sliver(world):
+    """Live P05: 70250 stood at 29.00, our next sheet 28.93; 70210's reply was on its way, so the tender rule kept us
+    from taking 29.00 and the code sent the 28.93 sliver instead. Now it waits for the rival's reply."""
+    agent = BuyerAgent(world)
+    agent.start(_case("P05"))
+
+    def s(price, pay=None, lead=None):
+        return {k: v for k, v in (("unit_price", price), ("payment_days", pay), ("lead_time_days", lead)) if v}
+
+    def sup(*terms, i):
+        return {"from": "sales", "status": "open", "body": "Our offer.",
+                "term_sheets": [{"term_sheet_id": f"offer:{i}-{j}", "terms": t} for j, t in enumerate(terms)]}
+
+    def us(*terms):
+        return {"from": "buyer", "body": "Our offer.", "term_sheets": [{"terms": t} for t in terms]}
+
+    threads = {
+        "sup:70210": [sup(s(36.0), i=0), us(s(27.19, 14, 28), s(27.47, 14, 42)), sup(s(32.0, 14, 28), i=1),
+                      us(s(27.55, 14, 42), s(27.38, 14, 28)), sup(s(30.5, 14, 28), i=2),
+                      us(s(27.63, 14, 28), s(27.47, 14, 42)), sup(s(30.5, 14, 28), i=3)],
+        "sup:70240": [sup(s(31.5, None, 52), i=0), us(s(29.93, 14, 42), s(30.24, 60, 42)), sup(s(31.5, 14, 42), i=1),
+                      us(s(30.25, 14, 42), s(30.56, 60, 42)), sup(s(31.5, 14, 42), i=2),
+                      us(s(30.34, 14, 42), s(30.5, 60, 42)), sup(s(31.5, 14, 42), i=3)],
+        "sup:70250": [sup(s(38.5), i=0), us(s(29.03, 14, 28), s(28.57, 14, 42)), sup(s(31.0, 14, 28), i=1),
+                      us(s(28.66, 14, 42), s(28.83, 14, 28)), sup(s(29.5, 14, 28), i=2), us(s(28.92, 14, 28)),
+                      sup(s(29.0, 14, 28), i=3)],
+    }
+    assert agent.decide(threads, "sup:70250")["message"].get("action", {}).get("type") == "accept"  # nothing in flight
+    agent.t["sup:70210"].in_flight = True  # our message to the rival is out; its reply is coming
+    assert agent.decide(threads, "sup:70250") is None
+    assert any(k == "band_wait" for _, k, _ in agent.log)

@@ -147,6 +147,7 @@ class ThreadState:
         self.asks = []  # BUYER_STRAT: what its last e-mail asked us for (`writer.asks_for`), each priced as a trade
         self.said_main_source = False
         self.agreed_holds = 0  # Leverage in a tender: times we held our price after an "agreed" above our limit
+        self.band_waited = -1  # the reply (`seen`) we last waited on inside `CLOSE_BAND` for a rival's reply
 
 
 class BuyerAgent:
@@ -561,8 +562,14 @@ class BuyerAgent:
                     return settle()
                 return None  # leave it standing; another bidder is better
             return settle()
-        # BUYER_FLOOR: it still steps (or only said it needs approval): keep countering while a message and time remain
-        chase = ts.plan.chasing() and rounds_left >= 2 and time_left > 120
+        # BUYER_FLOOR: it still steps (or only said it needs approval): keep countering while a message and time remain,
+        # but not inside `CLOSE_BAND` of our next sheet, where a counter risks its walk for less than 1 % of the price
+        chase = (
+            ts.plan.chasing()
+            and rounds_left >= 2
+            and time_left > 120
+            and not ts.plan.close_enough(ts.c_standing, ts.k, rounds_left)
+        )
         if (
             not chase
             and ts.k >= 1
@@ -624,6 +631,22 @@ class BuyerAgent:
                 self.log.append((sid, "two_step_hold", [t.get("unit_price") for t in ts.last_sent]))
                 held = [dict(t) for t in ts.last_sent]
                 return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=held, exact=True)}
+        if (
+            len(live) > 1
+            and sid == best_sid
+            and status == "open"
+            and measure(ts) <= reservation
+            and not ts.in_flight
+            and any(x.in_flight for s, x in live.items() if s != sid)
+            and ts.plan.close_enough(ts.c_standing, ts.k, rounds_left)
+        ):
+            # a tender: the best sheet sits within `CLOSE_BAND` of ours and only a rival's reply on its way kept us from
+            # taking it. Wait for that reply instead of a sliver counter (live P05: 28.93 against 70250's 29.00 while
+            # 70210's reply was coming; it came at 30.50); the runner's holding note keeps the 60 s
+            if ts.band_waited != ts.seen:
+                ts.band_waited = ts.seen
+                self.log.append((sid, "band_wait", ts.k))
+            return None
         sheets = ts.plan.sheets(ts.k, rounds_left=rounds_left)
         if sheets and ts.last_sent and all(t in ts.last_sent for t in sheets):
             sheets = []  # never resend the same sheets: suppliers read that as no move
