@@ -1,127 +1,89 @@
 # Hollerau buyer agent
 
-An AI buyer for the Tacto Negotiation Arena. Code decides every number; Claude only words the e-mail.
+An AI buyer for the Tacto Negotiation Arena. Code prices every offer; Claude Opus chooses among the code's offers,
+reads the supplier and writes the e-mail.
 
 ```
-case file + data package + Sunday release + supplier profiles
-   │
+case file + data package (+ Sunday release)
    ▼
-dossier.py   persona traits from notes, letters, quote remarks, history, news (strong vs weak),
-             should-cost and margin, notice check, hedges, scorecard, payment record, forecast;
-             market news mapped to the suppliers it concerns (pump demand, copper, steel, alloy)
-   │
+dossier.py    the supplier read from the data: traits from notes, letters, news and quote remarks, past deals,
+              should-cost and margin, scorecard, payment record, forecast, trust; market news mapped to the
+              suppliers it concerns
    ▼
-approach.py  one approach per supplier at case start (Leverage, Floor-chase, Quick-close) from its
-             negotiation history, news, pricing room, rivals and our cost drivers; it sets the opening,
-             at most 3 tactics and one correction after two replies (BUYER_STRAT, on by default)
-   │
+approach.py   one approach per supplier (Leverage, Floor-chase, Quick-close) from its history, news, pricing room,
+              rivals and our cost drivers: opening depth, at most 3 tactics, one correction (BUYER_STRAT, default on)
    ▼
-strategy.py  every combination of term_options priced: lowest price the supplier signs (its cost of
-             money, minimum margin) and the price that is cheapest for us (relationship charge);
-             equal-cost packages (MESO); a concession path that is always a visible move;
-             never above the supplier's own ask, never past our walk-away cost
-   │
+strategy.py   every combination of term options priced at the supplier's floor and at our cheapest (total cost C);
+              equal-cost packages; a concession path of visible steps inside our walk-away
    ▼
-claims.py    data arguments the arena checks, figure next to ID, verified against facts.json,
-             chosen per persona (no index claims to a hedged supplier, never one that supports a rise)
-   │
+claims.py     data arguments the arena checks (figure next to ID), chosen per supplier
    ▼
-writer.py    template (free, deterministic) or Claude Opus 5.5 at low effort, with a guard:
-             claim sentences kept verbatim, unplanned IDs removed, no leaks, prices must match
-   │
+writer.py     Opus strategist picks sheets and arguments from the code's menu and writes the e-mail; a guard checks
+              every price and ID (template writer as fallback)
    ▼
-agent.py     per thread: read reply (quote PDF standard terms, cost breakdown), update the model,
-             accept (AC_next, never the first offer), counter, match its level on our terms,
-             safe match after a final offer, or walk only if the alternative is clearly cheaper
-runner.py    one worker per supplier thread (no thread idles past 60 s), Live Final waves
+agent.py      per thread: read the reply, update the model, accept, counter, hold or walk
+runner.py     one worker per supplier thread inside the 60 s rule; the Live Final in waves
 ```
 
-**Supplier profiles:** every one of the 46 suppliers the cases can involve has a profile, built once from the
-data and a deep read of its documents: [`starter-kit/profiles/INDEX.md`](starter-kit/profiles/INDEX.md) (start
-there) and [`starter-kit/profiles/README.md`](starter-kit/profiles/README.md) (how they are built and used). The
-agent loads them at case start instead of reading documents under the clock. The profile and arena record select
-one primary bargaining approach and one fallback; live concessions or resistance can trigger the single switch.
-The plan reads the supplier's past negotiations, current news and letters (so new suppliers get one too) and shapes
-how the strategist writes; its only pricing effect is a slightly deeper opening where the arena showed room below the
-supplier's first counter. Trusted suppliers (strategic goal, partnership history, or our source for 8+ years) get
-no risky trades, and after any final offer only the supplier's own terms go back. Code still prices every offer inside the shared procurement ceiling. First offers remain within the 60-second move window, each
-supplier thread is capped at 10 messages (after the 10th we may still accept). In a multi-supplier case, closing the
-procurement stops work on sibling threads.
+Every one of the 46 suppliers in the data has a prebuilt profile ([`starter-kit/profiles/INDEX.md`](starter-kit/profiles/INDEX.md)):
+the agent loads it instead of reading documents under the clock and picks one approach per supplier (Leverage,
+Floor-chase or Quick-close). Trusted suppliers get no risky arguments; after a final offer only its own terms go back.
 
 ## Approach in brief
 
-- **Prepares** before the first message: loads the supplier's profile (46 suppliers, rebuilt with the Sunday release)
-  and the case, prices every allowed term combination by the arena's total cost C (price over the horizon, payment
-  days, freight, lateness, quality, tooling, index clause, uncovered need, relationship charge).
-- **Reads** the data package and the release: its past negotiations with us, letters, news (its own and the market's),
-  scorecards, payments, contracts, should-cost, rival quotes, and every supplier e-mail (sheets, asks, floor and
-  approval signals, final offers).
-- **Decides what to offer** with one approach per supplier: opening depth from the pricing room and its history,
-  equal-cost packages, verified facts the arena can check, supplier asks answered with a priced trade, the rival
-  quote once where it moves most. Code sets every number; Claude only words the e-mail.
-- **Closes or walks** on total cost: it accepts when the supplier's sheet is the cheapest it can reach and beats the
-  alternative, takes the supplier's own cheaper alternative sheet, never takes a must-have break, walks only when the
-  alternative is clearly cheaper, and always closes before the wave cap (no timeouts).
+- **Prepares:** loads the supplier's prebuilt profile (rebuilt with the Sunday release) and prices every allowed term
+  combination by the arena's total cost C: price over the horizon, payment days, freight, lateness, quality, tooling,
+  index clause, uncovered need, relationship charge.
+- **Reads:** its past negotiations with us, letters, own and market news, scorecards, payments, contracts, should-cost,
+  rival quotes, and every supplier e-mail (sheets, asks, floor and approval signals, final offers).
+- **Decides what to offer:** one approach per supplier; equal-cost packages; verified facts the arena checks; each
+  supplier ask answered with a priced trade; a rival quote once, where it moves most. Code sets every number.
+- **Closes or walks:** accepts the cheapest sheet it can reach when it beats the alternative (including the supplier's
+  own earlier or alternative sheet), never breaks a must-have, walks only when the alternative is clearly cheaper, and
+  closes every thread before the wave cap.
 
 ## Run
 
-Environment variables (`starter-kit/.env`, never committed; values not shown here): `ARENA_URL`, `ARENA_API_KEY`,
-`ANTHROPIC_API_KEY`, `LLM_PROVIDER`, `LLM_MODEL`, `LLM_EFFORT`, `ARENA_DATA`, `BUYER_WRITER`, `BUYER_BUDGET_USD`
-(40 for the final). Optional switches, all off unless noted: `BUYER_STRAT` (on; `0` turns the per-supplier approach
-off), `BUYER_FLOOR`, `BUYER_FINALC`, `BUYER_PACE` (decided by the approach while `BUYER_STRAT` is on), `BUYER_QSTEP`,
-`BUYER_LIKE`, `BUYER_NIBBLE`, `BUYER_CLAIMS`, `BUYER_OFF`. See `starter-kit/buyer/flags.py`.
+Environment variables (in `starter-kit/.env`, never committed): `ARENA_URL`, `ARENA_API_KEY`, `ANTHROPIC_API_KEY`,
+`LLM_PROVIDER`, `LLM_MODEL`, `LLM_EFFORT`, `ARENA_DATA`, `BUYER_WRITER`, `BUYER_BUDGET_USD`. Optional switches
+(`starter-kit/buyer/flags.py`): `BUYER_STRAT` (on; `0` = no per-supplier approach), `BUYER_FLOOR`, `BUYER_FINALC`,
+`BUYER_PACE` (chosen by the approach while `BUYER_STRAT` is on), `BUYER_QSTEP`, `BUYER_LIKE`, `BUYER_NIBBLE`,
+`BUYER_CLAIMS`, `BUYER_OFF`.
 
 ```bash
 cd starter-kit
 uv sync --all-extras
-cp .env.example .env          # fill in the variables above
-uv run arena data             # the data package and, after 08:00 on Sunday, the release next to it
-uv run arena me               # the key works
-uv run python -m buyer.profiles build --data data/package --arena "runs/arena-*.json"
-uv run python -m buyer.profiles check --data data/package      # 46 suppliers clean
-uv run python -m buyer.cases  # local stand-ins for the 19 practice case files (cases/practice)
+cp .env.example .env    # ARENA_URL, ARENA_API_KEY, ANTHROPIC_API_KEY, BUYER_BUDGET_USD (40 for the final)
+uv run arena data       # the data package and the Sunday release into data/
+uv run arena me         # the key works
+uv run python -m buyer.profiles check --data data/package   # 46 suppliers clean (else: profiles build, then check)
 ```
 
-Live Final (start before 13:30, leave it running, logs to a file; no human in the loop afterwards):
+Live Final (start before 13:30; it waits for wave 1, plays each wave's cases in parallel and stops after wave 5):
 
 ```bash
-mv runs/spend.json runs/spend-practice.json   # a fresh LLM budget for the final
-uv run python -m buyer.runner run --set final --writer claude > runs/final.log 2>&1
+mv runs/spend.json runs/spend-practice.json    # a fresh LLM budget for the final
+caffeinate -dimsu uv run python -m buyer.runner run --set final --writer claude -v 2>&1 | tee runs/final.log
 ```
 
-The runner starts each wave's cases most valuable first (at most 10 open), re-reads `seconds_left` on every poll,
-closes every thread before the cap, resumes a crashed session, and refuses the endpoints the agent may not read.
-
-Before every push: `uv run python scripts/gate.py` (tests, six offline benchmarks and per-category means against
-`scripts/gate_baseline.json`; it fails on any step back).
-
-Local benchmark (no arena calls):
+Practice and offline checks:
 
 ```bash
-uv run python -m buyer.bench --sim kit  --agents naive,buyer          # the kit's scripted supplier
-uv run python -m buyer.bench --sim twin --agents naive,buyer          # persona-driven supplier twin
-uv run python -m buyer.bench --sim twin --agents buyer-claude --cases P01,P05   # with the Opus writer (costs money)
-```
-
-Against the arena (practice quota counts):
-
-```bash
-uv run python -m buyer.runner play case:P01 --writer claude
-uv run python -m buyer.runner run --set practice --writer claude -p 8
-uv run python -m buyer.runner run --set final --writer claude          # Live Final: start before 13:30
+uv run python -m buyer.runner play case:P01 --writer claude     # one practice session
+uv run python scripts/gate.py                                    # tests + six offline benchmarks
 ```
 
 LLM spend is tracked in `runs/spend.json`; calls stop at `BUYER_BUDGET_USD` and the template writer takes over.
 
 ## Results (25 Oct, hosted practice board before the Live Final)
 
-Team **RGV GmbH**, best practice session per case, read from the arena at 11:30 on 25 Oct: **mean 0.806, 6th of
-13 teams**. Tacto's reference agent scores 0.697 on the same cases; we are above it on 7 of 10. Our best deals save
-about **EUR 1.2M** against the suppliers' opening offers (C_open - C_deal, all 10 cases).
+Team **RGV GmbH**, best practice session per case at 11:30 on 25 Oct: **mean 0.806, 6th of 13 teams**. Tacto's
+reference agent scores 0.697 on the same cases; we are above it on 7 of 10. Our best deals save about **EUR 1.2M**
+against the opening offers.
 
-Two agents set these numbers. The production agent is the `buyer/` package in this repo. The research agent
-(`negotiation-lab/llm_v4.py`, **not in this repo**) lets Claude lead every move on single-supplier cases; it set 7
-of the 10 team bests. Its mechanics are written up in `negotiation-lab/PORTING.md` and are partly ported to `buyer/`.
+Two agents set these numbers: the production agent (`buyer/`, this repo) and a research agent where Claude leads
+every move (`negotiation-lab/llm_v4.py`, **not in this repo**), which set 7 of the 10 team bests. Its mechanics are
+partly ported to `buyer/`.
 
 | Case | Situation | Team best | Set by | This branch's best | Tacto reference | Best of any team | Saved vs opening |
 |---|---|---|---|---|---|---|---|
@@ -137,225 +99,29 @@ of the 10 team bests. Its mechanics are written up in `negotiation-lab/PORTING.m
 | P18 | alloy surcharge, 1.4404 bar (Werdenfels) | 0.641 | research agent | 0.497 | 0.386 | 0.767 | EUR 46,475 |
 | **Mean** | | **0.806** | | **0.748** | **0.697** | | **EUR 1.21M** |
 
-"This branch's best" is the best live practice session played from `improve/supplier-levers` (at different
-commits). The `buyer/` team bests on P05 and P10 come from sessions on other branches of this repo. Generalisation:
-with each case's own history wiped ("fresh mode"), the research agent scored 0.747 against 0.787 with history, over
-9 single-supplier cases.
+"This branch's best" is the best live session played from `improve/supplier-levers`. With each case's own history
+wiped ("fresh mode"), the research agent scored 0.747 against 0.787 with history, over 9 single-supplier cases.
 
-What this branch changed on 25 Oct, each change checked in live practice sessions (details and the rejected ideas
-in [`EXPERIMENTS.md`](EXPERIMENTS.md)):
-- **Tenders, rival quote first:** a bidder quoting far above the cheapest rival hears that rival's quote in our first
-  e-mail. Its back office answers "I give half the step now and check the rest", then gives the rest
-  (P05: 36.00 -> 30.50 -> 28.00). Best P05 session 0.814; this branch's earlier P05 runs closed near 0.72.
-- **Tenders, internal check:** while a bidder checks its price internally, we resend our exact offer instead of
-  raising it. The bidder then agreed at our price (P05: 0.744 in both sessions).
-- **Tenders, no sliver counters:** a bidder's sheet within 1 % of our next offer is taken. Across 240 saved sessions,
-  counters that close drew 6 withdrawals in 64.
-- **Copper clause at its cheapest price for us** (P02): 0.63 -> 0.724, twice.
-- **No 5 % cap on quality-case openings** (P11): best 0.794 (two other sessions 0.620).
-- **Tested live and rejected:** spreading arguments over later rounds, smaller concession steps, deeper raw-material
-  openings, a deadband-0 clause offer (removed from the code on 25 Oct: our worst result wherever it ran).
-- **Record hunt (25 Oct, ~50 sessions, one approach per try):** new team best **P05 0.857** (chase a bidder while it
-  steps, take the final sheet with the lowest C; now the default in every tender), P03 0.925, P04 tied at 0.860.
-- **Pipeline audit** ([`ANALYSIS.md`](ANALYSIS.md)) and the plan for the final ([`WINNING_PLAN.md`](WINNING_PLAN.md)):
-  input bugs fixed (forecast file units, hedged-supplier wording, an old supplier record, ask parsing), payment days
-  kept at their efficient level, every supplier ask answered, the Sunday release in all 46 profiles.
+What changed on 25 Oct, each checked in live practice sessions ([`EXPERIMENTS.md`](EXPERIMENTS.md) has the details
+and the rejected ideas):
+- **Tenders:** a bidder far above the cheapest rival hears that rival's quote in our first e-mail (P05: 36.00 ->
+  30.50 -> 28.00, best 0.814); while a bidder checks its price internally we resend our exact offer (0.744 twice);
+  a sheet within 1 % of our next offer is taken, not countered.
+- **P02** copper clause at its cheapest price for us (0.63 -> 0.724); **P11** no 5 % cap on quality openings (0.794).
+- **Final-day runner:** wave deadlines re-read every poll, banned endpoints refused, budget warnings; a simulated
+  19-case wave closed every case by 284 s of the 480 s cap.
+- **Record hunt** (~50 sessions, one approach per try): new team best **P05 0.857** (chase a bidder while it steps,
+  take the final sheet with the lowest C; now the default in every tender), P03 0.925, P04 tied at 0.860.
+- **Pipeline audit** ([`ANALYSIS.md`](ANALYSIS.md)), plan for the final ([`WINNING_PLAN.md`](WINNING_PLAN.md)): input
+  bugs fixed (forecast file units, hedged-supplier wording, an old supplier record, ask parsing), payment days kept at
+  their efficient level, every supplier ask answered, release news and market news in all 46 profiles.
+- **Removed:** our own deadband-0 clause offer (worst live result wherever it ran: P08 0.405, P18 0.473).
 
-Every change passes `starter-kit/scripts/gate.py`: the tests plus six offline benchmarks (four persona-twin seeds,
-the kit simulator, and a twin calibrated on real sessions), and no case category may drop.
-
-## Earlier results (24 Oct)
-
-Kept for the record; the section above replaces these numbers.
-
-### Local results (24 Oct, v1)
-
-Mean score × 100 over the 19 local practice cases. Nothing was sent to the hosted arena.
-
-| Opponent | naive (kit) | kit LLM agent (Opus 5.5) | this agent |
-|---|---|---|---|
-| supplier twin, seeds 0 / 1 / 2 / 3 | 15.7 / 14.5 / 16.6 / 14.5 | - | 81.7 / 80.6 / 77.9 / 74.4 |
-| twin, 7 cases, 60-second clock, Opus e-mails | - | 21.9 | 69.8 |
-| kit's scripted supplier (`arena-sim`) | 65.1 | - | 65.1 |
-| Live Final rehearsal, 2 waves × 6 cases, 240 s cap | - | - | 67.6, every case closed in time |
-
-The kit's scripted supplier ignores the relationship charge and concedes 2 % a message to a fixed floor,
-so the agent's margin-protecting moves earn nothing there. The twin models the published cost function
-with persona-driven suppliers; it is our own model, so treat its numbers as relative, not absolute.
-LLM spend for this build: about $1.13 (63 calls).
-
-### First hosted-arena session (24 Oct, team RGV GmbH)
-
-One practice session, `case:P01` (Brandlhuber +9.5 %), Opus writer: **score 0.78**, deal at €133.80 from
-1 January 2027 with 14-day payment (asked: €138.55 from 1 November 2026). C_open €1,153,780,
-C_deal €1,109,365, C_best €1,096,816. 3 messages, 94 s, $0.04. Replay: https://arena.tacto.ai/replay/2f7132cb8b201e08
-
-What the replay taught, now in the code:
-- The notice-period claim and the forecast claim moved the supplier ("we did not know that - a fair point").
-- Citing a driver that rose, even far less than the ask, backfired ("your figures confirm our case"):
-  only falling drivers are cited now.
-- The supplier answered with two alternative term sheets; the agent now reads all of them and takes the
-  cheapest for us.
-
-### Hosted practice, v3 (24 Oct, 17:38, one session per case)
-
-Agent v3 (commit 0e295d2), Opus 5.5 writer, all 10 hosted cases in parallel: **10 deals, mean 0.655**.
-The first sessions (v1) averaged 0.428, and the best per case before this run averaged 0.547.
-`buyer/twin_real.py` had predicted 0.669. LLM spend for the run: $0.45 (32 calls).
-
-| case | v3 score | twin prediction | best before | deal |
-|---|---|---|---|---|
-| P01 price increase | **0.875** | 0.855 | 0.78 | €132.70, 14 days |
-| P02 price increase | **0.723** | 0.555 | 0.26 | €362.81, agreed in round 1 |
-| P03 renewal | **0.923** | 0.993 | 0.90 | €432.15, 36 months |
-| P04 renewal | 0.860 | 1.000 | 0.86 | €4.94, final offer |
-| P05 RFQ (3 bidders) | **0.451** | 0.441 | 0.34 | €31.51 from 70210, our first offer accepted |
-| P07 bundling (kit) | 0.624 | 0.728 | 0.70 | €5.60, final offer |
-| P08 raw material | **0.473** | 0.430 | 0.26 | €5.54 |
-| P10 capacity | **0.694** | 0.671 | 0.59 | €31.30, final offer |
-| P11 quality | **0.536** | 0.536 | 0.44 | €46.00 |
-| P18 raw material | **0.395** | 0.480 | 0.34 | €5.61 |
-
-Best score per case on the practice board is now 0.663 on average.
-
-What these sessions taught:
-- **Suppliers count each kind of argument once.** A second forecast (another kit part) or a second
-  scorecard row (ppm after on-time delivery) came back `duplicate` with "we have already taken that
-  volume change data into account". This happened even with new IDs and even within one message. One
-  argument of each kind per supplier is enough. Further slots should go to a different kind.
-- **An offer accepted at once was too generous.** P05-70210 accepted our first RFQ offer (12 % below its
-  ask), and P02 and P18 agreed in one step too. In RFQs the anchor can go deeper.
-- **Effective date given up.** P01 opened with "valid from 1 April 2027" (the notice argument), and the
-  supplier accepted it with 1 January 2027 as an alternative. In round 2 we fell back to 1 November 2026.
-- **The writer answers questions nobody asked.** "To your question on our figures" appeared when the
-  supplier only wrote "these figures" in its opening. Only a real request for data should trigger it.
-
-### v4 fixes (local only, no arena runs)
-
-The twin was refit on all 23 real sessions and now treats a second argument of the same kind as
-`duplicate`, as the arena does. On the refit twin, v3 scored 0.698 on the 10 hosted cases and v4 scores
-**0.715**. The 9 other cases, with generic suppliers, went from 0.562 to 0.583.
-
-- One argument per kind per supplier (`claims.kind_key`); further slots go to a different kind.
-- RFQ opening 18 % below the ask (was 12 %), at most 10 % for a capacity-tight bidder. P05: 0.451 → 0.580.
-- Price letters keep a later effective date once the supplier has offered it in every sheet (P01 keeps 1 April 2027).
-- "To your question on our figures" only when the supplier asks for data, and never in the first message.
-- When a supplier's sheets reveal it wants an index clause, its earlier asks and our last offer are valued
-  again, so the limit estimate does not mix two valuations.
-- Our guessed value of a long contract and of an index clause is halved, closer to the twin's fitted model (P08 0.40 → 0.45).
-
-#### Review round (safety for the final, data still dropped)
-
-Safety:
-- **Error fallback:** after an internal error the agent no longer signs the supplier's standing sheet.
-  While time and rounds remain it sends one short holding note per supplier reply. Near the cap it takes
-  the best live sheet across all bidders, if that beats the alternative.
-- **No walking away without an alternative:** with no priced sheet and no alternative, the agent keeps the
-  threads open, since a walk-away would score 0.
-- **Waiting threads:** an RFQ thread parked behind a final offer gets a holding note whenever its last reply
-  is 40 s old (rounds permitting), instead of one note and then silence.
-
-Arguments, from the 23 real sessions:
-- **Delivery record:** "does not change our calculation" 6 of 6 times; only a supplier on an old cost sheet
-  said "a fair point". The on-time-delivery argument now goes only to those suppliers, and the twin was
-  corrected and refit (replay loss 0.0100 → 0.0096).
-- **Should-cost:** counted with the capacity-tight P10 supplier in both sessions, so it stays.
-- **Duplicates:** a `duplicate` claim result retires that kind of argument for the supplier.
-
-Openings and terms:
-- Openings go 5 points deeper for easy-to-move suppliers (spare capacity, old cost sheet, reference
-  customer, weak cash squeeze). Price letters with a stabilise goal open up to 5 % below (was 2.5 %).
-- A shorter lead time the supplier granted in every sheet stays ours, like the effective date.
-
-Inputs:
-- The supplier's 8D report sets a floor on the ppm commitment we ask for ("Commitment: 1500 ppm").
-- A delivery schedule fills in a missing standard lead time.
-- Each attachment is downloaded once per session. Saved records now keep attachment texts; before, they
-  held only empty `content_b64`.
-- The Sunday release is read in every supplier lookup (`World.rows`): hedge note, news, own letter, news traits.
-- In single-supplier cases the case briefing feeds the supplier profile (no trait changes on today's 19 cases).
-
-Twin A/B on the refit twin, before → after:
-- The 10 hosted cases: 0.679 → 0.679.
-- The 9 other cases: 0.553 → 0.573.
-
-Tried and dropped:
-- **Forced €150 chargeback** (the company standard): it raised C, because the supplier pays it at its real
-  defect rate while it is worth less to us at the committed rate (P12 0.351 → 0.325).
-- **Raw-material opening at 14 %:** P08 fell from 0.451 to 0.386.
-
-Not taken:
-- A sheet within 2 % of the ask for committee suppliers: our pacing to the supplier's limit already lands
-  below that.
-- Never offering above today's price in quality cases: price is the only move a quality supplier values,
-  so holding it would stall the talks.
-- A profile cache: building a supplier profile takes 0.07 s.
-- An LLM e-mail cache: prompts carry the supplier's e-mail, so they rarely repeat.
-- `validity_days` and `reply_delay_days`: they count simulated days, and no offer expired within a session.
-
-### Evening push (24 Oct): what the suppliers really do, and v5
-
-Evidence: 47 real sessions, including each supplier's back-office notes and the arena trace with its
-reasons. Two Opus analyses of them are in the session scratchpad: a mechanism report and an ideas report.
-
-Practice sessions this evening:
-
-| Batch | Cases | Mean | Notes |
-|---|---|---|---|
-| b1 | all 10 | 0.624 | P05 **0.814** (rival two-step), P01 0.903; P02 0.462 and P08 0.000 from bugs |
-| b2 | all 10 | 0.593 | P01 **0.928**, P07 **0.721**; P05 0.000 (accept loop plus timeouts) |
-| b3 | P02, P05, P08, P18 | 0.541 | quotes outside the case are "irrelevant"; P02 copper clause agreed at once |
-| b4 | P02, P05 | 0.740 | P05 0.814 (waited for the second step) |
-
-The best score per case averages **0.711**: P01 .928, P02 .723, P03 .923, P04 .860, P05 .814, P07 .721,
-P08 .473, P10 .694, P11 .536, P18 .441.
-
-How the hosted suppliers behave:
-- **Round-1 counter:** a fixed step whatever our anchor. An offer above it is agreed at once, so we
-  overpaid.
-- **After round 1:** about one price-grid step (about 1 %) per round on a visible move. The final offer
-  comes at round 3-4, at most 2.6 % of the opening below the round-1 counter. A final offer is final:
-  any change to it, or a step back in price, ends in a walk.
-- **Rival quotes:** a rival price far below its own triggers the only escalation we have seen ("I give
-  half the step now and check the rest", then "give the rest of the step"). P05 went 36 → 30.5 → 28.0.
-  Quotes outside the case's refs do not count ("does not concern this part or our company").
-- **Arguments:** each kind counts once per supplier. "Does not change our calculation" means no effect;
-  the delivery record counts only with suppliers on old cost sheets.
-- **Committees:** asking for approval does nothing (about 40 tries).
-- **Timeouts:** the arena logs supplier answers to late moves in `timeouts`, outside `messages`. Missing
-  them cost the b2 P05 deal.
-
-v5 changes:
-- **Opus strategist** (`StrategistWriter`): code builds a menu of offers that cost us the same, checked
-  arguments and points. Opus reads the supplier's documents and the thread, picks from the menu, notes
-  contradictions, and writes the e-mail. `guard()` still checks every price and ID.
-- **Runner:**
-  - supplier answers from `timeouts` are merged into the thread;
-  - a holding note goes out after 45 s without a reply;
-  - a refused accept is retried at most twice, then we offer its own terms back.
-  - Stress test on the twin (refused accepts, late errors, 10 cases in parallel): 10 of 10 deals.
-- **Pacing:**
-  - the limit estimate is min(75 % rule, round-1 counter − 2 % of the opening);
-  - jumps are capped at 1.5 % a round (1 % in RFQs and with committee suppliers);
-  - never a lower price for the same terms;
-  - our last offer is re-valued when the model changes;
-  - after "come back to you on price", only a minimal move.
-- **RFQ:** cite the cheapest rival offer to every bidder. While a bidder's second step is pending, do
-  not sign another bidder.
-- **Relationship charge** counted in full where our calibrated cost estimate puts the supplier near its
-  sustainable margin. The no-step-back and repricing logic now handles C falling and then rising in price.
-- **Twin:** refit on all sessions. It now models duplicates per kind, the delivery-record rule, the rival
-  two-step, out-of-case quotes being irrelevant, and the step-back walk.
-
-Ceiling: both analyses put the realistic mean on these 10 cases at about 0.73-0.75 under the behaviour
-seen so far. More needs a trigger the suppliers have not shown yet.
+Every change passes `scripts/gate.py` (tests plus four persona-twin seeds, the kit simulator and a twin calibrated
+on real sessions; no case category may drop). The 24 Oct results and fixes are in [`HISTORY.md`](HISTORY.md).
 
 ## Not yet done
 
-- Relationship-goal cases with only a generic cost estimate (e.g. P06): the agent can squeeze below the
-  supplier's full cost, which the relationship charge punishes. Not hosted in practice, so not checked live.
-- Sunday release: done (profiles rebuilt, six deep reads redone, letters and market news mapped to suppliers).
-- Tenders: no counter step below the supplier's 0.5 % counter threshold once it has "given the rest of the step"
-  (live P05 0.484: a 0.2 % step drew a withdrawal). Analysed in `EXPERIMENTS.md`, not built.
-- The runner logs no line for a send that arrives too late (HTTP 409): one P05 holding message never reached the
-  arena, and the log does not say why.
+- Tenders: no counter step below the supplier's 0.5 % counter threshold once it has given the rest of its step.
+- The runner logs no line for a send that arrives too late (HTTP 409).
+- Relationship-goal cases with only a generic cost estimate (e.g. P06) are not checked live.
