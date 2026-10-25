@@ -41,3 +41,7 @@ def lean():
 
 def clause0():
     return os.environ.get("BUYER_CLAUSE0") == "1"
+
+
+def deep():
+    return os.environ.get("BUYER_DEEP") == "1"

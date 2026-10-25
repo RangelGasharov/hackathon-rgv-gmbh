@@ -17,7 +17,7 @@ from pathlib import Path
 def session_file(log, score=None):
     """The arena record a play log belongs to: the record of its case saved closest to the log's last write
     (the runner saves `runs/arena-<case>-<time>.json` when the session ends)."""
-    case = re.search(r"-(P\d+)-\d{6}\.log$", log)
+    case = re.search(r"-(P\d+)-\d{6}(?:-\d+)?\.log$", log)
     if not case:
         return None, None
     end = Path(log).stat().st_mtime

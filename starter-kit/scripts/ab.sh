@@ -12,7 +12,7 @@ mkdir -p runs/ab
 for c in "$@"; do
   while (( $(jobs -r | wc -l) >= max )); do sleep 3; done
   (
-    log="runs/ab/${label}-${c}-$(date +%H%M%S).log"
+    log="runs/ab/${label}-${c}-$(date +%H%M%S)-${RANDOM}.log"
     env ${=envs} uv run python -m buyer.runner play "case:${c}" --writer claude > "$log" 2>&1
     line=$(grep "^case:${c} {" "$log" | tail -1)
     json=${line#case:${c} }

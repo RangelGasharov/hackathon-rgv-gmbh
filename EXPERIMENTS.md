@@ -86,6 +86,21 @@ supplier's final offer comes after a set number of rounds and lands where it lan
 **Rejected** live and on the calibrated twin. The other agent's single 0.614 on P08 (5.24, deadband 0, 45 days) did
 not reproduce with our concession path.
 
+### 3.1 Deeper openings (`BUYER_DEEP=1`)
+
+The other agent's LLM-led negotiator (negotiation-lab/llm_v4.py) set the team bests by opening deep and then moving in
+small steps: P11 0.794 (opened 43.50/42.96 at 300/1500 ppm, about 7.5 % below 47; steps 0.5, 0.3, 0.3, 0.3, 0.05; the
+supplier countered in 0.50 steps to 45.00 by reply 6), P18 0.618 (opened 4.72-4.90, about 20 % below 6.10, with two
+verified arguments; counter 5.50 instead of the usual 5.60-5.70; steps of 0.07-0.09 with a new argument each round;
+took the 5.20/30-day alternative of its final). Our agent capped quality cases and cash-short suppliers at a 5 %
+opening, raw material at 10 % and committee suppliers at 10 %.
+
+| Case | base | deep | notes |
+|---|---|---|---|
+| P11 | 0.626 (lean 0.635) | **0.794**, 0.620 | 0.794: six counters to 45.00 at 300 ppm. 0.620: it held at 45.50 after our steps fell to 0.13 (< 0.5 % of its opening) and closed on its 1500-ppm sheet |
+
+Twins: persona +3.4 / +1.3 / +1.6 (P12 0.25 -> 0.55 on every seed), calibrated twin unchanged.
+
 ## 4. Bugs found and fixed
 
 ### 4.1 Clause sheet priced below the supplier's healthy margin (P02, `Planner._clause_pair`)

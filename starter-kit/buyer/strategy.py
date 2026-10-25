@@ -483,14 +483,20 @@ class Planner:
             gap += min(0.02, (0.92 - ev["first_counter_vs_opening"]) * 0.15)
         if ctype == "price_increase" and d.notice:
             gap = max(gap, 0.06)
-        if ctype == "quality" or (d.has("cash_short", strong=True) and ctype != "rfq"):
-            gap = min(gap, 0.05)  # quality cases are about ppm and chargebacks, not a price cut to a cash-short shop
-            # (in an RFQ the rivals' prices do the cutting: P05's bidders anchored 18 % below still countered)
+        # No 5 % cap for quality cases and cash-short suppliers any more: P11's C_best is 11.6 % under its opening, and
+        # from a 4 % opening our offers were within 2 % of its price by round 2, where it holds. Live (25 Oct): opening
+        # about 9 % below gave 0.794, 0.620, 0.620 (mean 0.68) against 0.626 and 0.635; the LLM-led 0.794 opened 7.5 %
+        # below. A strategic cash-short supplier stays protected by the relationship charge (`price_at`).
         if ctype == "capacity" and d.has("capacity_tight"):
             gap = min(gap, 0.08)  # no alternative and a +25 % fallback: commitment, not a squeeze
         elif d.has("capacity_tight"):
             gap = min(gap, 0.10)  # far below a capacity-tight bidder: its final offer at once (P10: -19 %)
-        if d.has("approval_ladder") and ctype != "rfq":
+        deep_raw = flags.deep() and ctype == "raw_material"
+        # the LLM-led runs opened ~20 % below a raw-material distributor (P18 countered 5.50, not 5.60-5.70); ours,
+        # live: P18 0.497 vs 0.467, but P08 0.379 vs 0.462 as its counters shrank to 0.03 - off by default
+        if deep_raw:
+            gap = max(gap, 0.18)
+        if d.has("approval_ladder") and ctype != "rfq" and not deep_raw:
             gap = min(gap, 0.10)  # a pricing committee decides above 2 %: stay in a range it can approve
         return gap
 
@@ -660,7 +666,8 @@ class Planner:
             # moving a little every round until the final offer comes.
             v0 = self.asks[0] if self.asks else ask
             lim = self.limit_hat
-            if flags.lean():  # small fixed steps that keep it countering, instead of heading for its limit
+            if flags.lean() and len(self.case.get("suppliers") or []) == 1:  # small fixed steps that keep it countering
+                # (not in an RFQ: there the rivals' quotes do the work and small steps lost, P05 0.38 vs 0.73)
                 target = min(self.last_value + LEAN_STEP * v0, ask - LEAN_GAP * v0)
                 if self.second_step:  # "we will come back to you on price": its next step comes anyway
                     target = self.last_value + 0.001 * v0

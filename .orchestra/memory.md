@@ -12,7 +12,10 @@ live practice sessions, document what works and what doesn't. Score per case = (
   `play`/`run` session against it; check `/v1/me` before each batch.
 - Final code: changes stay on `improve/supplier-levers`; the team merges into main (user). Never merge into main.
 - Other agent (tacto-negotiation-are-2, local_a5963e3f...) was told my budget (user OK'd the note).
-- Use lean-orchestrator; debugging via the `investigate` skill (no /debug installed); grilling format for decisions.
+- **Usage stop rule (user, 02:00)**: check `get_usage` before each live batch; if "Weekly · all models" >= 35 %,
+  stop the other Claude sessions (stop_session) and stop working. 28 % at 02:00.
+- **No subagents from now on (user, 01:55)**: the manager does all work itself; work autonomously, no check-ins.
+- Use lean-orchestrator (state files only); debugging via the `investigate` skill (no /debug installed); grilling format for decisions.
 - Commits: commit and push `improve/supplier-levers` at milestone close.
 
 ## Decisions
@@ -35,7 +38,8 @@ live practice sessions, document what works and what doesn't. Score per case = (
 
 - Never run twin benchmarks or tests while live sessions run: round 2's three 0-score sessions (P04, P05 x2) stalled
   after round 1 (sends never landed, all threads timed out) exactly while 6 twin processes + pytest loaded the CPU.
-- Sessions used for this project (budget 40): round 1 = 10, round 2 = 7, round 3 = 5 -> 22.
+- Sessions used for this project (budget 40): round 1 = 10, round 2 = 7, round 3 = 5, P11 deep x2 -> 24.
+  User 02:10: sessions are scarce, ~20 left for me in total -> at most 16 more; spend only on strong candidates.
 
 ## Management rules (learned from retros)
 - Subagents cannot write report files (Write refuses 'report' files for subagents): cards ask for findings in the
