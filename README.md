@@ -45,6 +45,10 @@ Local benchmark (no arena calls):
 uv run python -m buyer.bench --sim kit  --agents naive,buyer          # the kit's scripted supplier
 uv run python -m buyer.bench --sim twin --agents naive,buyer          # persona-driven supplier twin
 uv run python -m buyer.bench --sim twin --agents buyer-claude --cases P01,P05   # with the Opus writer (costs money)
+uv run python -m buyer.bench --sim real --agents buyer --seeds 0,1,2  # calibrated twin, 19 cases, hosted and other apart
+uv run python -m buyer.bench --sim real --agents buyer --seeds 0,1,2 --against runs/bench-real-<before>.json  # keep or reject
+uv run python -m buyer.argtable build   # argument results per kind and persona from runs/arena-*.json
+uv run python -m buyer.argtable show
 ```
 
 Against the arena (practice quota counts):
@@ -371,8 +375,81 @@ Hosted, Opus strategist (24 Oct, 23:15 and 23:28):
 Session to session, the supplier's first counter moves by a grid step (P08 €5.62–5.69, P18 €5.60–5.70), and the
 score moves with it: P08 0.523–0.570 and P18 0.532–0.598 over the sessions with the new pacing.
 
+## 25 Oct review: robustness, early arguments, money, clauses, leapfrog
+
+Eight changes from a review of the replays. Each behaviour change has a switch (`True` = new), so it can be
+A/B-tested on the twin. They were built in a cloud session that could reach neither the arena nor the data package:
+**none of them has been played on the twin or the arena yet.** The 27 new tests (`tests/test_review.py`) use a
+stand-in dossier and need neither. The behaviour tests fail when their change is switched off or reverted. The 39
+tests that ran without the data package before still pass.
+
+1. **Error paths: no signing, walking or going silent on an error** (`runner.py`, `agent.py`). An error-free batch
+   on all 10 hosted cases is still to do before the final. Found and fixed:
+   - The case ended when one message hit a 5xx or 429 that outlasted the client's 3 retries. All threads went
+     silent, so no deal. Now: re-read the thread; if the message arrived, carry on; otherwise send it again
+     (`RESENDS = 3`). Only 401, 403 and 404 end the case.
+   - A dropped connection after the client's retries, an unreadable attachment, or an error while writing,
+     composing a holding note or re-offering killed that worker. Its supplier then went silent with `in_flight`
+     stuck, which also held up the other bidders. Now each of these has a fallback, and a worker never stops while
+     its case is open.
+   - After an internal error the agent sent one holding note, then went silent if the error repeated, because it
+     counted replies with the state that had failed. Now it counts replies from the thread itself. A repeated error
+     sends a small safe move instead: our last sheet 1 % higher, never above the supplier's ask. A second hold
+     would only draw a final offer.
+   - Near the cap, the error fallback compared sheets with the published formula only, not with model state that
+     might be broken.
+   - A replay of the old runner against the same flaky table: one 502 → no deal; a dropped connection → crash.
+     The new runner closes the deal both times.
+2. **Front-loaded arguments and a table of results** (`argtable.py`, `argtable.json`, `claims.py`). Message 1 carries
+   the three strongest arguments, at most one of each kind. The strategist can no longer drop a new rival offer.
+   Raw material keeps one argument a round (`agent.RAW_ONE_A_ROUND`): on these suppliers, three arguments in
+   round 1 scored 0.497 / 0.538, against 0.598 / 0.570 for one a round. The hand-written "counted / did not count"
+   weights are now a table per argument kind and supplier persona (hedge-covered, hedged-other, cash-short,
+   stale costing, capacity-tight, not strategic, ...). Each weight is
+   `(2 × old rule + what each logged argument did) / (2 + number logged)`. The table is seeded with the counts this
+   README states (delivery record 0 of 6, forecast 5 of 5, not-strategic forecast 0 of 4, P08's unhedged indices
+   4 of 4, ...). **Run `python -m buyer.argtable build` where `runs/` and the data package are** to tally every saved
+   session. What the seed changes: P04's forecast is no longer a candidate, and P08 sends PPI-C2431 and LCI-C before
+   its price history.
+3. **Cost-of-money gap** (`strategy.MONEY_SHEET`). The equal-cost sheets always include 14 days for a supplier whose
+   money costs more than our 8 %, and 90 days for one whose money costs less. Raw material uses the rate read off
+   the supplier's own two-sheet answers. On the stand-in, the sheets already held 14 days for cash-short suppliers.
+   The change mattered at 7 %, where 90 days was missing.
+4. **Clause as currency** (`strategy.CLAUSE_CHEAP`). Raw-material first messages already carried the cheapest clause
+   with 36 months. 36 months costs us the same as 24 over the 2-year horizon, and the supplier values it more. Now
+   the e-mail also says it: "We accept a price adjustment clause on AS-14404 together with a 36-month agreement:
+   it covers your material risk, so we expect a lower base price in return." An optional clause is offered
+   unprompted only if it costs us less than the ~1.5 % suppliers value it at. P02 (0.8 %) keeps its trial. In P14
+   the cheapest copper clause costs 2.2 % (55 % share × 4 % index risk), so it goes on our sheets only once the
+   supplier's sheets carry it or it calls it mandatory. By the published formula, P08's deadband-3 clause costs 1.8 %
+   (path 6 %, deadband 3 %); the agent's deadband-5 choice costs 0.9 %.
+5. **`_pref_clause`** ranks by the full clause cost, including `material_share × index_risk_pct`. With the path
+   inside the deadband, a 45 % share now beats an 80 % share whichever order the case lists them in. None of the 19
+   cases changes its pick.
+6. **RFQ leapfrog** (`agent.LEAPFROG`). Before signing a bidder, whether on an agreement, a final offer or AC_next,
+   every other bidder still `open` with two rounds left must have seen that offer or a lower one. Each new, lower
+   offer is a new ID. Bounded by rounds and by the wave's cap. Agreed and final-offer threads are never reopened.
+7. **Sustainable-margin stop** (`strategy.SUSTAINABLE_STOP`). In relationship cases with a rough cost estimate (no
+   should-cost of the supplier's own plant and no breakdown from it, as in P06), no offer goes below the price where
+   our median belief of the supplier's full cost meets the sustainable margin, and none above its ask. Own-plant
+   estimates (P01-P03) are unchanged. This closes the P06 item that was here under "Not yet done".
+8. **Overfitting gate** (`bench.py`). `--sim real --seeds 0,1,2` plays all 19 real case files on the calibrated twin
+   and reports the hosted 10 and the other 9 apart, per seed. `--against <earlier bench file>` rejects a change that
+   helps the hosted 10 but costs the other 9, on average or on most seeds.
+
+Before the final:
+
+```bash
+cd starter-kit
+uv run python -m buyer.bench --sim real --agents buyer --seeds 0,1,2                  # with all switches True
+# set the switches to False (strategy.MONEY_SHEET, SUSTAINABLE_STOP, CLAUSE_CHEAP = 1.0; agent.LEAPFROG), run again,
+# then judge the new code against that run:
+uv run python -m buyer.bench --sim real --agents buyer --seeds 0,1,2 --against runs/bench-real-<switches-off>.json
+uv run python -m buyer.argtable build && uv run python -m buyer.argtable show
+uv run python -m buyer.runner run --set practice --writer claude -p 10                 # one error-free hosted batch
+```
+
 ## Not yet done
 
-- Relationship-goal cases with only a generic cost estimate (e.g. P06): the agent can squeeze below the
-  supplier's full cost, which the relationship charge punishes. Not hosted in practice, so not checked live.
+- None of the 25 Oct changes has been played on the twin or the arena (see above).
 - No Sunday-release handling beyond what `DataPackage` merges automatically.

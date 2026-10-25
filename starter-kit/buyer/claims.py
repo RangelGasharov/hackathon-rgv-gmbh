@@ -6,6 +6,8 @@ does its costing from an old spreadsheet is disarmed by them."""
 import re
 from dataclasses import dataclass, field
 
+from . import argtable
+
 TOL_PP = 0.5
 
 
@@ -77,7 +79,7 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                 [doc, ctr],
                 days,
                 f"Your letter ({doc}) gives us only {days} days' notice under our framework agreement ({ctr}).",
-                1.0,
+                argtable.weight("notice", "any"),
                 "date",
                 f"The agreement fixes prices for each calendar year and requires {cdays} days' notice, "
                 f"so the current price applies at least until the end of the year."
@@ -86,22 +88,15 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
             )
         )
     # 2. cost drivers that fell, or rose far less than the ask: never cite one that supports a rise
-    hedged = d.has("hedged_material")
     idx_claims = []
     for series, w, ch, i0, i1, m0, m1 in d.drivers:
         if ch >= 0:
             # arena replay P01: citing a driver that rose (even far less than the ask) got
             # "your figures confirm our case": only falling drivers are arguments for us
             continue
-        weight = 0.9
-        if d.has("stale_costing"):
-            weight = 1.0  # arena: "we did not know that - a fair point"
-        if hedged and d.hedge_covers(series):
-            weight = 0.05  # arena P08: "that is not our reality: our material is covered at fixed prices"
-        elif hedged:
-            weight *= 0.6  # a series its hedge does not name (P08: labour, bar drawing): untested, no harm seen
-        elif d.has("cash_short", strong=True):
-            weight *= 0.3  # "we see your figures, but we cannot give up margin right now"
+        # whether it counts with this supplier (hedge, cash squeeze, an old cost sheet): the replay table
+        who = argtable.persona("idx", d, case, series=series)
+        weight = argtable.weight("idx", who)
         if m1 < world.series_last.get(series, m1):
             weight *= 0.85  # an older window: after the current ones, so P18's forecast still goes in round 1
         label = series_label(world, series)
@@ -113,7 +108,7 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                 f"{label} changed {ch:+.1f}% from {m0} to {m1} ({i0}, {i1}).",
                 round(weight * (0.9 + 0.1 * min(1.0, w / 0.3)), 2),  # heavier drivers first
                 "cost",
-                meta={"series": series, "weight": w},
+                meta={"series": series, "weight": w, "persona": who},
             )
         )
     if idx_claims and asked is not None and d.justified_pct < asked - 1:
@@ -134,7 +129,7 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                     [sc["id"]],
                     sc["ppm"],
                     f"Your defect rate over the last twelve months was {sc['ppm']:.0f} ppm ({sc['id']}).",
-                    0.95 if ctype == "quality" else 0.7,
+                    argtable.weight("sc", argtable.persona("sc", d, case)),
                     "quality",
                 )
             )
@@ -161,7 +156,7 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                         f"Your on-time delivery was {mean:.1f}% against our 95% target ({', '.join(ids)}).",
                         # arena (23 sessions): "the delivery record ... does not change our calculation" 6 of 6
                         # times; only a supplier on an old cost sheet said "we did not know that - a fair point"
-                        0.8 if d.has("stale_costing") else 0.12,
+                        argtable.weight("sc_otd", argtable.persona("sc_otd", d, case)),
                         "delivery",
                     )
                 )
@@ -171,8 +166,7 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
     for n, (fid, ch) in enumerate(sorted(d.forecasts, key=lambda x: -x[1])):
         if ch <= 0:
             continue
-        cold = d.has("capacity_tight") or d.not_strategic
-        w = 0.2 if cold else 0.85 if d.has("stale_costing") else 0.8
+        w = argtable.weight("fc", argtable.persona("fc", d, case))
         what = "this part" if len(d.forecasts) == 1 else f"part {world.facts[fid]['part'].split(':')[1]} of the kit"
         out.append(
             Claim(
@@ -196,7 +190,7 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                 [cid],
                 unit_cost,
                 f"Our cost model puts the full cost of this part at €{unit_cost:.2f} per unit ({cid}).",
-                0.75,
+                argtable.weight("cost", "any"),
                 "cost",
             )
         )
@@ -211,7 +205,7 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                 [alt["ref"]],
                 p,
                 f"We hold a quote of €{p:.2f} for the same part ({alt['ref']}).",
-                0.85,
+                argtable.weight("quote", "alternative"),
                 "competition",
             )
         )
@@ -241,7 +235,7 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                     [q[0]],
                     q[2],
                     f"Another supplier quoted €{q[2]:.2f} for the same part{when} ({q[0]}).",
-                    (0.97 if far else 0.9) if recent else (0.7 if far else 0.5),
+                    argtable.weight("quote", ("rival" if recent else "rival_old") + ("_far" if far else "")),
                     "competition",
                     meta={"rival": q[1]},
                 )
@@ -254,7 +248,7 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                 [oid],
                 price,
                 f"Another supplier offers €{price:.2f} for the same part ({oid}).",
-                0.95 if ctype == "rfq" else 0.85,
+                argtable.weight("offer", argtable.persona("offer", d, case)),
                 "competition",
             )
         )
@@ -273,13 +267,13 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                     ids[:2] if below else ids,
                     price,
                     f"We pay you €{price:.2f} per unit today ({', '.join(ids[:2] if below else ids)}).",
-                    0.6 if below else 0.1,
+                    argtable.weight("po", "below_standing" if below else "any"),
                     "history",
                 )
             )
     # 8. news about the supplier that speaks for us (free capacity, secured energy, new plant)
     for nid, _topic, headline in d.news_items[:1]:
-        w = 0.1
+        w = argtable.weight("news", "any")
         out.append(
             Claim("news", [nid], None, f"We read that {headline[0].lower() + headline[1:]} ({nid}).", w, "context")
         )

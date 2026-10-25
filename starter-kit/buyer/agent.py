@@ -10,14 +10,14 @@ import math
 import re
 import time
 
-from arena_kit.cost import RELATIONSHIP_GOALS, must_haves_ok
+from arena_kit.cost import RELATIONSHIP_GOALS, must_haves_ok, total_cost
 from arena_kit.docs import quote_terms
 
 from .claims import candidates, dead_key, kind_key, no_change_kinds, ration
 from .dossier import Dossier
 from .persona import opening_text, read_all
 from .strategy import Estimate, Planner, cost
-from .writer import Plan, TemplateWriter, human_date
+from .writer import Plan, TemplateWriter, describe, human_date
 
 log = logging.getLogger("buyer")
 ENDED = {"walked_away", "no_bid"}
@@ -44,6 +44,16 @@ ASKS_DATA = re.compile(
     re.I,
 )
 LEARN_OPENING_LEAD = True  # a supplier's opening lead time is its standard (see `learn_opening_standard`)
+# raw material: one new argument a round (hosted P18 0.598 / P08 0.570 that way, against 0.497 / 0.538 with three in
+# round 1: its first counter is a fixed step, each later argument bought one more). False: three in message 1, as
+# every other case type does
+RAW_ONE_A_ROUND = True
+LEAPFROG = True  # RFQ: before we sign a bidder, every other bidder that can still answer has seen its offer
+SIGN_OFF = "Best regards,\nHollerau Pumpenwerke GmbH, Purchasing"
+HOLD_BODY = (
+    "Thank you for your message. We are reviewing it together with the other information we have "
+    "and will come back to you shortly.\n\n" + SIGN_OFF
+)
 COST_ROW = re.compile(r"^(material|conversion|overhead|margin|unit price)[^|]*\|\s*([-\d.]+)", re.I | re.M)
 
 
@@ -113,7 +123,7 @@ class ThreadState:
         self.last_claims = []
         self.last_body = ""
         self.reply_seen_at = time.monotonic()  # when we last read a new message from it (hold-note timer)
-        self.fallback_seen = -1  # the reply we already answered with a fallback holding note
+        self.fallback_seen = -1  # the reply (count of its messages) we last answered after an internal error
         self.phrase_dead = set()  # kinds retired only by the "does not change our calculation" phrase
         self.signals = None  # the strategist's reading of its last e-mail, applied at the next `ingest`
 
@@ -130,6 +140,7 @@ class BuyerAgent:
         self.c_open = None
         self.log = []
         self.round_seconds = 30.0  # our message + the supplier's reply; updated from what we measure
+        self.offer_prices = {}  # RFQ: unit price of every bidder offer we could cite, by its ID
 
     def note_round(self, seconds):
         self.round_seconds = 0.6 * self.round_seconds + 0.4 * seconds if self.log else seconds
@@ -399,7 +410,8 @@ class BuyerAgent:
             s != sid and x.sent == 0 and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)
             for s, x in live.items()
         )
-        rival_better = rival_better or untouched
+        leap = self.unshown(threads, sid, live, time_left)
+        rival_better = rival_better or untouched or leap
         if status == "agreed" and measure(ts) <= reservation * slack and ts.c_standing <= best.c_standing * 1.001:
             if (rival_better or pending) and not ts.held:  # RFQ: let the other bidders answer before we sign
                 ts.held = True
@@ -424,6 +436,7 @@ class BuyerAgent:
                 and ts.c_standing <= best.c_standing * 1.001
                 and not pending
                 and not untouched
+                and not leap
             ):
                 return accept(sid)
             if others:
@@ -485,6 +498,34 @@ class BuyerAgent:
             ts.matched = True  # the concession path has reached its own offer
         return {"supplier_id": sid, "message": msg}
 
+    def unshown(self, threads, sid, live, time_left=math.inf):
+        """RFQ leapfrog: another bidder still in the open has not been shown this bidder's current offer (or a lower
+        one) and has the rounds and the time to answer it. A rival price is the only escalation the suppliers have
+        shown (P05: 36 -> 30.5 -> 28.0), and each new, lower offer is a new ID that may be cited again to the other
+        bidder: so we keep cycling bidders while rounds remain instead of signing at the first lower offer."""
+        if not LEAPFROG or len(live) < 2:
+            return False
+        oid, terms = standing(threads[sid], self._price(sid))
+        price = terms.get("unit_price")
+        if not oid or price is None:
+            return False
+        pace = max(10.0, 1.3 * self.round_seconds)
+        for s, x in live.items():
+            if s == sid or latest(threads[s]).get("status") != "open":
+                continue  # an agreement or a final offer is not reopened with a lower price
+            own = standing(threads[s], self._price(s))[1].get("unit_price")
+            if own is None or price >= own * 0.995:
+                continue  # nothing lower to show it
+            shown = [self.offer_prices[k[1]] for k in x.used_kinds if k[0] == "offer" and k[1] in self.offer_prices]
+            if shown and min(shown) <= price + 0.005:
+                continue  # it has seen this price or a lower one
+            rounds = self.case.get("round_limit", 10) - x.sent
+            if self.deadline:
+                rounds = min(rounds, int(max(0.0, time_left - self.close_margin) // pace))
+            if rounds >= 2:  # one to show it, one to close
+                return True
+        return False
+
     @staticmethod
     def heading_below(x, ts):
         """Another bidder that has only made its first moves: where they point (`limit_hat`) is more than 1 % under
@@ -532,11 +573,14 @@ class BuyerAgent:
                     and (not own.get("unit_price") or terms["unit_price"] < own["unit_price"])
                 ):
                     rivals[oid] = terms["unit_price"]
+        self.offer_prices.update(rivals)
         allc = candidates(self.world, d, case, rivals, own_price=own.get("unit_price"))
-        # raw material: one new argument a round. Its first counter is a fixed step (P18: 5.60 at 90 days with one
-        # argument or three), and each argument counted later took one more grid step off (team P18: 5.60, then
-        # 5.50 after the forecast, 5.40 after PPI-C2431)
-        per = 1 if case.get("type") == "raw_material" else 3
+        # message 1 carries the three strongest arguments of different kinds (the round-1 counter is a fixed step and
+        # later concessions are capped near 2.6 % of the opening: what lands early sets the deal). Raw material: one
+        # new argument a round. Its first counter is a fixed step (P18: 5.60 at 90 days with one argument or three),
+        # and each argument counted later took one more grid step off (team P18: 5.60, then 5.50 after the forecast,
+        # 5.40 after PPI-C2431)
+        per = 1 if case.get("type") == "raw_material" and RAW_ONE_A_ROUND else 3
         later = 0.3 if per == 1 else 0.5
         claims = ration(allc, self.used_ids, ts.sent, ts.used_kinds, per_message=per, later_min=later)
         answered, lever_lines = self.answers(ts, sheets, threads[sid]), self.levers(ts, sheets)
@@ -603,28 +647,45 @@ class BuyerAgent:
 
     def write(self, msg, budget=None):
         """Fill in the e-mail body of a message from `decide` (call it without holding the case lock).
-        `budget`: seconds left for writing; too little and the template writes it at once."""
+        `budget`: seconds left for writing; too little and the template writes it at once. A writer that fails
+        never stops the message: the code's own choice goes out in the template, else as a plain note."""
         plan = msg.pop("_plan", None)
         default = (list(plan.sheets), list(plan.claims)) if plan is not None else None
         if plan is not None and msg.get("body") is None:
-            if budget is not None and budget < 8:
-                msg["body"] = TemplateWriter().write(plan)
-            else:
-                try:
-                    msg["body"] = self.writer.write(plan, timeout=None if budget is None else min(25.0, budget))
-                except TypeError:  # a writer without a timeout parameter
-                    msg["body"] = self.writer.write(plan)
-            if (list(plan.sheets), list(plan.claims)) != default:  # the strategist chose differently
-                self._finalize(msg, plan)
-                self.log.append((msg["_sid"], "strategist", [t["unit_price"] for t in plan.sheets]))
-            if plan.read:
-                self.log.append((msg["_sid"], "read", plan.read))
-            self._take_reading(msg, plan)
+            try:
+                if budget is not None and budget < 8:
+                    msg["body"] = TemplateWriter().write(plan)
+                else:
+                    try:
+                        msg["body"] = self.writer.write(plan, timeout=None if budget is None else min(25.0, budget))
+                    except TypeError:  # a writer without a timeout parameter
+                        msg["body"] = self.writer.write(plan)
+                if (list(plan.sheets), list(plan.claims)) != default:  # the strategist chose differently
+                    self._finalize(msg, plan)
+                    self.log.append((msg["_sid"], "strategist", [t["unit_price"] for t in plan.sheets]))
+                if plan.read:
+                    self.log.append((msg["_sid"], "read", plan.read))
+                self._take_reading(msg, plan)
+            except Exception:  # noqa: BLE001 - one odd plan must not leave the supplier unanswered
+                log.exception("%s: writing failed; the code's own choice goes out", msg.get("_sid"))
+                self._write_default(msg, plan, default)
         msg.pop("_sid", None)
         msg.pop("_committed", None)
         for f in msg.get("attachments") or []:
             f.pop("about", None)
         return msg
+
+    def _write_default(self, msg, plan, default):
+        plan.sheets, plan.claims = list(default[0]), list(default[1])
+        try:
+            if msg.get("_committed"):
+                self._finalize(msg, plan)  # back to the default choice, if the strategist's was half applied
+        except Exception:  # noqa: BLE001
+            log.exception("could not restore the default choice")
+        try:
+            msg["body"] = TemplateWriter().write(plan)
+        except Exception:  # noqa: BLE001
+            msg["body"] = HOLD_BODY
 
     def _take_reading(self, msg, plan):
         """What the strategist decided beyond sheets and claims: the files to attach, and its reading of the
@@ -652,7 +713,16 @@ class BuyerAgent:
         if self.case.get("round_limit", 10) - ts.sent <= 1:
             return None  # the last round is for a decision, not for a note
         self.log.append((sid, "keep_alive", None))
-        return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[], hold=True)}
+        try:
+            return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[], hold=True)}
+        except Exception:  # noqa: BLE001 - the note goes out plain: a silent thread times out
+            log.exception("%s: holding note failed; a plain one goes out", sid)
+            ts.sent += 1
+            return {"supplier_id": sid, "message": self._plain(HOLD_BODY)}
+
+    def _plain(self, body, sheets=()):
+        return {"subject": f"Re: {self.case.get('title', 'our negotiation')}"[:300], "body": body,
+                "term_sheets": [{"terms": dict(t)} for t in sheets]}  # fmt: skip
 
     def reoffer(self, threads, sid):
         """Its standing sheet was refused as an accept (gone or changed): send its own terms back as our
@@ -661,37 +731,56 @@ class BuyerAgent:
         if not terms.get("unit_price") or self.t[sid].dead:
             return None
         self.log.append((sid, "reoffer", terms.get("unit_price")))
-        return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[dict(terms)])}
+        try:
+            return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[dict(terms)])}
+        except Exception:  # noqa: BLE001
+            log.exception("%s: re-offer failed; its terms go back plain", sid)
+            self.t[sid].sent += 1
+            body = f"Thank you. We confirm {describe(terms)}.\n\n" + SIGN_OFF
+            return {"supplier_id": sid, "message": self._plain(body, [terms])}
+
+    def _plain_cost(self, sid):
+        """C of a sheet from the published formula and its standard terms only: no model state that may be broken."""
+        std = self.t[sid].std if sid in self.t else {}
+
+        def c(terms):
+            if terms.get("unit_price") is None or not must_haves_ok(self.case, terms, std):
+                return math.inf
+            return total_cost(self.case, terms, std)
+
+        return c
 
     def safe_fallback(self, threads, sid):
-        """After an internal error. Not a reason to sign: while time and rounds remain, one short holding note
-        per supplier reply keeps the thread alive. When the case is about to end, the best live sheet across
-        all bidders that keeps the must-haves and beats the alternative (as `settle`), else the alternative."""
+        """After an internal error. Never silent, and never a reason to sign or walk while time and rounds remain.
+        The first error after a supplier reply gets a short holding note; an error on the very next reply too gets a
+        small safe move instead (our last sheet 1 % up, never above its ask: a second hold only draws its final
+        offer). When the case is about to end, the best live sheet across all bidders that keeps the must-haves
+        and beats the alternative (as `settle`), else the alternative. Reads the threads, not the agent's state:
+        `ingest` may be what failed."""
         try:
-            ts = self.t[sid]
+            ts, events = self.t[sid], threads[sid]
+            incoming = sum(m.get("from") != "buyer" for m in events)
+            sent = max(ts.sent, sum(m.get("from") == "buyer" for m in events))
             time_left = (self.deadline - time.time()) if self.deadline else math.inf
-            rounds_left = self.case.get("round_limit", 10) - ts.sent
+            rounds_left = self.case.get("round_limit", 10) - sent
             if time_left > self.close_margin and rounds_left > 1:
-                if ts.in_flight or ts.fallback_seen == ts.seen or latest(threads[sid]).get("status") in ENDED:
+                if ts.in_flight or ts.fallback_seen == incoming or latest(events).get("status") in ENDED:
                     return None
-                ts.fallback_seen, ts.sent = ts.seen, ts.sent + 1
-                body = (
-                    "Thank you for your message. We are reviewing it together with the other information we have "
-                    "and will come back to you shortly.\n\nBest regards,\nHollerau Pumpenwerke GmbH, Purchasing"
-                )
-                return {
-                    "supplier_id": sid,
-                    "message": {"subject": "Re: our negotiation", "body": body, "term_sheets": []},
-                }
+                again = ts.fallback_seen == incoming - 1  # it failed on the reply before as well
+                ts.fallback_seen, ts.sent = incoming, sent + 1
+                move = self._fallback_move(events, sid) if again and latest(events).get("status") == "open" else None
+                self.log.append((sid, "fallback", "move" if move else "hold"))
+                return {"supplier_id": sid, "message": move or self._plain(HOLD_BODY)}
             best = None
             for s, x in self.t.items():
                 if x.dead or latest(threads[s]).get("status") in ENDED:
                     continue
-                sheet_id, terms = standing(threads[s])
-                if sheet_id and terms.get("unit_price") and must_haves_ok(self.case, terms, x.est.standard):
-                    c = cost(self.case, terms, x.est, rel=False)
+                price = self._plain_cost(s)
+                sheet_id, terms = standing(threads[s], price)
+                if sheet_id and math.isfinite(c := price(terms)):
                     best = min(best or (c, s, sheet_id), (c, s, sheet_id))
-            c_alt = min((x.plan.c_alt for x in self.t.values()), default=math.inf)
+            alt = (self.case["buyer"].get("alternative") or {}).get("terms") or {}
+            c_alt = total_cost(self.case, alt) if alt.get("unit_price") else math.inf
             if best and best[0] <= c_alt:
                 return {"supplier_id": best[1], "message": {"action": {"type": "accept", "term_sheet_id": best[2]}}}
             if math.isfinite(c_alt):
@@ -699,6 +788,22 @@ class BuyerAgent:
         except Exception:  # noqa: BLE001 - nothing more to do safely
             log.exception("safe fallback failed")
         return None
+
+    def _fallback_move(self, events, sid):
+        """Our last sheet at 1 % more, never above its standing price: a visible move that needs no model."""
+        mine = [m for m in events if m.get("from") == "buyer" and m.get("term_sheets")]
+        _, ask = standing(events, self._plain_cost(sid))
+        if not mine or ask.get("unit_price") is None:
+            return None
+        last = dict(mine[-1]["term_sheets"][0].get("terms") or {})
+        if last.get("unit_price") is None:
+            return None
+        price = round(min(last["unit_price"] * 1.01, ask["unit_price"] * 0.997), 2)
+        t = {**last, "unit_price": price}
+        if price <= last["unit_price"] or not must_haves_ok(self.case, t, self.t[sid].std):
+            return None
+        body = f"Thank you for your message. We can move to {describe(t)}.\n\n" + SIGN_OFF
+        return self._plain(body, [t])
 
     def tone(self, ts, events):
         d, first = ts.d, ts.sent == 0
@@ -748,6 +853,16 @@ class BuyerAgent:
                 out.append(f"We can work with a lead time of {lead} days, which gives you room to plan your capacity.")
         elif (d.has("free_capacity") or d.has("small_account")) and months and months >= 24:
             out.append(f"We are ready to place the full annual volume of {need:,} with you for {months} months.")
+        clause = s.get("index_clause")
+        if clause and ts.k == 0 and (ts.plan.clause_required or ts.est.wants_clause):
+            # the clause is currency: these suppliers fix no price beyond 12 months without one and have valued it at
+            # 1.6 % or more, while the deadband clause costs us less - offer it from the first message, with the long
+            # term, and ask for price in return rather than let it surface in a trial
+            term = f" together with a {months}-month agreement" if months and months > 12 else ""
+            out.append(
+                f"We accept a price adjustment clause on {clause['series']}{term}: it covers your material risk, "
+                "so we expect a lower base price in return."
+            )
         if d.has("price_frozen") and d.current and s.get("unit_price", 0) >= d.current:
             out.append(
                 "We understand that your list price is fixed; our proposals therefore work through the other terms."

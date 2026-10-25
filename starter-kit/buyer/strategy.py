@@ -25,6 +25,21 @@ LATE_ARG = 0.005  # share of its opening value an argument counted after its fir
 SIGMA_K = 0.5
 SIGMA_OWN = 0.02
 Z5 = (-1.2816, -0.5244, 0.0, 0.5244, 1.2816)  # medians of the five quintiles of a standard normal
+# switches for the 25 Oct review (True = new behaviour; False to A/B it on the twin)
+MONEY_SHEET = True  # MESO always carries the payment term the gap between its cost of money and ours favours
+# an optional clause is offered unprompted only when it costs us less than a supplier values one: P02's copper clause
+# 0.8 % (agreed at once, 0.67-0.72), P14's 2.2 % (55 % share x 4 % index risk at deadband 5): there only on insistence
+CLAUSE_CHEAP = CLAUSE_VALUE
+SUSTAINABLE_STOP = True  # relationship case, rough cost estimate: no offer below its sustainable margin
+
+
+def clause_share(case, clause):
+    """What an index clause costs us as a share of the price (`cost.cost_breakdown`): the index path beyond the
+    deadband (signed: a falling index makes the clause pay us) plus the index risk, both on the material share."""
+    b = case["buyer"]
+    path = b.get("index_paths", {}).get(clause["series"], 0.0)
+    moved = max(0.0, abs(path) - clause["deadband_pct"] / 100) * math.copysign(1, path)
+    return clause["material_share"] * (moved + b.get("index_risk_pct", 0) / 100)
 
 
 class Estimate:
@@ -194,6 +209,11 @@ class Estimate:
         t = closing_terms(case, terms, self.standard)
         return supplier_value(case, t, self.model(case, t))
 
+    def cash_value(self, case, terms):
+        """What the arena counts in its margin: `value` without the security of a long term or a clause."""
+        t = closing_terms(case, terms, self.standard)
+        return supplier_value(case, t, self.model(case, t, cash=True))
+
     def price_for_value(self, case, terms, target):
         """The unit price at which `terms` are worth `target` to the supplier (value is linear in price)."""
         v1 = self.value(case, {**terms, PRICE: 100.0})
@@ -242,7 +262,7 @@ def rel_charge(case, terms, est):
     if b.get("category_goal") not in RELATIONSHIP_GOALS or not per_point or not sustainable:
         return 0.0
     t = closing_terms(case, terms, est.standard)
-    worth = supplier_value(case, t, est.model(case, t, cash=True))
+    worth = est.cash_value(case, t)
     soft = sum(w * _soft(sustainable - (worth - f) / worth * 100) for w, f in est.f_nodes())
     return per_point * soft * _years(case, t)
 
@@ -393,19 +413,18 @@ class Planner:
         return m or 12
 
     def _pref_clause(self):
-        """The clause option that costs us least per unit of price: the case's index path beyond the deadband (signed:
-        a falling index makes the clause pay us) plus the index risk, which is the same share for every deadband.
-        Where the path sits inside several deadbands they cost the same and the lowest protects the supplier most."""
-        b, best = self.case["buyer"], None
+        """The clause option that costs us least (`clause_share`): the index path beyond the deadband plus the index
+        risk, which grows with the material share - with two deadband-3 options of 45 % and 80 % share and the path
+        inside the deadband, only the risk tells them apart (0.45 % against 0.8 % at a 1 % index risk), whatever
+        order the case lists them in. Where they cost the same the lowest deadband protects the supplier most."""
+        best = None
         opts = [o for o in self.case.get("term_options", {}).get("index_clause") or [] if o]
         weight = {}
         if len({o["series"] for o in opts}) > 1:  # several series: the one its cost follows
             weight = {sr: w for sr, w, *_ in self.est.d.drivers}
         top = max((weight.get(o["series"], 0.0) for o in opts), default=0.0)
         for o in [o for o in opts if weight.get(o["series"], 0.0) == top]:
-            path = b.get("index_paths", {}).get(o["series"], 0.0)
-            moved = max(0.0, abs(path) - o["deadband_pct"] / 100) * math.copysign(1, path)
-            key = (round(o["material_share"] * moved, 6), o["deadband_pct"])
+            key = (round(clause_share(self.case, o), 6), o["deadband_pct"])
             if best is None or key < best[0]:
                 best = (key, o)
         return best[1] if best else None
@@ -418,6 +437,9 @@ class Planner:
         clause = combo.get("index_clause")
         if clause and self.pref_clause and clause != self.pref_clause and "index_clause" not in self.locked:
             return False
+        asked = self.clause_required or self.clause_seen or "index_clause" in {**self.locked, **self.kept}
+        if clause and not asked and clause_share(self.case, clause) >= CLAUSE_CHEAP:
+            return False  # a dear clause (P14's copper, 2.2 %) only once the supplier asks for one
         return not (self.clause_required and not clause and self._months(combo) > 12)
 
     def require_clause(self):
@@ -543,9 +565,74 @@ class Planner:
                 ),
             )
         p = self.est.price_for_value(self.case, pkg.combo, target) or pkg.p_floor
+        if (stop := self._stop_price(pkg.combo)) is not None:  # never above its own ask for this
+            ask = self.est.price_for_value(self.case, pkg.combo, self.ask_value * 0.997) if self.ask_value else None
+            p = max(p, stop if ask is None else min(stop, ask))
         if self.frozen:
             p = max(p, self.frozen)
         return round(p, 2)
+
+    def stop_value(self):
+        """Relationship case on a rough cost estimate (generic should-cost, no breakdown of its own): the cash value
+        at which our median belief of its full cost meets the sustainable margin. Below it the charge grows with the
+        square of the gap (P01: one point below costs ~€8k over two years, five points ~€206k) and rests on a cost
+        we barely know, so we stop there rather than squeeze (P06: the agent could go below its full cost). With a
+        confident estimate (own plant, breakdown) the expected charge in C already places the price."""
+        b = self.case["buyer"]
+        sust = b.get("sustainable_margin_pct")
+        if not (SUSTAINABLE_STOP and self.relationship and sust and b.get("relationship_eur_per_point")):
+            return None
+        if self.confident:
+            return None
+        f = sorted(f for _w, f in self.est.f_nodes())[len(Z5) // 2]  # capped by what its opening quote allows
+        return f / (1 - sust / 100)
+
+    def _stop_price(self, combo):
+        """The unit price at which `combo` reaches `stop_value` in cash (value is linear in price), or None."""
+        stop = self.stop_value()
+        if stop is None:
+            return None
+        v1 = self.est.cash_value(self.case, {**combo, PRICE: 100.0})
+        v2 = self.est.cash_value(self.case, {**combo, PRICE: 200.0})
+        slope = (v2 - v1) / 100.0
+        return 100.0 + (stop - v1) / slope if slope > 0 else None
+
+    def _below_stop(self, t):
+        stop = self.stop_value()
+        return stop is not None and self.est.cash_value(self.case, t) < stop * 0.999
+
+    def money_days(self):
+        """The payment term the gap between its cost of money and ours favours: 14 instead of 60 days costs us ~1 %
+        of the price and is worth 1.5-1.9 % to a supplier paying 12-15 %; one whose money is cheaper than our 8 %
+        gives up less for 90 days than we gain. Raw material reads the rate off its own two-sheet answers. None when
+        the case offers no such choice or the rates are close."""
+        if not MONEY_SHEET or "payment_days" not in self.case["negotiable"]:
+            return None
+        opts = self.case.get("term_options", {}).get("payment_days") or []
+        pays = sorted(p for p in opts if isinstance(p, int | float))
+        if len(pays) < 2:
+            return None
+        rate = self.est.rate_seen if self.est.rate_seen is not None else self.est.rate
+        ours = self.case["buyer"].get("interest_rate", 0.08)
+        if abs(rate - ours) < 0.005:
+            return None
+        return pays[0] if rate > ours else pays[-1]
+
+    def _money_sheet(self, best, c0, days):
+        """`best` with payment at `days`, priced to cost us what `best` does; None where our limits rule it out."""
+        t = {**best, "payment_days": days}
+        if any(t.get(f) != v for f, v in {**self.kept, **self.locked}.items() if f in t):
+            return None
+        if not self._in_bounds(t) or not must_haves_ok(self.case, t, self.est.standard):
+            return None
+        same = self.reprice_to_cost(t, c0)
+        if not same or not (0.85 * best[PRICE] <= same[PRICE] <= 1.15 * best[PRICE]) or self._below_stop(same):
+            return None
+        if cost(self.case, same, self.est, rel=self.confident) > self.cap_c:
+            return None
+        if self.ask_value and not self.fair_price_case and self.est.value(self.case, same) > self.ask_value:
+            return None
+        return same
 
     def sheets(self, k, n=3, rounds_left=10):
         """Up to n packages that cost us the same (MESO): the cheapest at this round's level, plus the
@@ -573,6 +660,7 @@ class Planner:
             return 0 if diff - varied else 1
 
         rest = [x for x in cand[1:] if x[0] <= c0 * 1.03]
+        pair = None
         if self._clause_trial() and not best.get("index_clause"):
             pair = self._clause_pair(best, c0)
             if pair and not (self.ask_value and self.est.value(self.case, pair) > self.ask_value):
@@ -583,7 +671,7 @@ class Planner:
             c, t = min(rest, key=lambda x: (fresh(x[1]), x[0]))  # re-ranked after every pick
             rest.remove((c, t))
             same = self.reprice_to_cost(t, c0)
-            if not same or not (0.85 * best[PRICE] <= same[PRICE] <= 1.15 * best[PRICE]):
+            if not same or not (0.85 * best[PRICE] <= same[PRICE] <= 1.15 * best[PRICE]) or self._below_stop(same):
                 continue
             if self.ask_value and not self.fair_price_case and self.est.value(self.case, same) > self.ask_value:
                 continue
@@ -592,6 +680,15 @@ class Planner:
                 out.append(same)
                 vals.append(v)
                 varied |= {f for f in same if f != PRICE and same.get(f) != best.get(f)}
+        # the payment term its cost of money favours is always among them: in place of the last alternative, never of
+        # the best or the clause sheet (with one sheet, `accept_now` only prices our next offer)
+        days = self.money_days()
+        if n > 1 and days is not None and all(t.get("payment_days") != days for t in out):
+            if (t := self._money_sheet(best, c0, days)) is not None:
+                if len(out) >= n and len(out) > 1 and out[-1] is not pair:
+                    out[-1] = t
+                elif len(out) < n:
+                    out.append(t)
         return [self._no_step_back(t) for t in out]
 
     def _clause_trial(self):
@@ -600,11 +697,14 @@ class Planner:
         sheet over three clause-free ones; on the twin, where it values no clause, an all-clause message came back
         as an all-clause deal, 0.26 against 0.65, the whole index risk for nothing)."""
         # only its own sheets end the trial: a wish read from its words (persona read, the series it blames)
-        # gets the clause sheet beside the clause-free ones, and its pick decides (merge of the two rules)
+        # gets the clause sheet beside the clause-free ones, and its pick decides (merge of the two rules).
+        # Only a clause that costs us less than it is worth to the supplier (CLAUSE_CHEAP): a dear one (P14's copper,
+        # 2.2 %) goes in only when the supplier insists - its sheets carry it twice, or it calls it mandatory
         return (
             not self.clause_required
             and not self.clause_seen
             and self.pref_clause is not None
+            and clause_share(self.case, self.pref_clause) < CLAUSE_CHEAP
             and self.est.clause_driven
             and self.locked.get("index_clause") is None
         )
@@ -615,11 +715,7 @@ class Planner:
         t = {**best, "index_clause": self.pref_clause}
         same = self.reprice_to_cost(t, c0)
         if not same:
-            b = self.case["buyer"]
-            path = b.get("index_paths", {}).get(self.pref_clause["series"], 0.0)
-            moved = max(0.0, abs(path) - self.pref_clause["deadband_pct"] / 100) * math.copysign(1, path)
-            share = self.pref_clause["material_share"] * (moved + b.get("index_risk_pct", 0) / 100)
-            same = {**t, PRICE: round(best[PRICE] * (1 - share), 2)}
+            same = {**t, PRICE: round(best[PRICE] * (1 - clause_share(self.case, self.pref_clause)), 2)}
             if cost(self.case, same, self.est) > c0 * 1.012:
                 return None
         return same if 0.85 * best[PRICE] <= same[PRICE] <= 1.15 * best[PRICE] else None
@@ -655,7 +751,7 @@ class Planner:
             c = cost(self.case, t, self.est)
             if c / c0 - 1 > 0.002 or cost(self.case, t, self.est, rel=self.confident) > self.cap_c:
                 continue
-            if self.ask_value and self.est.value(self.case, t) > self.ask_value:
+            if self.ask_value and self.est.value(self.case, t) > self.ask_value or self._below_stop(t):
                 continue
             pool.append((t, c / c0 - 1, {f for f in rest if rest[f] != seen[0].get(f)}))
         varied = {f for t in base[1:] for f in t if f != PRICE and t.get(f) != base[0].get(f)}
@@ -844,7 +940,9 @@ class Planner:
                 self.bounds["lead_time_days"] = ("<=", max(leads))  # a shorter lead time it granted stays ours
                 self.refresh()
         if any(t.get("index_clause") for t in sheets):
-            self.clause_seen = True
+            if not self.clause_seen:
+                self.clause_seen = True
+                self.refresh()  # a dear clause may go on our sheets now
             self.want_clause()  # it asks for a clause: now it is worth something to it
         raw = self.case.get("type") == "raw_material"
         if raw and (r := rate_from_pairs(sheets)) is not None:
