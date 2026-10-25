@@ -247,6 +247,8 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                 )
             )
             break
+    # not what we pay another supplier for the same part: P18 77423e4c cited Donautal's order lines (5.45 for the
+    # same bar) and the arena returned `irrelevant`; its first counter was 5.80, its worst (0.415)
     for oid, price in sorted((rivals or {}).items(), key=lambda kv: kv[1])[:1]:
         out.append(
             Claim(

@@ -425,7 +425,8 @@ class Planner:
         """One clause per thread: every supplier of the arena answered with the same deadband-5 clause (12 of 12
         sessions), also when we had offered deadband 3 or none, and on the twin a mix of deadbands made our moves
         look like steps back. Offer the cheapest one for us, unless the supplier has insisted on another. A
-        required clause is needed on every sheet beyond 12 months."""
+        required clause is needed on every sheet beyond 12 months. Not the full cover (deadband 0) beside it: P08
+        e38a54f4 took that line down to 5.35, and its index cost left 0.510 against 0.52-0.57 at deadband 5."""
         clause = combo.get("index_clause")
         if clause and self.pref_clause and clause != self.pref_clause and "index_clause" not in self.locked:
             return False
