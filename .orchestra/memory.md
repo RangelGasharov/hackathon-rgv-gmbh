@@ -60,6 +60,8 @@ live practice sessions, document what works and what doesn't. Score per case = (
 - **No timeouts (user, 04:20)**: a thread or case must never end by timeout; guards always on.
 
 ## Decisions
+- 2026-10-25 07:50 (Claude, A/B session): spreading arguments (2 first, then 1 per message; = BUYER_PACE) lost live on
+  build 9652365: P01 0.981/0.978 vs 0.992, P05 0.762/0.717 vs 0.723. Details in EXPERIMENTS.md. 34 practice sessions used by that session.
 - 2026-10-25 07:30 Kept T-053 (relationship charge from own cost estimate, bid above ask when C is lower) despite kit
   62.1 -> 58.9: the kit sim never charges a relationship cost, the arena does (live P02 paid EUR 66.9k of it). Kit
   P01/P02/P17 drops are a sim artefact; the gate baseline is taken after this change.
