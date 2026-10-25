@@ -616,6 +616,14 @@ class BuyerAgent:
             return None if wait_best else settle()
         if rounds_left <= 2 and not ts.matched and self._may(ts, "match") and (m := self.match(threads, sid)):
             return m
+        if ts.plan.second_step and ts.last_sent and len(self.case.get("suppliers") or []) > 1 and status == "open":
+            if rounds_left > 2:
+                # the RFQ two-step: after a rival's quote it gives half the step now and the rest after its internal
+                # check (back office, P05). Hold our exact sheets ("resend the same sheet"): the planner rose 0.3 % a
+                # round meanwhile, and a sheet on its way up is one it can accept instead of giving the rest
+                self.log.append((sid, "two_step_hold", [t.get("unit_price") for t in ts.last_sent]))
+                held = [dict(t) for t in ts.last_sent]
+                return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=held, exact=True)}
         sheets = ts.plan.sheets(ts.k, rounds_left=rounds_left)
         if sheets and ts.last_sent and all(t in ts.last_sent for t in sheets):
             sheets = []  # never resend the same sheets: suppliers read that as no move
@@ -735,7 +743,7 @@ class BuyerAgent:
         return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[sheet])}
 
     # -- writing ----------------------------------------------------------------------------------
-    def compose(self, threads, sid, sheets=None, hold=False, trade=False, rival=False):
+    def compose(self, threads, sid, sheets=None, hold=False, trade=False, rival=False, exact=False):
         """The next message: code's default choice of sheets, arguments and points, plus the menu the
         strategist (Opus) may choose from instead. State is committed in `write`, once the choice is made.
         `trade` (BUYER_STRAT, our own concession sheets only): each ask of its last e-mail gets a priced sheet."""
@@ -839,7 +847,7 @@ class BuyerAgent:
         files = self.attachments(ts)  # what its last e-mail asked for, by keyword
         if sheets:  # the strategist's options: priced by code, inside our limits
             # after a final offer exactly what we take, no other package (the strategist could pick changed terms)
-            only = final or not flags.on("menu")
+            only = final or exact or not flags.on("menu")  # exact: these sheets and no other package
             plan.menu = [(t, 0.0) for t in sheets] if only else ts.plan.menu(sheets, ts.k)
             plan.max_claims = cap
             fresh = [c for c in allc if not any(i in self.used_ids for i in c.ids) and kind_key(c) not in ts.used_kinds]

@@ -366,3 +366,21 @@ def test_quality_steps_keep_it_countering(world, monkeypatch):
     big = p.target_value(2)
     assert big >= 43.0 + 0.0055 * 47.0 - 1e-9 and big >= small  # at least 0.55 % of its opening while 2 % apart
     assert p.ask_value - big >= 0.02 * 47.0 - 1e-9  # and never into the last 2 % above its ask
+
+
+def test_rfq_two_step_holds_our_exact_sheets(world):
+    """After a rival's quote a bidder gives half its step and checks the rest internally (P05 back office): we
+    resend our exact sheets instead of rising, and the strategist gets no other package."""
+    agent = BuyerAgent(world, use_profiles=False)
+    agent.start(_case("P05"))
+    sid = "sup:70250"
+    threads = {s: [_msg(p)] for s, p in (("sup:70210", 36.0), ("sup:70240", 31.5), (sid, 38.5))}
+    first = agent.decide(threads, sid)["message"]
+    sent = [t["terms"] for t in first["term_sheets"]]
+    reply = {**_msg(30.5), "body": "We need to clarify this internally - we will come back to you on price."}
+    threads[sid] += [{**first, "from": "buyer"}, reply]
+    d = agent.decide(threads, sid)
+    assert d and not d["message"].get("action")
+    assert [t["terms"] for t in d["message"]["term_sheets"]] == sent  # the same sheets, not a step up
+    assert [t for t, _ in d["message"]["_plan"].menu] == sent
+    assert any(k == "two_step_hold" for _, k, _ in agent.log)

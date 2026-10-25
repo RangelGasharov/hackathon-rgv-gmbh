@@ -168,6 +168,16 @@ the gap above 2 % with steps of about 0.28.
 
 ## 4. Bugs found and fixed
 
+### 4.0 RFQ two-step: we rose while the bidder's internal check was pending (`BuyerAgent.decide`)
+After a rival's quote a bidder gives half its step and says it will "clarify this internally / come back to you on
+price"; the back office then gives the rest (T-004: P05). Meanwhile our planner still rose by its minimum step
+(0.3 %, e.g. 29.41 -> 29.50 on P05's 70250), and "never resend the same sheets" blocked an exact hold, so the bidder
+could accept our higher sheet instead of giving the rest. Fix: in a multi-supplier case, while its latest reply
+announces the check (and more than two rounds remain), resend our exact last sheets, with no other package on the
+strategist's menu. Regression test `test_rfq_two_step_holds_our_exact_sheets` (fails without the fix: 29.41 -> 29.50).
+Not live-tested (no sessions for this fix).
+
+
 ### 4.1 Clause sheet priced below the supplier's healthy margin (P02, `Planner._clause_pair`)
 In a stabilise case the relationship charge rises as the price falls, so no clause price costs us what the clause-free
 sheet does. The fallback then took the clause-free price less the clause's cost share (357.12) and allowed it at up to
