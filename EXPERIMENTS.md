@@ -17,6 +17,12 @@
 2. Deadband-0 index clause trial: P08 0.438 vs 0.462, P18 0.430 vs 0.467 (the other agent: 0.614, 0.569, 0.449).
 3. Deep raw-material openings (18 %): P08 0.379 vs 0.462 (its counters shrank to 0.03), P18 0.497 vs 0.467.
 4. Fewer arguments per message: twins -0.02 to -0.03.
+5. One new argument per later round (two in the first message, then one new one per message; the same idea as
+   `BUYER_PACE`), tested at 07:50 on build 9652365, i.e. before `BUYER_STRAT`, from a local switch:
+   P01 0.981, 0.978 vs base 0.992 (same hour) and 0.992; P05 0.762, 0.717 vs 0.723 and 0.725. On P01 the argument
+   held back raised the first counter by 0.60 (134.40 vs 133.80) and the later ones did not win it back. Twins:
+   persona -1.2 to -1.3, calibrated 0.713 vs 0.731. Only P01 and P05 of the hosted cases have three or more
+   argument kinds with weight >= 0.5, so it changes little elsewhere.
 
 **No measurable effect (twins):** `probe` never fires on the hosted cases; profiles off +0.1 on the persona twin;
 `match` off -1.3 on one seed (kept).
@@ -25,8 +31,8 @@
 sessions per API key (the team shares them).
 
 **Add or iterate next (evidence, untested here):**
-1. A new verified argument in each later round instead of all in round 1: transcripts +1.4 pp of opening per new
-   argument after round 1 (n = 12); the LLM-led P18 0.618 did this. Our twins reward front-loading by construction.
+1. (Tested 25 Oct 07:50, rejected: see "Does not work" 5.) New arguments in later rounds help only when they are
+   extra kinds, not ones held back from round 1: round-1 arguments lower the first counter.
 2. Answer the supplier's own asks with a concrete trade: volume (asked in 83 replies, followed up 5 times) and
    faster payment where it is a term; the P18 volume answer reached 5.40/90 days (0.532).
 3. Late steps of at least 0.5 % of its opening while its price is >= 2 % above ours (P11's 0.620 held after 0.13 steps).
@@ -41,7 +47,7 @@ sessions per API key (the team shares them).
    P03 ~4 %); bottleneck suppliers answer a ~15 % opening with an immediate final offer (P10, twice); do not accept
    open offers while it is still conceding.
 
-Sessions used for this log: 28 of the 40 allowed.
+Sessions used for this log: 34 (28 + 6 for the spread test).
 
 Branch `improve/supplier-levers`. Every claim below names its evidence: real arena transcripts (84 sessions, 100
 supplier threads, saved by several agent versions), the two local twins, or live A/B sessions run for this log.
