@@ -177,6 +177,64 @@ announces the check (and more than two rounds remain), resend our exact last she
 strategist's menu. Regression test `test_rfq_two_step_holds_our_exact_sheets` (fails without the fix: 29.41 -> 29.50).
 Not live-tested (no sessions for this fix).
 
+### 4.0b Sliver counters inside 1 % of the supplier's price (`Planner.close_enough`, `accept_now`, chase)
+P05's cheapest bidder (70210) came down 36 -> 30 -> 27.50 in 4 of our 7 P05 runs (27.50 scores ~0.865) and we lost
+it every time; we closed the next bidder at 28.92-29.00 (0.72). Three times our next sheet was 27.34 (0.58 % under
+its price): its back office's call was a final offer, and on reading our e-mail it withdrew ("Which figures is that
+based on?"). The fourth time it made the final offer, we held it for a rival and it timed out (that run used the
+local branch without the 30 s holding note of 87e563a, which the branch has now). Across 240 saved sessions of four
+clones (back-office logs): our sheet within 1 % of its price - 6 of 64 withdrew, 15 accepted ours; 1-2 % - 0 of 67;
+beyond 2 % - 1 of 387. A counter inside 1 % wins less than 1 % of the price and risks the thread. Fix, in tenders
+only: its standing sheet within `CLOSE_BAND` (1 %) of our next sheet is taken (`accept_now`, was 0.2 %), and the
+Floor-chase stops there. Single-supplier cases keep 0.2 % (`CLOSE_BAND_ONE`): with 1 % everywhere every twin lost
+0.6-1.6 x100 (P01, P02, P04, P10, P12, P15 - no twin supplier walks, and live P01's 132.45 sliver against 132.60
+did win). Replays of the three withdrawn runs now accept 27.50. Second part: when the only thing that kept us from
+taking a sheet inside the band was a rival's reply on its way (`rival_better`), we now wait for that reply
+(`band_wait`, the runner's 30 s holding note keeps the clock) instead of sending a sliver. Regression tests
+`test_inside_one_percent_of_its_price_we_take_it_instead_of_a_sliver_counter` (fails without: 27.34) and
+`test_inside_the_band_a_rivals_reply_on_its_way_means_wait_not_a_sliver` (fails without: 28.93). Gate: equal to
+the baseline (twin-s1 -0.16, within tolerance; the one failing test is the old `test_twin_real` replay, which needs
+`runs/`). Live, 2 P05 sessions on the first part: 0.717 and 0.614 (both closed 70250 at 29.00 / 30.00); 70210 did
+not come below 29.00 in either, so the band to it never applied - no evidence either way yet. In the 0.717 run the
+28.93 sliver to 70250 (its 29.00, 70210's reply in flight) is what the second part now avoids; there 70250 answered
+with a final 29.00 and agreed. (The other agent's analysis of 25 Oct pointed at P05 too, but its cause - 14-day
+payment mispriced - does not hold here: our C uses the kit's `total_cost`, which charges the arena's EUR 2,375 for
+14 days.) Two more live P05 sessions on 8d9a62c: **0.744 and 0.744** (70250 at 28.74 both times). The band again was
+not reached, but the RFQ two-step hold (4.0) got its first live evidence: both times 70250 said it would clarify
+internally at 30.00, we resent our exact sheets, and it agreed at our 28.74 (earlier 70250 closes: 28.92-29.00,
+0.717-0.725).
+
+### 4.0c The far bidder's rival quote was dropped from the first mail (`BuyerAgent.compose`, `far`)
+Why 70210 reached 27.50 in three runs and stopped at 29.00-31.00 in today's four: in the three, our first mail cited
+the rival's quote (`offer:70240-0`, 31.50 against its 36.00) and its back office said "The buyer shows a much lower
+rival quote. I give half the step now" (30.00), then "Checked: give the rest of the step" (27.50). In today's four the
+first mail cited index facts only and it countered 31.50-32.00. The `far` rule (29bf84c) already says a bidder quoting
+far above the cheapest rival hears that rival in the first mail, but Leverage paces its first mail to 2 arguments
+by weight and two index facts (0.96, 0.95) outweighed the quote, so the rule never took effect for a paced bidder.
+The older test `test_rival_price_held_until_it_holds` (87e563a) passed only through that cap: its rival (30.00
+against 36.00) is far; its rivals are now within 8 %, which keeps its point (no rival price to a near bidder before
+it holds). Fix: when `far`, the strongest rival quote takes the first slot. Regression test
+`test_a_far_bidder_hears_the_rival_quote_in_the_first_mail_under_the_pace_cap` (fails without: index facts only).
+Since each ID is cited once per case, 70240 now gets the AS-14404 fact 70210 used to get. Gate: twin_real +1.79
+(P05 0.588 -> 0.769), persona twins -0.16..+0.37.
+
+Live, 2 P05 sessions on 424a4c0: **0.814** and **0.484**. Both first mails cited the rival quote and both times
+70210's back office said "a much lower rival quote. I give half the step now", then gave the rest (36.00 -> 30.50 ->
+28.00): the fix works. 0.814: its final 28.00, our holding note, it agreed, we took it (best P05 of the day). 0.484:
+after its 28.00 (open) we countered 27.27 - a step of 0.08 from our 27.19, 0.2 % of its opening - its call was a
+final offer and it withdrew on reading our sheet. Separately 70250 walked: after its "clarify internally" 30.00 our
+two-step hold was composed and written but never reached the arena (no second buyer message; three timeouts, it
+agreed to 28.74 on the first, then walked). A late send ends in a silent 409, so the log shows nothing: open, the
+runner should log 409s and send times. We closed 70240 at 31.00.
+
+**Next (not done): no dead counter after the rest of the step.** Across all saved runs, after a back office "gave
+the rest of the step" it never called a counter again for 70210: of 6 lower sheets we sent it there, 3 drew a
+withdrawal, 1 a walk, 1 a timeout loss, 1 a hold and then its own price; holding notes got its price agreed every
+time. 70250 moved once more (29.50 -> 29.00, our step 0.5 % of its opening, gap 2 %) and never withdrew. This is the
+T-004 rule (it counters only for a step >= 0.5 % of its opening and a gap >= 2 %): a sheet below it can only draw a
+hold, a final offer or a withdrawal. Candidate rule: in a tender, when our next step is below 0.5 % of its opening,
+take its sheet if it is the best and acceptable (else a holding note), never the small step.
+
 
 ### 4.1 Clause sheet priced below the supplier's healthy margin (P02, `Planner._clause_pair`)
 In a stabilise case the relationship charge rises as the price falls, so no clause price costs us what the clause-free

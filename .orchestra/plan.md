@@ -34,9 +34,9 @@ Team mirror refreshed: runs/team 319 sessions.
 | T-080 wave 1a: B1 promise, B2 holds, B3 boilerplate, A3 earlier sheet, C7 ask regex, C8 floor words | sonnet | done | 1 | agent.py, tests/test_wave1_agent.py | |
 | T-081 wave 1b: C1 units, C2 hedge, C3 alias, C4 horizon, C5 news claims, C11, A5 rel, A6 clause tol, A1 tender f_hat | sonnet | done | 1 | dossier, claims, profiles, approach, strategy, tests/test_wave1_inputs.py | A5 reverted (P01 twin); C4 -> free give = longest contract; gate PASS |
 | wave 3: profiles build (70210 trend -10.4) + T-083 deep reads of 6 release suppliers | opus | done, gate PASS | 1 | profiles/ | $0.63; 46/46 clean; 70340 hedged to 2027-12; 70170/70190/70270 cash_short strong |
-| T-082 wave 2: A2 payment-day rules + B4 answer every ask | opus | running | 1 | strategy, writer, agent | |
+| T-082 wave 2: A2 payment-day rules + B4 answer every ask | opus | done | 1 | strategy, writer, agent | $2.90; benchmarks PASS; replay test small-record rule widened |
 | T-084 levers: volume shift from a rival source + committee business case (records P04/P10) | sonnet | pending (T-082) | 0 | agent, writer, claims, approach, tests/test_levers.py | user 11:00 |
-| live record attempts A (after wave 2 gate): P11 x2 with BUYER_QSTEP=1, P07 x2, P03 x1, P05 x1 defaults | manager | pending | 0 | | user: records P11 0.794, P07 0.769, P03 0.936, P05 0.852 |
+| live record attempts A (after merge gate): P01 P02 P03 P05 P07 P08 P18 defaults + P11 BUYER_QSTEP=1, up to 3 tries each (.claude/runs/records.py) | manager | pending | 0 | | user: records P11 0.794, P07 0.769, P03 0.936, P05 0.852 |
 | T-085 Live Final wave rules: every rule checked, gaps fixed, 19-case wave simulated | sonnet | pending (T-082; parallel with T-084) | 0 | runner, llm, client, tests/test_waves.py | user 11:10 |
 | live record attempts B (after T-084 gate): P04 x2, P10 x2 | manager | pending | 0 | | user: records P04 0.860, P10 0.694 |
 

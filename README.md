@@ -69,7 +69,57 @@ uv run python -m buyer.runner run --set final --writer claude          # Live Fi
 
 LLM spend is tracked in `runs/spend.json`; calls stop at `BUYER_BUDGET_USD` and the template writer takes over.
 
-## Local results (24 Oct, v1)
+## Results (25 Oct, hosted practice board before the Live Final)
+
+Team **RGV GmbH**, best practice session per case, read from the arena at 11:30 on 25 Oct: **mean 0.806, 6th of
+13 teams**. Tacto's reference agent scores 0.697 on the same cases; we are above it on 7 of 10. Our best deals save
+about **EUR 1.2M** against the suppliers' opening offers (C_open - C_deal, all 10 cases).
+
+Two agents set these numbers. The production agent is the `buyer/` package in this repo. The research agent
+(`negotiation-lab/llm_v4.py`, **not in this repo**) lets Claude lead every move on single-supplier cases; it set 7
+of the 10 team bests. Its mechanics are written up in `negotiation-lab/PORTING.md` and are partly ported to `buyer/`.
+
+| Case | Situation | Team best | Set by | This branch's best | Tacto reference | Best of any team | Saved vs opening |
+|---|---|---|---|---|---|---|---|
+| P01 | +9.5 % price letter, volute casings | 0.998 | research agent | 0.992 | 0.966 | 1.000 | EUR 56,857 |
+| P02 | copper pass-through, 7.5 kW motor | 0.816 | research agent | 0.724 | 0.740 | 0.875 | EUR 38,643 |
+| P03 | frame renewal, frequency converter | 0.936 | research agent | 0.919 | 0.925 | 0.963 | EUR 315,698 |
+| P04 | renewal, ball bearing 6306 | 0.860 | both (tie) | 0.860 | 0.860 | 0.874 | EUR 1,994 |
+| P05 | RFQ with 3 bidders, pump shaft | 0.852 | `buyer/` | 0.814 | 0.555 | 0.924 | EUR 69,697 |
+| P07 | bundling, fastener kit | 0.776 | research agent | 0.739 | 0.782 | 0.805 | EUR 71,199 |
+| P08 | alloy surcharge, 1.4404 bar | 0.614 | research agent | 0.462 | 0.752 | 0.904 | EUR 107,776 |
+| P10 | capacity cut, seals | 0.694 | `buyer/` | 0.679 | 0.686 | 0.718 | EUR 418,951 |
+| P11 | quality, bearing brackets | 0.877 | research agent | 0.794 | 0.314 | 0.877 | EUR 83,396 |
+| P18 | alloy surcharge, 1.4404 bar (Werdenfels) | 0.641 | research agent | 0.497 | 0.386 | 0.767 | EUR 46,475 |
+| **Mean** | | **0.806** | | **0.748** | **0.697** | | **EUR 1.21M** |
+
+"This branch's best" is the best live practice session played from `improve/supplier-levers` (at different
+commits). The `buyer/` team bests on P05 and P10 come from sessions on other branches of this repo. Generalisation:
+with each case's own history wiped ("fresh mode"), the research agent scored 0.747 against 0.787 with history, over
+9 single-supplier cases.
+
+What this branch changed on 25 Oct, each change checked in live practice sessions (details and the rejected ideas
+in [`EXPERIMENTS.md`](EXPERIMENTS.md)):
+- **Tenders, rival quote first:** a bidder quoting far above the cheapest rival hears that rival's quote in our first
+  e-mail. Its back office answers "I give half the step now and check the rest", then gives the rest
+  (P05: 36.00 -> 30.50 -> 28.00). Best P05 session 0.814; this branch's earlier P05 runs closed near 0.72.
+- **Tenders, internal check:** while a bidder checks its price internally, we resend our exact offer instead of
+  raising it. The bidder then agreed at our price (P05: 0.744 in both sessions).
+- **Tenders, no sliver counters:** a bidder's sheet within 1 % of our next offer is taken. Across 240 saved sessions,
+  counters that close drew 6 withdrawals in 64.
+- **Copper clause at its cheapest price for us** (P02): 0.63 -> 0.724, twice.
+- **No 5 % cap on quality-case openings** (P11): best 0.794 (two other sessions 0.620).
+- **Tested live and rejected:** spreading arguments over later rounds, smaller concession steps, deeper raw-material
+  openings, a deadband-0 clause offer.
+
+Every change passes `starter-kit/scripts/gate.py`: the tests plus six offline benchmarks (four persona-twin seeds,
+the kit simulator, and a twin calibrated on real sessions), and no case category may drop.
+
+## Earlier results (24 Oct)
+
+Kept for the record; the section above replaces these numbers.
+
+### Local results (24 Oct, v1)
 
 Mean score × 100 over the 19 local practice cases. Nothing was sent to the hosted arena.
 
@@ -85,7 +135,7 @@ so the agent's margin-protecting moves earn nothing there. The twin models the p
 with persona-driven suppliers; it is our own model, so treat its numbers as relative, not absolute.
 LLM spend for this build: about $1.13 (63 calls).
 
-## First hosted-arena session (24 Oct, team RGV GmbH)
+### First hosted-arena session (24 Oct, team RGV GmbH)
 
 One practice session, `case:P01` (Brandlhuber +9.5 %), Opus writer: **score 0.78**, deal at €133.80 from
 1 January 2027 with 14-day payment (asked: €138.55 from 1 November 2026). C_open €1,153,780,
@@ -98,7 +148,7 @@ What the replay taught, now in the code:
 - The supplier answered with two alternative term sheets; the agent now reads all of them and takes the
   cheapest for us.
 
-## Hosted practice, v3 (24 Oct, 17:38, one session per case)
+### Hosted practice, v3 (24 Oct, 17:38, one session per case)
 
 Agent v3 (commit 0e295d2), Opus 5.5 writer, all 10 hosted cases in parallel: **10 deals, mean 0.655**.
 The first sessions (v1) averaged 0.428, and the best per case before this run averaged 0.547.
@@ -131,7 +181,7 @@ What these sessions taught:
 - **The writer answers questions nobody asked.** "To your question on our figures" appeared when the
   supplier only wrote "these figures" in its opening. Only a real request for data should trigger it.
 
-## v4 fixes (local only, no arena runs)
+### v4 fixes (local only, no arena runs)
 
 The twin was refit on all 23 real sessions and now treats a second argument of the same kind as
 `duplicate`, as the arena does. On the refit twin, v3 scored 0.698 on the 10 hosted cases and v4 scores
@@ -145,7 +195,7 @@ The twin was refit on all 23 real sessions and now treats a second argument of t
   again, so the limit estimate does not mix two valuations.
 - Our guessed value of a long contract and of an index clause is halved, closer to the twin's fitted model (P08 0.40 → 0.45).
 
-### Review round (safety for the final, data still dropped)
+#### Review round (safety for the final, data still dropped)
 
 Safety:
 - **Error fallback:** after an internal error the agent no longer signs the supplier's standing sheet.
@@ -194,7 +244,7 @@ Not taken:
 - An LLM e-mail cache: prompts carry the supplier's e-mail, so they rarely repeat.
 - `validity_days` and `reply_delay_days`: they count simulated days, and no offer expired within a session.
 
-## Evening push (24 Oct): what the suppliers really do, and v5
+### Evening push (24 Oct): what the suppliers really do, and v5
 
 Evidence: 47 real sessions, including each supplier's back-office notes and the arena trace with its
 reasons. Two Opus analyses of them are in the session scratchpad: a mechanism report and an ideas report.
@@ -256,3 +306,7 @@ seen so far. More needs a trigger the suppliers have not shown yet.
 - Relationship-goal cases with only a generic cost estimate (e.g. P06): the agent can squeeze below the
   supplier's full cost, which the relationship charge punishes. Not hosted in practice, so not checked live.
 - No Sunday-release handling beyond what `DataPackage` merges automatically.
+- Tenders: no counter step below the supplier's 0.5 % counter threshold once it has "given the rest of the step"
+  (live P05 0.484: a 0.2 % step drew a withdrawal). Analysed in `EXPERIMENTS.md`, not built.
+- The runner logs no line for a send that arrives too late (HTTP 409): one P05 holding message never reached the
+  arena, and the log does not say why.

@@ -140,8 +140,9 @@ def _thread(sid, price, body="Our offer.", status="open", n=1):
 def test_rival_price_held_until_it_holds(world, monkeypatch):
     monkeypatch.setenv("BUYER_STRAT", "1")
     case = _case("P05")
-    threads = {"sup:70210": _thread("sup:70210", 36.0), "sup:70240": _thread("sup:70240", 30.0),
-               "sup:70250": _thread("sup:70250", 33.0)}  # fmt: skip
+    # rivals within 8 % of its quote: a far one (`far`, test below) hears the rival in the first mail
+    threads = {"sup:70210": _thread("sup:70210", 36.0), "sup:70240": _thread("sup:70240", 34.0),
+               "sup:70250": _thread("sup:70250", 34.5)}  # fmt: skip
     agent = BuyerAgent(world, use_profiles=True)
     agent.start(case, threads)
     sid = "sup:70210"
@@ -179,3 +180,22 @@ def test_asks_get_a_priced_trade(world, monkeypatch):
     for head in ("On faster payment", "On volume", "On the term"):
         assert any(x.startswith(head) for x in plan.levers), head
     assert len(plan.sheets) <= 3
+
+
+def test_a_far_bidder_hears_the_rival_quote_in_the_first_mail_under_the_pace_cap(world, monkeypatch):
+    """Live P05: with the rival's 31.50 cited, 70210 (36.00) gave "half the step now", then the rest (30.00 -> 27.50,
+    3 of 3); Leverage paces its first mail to 2 arguments, two index facts outweighed the quote and it stopped at
+    29.00-31.00 (4 of 4)."""
+    monkeypatch.setenv("BUYER_STRAT", "1")
+    agent = BuyerAgent(world)
+    agent.start(_case("P05"))
+    opening = {"sup:70210": 36.0, "sup:70240": 31.5, "sup:70250": 38.5}
+    threads = {
+        s: [{"from": "sales", "status": "open", "body": "Our quote.",
+             "term_sheets": [{"term_sheet_id": f"offer:{s[4:]}-0", "terms": {"unit_price": p}}]}]
+        for s, p in opening.items()
+    }
+    d = agent.decide(threads, "sup:70210")
+    claims = d["message"]["_plan"].claims
+    assert agent.t["sup:70210"].plan.sw("pace") and len(claims) == 2
+    assert "offer:70240-0" in [i for c in claims for i in c.ids]
