@@ -19,13 +19,14 @@ from pathlib import Path
 from arena_kit.cli import load_env
 from arena_kit.client import ArenaClient, ArenaError
 from arena_kit.docs import read_document
-from arena_kit.play import RemoteTable, fetch_documents
+from arena_kit.play import RemoteTable
 
 from .agent import ENDED, BuyerAgent, latest
 from .dossier import World
 
 log = logging.getLogger("buyer")
 MOVE_BUDGET_S = 45  # our own deadline per message, well inside the arena's 60 s
+RESENDS = 3  # a message a transient error stopped is sent again this often, once a re-read shows it did not arrive
 
 
 def cache_attachments(table):
@@ -75,8 +76,31 @@ def _timeout_message(t):
     }
 
 
+def safe_fetch(table, message):
+    """`fetch_documents`, except that an attachment which cannot be fetched or read gets an empty text: a broken
+    PDF must not end the worker that was about to answer the supplier."""
+    for att in message.get("attachments") or []:
+        if att.get("attachment_id") and "text" not in att:
+            try:
+                att["text"] = read_document(att["name"], table.attachment(att["attachment_id"]))
+            except Exception as e:  # noqa: BLE001
+                log.warning("attachment %s unreadable: %s", att.get("name"), e)
+                att["text"] = ""
+    return message
+
+
+def transient(e):
+    """A server error, a rate limit or a dropped connection the client's own retries did not get past."""
+    return not isinstance(e, ArenaError) or e.status >= 500 or e.status == 429
+
+
 def play(table, case_id, agent_factory, deadline=None, case=None):
-    """One case to its end. Returns the result dict."""
+    """One case to its end. Returns the result dict.
+
+    No error path signs, walks or goes silent: a failed decision gets the agent's safe fallback (a holding note or a
+    small move), a failed e-mail the template, a transient arena error a re-read and, if the message did not arrive,
+    a resend; a worker never stops while its case is open. Only a closed case, or the arena refusing our key or the
+    session (401, 403, 404), ends the play."""
     cache_attachments(table)
     opened_case, threads = table.open(case_id)
     case = opened_case or case
@@ -84,10 +108,15 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
         return table.done
     for events in threads.values():
         for m in events:
-            fetch_documents(table, m)
+            safe_fetch(table, m)
     reply_at = {sid: time.monotonic() for sid in threads}  # when each supplier last answered: the clocks run
     agent = agent_factory(deadline)
-    agent.start(case, threads)  # with a model writer: the persona reads, at most `read_timeout` seconds
+    try:
+        agent.start(case, threads)  # with a model writer: the persona reads, at most `read_timeout` seconds
+    except Exception:  # noqa: BLE001 - the persona read is a bonus; the dossiers are not
+        log.exception("%s: start failed; starting again without the persona read", case_id)
+        agent.read_timeout = 0
+        agent.start(case, threads)
     lock, done, result = threading.Lock(), threading.Event(), {}
 
     def finish(res):
@@ -95,113 +124,181 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
             result.update(res or {})
             done.set()
 
+    def result_now():
+        try:
+            return table.result()
+        except Exception as e:  # noqa: BLE001
+            log.warning("%s: no result readable (%s)", case_id, e)
+            return {"deal": False, "end_reason": f"result unreadable: {e}"}
+
+    def ended():
+        """The result if the case has ended, else None (also when the arena cannot be asked)."""
+        try:
+            state = table.client.session(table.session_id)
+        except Exception:  # noqa: BLE001
+            return None
+        if state.get("status") != "ended":
+            return None
+        return state.get("result") or {"deal": False, "end_reason": state.get("end_reason"), **state}
+
     def refresh(sid):
         """Re-read a thread from the arena (after a stale accept or a late move)."""
         try:
             th = table.client.thread(table.session_id, sid)
-            threads[sid] = [fetch_documents(table, m) for m in with_timeouts(th)]
+            threads[sid] = [safe_fetch(table, m) for m in with_timeouts(th)]
         except Exception as e:  # noqa: BLE001 - keep playing on what we have
             log.warning("refresh %s failed: %s", sid, e)
 
     failed = {}  # (supplier, sheet id) -> failed accepts
+    sending = {}  # worker -> the supplier its message in flight is for (to clear `in_flight` after an error)
 
-    def worker(sid):
-        while not done.is_set():
-            cap = deadline() if callable(deadline) else deadline
-            agent.deadline = cap
-            t0 = time.monotonic()
-            with lock:
-                if done.is_set():
-                    return
-                try:
-                    decision = agent.decide(threads, sid)
-                except Exception:  # one odd reply must not leave this supplier unanswered
-                    log.exception("%s %s: decide failed; using the safe fallback", case_id, sid)
-                    decision = agent.safe_fallback(threads, sid)
-                if decision and decision["message"].get("action"):
-                    try:  # close while holding the lock: no other thread can change a standing sheet now
-                        finish(table.close(decision["supplier_id"], decision["message"]))
-                        return
-                    except ArenaError as e:
-                        log.warning("%s: close failed (%s); re-reading the threads", case_id, e)
-                        if e.status == 409 and "ended" in str(e.detail):
-                            finish(table.result())
-                            return
-                        for s in threads:
-                            refresh(s)
-                        key = (decision["supplier_id"], (decision["message"]["action"] or {}).get("term_sheet_id"))
-                        failed[key] = failed.get(key, 0) + 1
-                        if failed[key] >= 2:  # still refused after a re-read: offer its own terms back instead
-                            decision = agent.reoffer(threads, decision["supplier_id"])
-                            if not decision:
-                                time.sleep(1.0)
-                                continue
-                        else:
-                            continue
-                if decision:
-                    agent.t[decision["supplier_id"]].in_flight = True
-            if decision is None:
-                if latest(threads[sid]).get("status") in ENDED or agent.t[sid].dead:
-                    return
-                # nobody answers this supplier for now: before its 60 s run out, a short holding note (a
-                # timeout repeats our last offer and costs patience; three end the thread - arena b2 P05)
-                if time.monotonic() - reply_at.get(sid, time.monotonic()) > 45 and not agent.t[sid].in_flight:
-                    with lock:
-                        decision = agent.keep_alive(threads, sid)
-                    if decision:
-                        agent.t[sid].in_flight = True
-                if decision is None:
-                    time.sleep(1.0)  # another thread decides this case; check back
-                    continue
-            target = decision["supplier_id"]
-            # the 60 s per message run from the supplier's last reply: give the writer what is left of them
-            budget = 60.0 - (time.monotonic() - reply_at.get(target, time.monotonic())) - 12.0
-            msg = agent.write(decision["message"], budget)
-            took = time.monotonic() - t0
-            if took > MOVE_BUDGET_S:
-                log.warning("%s %s: decision took %.0fs", case_id, sid, took)
+    def close(decision):
+        """Send an accept or a walk-away (under the lock). True: the case is over; None: decide again; else the
+        decision to send instead (its own terms back, after the same accept failed twice)."""
+        try:
+            finish(table.close(decision["supplier_id"], decision["message"]))
+            return True
+        except Exception as e:  # noqa: BLE001
+            log.warning("%s: close failed (%s); re-reading the threads", case_id, e)
+            if isinstance(e, ArenaError) and e.status == 409 and "ended" in str(e.detail):
+                finish(result_now())
+                return True
+            if transient(e) and (res := ended()) is not None:  # it may have gone through
+                finish(res)
+                return True
+            for s in threads:
+                refresh(s)
+            key = (decision["supplier_id"], (decision["message"]["action"] or {}).get("term_sheet_id"))
+            failed[key] = failed.get(key, 0) + 1
+            if failed[key] >= 2:  # still refused after a re-read: offer its own terms back instead
+                return agent.reoffer(threads, decision["supplier_id"])
+            return None
+
+    def deliver(decision, t0):
+        """Write and send one message, read the reply. True: the case is over."""
+        target = decision["supplier_id"]
+        # the 60 s per message run from the supplier's last reply: give the writer what is left of them
+        budget = 60.0 - (time.monotonic() - reply_at.get(target, time.monotonic())) - 12.0
+        msg = agent.write(decision["message"], budget)
+        took = time.monotonic() - t0
+        if took > MOVE_BUDGET_S:
+            log.warning("%s %s: decision took %.0fs", case_id, target, took)
+        before = sum(m.get("from") == "buyer" for m in threads[target])
+        for attempt in range(RESENDS + 1):
             try:
                 reply = table.send(target, msg)
+                break
             except ArenaError as e:
-                if e.status != 409:
-                    log.warning("%s %s: %s", case_id, sid, e)
+                if e.status == 409:  # late or ended: read what the arena really holds
                     agent.t[target].in_flight = False
-                    if e.status == 422:  # invalid message: nothing happened; re-read and decide again
-                        with lock:  # a value outside the options (the supplier's own standard) is taken back
-                            if agent.invalid_message(target):
-                                log.warning("%s %s: offering term options only from now on", case_id, target)
+                    if (res := ended()) is not None:
+                        finish(res)
+                        return True
+                    with lock:
                         refresh(target)
-                        continue
-                    finish(table.result())
-                    return
-                agent.t[target].in_flight = False  # late or ended: read what the arena really holds
-                try:
-                    state = table.client.session(table.session_id)
-                except ArenaError:
-                    state = {}
-                if state.get("status") == "ended":
-                    finish(state.get("result") or table.result())
-                    return
-                with lock:
+                        reply_at[target] = time.monotonic()
+                    return False
+                if e.status in (400, 422):  # invalid message: nothing happened; re-read and decide again
+                    log.warning("%s %s: %s", case_id, target, e)
+                    agent.t[target].in_flight = False
+                    with lock:  # a value outside the options (the supplier's own standard) is taken back
+                        if agent.invalid_message(target):
+                            log.warning("%s %s: offering term options only from now on", case_id, target)
                     refresh(target)
-                    reply_at[target] = time.monotonic()
-                continue
-            if "result" in reply:
-                finish(reply["result"])
-                return
+                    time.sleep(0.5)
+                    return False
+                if not transient(e):  # our key or the session refused: nothing to play on
+                    log.warning("%s %s: %s", case_id, target, e)
+                    agent.t[target].in_flight = False
+                    finish(result_now())
+                    return True
+                err = e
+            except Exception as e:  # noqa: BLE001 - a dropped connection after the client's own retries
+                err = e
+            log.warning("%s %s: send failed (%s); checking whether it arrived", case_id, target, err)
             with lock:
-                threads[target] += [{**msg, "from": "buyer"}, fetch_documents(table, reply)]
-                agent.t[target].in_flight = False
-                reply_at[target] = time.monotonic()
-                agent.note_round(time.monotonic() - t0)
-            if reply.get("status") in ENDED and all(latest(ev).get("status") in ENDED for ev in threads.values()):
-                finish(table.result())
-                return
+                refresh(target)
+                if sum(m.get("from") == "buyer" for m in threads[target]) > before:  # it did: the reply is read
+                    agent.t[target].in_flight = False
+                    reply_at[target] = time.monotonic()
+                    return False
+            if (res := ended()) is not None:
+                finish(res)
+                return True
+            time.sleep(min(4.0, 2.0**attempt))
+        else:
+            agent.t[target].in_flight = False  # it never arrived: decide again on what the arena holds
+            return False
+        if "result" in reply:
+            finish(reply["result"])
+            return True
+        with lock:
+            threads[target] += [{**msg, "from": "buyer"}, safe_fetch(table, reply)]
+            agent.t[target].in_flight = False
+            reply_at[target] = time.monotonic()
+            agent.note_round(time.monotonic() - t0)
+        if reply.get("status") in ENDED and all(latest(ev).get("status") in ENDED for ev in threads.values()):
+            finish(result_now())
+            return True
+        return False
+
+    def step(sid):
+        """One decision for thread `sid` and, if it sends something, the round trip. True: this worker is done."""
+        cap = deadline() if callable(deadline) else deadline
+        agent.deadline = cap
+        t0 = time.monotonic()
+        with lock:
+            if done.is_set():
+                return True
+            try:
+                decision = agent.decide(threads, sid)
+            except Exception:  # noqa: BLE001 - one odd reply must not leave this supplier unanswered
+                log.exception("%s %s: decide failed; using the safe fallback", case_id, sid)
+                decision = agent.safe_fallback(threads, sid)
+            if decision and decision["message"].get("action"):
+                # close while holding the lock: no other thread can change a standing sheet now
+                decision = close(decision)
+                if decision is True:
+                    return True
+            if decision:
+                agent.t[decision["supplier_id"]].in_flight = True
+                sending[sid] = decision["supplier_id"]
+        if decision is None:
+            if latest(threads[sid]).get("status") in ENDED or agent.t[sid].dead:
+                return True
+            # nobody answers this supplier for now: before its 60 s run out, a short holding note (a
+            # timeout repeats our last offer and costs patience; three end the thread - arena b2 P05)
+            if time.monotonic() - reply_at.get(sid, time.monotonic()) > 45 and not agent.t[sid].in_flight:
+                with lock:
+                    decision = agent.keep_alive(threads, sid)
+                    if decision:
+                        agent.t[sid].in_flight = True
+                        sending[sid] = sid
+            if decision is None:
+                time.sleep(1.0)  # another thread decides this case; check back
+                return False
+        over = deliver(decision, t0)
+        sending.pop(sid, None)
+        return over
+
+    def worker(sid):
+        errors = 0
+        while not done.is_set():
+            try:
+                if step(sid):
+                    return
+                errors = 0
+            except Exception:  # noqa: BLE001 - a worker never stops while its case is open: a silent thread times out
+                errors += 1
+                log.exception("%s %s: worker error %d; carrying on", case_id, sid, errors)
+                if (target := sending.pop(sid, None)) in agent.t:
+                    agent.t[target].in_flight = False
+                time.sleep(min(5.0, 0.5 * errors))
 
     with ThreadPoolExecutor(max_workers=len(threads)) as pool:
         list(pool.map(worker, list(threads)))
     if not done.is_set():
-        finish(table.result())
+        finish(result_now())
     result["agent_log"] = agent.log
     return result
 

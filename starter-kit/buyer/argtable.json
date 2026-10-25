@@ -1,0 +1,18 @@
+{
+ "note": "seed: the per-argument results the README states for our own sessions. Run `python -m buyer.argtable build` where runs/ and the data package are, to tally every saved session instead.",
+ "built": "2026-10-25 seed",
+ "counts": {
+  "cost|any": {"counted": 2, "source": "P10, should-cost counted in both sessions"},
+  "fc|any": {"counted": 5, "source": "+1.9 % forecast counted 4 of 4 (P08 x3, P18); P08 9b1e05 round 1"},
+  "fc|not_strategic": {"no_effect": 4, "source": "P04: does not change our calculation, 4 of 4"},
+  "idx|any": {"counted": 3, "source": "P18 6155cdbec: AS-14404, PPI-C2431, LCI-C all verified, adjusted our calculation"},
+  "idx|hedge_covered": {"no_effect": 1, "source": "P08: AS-14404 is not our reality, material covered at fixed prices"},
+  "idx|hedged_other": {"counted": 4, "source": "P08 9b1e05 and 544cfcd8: PPI-C2431 and LCI-C counted"},
+  "po|below_standing": {"no_effect": 1, "source": "P08 544cfcd8: price history does not change our calculation"},
+  "sc_otd|any": {"no_effect": 6, "source": "delivery record: does not change our calculation, 6 of 6 (23 sessions)"},
+  "sc_otd|stale_costing": {"fair": 1, "source": "the supplier on an old cost sheet: we did not know that - a fair point"}
+ },
+ "manual": [
+  {"kind": "po", "persona": "below_standing", "outcome": "counted", "n": 1, "source": "team P08 session (not in runs/): price history held and was taken into account"}
+ ]
+}
