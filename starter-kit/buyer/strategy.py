@@ -19,6 +19,10 @@ from arena_kit.cost import RELATIONSHIP_GOALS, _soft, _years, closing_terms, mus
 PRICE = "unit_price"
 CLAUSE_VALUE = 0.015  # share of the price an index clause is worth to a supplier that wants one (arena P02: >= 1.6 %)
 LATE_ARG = 0.005  # share of its opening value an argument counted after its first counter takes off its limit
+# arena back office, raw material and quality (P08, P11, P18, 25 Oct): with our step >= 0.5 % of its opening it
+# countered 57 of 59 times; smaller steps got "My call: hold" and its final offer at its price (P18 5db7f885: a 0.02
+# step in round 4, final at 5.30). Not a reason to step small: 0.6 % steps got skipped counters (P18 3e0415bc, 0.473)
+VISIBLE_STEP = 0.006
 # Our belief about a supplier's full cost, for the relationship charge: one sigma = SIGMA_K x the error band of the
 # estimate (generic should-cost 15 % -> 7.5 %), and SIGMA_OWN for the should-cost of its own plant (the charges of 17
 # real deals in P01, P02 and P03 put the full cost at 0.977-0.979 x it, to 0.1 %). Five equal-weight quintile nodes.
@@ -180,7 +184,10 @@ class Estimate:
         real = (d.scorecard or {}).get("ppm") or 0
         commit = t.get("ppm_commitment")
         if commit is not None and real and commit < real:
-            x -= 0.03 * p * (1 - commit / real)  # promising better quality than it achieves is a risk to it
+            # promising better quality than it achieves is a risk to it: P11 (2376 ppm real) priced 300 ppm 0.50 above
+            # 1500 ppm in three sessions (47.0/46.5, 46.5/46.0, 45.5/45.0), 2.1 % of its price per unit of the share;
+            # at 3 % we judged the 300-ppm sheet dearer than it is, and offered only 1500 ppm (signed at 45.50, 0.620)
+            x -= 0.021 * p * (1 - commit / real)
         return x
 
     def model(self, case, t, cash=False):
@@ -276,6 +283,7 @@ class Planner:
         self.last_value = None  # supplier value of our best sheet in the last message
         self.ask_value = None  # supplier value of its own standing sheet: we never offer more than that
         self.cap_c = math.inf  # the most a package may cost us (set by the agent: the reservation)
+        self.override = None  # a supplier-value level the strategist chose for this round (`sheets_at`)
         self.anchor_value = self._anchor()
         self.anchor_gap = self._anchor_gap()
         self.asks = []  # supplier value of its best standing sheet, one entry per reply
@@ -334,8 +342,11 @@ class Planner:
         if ctype == "price_increase" and d.notice:
             gap = max(gap, 0.06)
         if ctype == "quality" or (d.has("cash_short", strong=True) and ctype != "rfq"):
-            gap = min(gap, 0.05)  # quality cases are about ppm and chargebacks, not a price cut to a cash-short shop
-            # (in an RFQ the rivals' prices do the cutting: P05's bidders anchored 18 % below still countered)
+            # 10 %, not 5 %: P11's C_best is 11.6 % under its opening, and from a 5 % opening our offers were within 2 %
+            # of its price by round 2, where it holds (0.54-0.63). Our team's 0.794 opened 7.5 % below (43.50 at
+            # 300 ppm) and moved 0.3-0.5 a round to its final at 45.00; a strategic cash-short supplier stays protected
+            # by the relationship charge (`price_at`). In an RFQ the rivals' prices do the cutting.
+            gap = min(gap, 0.10)
         if ctype == "capacity" and d.has("capacity_tight"):
             gap = min(gap, 0.08)  # no alternative and a +25 % fallback: commitment, not a squeeze
         elif d.has("capacity_tight"):
@@ -511,8 +522,9 @@ class Planner:
             # moving a little every round until the final offer comes.
             v0 = self.asks[0] if self.asks else ask
             lim = self.limit_hat
+            visible = self._visible_steps()
             if lim is None:
-                target = max(self.last_value + 0.004 * v0, ask - 0.015 * v0)
+                target = max(self.last_value + (VISIBLE_STEP if visible else 0.004) * v0, ask - 0.015 * v0)
             else:
                 nxt = ask - 0.4 * max(0.0, ask - lim)
                 aim = min(lim - 0.003 * v0, nxt - 0.002 * v0)
@@ -525,11 +537,69 @@ class Planner:
                 aim = min(aim, self.last_value + jump * v0)
                 if self.second_step:  # "we will come back to you on price": its next step comes anyway
                     aim = self.last_value + 0.001 * v0
+                if visible:  # near its limit too, a step it sees
+                    step = max(step, VISIBLE_STEP * v0)
                 target = max(self.last_value + step, aim)
+        if self.override is not None:  # the strategist's level: the same guardrails below
+            target = self.override
         target = max(target, 0.75 * self.est.floor_value)
         if self.last_value:
             target = max(target, self.last_value * 1.003)  # never a step back
         return min(target, ask * 0.997)
+
+    def increment(self):
+        """Its own step between counters after its first one, in supplier value (median), or None: real suppliers
+        counter on a fixed grid (P18 0.10, P11 0.50)."""
+        steps = [a - b for a, b in itertools.pairwise(self.asks[1:]) if a - b > 1e-6]
+        return statistics.median(steps) if steps else None
+
+    def ladder(self, k, rounds_left=10):
+        """[(what it means, supplier value)]: the price levels the strategist may choose this round, the code's own
+        pace among them, lowest first. The opening: a few depths below its ask. Later: the smallest step it reacts
+        to and larger ones, and the level just under its next counter. Each passes the guardrails of `target_value`
+        (never above its ask, never a step back) when it is priced with `sheets_at`."""
+        code = self.target_value(k, rounds_left)
+        ask = self.ask_value
+        if not ask:
+            return [("code's pace", code)]
+        v0 = self.asks[0] if self.asks else ask
+        if not self.last_value:
+            gaps = (self.anchor_gap - 0.04, self.anchor_gap + 0.04)  # P08 e15154b2: 19 % below, final in round 3
+            levels = [(f"opens {g * 100:.0f} % below its price", ask * (1 - g)) for g in gaps if 0.02 <= g <= 0.30]
+        else:
+            # live 25 Oct: offered +0.6 % steps, the strategist took them every round and the supplier answered in
+            # kind (P18 3e0415bc: a counter every other round, 0.473; P08 e15154b2: a wide gap, final in round 3, 0.430)
+            levels = [
+                ("+1 % of its opening price", self.last_value + 0.01 * v0),
+                ("+1.5 % of its opening price", self.last_value + 0.015 * v0),
+                ("+2.5 % of its opening price", self.last_value + 0.025 * v0),
+            ]
+            if (inc := self.increment()) and len(self.asks) >= 3:
+                levels.append(("just under its next counter: it agrees or makes one last step", ask - 1.05 * inc))
+        out, seen = [("code's pace", code)], [code]
+        for label, v in sorted(levels, key=lambda x: x[1]):
+            self.override = v
+            try:
+                v = self.target_value(k, rounds_left)  # clamped as the code's own level is
+            finally:
+                self.override = None
+            if all(abs(v - u) > 0.001 * v0 for u in seen):
+                out.append((label, v))
+                seen.append(v)
+        return sorted(out, key=lambda x: x[1])
+
+    def sheets_at(self, k, value, n=3, rounds_left=10):
+        """`sheets` at a supplier-value level of the strategist's choice instead of the code's."""
+        self.override = value
+        try:
+            return self.sheets(k, n, rounds_left)
+        finally:
+            self.override = None
+
+    def _visible_steps(self):
+        """Single-supplier raw-material and quality cases: their suppliers hold on a step they cannot see (arena P08,
+        P11, P18). Not price letters (P01, P02 never held), not an RFQ (the rivals' prices do the work there)."""
+        return self.case.get("type") in ("raw_material", "quality") and len(self.case.get("suppliers") or []) == 1
 
     def price_at(self, pkg, k, rounds_left=10):
         """Our price for a package in round k, at this round's supplier-value target."""
@@ -665,6 +735,10 @@ class Planner:
                 t = self._no_step_back(t)
             c = cost(self.case, t, self.est)
             if c / c0 - 1 > 0.002 or cost(self.case, t, self.est, rel=self.confident) > self.cap_c:
+                continue
+            if not 0.85 * base[0][PRICE] <= t[PRICE] <= 1.15 * base[0][PRICE]:
+                # as in `sheets`: a 12-month sheet costs us a year at the fallback price, so "equal cost" put it at
+                # half its price (P08 71ddffd7: the strategist sent 4.31 and 4.34 next to 5.04 in round 1)
                 continue
             if self.ask_value and self.est.value(self.case, t) > self.ask_value:
                 continue

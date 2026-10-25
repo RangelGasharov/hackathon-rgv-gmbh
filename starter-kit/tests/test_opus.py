@@ -2,6 +2,7 @@
 each reply and its choice of attachments - with fake models, no network. Plus the decision guards found on
 the twin and in the real sessions (signing past an in-flight rival, a deal dearer than the alternative)."""
 
+import itertools
 import json
 import re
 import time
@@ -312,6 +313,125 @@ def test_no_signature_while_a_rival_reply_is_in_flight(world):
     agent.t["sup:70250"].held = False
     d = agent.decide(threads, "sup:70250")
     assert d["message"]["action"]["type"] == "accept"  # nothing pending: its final offer is the best
+
+
+def test_no_signature_while_a_rivals_first_counter_is_in_flight(world):
+    # arena P05 97df70e8 and 2c7b1fe9 (0.665 twice): 70250 agreed to our 29.50 while 70210's first reply (36.00 ->
+    # 30.00, "we will come back to you on price") was on its way; its standing sheet still read its 36.00 opening
+    agent = BuyerAgent(world, read_timeout_s=0)
+    agent.start(case("P05"))
+    terms = {"payment_days": 14, "lead_time_days": 28}
+    threads = {
+        "sup:70210": [msg(36.0, sid="a")],
+        "sup:70240": [msg(31.5, sid="b", lead_time_days=52)],
+        "sup:70250": [msg(38.5, sid="c"), BUYER, msg(30.5, sid="c", **terms), BUYER,
+                      msg(29.5, "agreed", sid="c", **terms)],
+    }  # fmt: skip
+    agent.t["sup:70240"].sent = 1
+    agent.t["sup:70210"].sent, agent.t["sup:70210"].in_flight = 1, True
+    d = agent.decide(threads, "sup:70250")
+    assert not d["message"].get("action") and d["message"]["term_sheets"] == []  # a hold note
+    # its first counter came with a second step to follow, and our next message to it is out: hold once more
+    threads["sup:70210"] += [BUYER, msg(30.0, sid="a", body="We need to clarify this internally - we will come back "
+                                        "to you on price.", **terms)]  # fmt: skip
+    threads["sup:70250"] += [BUYER, msg(29.5, "agreed", sid="c", **terms)]
+    agent.t["sup:70210"].sent += 1
+    d = agent.decide(threads, "sup:70250")
+    assert agent.t["sup:70210"].plan.second_step
+    assert not d["message"].get("action") and d["message"]["term_sheets"] == []
+    threads["sup:70250"] += [BUYER, msg(29.5, "agreed", sid="c", **terms)]
+    d = agent.decide(threads, "sup:70250")
+    assert d["message"]["action"]["type"] == "accept"  # two holds at most: then it signs the agreed sheet
+
+
+def test_raw_material_steps_stay_visible(world):
+    # arena back office: a step under 0.5 % of its opening got "My call: hold" and its final offer at its price
+    # (P18 5db7f885, round 4: 5.15 -> 5.17 at 14 days, final 5.30). There the arguments it counted after its first
+    # counter had brought our limit estimate down to our own offer, and the old pacing stepped 0.12 % there
+    sid = "sup:70740"
+    clause = {"series": "AS-14404", "material_share": 0.45, "deadband_pct": 5, "base_month": "2026-08"}
+    long = {"contract_months": 36, "index_clause": clause}
+    threads = {sid: [msg(6.10, payment_days=30, contract_months=12, index_clause=None)]}
+    agent = BuyerAgent(world, read_timeout_s=0)
+    agent.start(case("P18"), threads)
+    plan, values = agent.t[sid].plan, []
+    r1, r2 = msg(5.60, payment_days=90, **long), msg(5.50, payment_days=90, **long)  # its real replies, both sheets
+    r1["term_sheets"] += msg(5.50, sid="b", payment_days=30, contract_months=24, index_clause=clause)["term_sheets"]
+    r2["term_sheets"] += msg(5.40, sid="b", payment_days=14, **long)["term_sheets"]
+    for reply in (r1, r2, msg(5.30, payment_days=14, **long), None):
+        plan.late_args = 3 * max(0, len(plan.asks) - 2)
+        out = agent.write(agent.decide(threads, sid)["message"])
+        values.append(plan.last_value)
+        if reply:
+            threads[sid] = threads[sid] + [{**out, "from": "buyer"}, reply]
+    steps = [b - a for a, b in itertools.pairwise(values)]
+    assert min(steps) >= 0.005 * plan.asks[0]
+
+
+def test_a_term_it_varies_between_its_own_sheets_is_no_condition(world):
+    # arena P18 5db7f885: "we welcome your proposal of 14-day payment terms", with its own 90-day sheet beside the
+    # 14-day one, came back from the strategist as keep_terms payment_days; every later sheet was at 14 days
+    sid = "sup:70740"
+    clause = {"series": "AS-14404", "material_share": 0.45, "deadband_pct": 5, "base_month": "2026-08"}
+    opening = msg(6.10, payment_days=30, contract_months=12, index_clause=None)
+    reply = msg(5.50, payment_days=90, contract_months=36, index_clause=clause)
+    alt = msg(5.40, sid="alt", payment_days=14, contract_months=36, index_clause=clause)
+    reply["term_sheets"] += alt["term_sheets"]
+    agent = BuyerAgent(world, read_timeout_s=0)
+    agent.start(case("P18"), {sid: [opening]})
+    ts = agent.t[sid]
+    ts.signals = {"counted": [], "dead": [], "second_step": False, "keep_terms": ["payment_days", "index_clause"],
+                  "traits": {}}  # fmt: skip
+    agent.ingest(sid, [opening, BUYER, reply])
+    assert ts.plan.kept == {"index_clause": clause}  # the clause is on both of its sheets: that one stays
+
+
+def ladder_strategist(level):
+    """A model that sets its own pace: every sheet of ladder level `level`, their prices in the e-mail."""
+
+    def complete(system, user, max_tokens=None, timeout=None):
+        ids = re.findall(rf"^  (L{level}\.\d+): €([\d.]+)", user, re.M)
+        prices = " or ".join(f"€{p}" for _i, p in ids)
+        return json.dumps({"read": "x", "reply": {}, "sheets": [i for i, _p in ids], "claims": [], "points": [],
+                           "attach": [], "email": f"Dear team,\nWe offer {prices}.\nBest regards"})  # fmt: skip
+
+    return complete
+
+
+def test_the_strategist_sets_the_pace_inside_the_guardrails(world):
+    # the team's LLM-led negotiator set its own prices and holds the team bests on P02, P08, P11 and P18
+    sid = "sup:70740"
+    clause = {"series": "AS-14404", "material_share": 0.45, "deadband_pct": 5, "base_month": "2026-08"}
+    opening = msg(6.10, payment_days=30, contract_months=12, index_clause=None)
+    counter = msg(5.60, payment_days=90, contract_months=36, index_clause=clause)
+    agent = BuyerAgent(world, writer=StrategistWriter(ladder_strategist(1)), read_timeout_s=0)
+    threads = {sid: [opening]}
+    agent.start(case("P18"), threads)
+    first = agent.write(agent.decide(threads, sid)["message"])
+    plan = agent.t[sid].plan
+    opened = plan.last_value
+    threads[sid] = [opening, {**first, "from": "buyer"}, counter]
+    d = agent.decide(threads, sid)
+    ladder, menu = d["message"]["_plan"].ladder, d["message"]["_plan"].menu
+    assert ladder and all(0.85 * 5.11 < t["unit_price"] < 5.60 for _l, sh in ladder for t, _dc in sh)
+    out = agent.write(d["message"])
+    sent = [x["terms"] for x in out["term_sheets"]]
+    assert sent == [t for t, _dc in ladder[0][1]]  # its pick goes out, every sheet of that level
+    assert ("sup:70740", "level", "L1") in agent.log
+    assert opened * 1.003 <= plan.last_value <= plan.ask_value * 0.997  # committed: next round builds on it
+    assert all(0.85 * sent[0]["unit_price"] < t["unit_price"] < 1.15 * sent[0]["unit_price"] for t, _dc in menu)
+
+
+def test_quality_case_opens_ten_percent_below_a_cash_short_supplier(world):
+    # 5 % put our offers within 2 % of P11's price by round 2, where it holds; our team's 0.794 opened 7.5 % below
+    sid = "sup:70140"
+    threads = {sid: [msg(47.0, ppm_commitment=6400)]}
+    agent = BuyerAgent(world, read_timeout_s=0)
+    agent.start(case("P11"), threads)
+    agent.write(agent.decide(threads, sid)["message"])
+    plan = agent.t[sid].plan
+    assert plan.anchor_gap == pytest.approx(0.10)
+    assert plan.last_value == pytest.approx(0.90 * plan.asks[0], rel=0.005)
 
 
 def test_walks_when_the_alternative_is_cheaper_and_c_is_exact(world):

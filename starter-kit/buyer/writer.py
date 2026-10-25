@@ -85,6 +85,9 @@ class Plan:
         # for the strategist: the options code allows, and what it picked by default
         self.menu, self.menu_claims, self.points, self.thread, self.used_kinds = [], [], [], [], set()
         self.files = []  # true data files we may attach (the strategist decides; else code's regex did)
+        self.ladder = []  # [(what the level means, [(sheet, cost vs the code's pace)])]: the pace is its call
+        self.state = []  # lines: where the haggling stands, in its value terms
+        self.level = None  # the ladder level it chose ("A", "B", ...), None: the code's pace
         self.last_kinds = []  # argument kinds of our last message, for its reading of the reply
         self.read = None
         self.signals = None  # its reading of the supplier's last e-mail (`StrategistWriter.signals`)
@@ -189,7 +192,7 @@ How these suppliers behave (from 40+ real sessions):
 - A rule engine sets its numbers; a language model writes its e-mail. Only term sheets count: its prose can contradict them, and its documents can contradict each other or the data. Trust the sheets and the checked data.
 - Its reply phrases are signals. "It holds and we took it into account": that argument counted. "We did not know that - a fair point": it counted more. "Does not change our calculation": no effect, do not send more of that kind. "Your figures confirm our case": it backfired. "Already taken into account" or duplicate: that kind is used up. "We need to clarify this internally" or "we will come back to you on price": a second concession is coming, so do not move much. The same price twice: it is at its limit and a final offer follows.
 - A verified argument of a kind it has not heard is our strongest lever; each kind counts once per supplier, so send different kinds, strongest for this supplier first. A rival quote far below its price makes it give half the gap at once and the rest next round.
-- It gives nothing without a visible move from us, but our moves are priced by code: choose among the MENU only.
+- You set our pace. MENU holds the code's pace for this round, PRICE LADDER the other levels, each priced by code as complete sheets inside our limits (never above its price, never above our walk-away cost, never below our last offer). What real sessions show: these suppliers answer like for like. Our steps of about 1-1.5 % of its opening price got a counter every round (often a fixed step on its own grid); steps of about 0.6 % got smaller or skipped counters, below 0.5 % a hold; and when the gap stayed wide (about 10 % of its opening) it ended the talks early with a final offer in round 3. Its final offer comes after a few rounds (often with our 3rd to 5th message) and only its own terms close it then; an offer at or above its next counter is agreed at once, at our price. The code's pace follows this (NEGOTIATION STATE gives its steps and the gap): keep it unless the thread gives a reason - it held or named its limit (a larger level closes in), or it moved much less than we did last round (stay at the code's pace, never above its price minus its usual step). In the first message its first counter is mostly a fixed step from its opening whatever our depth: an opening deeper than the code's rarely lowers it and brings its final sooner.
 - It pays for packages it values: an index clause for a supplier driven by copper or alloy prices, 36 months for frozen-price or long-term suppliers, a longer lead time for a capacity-tight one, faster payment for a cash-short one, a binding volume commitment for one that needs volume. Read its documents and e-mails to see which, and pick sheets accordingly; a sheet with a small extra cost to us is worth sending when it is the package this supplier wants.
 - Raw-material distributors fix no price beyond 12 months: every longer sheet carries their index clause, and in 12 of 12 real sessions they came back with the same deadband-5 clause, also when we had offered deadband 3 or none. The MENU therefore holds one clause, the one that costs us least; never change it after their final offer (they withdraw). Where the clause is optional (a copper-driven part, 12 months) the MENU has a sheet with it next to one without: send both once, and if it takes the clause sheet, stay with it.
 - Answer its questions with the facts in POINTS (binding volume, data we attach): free commitments it values.
@@ -204,7 +207,7 @@ Answer with JSON only, no markdown:
  "attach": [],
  "email": "<the e-mail body>"}
 - reply: your reading of its LAST e-mail; our code acts on it next round. counted / dead: argument kinds from ARGUMENTS WE SENT LAST that it took into account (or called a fair point) / that did not move it (does not change its calculation, not its reality, backfired, duplicate). second_step: it said it will clarify internally or come back to you on price. keep_terms: fields of its term sheet it calls mandatory or a condition (from KEEPABLE TERMS). traits: what its e-mail reveals about it, names from TRAITS, "strong" or "weak". asks_for: what it asks us for, a few words each. Empty lists when there is nothing.
-- sheets: 1-3 ids from MENU, at least one with extra cost +0.00 %.
+- sheets: 1-3 ids, either all from MENU (at least one with extra cost +0.00 %) or all from ONE level of PRICE LADDER (for example L2.1, L2.2). Never mix levels.
 - claims: 0-3 ids from CHECKED ARGUMENTS, at most one per kind (each index series counts as a kind of its own). The expected help (0-1) is code's reading of this supplier's type and of what moved suppliers like it: take the highest first, and skip one below 0.3 unless nothing better is left (a spent slot is lost for that kind).
 - points: ids from POINTS to make (questions, answers, levers).
 - attach: ids from ATTACHMENTS to send with this e-mail: only data it asked for; mention each one you attach.
@@ -256,15 +259,22 @@ class StrategistWriter(ClaudeWriter):
         points = "\n".join(f"P{i}: {p}" for i, p in enumerate(plan.points, 1))
         files = "\n".join(f"A{i}: {f['name']} - {f.get('about', '')}" for i, f in enumerate(plan.files, 1))
         keepable = [f for f in case["negotiable"] if f != "unit_price"]
+        ladder = "\n".join(
+            f"L{i}: {label} | cost to us {sheets[0][1] * 100:+.2f} % against the code's pace\n"
+            + "\n".join(f"  L{i}.{j}: {describe(t)}" for j, (t, _dc) in enumerate(sheets, 1))
+            for i, (label, sheets) in enumerate(plan.ladder, 1)
+        )
         return "\n\n".join(
             [
                 f"CASE: {case['title']} ({case.get('type')}, goal {b.get('category_goal')}). Round {plan.round_no + 1} "
                 f"of {case.get('round_limit', 10)}. Our need: {b.get('need_per_year')} a year; must-haves: {must}.",
                 "THREAD SO FAR (oldest first):\n" + _thread_lines(plan.thread or []),
+                "NEGOTIATION STATE (computed by code):\n" + ("\n".join(plan.state) or "-"),
                 "ARGUMENT KINDS THIS SUPPLIER HAS ALREADY HEARD: " + (", ".join(sorted(plan.used_kinds)) or "none"),
                 "ARGUMENTS WE SENT LAST (kinds): " + (", ".join(plan.last_kinds) or "none"),
                 f"KEEPABLE TERMS: {', '.join(keepable) or '-'}. TRAITS: {', '.join(TRAITS)}.",
-                "MENU:\n" + (menu or "-"),
+                "MENU (the code's pace):\n" + (menu or "-"),
+                "PRICE LADDER (other levels for this round):\n" + (ladder or "- none: the code's pace is the only one"),
                 "CHECKED ARGUMENTS:\n" + (claims or "-")
                 + (  # raw material: each argument counted after its first counter took one more step off its price
                     "\nThis round: at most ONE argument; the others follow one a round."
@@ -305,9 +315,15 @@ class StrategistWriter(ClaudeWriter):
             log.warning("strategist fell back to the code's choice: %s", e)
             return super().write(plan, timeout)
         menu = {f"S{i}": (t, dc) for i, (t, dc) in enumerate(plan.menu, 1)}
-        sheets = [menu[s][0] for s in choice.get("sheets") or [] if s in menu][:3]
-        if not any(menu[s][1] <= 0.002 for s in choice.get("sheets") or [] if s in menu):
-            sheets = ([plan.sheets[0]] + sheets)[:3] if plan.sheets else sheets  # always one at our best cost
+        ladder = {f"L{i}.{j}": t for i, (_l, sh) in enumerate(plan.ladder, 1) for j, (t, _dc) in enumerate(sh, 1)}
+        picked = [str(s) for s in choice.get("sheets") or []]
+        level = next((s.split(".")[0] for s in picked if s in ladder), None)
+        if level:  # one ladder level: its own equal-cost sheets, nothing from the code's pace
+            sheets = [ladder[s] for s in picked if s in ladder and s.split(".")[0] == level][:3]
+        else:
+            sheets = [menu[s][0] for s in picked if s in menu][:3]
+            if not any(menu[s][1] <= 0.002 for s in picked if s in menu):
+                sheets = ([plan.sheets[0]] + sheets)[:3] if plan.sheets else sheets  # always one at our best cost
         if not sheets:
             return super().write(plan, timeout)
         cl = {f"C{i}": c for i, c in enumerate(plan.menu_claims, 1)}
@@ -344,6 +360,6 @@ class StrategistWriter(ClaudeWriter):
         if not body:
             log.warning("strategist e-mail failed the guard; writing the chosen plan plainly")
             body = TemplateWriter().write(chosen)
-        plan.sheets, plan.claims, plan.read = sheets, claims, choice.get("read")
+        plan.sheets, plan.claims, plan.read, plan.level = sheets, claims, choice.get("read"), level
         plan.signals, plan.attach = self.signals(plan, choice.get("reply")), attach
         return body

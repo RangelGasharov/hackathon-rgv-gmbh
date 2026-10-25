@@ -106,6 +106,7 @@ class ThreadState:
         self.matched = False  # we have offered its own value level on our terms
         self.in_flight = False  # a message to this supplier is on its way: its standing sheet may change
         self.held = False  # RFQ: we asked an agreeing bidder to wait while the others answer
+        self.holds = 0  # hold notes sent to it on its agreement
         self.last_sent = []  # our last sheets: never resend them unchanged
         self.sent_claims = []  # claim sentences already sent: to answer "which figures?"
         self.used_kinds = set()  # kinds of argument this supplier has heard: it counts each kind once
@@ -241,8 +242,14 @@ class BuyerAgent:
                 ts.d.dead_kinds.discard(kind)
         ts.d.dead_kinds.update(s.get("dead") or ())
         _, terms = standing(events, self._price(ts.sid))
+        # a term it varies between the sheets of one of its last replies is no condition (arena P18 5db7f885: "we
+        # welcome your proposal of 14-day payment terms" next to its own 90-day sheet was read as mandatory, every
+        # later sheet was at 14 days, and its final came at 5.30 / 14 days: 0.539, against 0.598 at 90 days)
+        replies = [m for m in events if m.get("from") != "buyer"][-2:]
+        recent = [[x.get("terms") or {} for x in m.get("term_sheets") or []] for m in replies]
         for field in s.get("keep_terms") or ():
-            if field in terms:
+            varied = any(len({repr(t[field]) for t in sheets if field in t}) > 1 for sheets in recent)
+            if field in terms and not varied:
                 ts.plan.keep(field, terms[field])
         if s.get("traits") and ts.d.note_traits(s["traits"]):
             ts.est.rate, ts.est.min_margin = ts.d.cash_rate, ts.d.min_margin
@@ -385,12 +392,21 @@ class BuyerAgent:
         )
         # RFQ: another bidder that can still move has a reply on its way and stands within reach of this sheet:
         # its standing sheet is a round old (twin P05, base code too: we signed 70250's final at 30.26 while
-        # 70210's reply - its final at 28.38 - was in flight, and 70210's standing sheet still read 30.34)
+        # 70210's reply - its final at 28.38 - was in flight, and 70210's standing sheet still read 30.34). Its first
+        # counter counts whatever its opening: that one can fall 15-21 % (arena P05 97df70e8 and 2c7b1fe9: we signed
+        # 70250's 29.50 while 70210's first reply, 36.00 -> 30.00 with "we will come back to you on price", was on
+        # its way; 0.665 twice, against 0.81-0.85 when we waited for it)
         pending = any(
             s != sid
             and x.in_flight
-            and x.c_standing < ts.c_standing * 1.08
+            and (x.c_standing < ts.c_standing * 1.08 or len(x.plan.asks) <= 1)
             and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)
+            for s, x in live.items()
+        )
+        # a rival's announced second step ("I give half the step now and check the rest") takes it two of our
+        # messages: one hold note is not enough to wait for it
+        step_coming = any(
+            s != sid and x.plan.second_step and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)
             for s, x in live.items()
         )
         # RFQ: a bidder we have not written to yet may still beat this sheet - it has its own concession path (P05: we
@@ -401,8 +417,11 @@ class BuyerAgent:
         )
         rival_better = rival_better or untouched
         if status == "agreed" and measure(ts) <= reservation * slack and ts.c_standing <= best.c_standing * 1.001:
-            if (rival_better or pending) and not ts.held:  # RFQ: let the other bidders answer before we sign
+            # RFQ: let the other bidders answer before we sign; twice while a rival's second step is coming
+            max_holds = 2 if (step_coming or pending) and rounds_left > 3 else 1
+            if (rival_better or pending) and ts.holds < max_holds:
                 ts.held = True
+                ts.holds += 1
                 return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[], hold=True)}
             return accept(sid)  # it agreed to our own sheet
         if self.deadline:  # rounds that still fit before we must close, at the pace measured so far
@@ -444,6 +463,7 @@ class BuyerAgent:
             and sid == best_sid
             and measure(ts) <= reservation
             and not rival_better
+            and not pending
             and not ts.in_flight
             and ts.plan.accept_now(ts.c_standing, ts.k, math.inf, rounds_left)
         ):
@@ -453,6 +473,7 @@ class BuyerAgent:
             and sid == best_sid
             and measure(ts) <= reservation
             and not rival_better
+            and not pending
             and not ts.in_flight
             and (ts.plan.near_floor() or ts.plan.holding())
         ):
@@ -480,7 +501,7 @@ class BuyerAgent:
             if ts.sent == 0:  # first contact: ask our questions before deciding anything
                 return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[])}
             return None if wait_best else settle()
-        msg = self.compose(threads, sid, sheets=sheets)
+        msg = self.compose(threads, sid, sheets=sheets, rounds_left=rounds_left)
         if ts.plan.ask_value and ts.plan.last_value and ts.plan.last_value >= ts.plan.ask_value * 0.99:
             ts.matched = True  # the concession path has reached its own offer
         return {"supplier_id": sid, "message": msg}
@@ -492,6 +513,40 @@ class BuyerAgent:
         counter, was on its way to its final offer at 28.38."""
         lim, ask = x.plan.limit_hat, x.plan.ask_value
         return bool(lim and ask and lim < ask and x.c_standing * lim / ask < ts.c_standing * 0.99)
+
+    def ladder(self, ts, sheets, rounds_left):
+        """[(what the level means, [(sheet, cost to us vs the code's pace)])]: the other price levels for this round,
+        each as equal-cost sheets of the code's packages (`Planner.ladder`, `Planner.sheets_at`). The team's LLM-led
+        negotiator, which set its own prices, holds the team bests on P02, P08, P11 and P18 (0.800, 0.614, 0.794,
+        0.618 against this agent's 0.735, 0.570, 0.626, 0.598): the strategist now sets the pace itself."""
+        if not sheets:
+            return []
+        c0 = min(cost(self.case, t, ts.est) for t in sheets)
+        out = []
+        for label, value in ts.plan.ladder(ts.k, rounds_left):
+            level = ts.plan.sheets_at(ts.k, value, rounds_left=rounds_left)
+            if not level or level == sheets:
+                continue  # the code's own pace is the MENU
+            out.append((label, [(t, cost(self.case, t, ts.est) / c0 - 1) for t in level]))
+        return out
+
+    def state(self, ts, rounds_left):
+        """Where the haggling stands, in its own value terms (its standard payment and terms): the strategist
+        reads the gap and its steps from these, not from sheets with different terms."""
+        p = ts.plan
+        if not p.asks:
+            return []
+        v0 = p.asks[0]
+        pct = lambda v: f"{v / v0 * 100:.1f}"  # noqa: E731
+        lines = ["Its price so far, as % of its opening (value at its standard terms): "
+                 + " -> ".join(pct(v) for v in p.asks)]  # fmt: skip
+        if inc := p.increment():
+            lines.append(f"Its usual step after its first counter: {inc / v0 * 100:.1f} % of its opening.")
+        if p.last_value:
+            lines.append(f"Our last offer: {pct(p.last_value)} %; the gap to its price is "
+                         f"{(p.ask_value - p.last_value) / v0 * 100:.1f} % of its opening.")  # fmt: skip
+        lines.append(f"Messages we can still send in this thread: {rounds_left}.")
+        return lines
 
     def match(self, threads, sid):
         """Offer its own value level with our package, if that is cheaper for us than its sheet."""
@@ -512,9 +567,11 @@ class BuyerAgent:
         return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[sheet])}
 
     # -- writing ----------------------------------------------------------------------------------
-    def compose(self, threads, sid, sheets=None, hold=False):
+    def compose(self, threads, sid, sheets=None, hold=False, rounds_left=None):
         """The next message: code's default choice of sheets, arguments and points, plus the menu the
-        strategist (Opus) may choose from instead. State is committed in `write`, once the choice is made."""
+        strategist (Opus) may choose from instead. State is committed in `write`, once the choice is made.
+        `rounds_left` is passed for the planner's own sheets only: then the strategist also gets the price ladder
+        and sets the pace itself (not for matches, holds and terms sent back, which have one right price)."""
         ts, case, d = self.t[sid], self.case, self.t[sid].d
         ts.snap = (ts.k, ts.sent, list(ts.last_sent), list(ts.last_claims), list(ts.sent_claims), ts.sent_schedule,
                    ts.sent_drivers, ts.asked_breakdown, ts.matched, list(ts.plan.last_sheets), ts.plan.last_value,
@@ -568,6 +625,9 @@ class BuyerAgent:
             plan.used_kinds = {k[0] if k[0] != "idx" else f"idx {k[1]}" for k in ts.used_kinds}
             plan.last_kinds = sorted({c.kind for c in ts.last_claims})
             plan.max_claims = per
+            if rounds_left is not None:
+                plan.ladder = self.ladder(ts, sheets, rounds_left)
+                plan.state = self.state(ts, rounds_left)
         ts.k += 1 if sheets else 0
         ts.sent += 1
         # the body is written by `write()` outside the case lock, so a slow model never holds up other threads
@@ -617,6 +677,8 @@ class BuyerAgent:
             if (list(plan.sheets), list(plan.claims)) != default:  # the strategist chose differently
                 self._finalize(msg, plan)
                 self.log.append((msg["_sid"], "strategist", [t["unit_price"] for t in plan.sheets]))
+                if plan.level:  # it set its own pace
+                    self.log.append((msg["_sid"], "level", plan.level))
             if plan.read:
                 self.log.append((msg["_sid"], "read", plan.read))
             self._take_reading(msg, plan)
