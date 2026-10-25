@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "built": "2026-10-24T20:09Z",
+ "built": "2026-10-25T09:37Z",
  "data": "D:\\hackathon-rgv-gmbh\\starter-kit\\data\\package",
  "suppliers": {
   "sup:70110": {
@@ -40,7 +40,7 @@
    "changed": false
   },
   "sup:70170": {
-   "source_hash": "5a4756e7847d99c3",
+   "source_hash": "78f1a27e7178324e",
    "persona": true,
    "stale": false,
    "changed": false
@@ -52,7 +52,7 @@
    "changed": false
   },
   "sup:70190": {
-   "source_hash": "0a46c05273aa11c3",
+   "source_hash": "45e3cc1391eb36a4",
    "persona": true,
    "stale": false,
    "changed": false
@@ -94,7 +94,7 @@
    "changed": false
   },
   "sup:70270": {
-   "source_hash": "1b35d649bcb5f99f",
+   "source_hash": "6b985acaa0c9c213",
    "persona": true,
    "stale": false,
    "changed": false
@@ -136,7 +136,7 @@
    "changed": false
   },
   "sup:70340": {
-   "source_hash": "a0a8565b397bff15",
+   "source_hash": "a2309498b31d1efc",
    "persona": true,
    "stale": false,
    "changed": false
@@ -208,7 +208,7 @@
    "changed": false
   },
   "sup:70560": {
-   "source_hash": "0c6a0dc03eb709b6",
+   "source_hash": "044b320c0d5e6efb",
    "persona": true,
    "stale": false,
    "changed": false
@@ -244,7 +244,7 @@
    "changed": false
   },
   "sup:70640": {
-   "source_hash": "e863d4038f23fd8d",
+   "source_hash": "1f8f961118958302",
    "persona": true,
    "stale": false,
    "changed": false

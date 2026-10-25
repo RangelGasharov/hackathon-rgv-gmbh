@@ -2,7 +2,7 @@
  "schema": 1,
  "id": "sup:70620",
  "name": "Wälzlager-Zentrum Süd GmbH",
- "built": "2026-10-24T20:09Z",
+ "built": "2026-10-25T09:37Z",
  "source_hash": "a0cb5e8c8597e1ea",
  "persona_stale": false,
  "problems": [],
@@ -547,15 +547,15 @@
   "cases": [
    "case:P04"
   ],
-  "sessions": 5,
-  "deals": 5,
-  "best_score": 0.86,
+  "sessions": 1,
+  "deals": 1,
+  "best_score": 0.766,
   "walked": 0,
   "agreed_round1": 0,
   "fair_point": 0,
-  "no_change": 5,
+  "no_change": 0,
   "duplicate": 0,
-  "first_counter_vs_opening": 0.996,
-  "final_offer_round_median": 2
+  "first_counter_vs_opening": 0.984,
+  "final_offer_round_median": null
  }
 }

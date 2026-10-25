@@ -37,7 +37,12 @@ TRAITS = {
     "stale_costing": (r"own spreadsheet|not followed his material|office manager does the costing", None),
     "reciprocity": (r"kept supplying at the old price|expects partnership", None),
     "below_full_cost": (r"accepted below full cost", None),
-    "hedged_material": (r"bought their \w+(?: and \w+)? forward|covered at fixed prices|Material covered until", None),
+    "hedged_material": (
+        r"bought (?:their |our )?(?:\w+ ){0,4}forward|covered at fixed prices|Material covered until|"
+        r"at fixed prices with|(?:secured|covered|locked in)[^.]{0,60}(?:for|until|through) (?:\w+ )?20\d\d|"
+        r"reaches our prices only from (?:\w+ )?20\d\d",
+        None,
+    ),
     "capacity_tight": (
         r"binding 12-month commitment|Order intake is very strong|cannot confirm your full forecast",
         None,
@@ -78,8 +83,34 @@ NEWS_SITUATION = {
 TRUSTED_YEARS = 8  # an active source of the part for this long is a partner, not a vendor
 COUNTRY_COST = {"DE": 1.0, "AT": 1.05, "CH": 1.1, "CZ": 0.83, "PL": 0.83, "HU": 0.83, "TR": 0.75, "CN": 0.7}
 OWNER_MARGIN = {"group": 0.12, "private": 0.10, "family": 0.09, "founder": 0.08}
-HEDGE_UNTIL = re.compile(r"until (January|March|June|December) (\d{4})")
-MONTHS = {"January": 1, "March": 3, "June": 6, "December": 12}
+MONTHS = {
+    m: i
+    for i, m in enumerate(
+        "January February March April May June July August September October November December".split(), 1
+    )
+}
+_MON = "|".join(MONTHS)
+HEDGE_UNTIL = re.compile(
+    rf"(?:until|through) (?:({_MON}) )?(\d{{4}})|(?:for|in) (?:the year )?(\d{{4}})|only from (?:({_MON}) )?(\d{{4}})"
+)
+
+
+def hedge_end(text):
+    """The latest date a hedge in `text` runs to: "until March 2027" -> that month; "until 2027" / "for 2027" ->
+    December of it; "reaches our prices only from 2028" -> the December before."""
+    best = None
+    for m in HEDGE_UNTIL.finditer(text):
+        mon1, y1, y2, mon2, y3 = m.groups()
+        if y1:
+            d = date(int(y1), MONTHS.get(mon1, 12), 28)
+        elif y2:
+            d = date(int(y2), 12, 28)
+        elif mon2:
+            d = date(int(y3), MONTHS[mon2], 28)
+        else:
+            d = date(int(y3) - 1, 12, 28)
+        best = max(best, d) if best else d
+    return best
 BEST_WINDOW_SLACK = 0  # index windows may end up to this many months before the latest month (None: 12 months only)
 
 
@@ -100,6 +131,15 @@ REPLY_SIGNALS = {  # phrases in a supplier's own e-mail that reveal what it need
 # what one reply shows about a supplier stays true: arena "We did not know that - a fair point." came back to the two
 # suppliers on old cost sheets (P01, P05-70210) and to no other; for them index, volume and delivery data count more
 LASTING_SIGNALS = {"stale_costing": r"did not know that|fair point"}
+
+
+LEGAL_FORMS = {"gmbh", "ag", "kg", "ek", "ohg", "gbr", "ug", "mbh", "se", "co", "und", "inh", "e", "k", "v", "kgaa"}
+
+
+def _stem(name):
+    """A supplier's name without its legal form: "Zerspanung Dralveck e.K." and "... GmbH" -> "zerspanung dralveck"."""
+    words = re.sub(r"[^\w ]", " ", (name or "").lower()).split()
+    return " ".join(w for w in words if w not in LEGAL_FORMS)
 
 
 class World:
@@ -125,10 +165,34 @@ class World:
     def one(self, sql, *a):
         return self.db.execute(sql, a).fetchone()
 
+    @cached_property
+    def aliases(self):
+        """{live supplier id: [old record ids]}: a supplier of the same name stem that is blocked, has no contract and
+        is not in the full detail set is the old record of the live one (sup:71999 -> sup:70210, "renamed 2024")."""
+        rows = self.all("SELECT id, name, detail, blocked, contract_id FROM suppliers")
+        live = {}
+        for r in rows:
+            if not r["blocked"] and r["detail"] == "full":
+                live.setdefault(_stem(r["name"]), []).append(r["id"])
+        out = {}
+        for r in rows:
+            if r["blocked"] and not r["contract_id"] and len(live.get(_stem(r["name"]), [])) == 1:
+                out.setdefault(live[_stem(r["name"])][0], []).append(r["id"])
+        return out
+
+    def ids(self, sid):
+        """The supplier's live ID and the IDs of its old records: history, spend and scorecards fold under the live one."""
+        return [sid, *self.aliases.get(sid, [])]
+
+    def all_for(self, sql, sid, *a):
+        """`all` for a query whose first parameter is `supplier_id=?`, over the supplier and its old records."""
+        ids = self.ids(sid)
+        return self.all(sql.replace("supplier_id=?", f"supplier_id IN ({','.join('?' * len(ids))})", 1), *ids, *a)
+
     def rows(self, table, supplier_id):
         """A supplier's rows of `table` (documents, news, po_lines, ...): the database plus the Sunday release's
         CSV rows, newest first by `date` where there is one. Dicts, so both sources read the same."""
-        out = [dict(r) for r in self.all(f'SELECT * FROM "{table}" WHERE supplier_id=?', supplier_id)]
+        out = [dict(r) for r in self.all_for(f'SELECT * FROM "{table}" WHERE supplier_id=?', supplier_id)]
         if self.pkg.release:
             out += [
                 dict(r)
@@ -249,7 +313,7 @@ class Dossier:
             out.append(self.w.doc_text(d["id"]))
         for r in self.w.all("SELECT remarks FROM quotes WHERE supplier_id=? AND remarks!=''", self.sid):
             out.append(r[0])
-        for r in self.w.all("SELECT note FROM negotiation_history WHERE supplier_id=? AND note!=''", self.sid):
+        for r in self.w.all_for("SELECT note FROM negotiation_history WHERE supplier_id=? AND note!=''", self.sid):
             out.append(r[0])
         for r in self.w.all("SELECT headline, body FROM news WHERE supplier_id=? AND topic!='noise'", self.sid):
             out.append(f"{r[0]} {r[1] or ''}")
@@ -459,16 +523,24 @@ class Dossier:
         return round(out, 1)
 
     def schedule_csv(self):
-        """Our latest monthly demand forecast per part, as a CSV a supplier can read (true data, no IDs)."""
-        lines = ["part,description,month,forecast_qty"]
+        """Our latest monthly demand forecast per part, as a CSV a supplier can read (true data, no IDs). Quantities
+        are per price unit, the unit the case need and our binding volume are in (a kit counts per kit)."""
+        units = {
+            (self.w.one("SELECT price_unit FROM parts WHERE id=?", part) or [None])[0] or 1 for part in self.case["parts"]
+        }
+        head = f"forecast_qty_per_{units.pop()}_units" if len(units) == 1 else "forecast_qty_per_price_unit"
+        lines = [f"part,description,month,{head}"]
         for part in self.case["parts"]:
             fc = self.w.one("SELECT id FROM forecasts WHERE part_id=? ORDER BY snapshot_month DESC LIMIT 1", part)
-            desc = (self.w.one("SELECT description FROM parts WHERE id=?", part) or ["-"])[0]
+            row = self.w.one("SELECT description, price_unit FROM parts WHERE id=?", part)
+            desc = (row[0] if row else "-").replace(",", " ")
+            unit = (row[1] if row else None) or 1
             if fc:
                 for r in self.w.all(
                     "SELECT target_month, qty FROM forecast_lines WHERE fc_id=? ORDER BY target_month", fc[0]
                 ):
-                    lines.append(f"{part.split(':')[1]},{desc.replace(',', ' ')},{r[0]},{r[1]}")
+                    qty = r[1] / unit
+                    lines.append(f"{part.split(':')[1]},{desc},{r[0]},{round(qty, 1) if unit != 1 else r[1]}")
         return "\n".join(lines) + "\n" if len(lines) > 1 else None
 
     def drivers_csv(self):
@@ -488,7 +560,8 @@ class Dossier:
     def recent_orders(self):
         """The last 2-3 order lines of this part with this supplier: [(po id, price)]."""
         rows = self.w.all(
-            "SELECT id, price FROM po_lines WHERE part_id=? AND supplier_id=? ORDER BY order_date DESC LIMIT 3",
+            "SELECT id, price FROM po_lines WHERE part_id=? AND supplier_id=? AND COALESCE(price_note,'')<>'stale_condition' "
+            "ORDER BY order_date DESC LIMIT 3",
             self.part,
             self.sid,
         )
@@ -594,8 +667,7 @@ class Dossier:
             return None
         if until := (self.read or {}).get("hedge_until"):  # the model reads any wording ("until end of Q1 2027")
             return date(int(until[:4]), int(until[5:7]), 28)
-        m = HEDGE_UNTIL.search(self.texts)
-        return date(int(m.group(2)), MONTHS[m.group(1)], 28) if m else None
+        return hedge_end(self.texts)
 
     @property
     def wants(self):
@@ -604,19 +676,19 @@ class Dossier:
 
     @cached_property
     def scorecard(self):
-        r = self.w.one(
+        r = self.w.all_for(
             "SELECT id, otd_pct, ppm, colour FROM scorecards WHERE supplier_id=? ORDER BY quarter DESC LIMIT 1",
             self.sid,
         )
-        return dict(r) if r else None
+        return dict(r[0]) if r else None
 
     @cached_property
     def late_days(self):
-        r = self.w.one(
+        r = (self.w.all_for(
             "SELECT avg(julianday(paid_date)-julianday(due_date)) FROM invoices WHERE supplier_id=? "
             "AND paid_date IS NOT NULL AND discount_taken=0",
             self.sid,
-        )
+        ) or [None])[0]
         return round(r[0], 1) if r and r[0] is not None else 0.0
 
     @cached_property
@@ -636,7 +708,7 @@ class Dossier:
 
     @cached_property
     def history(self):
-        rows = self.w.all(
+        rows = self.w.all_for(
             "SELECT asked_pct, settled_pct FROM negotiation_history WHERE supplier_id=? AND type='annual renewal'",
             self.sid,
         )

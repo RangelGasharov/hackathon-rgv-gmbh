@@ -2,7 +2,7 @@
  "schema": 1,
  "id": "sup:70610",
  "name": "Schraubenhandel Leitner & Sohn GmbH",
- "built": "2026-10-24T20:09Z",
+ "built": "2026-10-25T09:37Z",
  "source_hash": "23676527d20f464c",
  "persona_stale": false,
  "problems": [],
@@ -505,15 +505,15 @@
   "cases": [
    "case:P07"
   ],
-  "sessions": 5,
-  "deals": 5,
-  "best_score": 0.721,
+  "sessions": 1,
+  "deals": 1,
+  "best_score": 0.733,
   "walked": 0,
   "agreed_round1": 0,
   "fair_point": 0,
-  "no_change": 1,
-  "duplicate": 3,
-  "first_counter_vs_opening": 0.974,
-  "final_offer_round_median": 4.0
+  "no_change": 0,
+  "duplicate": 0,
+  "first_counter_vs_opening": 0.963,
+  "final_offer_round_median": 4
  }
 }

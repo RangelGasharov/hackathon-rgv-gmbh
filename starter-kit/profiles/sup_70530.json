@@ -2,7 +2,7 @@
  "schema": 1,
  "id": "sup:70530",
  "name": "Selvbrunn Drive Systems GmbH",
- "built": "2026-10-24T20:09Z",
+ "built": "2026-10-25T09:37Z",
  "source_hash": "0b5b2e8ce02c171e",
  "persona_stale": false,
  "problems": [],
@@ -442,15 +442,15 @@
   "cases": [
    "case:P03"
   ],
-  "sessions": 4,
-  "deals": 4,
-  "best_score": 0.923,
+  "sessions": 1,
+  "deals": 1,
+  "best_score": 0.845,
   "walked": 0,
   "agreed_round1": 0,
   "fair_point": 0,
   "no_change": 0,
   "duplicate": 0,
   "first_counter_vs_opening": 0.986,
-  "final_offer_round_median": 6
+  "final_offer_round_median": 4
  }
 }

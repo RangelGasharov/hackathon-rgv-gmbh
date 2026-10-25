@@ -247,7 +247,7 @@ def test_walks_when_the_alternative_is_cheaper_and_c_is_exact(world):
     agent = BuyerAgent(world)
     agent.start(c)
     sid = "sup:70610"
-    threads = {sid: [msg(5.74, payment_days=30, contract_months=24), BUYER,
+    threads = {sid: [msg(6.60, payment_days=30, contract_months=24), BUYER,
                      msg(6.35, "final_offer", payment_days=30, contract_months=24)]}  # fmt: skip
     d = agent.decide(threads, sid)
     assert agent.t[sid].c_standing > agent.t[sid].plan.c_alt  # 1 % dearer: the old 2 % band signed it

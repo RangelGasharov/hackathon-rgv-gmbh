@@ -2,8 +2,8 @@
  "schema": 1,
  "id": "sup:70640",
  "name": "Kugellager-Vertrieb Inntal GmbH",
- "built": "2026-10-24T20:09Z",
- "source_hash": "e863d4038f23fd8d",
+ "built": "2026-10-25T09:37Z",
+ "source_hash": "1f8f961118958302",
  "persona_stale": false,
  "problems": [],
  "country": "AT",
@@ -288,7 +288,14 @@
   "cost_recharged_eur": 750,
   "open_8d": 0
  },
- "news": [],
+ "news": [
+  {
+   "id": "news:20261017-S19",
+   "date": "2026-10-17",
+   "topic": "free_capacity",
+   "headline": "Kugellager-Vertrieb Inntal GmbH loses a large distribution contract"
+  }
+ ],
  "documents": [
   {
    "id": "doc:20260925-70640-P19",
@@ -350,11 +357,11 @@
  "quote_remarks": [],
  "persona": {
   "supplier": "sup:70640",
-  "source_hash": "e863d4038f23fd8d",
-  "analysed": "deep read v1",
+  "source_hash": "1f8f961118958302",
+  "analysed": "deep read v1 + Sunday release",
   "confidence": "medium",
-  "summary": "Austrian family bearing distributor (37 M EUR); we are 0.27 %. Second shift idle since spring and it can take more parts, though it is reviewing small accounts. Already cheaper than 70620 on 6306/6308, so our lever is moving 70620's quota (70 % of 6306) to it. Historically asks ~4 % and keeps only 27 %. Moves above 2 % need its pricing committee. Offer binding volume plus quota shift for a lower price.",
-  "notes": "Needs work for its idle second shift; it is itself reviewing small accounts like ours. Contradiction: idle capacity vs 'focus on customers with volume'. Renewal mail (contract to 2027-06) asks our expected volumes. OTD 81-87 % vs 95 % target, ppm fell to 0 in Q3.",
+  "summary": "Austrian family bearing distributor (37 M EUR); we are 0.27 %. It lost a large distribution contract (Oct 2026) and its second shift has been idle since spring, so it needs volume, though it is reviewing small accounts. Already cheaper than 70620 on 6306/6308, so our lever is moving 70620's quota (70 % of 6306) to it. Historically asks ~4 % and keeps only 27 %. Moves above 2 % need its pricing committee. Offer binding volume plus quota shift for a lower price.",
+  "notes": "Needs work: lost a large distribution contract and its second shift is idle; it is also reviewing small accounts like ours, so volume is the key. Renewal mail (contract to 2027-06) asks our expected volumes. OTD 81-87 % vs 95 % target, ppm 0 in Q3.",
   "traits": {
    "cash_short": "none",
    "approval_ladder": "strong",
@@ -378,7 +385,8 @@
    "binding_volume"
   ],
   "fears": [
-   "idle second shift"
+   "idle second shift",
+   "volume lost with the distribution contract"
   ],
   "hedge_until": null,
   "evidence": [
@@ -401,6 +409,11 @@
     "trait": "small_account",
     "doc": "data:our_weight.share_of_its_turnover_pct",
     "quote": "0.27"
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "news:20261017-S19",
+    "quote": "Kugellager-Vertrieb Inntal GmbH loses a large distribution contract"
    }
   ],
   "playbook": {
@@ -429,7 +442,7 @@
     "Expect steps of about 2 % (pricing-committee threshold); keep moving visibly each round.",
     "Accept its final offer unchanged."
    ],
-   "expected_concession": "No arena data; history (keeps 27 % of its ask) and idle capacity suggest it gives way, likely in steps of 2 % or less."
+   "expected_concession": "No arena data; history (keeps 27 % of its ask), idle capacity and the lost contract suggest it gives way, likely in steps of 2 % or less."
   }
  },
  "arena": null

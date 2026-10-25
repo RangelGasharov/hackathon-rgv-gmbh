@@ -6,9 +6,12 @@ does its costing from an old spreadsheet is disarmed by them."""
 import re
 from dataclasses import dataclass, field
 
+from .dossier import NEWS_SITUATION
+
 TOL_PP = 0.5
-# news topics that weaken a supplier's hand (BUYER_STRAT cites them): idle capacity, a new plant, distress
-WEAK_NEWS = {"free_capacity", "new_plant", "short_time_work", "restructuring", "credit_watch", "credit_downgrade"}
+# news topics that weaken a supplier's hand (BUYER_STRAT cites them): what the dossier reads as slack or distress
+# (idle capacity, a new plant, a lost customer, short-time work, restructuring, credit watch)
+WEAK_NEWS = {t for t, situation in NEWS_SITUATION.items() if situation in ("slack", "distress")}
 
 
 @dataclass
@@ -272,10 +275,10 @@ def candidates(world, dossier, case, rivals=None, own_price=None, pace=False, ne
         )
     # 8. news about the supplier that speaks for us (free capacity, secured energy, new plant)
     items = list(d.news_items)
-    if news_boost:  # its weakening news first, the distress kinds included (they are not in `news_items`)
-        seen = {i for i, _t, _h in items}
-        items += [(i, t, h) for i, _day, t, h in getattr(d, "current_news", None) or [] if t in WEAK_NEWS and i not in seen]
-        items.sort(key=lambda x: x[1] not in WEAK_NEWS)
+    if news_boost:  # its weakening news first, newest first, the distress kinds included (not in `news_items`)
+        weak = [(i, t, h) for i, _day, t, h in getattr(d, "current_news", None) or [] if t in WEAK_NEWS]
+        seen = {i for i, _t, _h in weak}
+        items = weak + [x for x in items if x[0] not in seen]
     for nid, topic, headline in items[:1]:
         w = 0.6 if news_boost and topic in WEAK_NEWS else 0.1
         out.append(

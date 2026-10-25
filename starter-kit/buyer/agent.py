@@ -54,6 +54,53 @@ ASKS_DATA = re.compile(
     r"which figures|send us the data|provide (?:the )?(?:specific )?data|data behind|calculation|cost analysis",
     re.I,
 )
+# B4 (outputs audit: 57 of 527 asks got no concrete answer): what else its questions ask for, each answered with a number
+ASKS_PAY_TERMS = re.compile(
+    r"payment (?:terms?|days|target|conditions)|(?:faster|earlier|quicker|shorter|sooner|prompt) payment|"
+    r"pay (?:us )?(?:faster|earlier|sooner|within)|how (?:soon|quickly) (?:can|will|would) you pay|advance payment",
+    re.I,
+)
+ASKS_TERM = re.compile(
+    r"contract (?:length|duration|term|period)|(?:length|duration|term) of (?:the|our|your) (?:contract|agreement)|"
+    r"how long|(?:longer|multi-year|long-term) (?:contract|agreement|commitment)|\b(?:12|24|36|48)[- ]month",
+    re.I,
+)
+ASKS_SCHEDULE = re.compile(r"schedule|call-?off|monthly quantit|release|delivery plan", re.I)
+ASKS_FIGURES = re.compile(r"which figures|send us the data|which data|what data|on which basis", re.I)
+# rule A2b: shorter payment counts as its ask only in its own words (an LLM reading turned P03's OFFER of 90 days
+# into "it refused 90-day payment" and a trade at 14/30 days, EUR 25.8k dearer than its own 90-day sheet)
+FASTER_PAY = re.compile(
+    r"(?:faster|earlier|quicker|shorter|sooner|prompt(?:er)?) payment|pay(?:ing)? (?:us )?(?:faster|earlier|sooner|"
+    r"more quickly)|advance payment|cash flow",
+    re.I,
+)
+PAY_DAYS = re.compile(r"payment\s+(?:terms?\s+)?(?:of|within|in|at)\s+(\d+)\s+days|(\d+)[- ]days?\s+payment", re.I)
+# only a sentence that asks counts (arena mails: "the data you cited", "the volume schedule you provided", "does not
+# change our calculation" hit the plain regexes 67 % / 84 % of the time and sent CSVs nobody asked for)
+REQUEST_SENTENCE = re.compile(
+    r"\?|(?:please|kindly)\s+(?:send|provide|share|submit)|send us|proof|substantiat|verifiable", re.I
+)
+ACKNOWLEDGES = re.compile(r"you (?:cited|provided|attached|sent|shared)|you've (?:provided|sent|shared)|"
+                          r"provided|attached|we (?:have )?checked|does not change our calculation", re.I)  # fmt: skip
+ASKS_PAYMENT_PROOF = re.compile(
+    r"(?:proof|evidence|record|verif\w+|substantiat\w+|reliab\w+|track record)\b.{0,80}\b(?:payment|paying|pay|invoice)|"
+    r"(?:payment|paying|invoice)\w*\b.{0,80}\b(?:proof|evidence|record|verif\w+|substantiat\w+|reliab\w+)",
+    re.I | re.S,
+)
+# weak signals that its price will not move (only when the same mail shows no price move)
+WEAK_FLOOR = re.compile(
+    r"cannot give up (?:any )?margin|flexibility (?:remains|is) (?:severely )?limited|limits our ability to reduce",
+    re.I,
+)
+
+
+def requests_of(text):
+    """The sentences of a supplier mail that ask for something (not the ones that acknowledge what we sent)."""
+    sentences = re.split(r"(?<=[.!?])\s+", text or "")
+    return " ".join(x for x in sentences if REQUEST_SENTENCE.search(x) and not ACKNOWLEDGES.search(x))
+
+
+PAY_ON_TIME = "We will pay every invoice on the agreed due date."
 LEARN_OPENING_LEAD = True  # a supplier's opening lead time is its standard (see `learn_opening_standard`)
 MAX_ROUNDS = 10  # the arena's round limit: never plan for more messages per thread, whatever a case file says
 # argument kinds a trusted supplier does not hear: our own price history never moved an arena supplier, and citing
@@ -147,6 +194,10 @@ class ThreadState:
         self.asks = []  # BUYER_STRAT: what its last e-mail asked us for (`writer.asks_for`), each priced as a trade
         self.said_main_source = False
         self.agreed_holds = 0  # Leverage in a tender: times we held our price after an "agreed" above our limit
+        self.promise = None  # what `decide` would accept from an agreeing reply (`promise_ok`), set before composing
+        self.said_once = set()  # standing commitments already said in this thread (`once`)
+        self.final_holds = 0  # holding notes sent after its final offer: at most one
+        self.took_earlier = False  # at its final offer we sent back its own earlier, cheaper sheet: once
 
 
 class BuyerAgent:
@@ -273,8 +324,9 @@ class BuyerAgent:
             ts.plan.second_step = bool(
                 re.search(r"come back to you on (?:the )?price|clarify (?:this|it) internally", body, re.I)
             )
-            ts.plan.soft_reply = bool(ts.plan.second_step or APPROVAL_WORDS.search(body))
-            if FLOOR_WORDS.search(body):
+            weak = bool(WEAK_FLOOR.search(body)) and not self.price_moved(events, m)
+            ts.plan.soft_reply = bool(ts.plan.second_step or APPROVAL_WORDS.search(body) or weak)
+            if FLOOR_WORDS.search(body) or weak:
                 ts.plan.said_floor = True
             if CLAUSE_MANDATORY.search(body):
                 ts.plan.require_clause()
@@ -299,6 +351,16 @@ class BuyerAgent:
             ts.c_norel = cost(self.case, terms, ts.est, rel=False)
         else:  # no price, or a must-have broken (scores 0)
             ts.c_standing = ts.c_norel = math.inf
+
+    @staticmethod
+    def price_moved(events, m):
+        """Its mail `m` carries a standing price below the one of its previous priced mail."""
+        mails = [x for x in events if x.get("from") != "buyer"]
+        i = next((j for j, x in enumerate(mails) if x is m), len(mails))
+        _, now = standing([m])
+        before = next((standing([x])[1] for x in reversed(mails[:i]) if x.get("term_sheets")), {})
+        a, b = now.get("unit_price"), before.get("unit_price")
+        return bool(a is not None and b is not None and a < b)
 
     @property
     def clause_series(self):
@@ -490,6 +552,13 @@ class BuyerAgent:
             for s, x in live.items()
         )
         rival_better = rival_better or untouched
+        # what an agreeing reply to our next sheet would meet (the accept rule below): `levers` promises only then
+        ts.promise = {
+            "cap": reservation * slack,
+            "rival": min((x.c_standing for s, x in live.items() if s != sid), default=math.inf),
+            "hold": bool(rival_better or pending or ts.in_flight),
+            "rel": confident,
+        }
         if status == "agreed" and measure(ts) <= reservation * slack and ts.c_standing <= best.c_standing * 1.001:
             # RFQ: let the other bidders answer before we sign; how long depends on the supplier's approach (Quick-close,
             # a walk risk: one note; else up to 3 while rounds and time remain, twin P05: its rivals' finals came later)
@@ -502,6 +571,20 @@ class BuyerAgent:
             pace = max(10.0, 1.3 * self.round_seconds)
             rounds_left = min(rounds_left, int(max(0, time_left - self.close_margin) // pace))
         if status == "final_offer":
+            if (
+                not ts.took_earlier
+                and not ts.in_flight
+                and not pending
+                and not untouched
+                and (earlier := self.earlier_cheaper(threads[sid], ts, min(reservation * slack, c_alt), confident))
+                and round_cap(self.case) - ts.sent > 0
+                and time_left > self.close_margin
+            ):
+                # A3: its own earlier standing sheet is cheaper for us than this final one: send its exact terms back
+                # once (like `take_alternative`), else the final-offer path below
+                ts.took_earlier = ts.took_alt = True
+                self.log.append((sid, "take_earlier", earlier.get("unit_price")))
+                return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[dict(earlier)], exact=True)}
             # wait for another bidder only if it can still move (not on its own final offer)
             others = [
                 x
@@ -548,12 +631,17 @@ class BuyerAgent:
                 and not untouched
             ):
                 return accept(sid)
-            if others:
-                # a holding note now, and again whenever its last reply is 40 s old (a silent thread times
-                # out after 60 s: "your last offer repeated", and three timeouts end it) while rounds remain
+            # B2: a hold after a final offer drew the same final offer back 32 of 44 times: only while another bidder's
+            # reply is still pending (or it has not been written to yet), and once per thread
+            awaiting = untouched or any(
+                s != sid and x.in_flight and latest(threads[s]).get("status") not in ("final_offer",) + tuple(ENDED)
+                for s, x in live.items()
+            )
+            if others and awaiting:
                 quiet = time.monotonic() - ts.reply_seen_at > 40
-                if not ts.in_flight and (not ts.held or (quiet and rounds_left > 2)):
+                if not ts.in_flight and ts.final_holds < 1:
                     ts.held = True
+                    ts.final_holds += 1
                     return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[], hold=True)}
                 if quiet and rounds_left <= 1 and not ts.in_flight:
                     # no note left to send: one timeout after a final offer and it walks (arena b2 P05: 70210's
@@ -704,6 +792,42 @@ class BuyerAgent:
             for s, x in live.items()
         )
 
+    def earlier_cheaper(self, events, ts, cap, confident):
+        """The terms of its own earlier standing sheet (before its final offer) that are cheaper for us than the final
+        one, keep the must-haves and stay within our limit; the cheapest such sheet, else None."""
+        mails = [m for m in events if m.get("from") != "buyer"]
+        found = []
+        for m in mails[:-1]:
+            sheets = m.get("term_sheets") or []
+            terms = sheets[0].get("terms") if sheets else None
+            if not terms or terms.get("unit_price") is None or not must_haves_ok(self.case, terms, ts.est.standard):
+                continue
+            c = cost(self.case, terms, ts.est, rel=confident)
+            if math.isfinite(c) and c <= cap and c < ts.c_standing * 0.999:
+                found.append((c, terms))
+        return min(found, key=lambda x: x[0])[1] if found else None
+
+    def promise_ok(self, ts, sheets):
+        """`decide` would accept an agreeing reply to every one of these sheets: within our limit, no cheaper
+        bidder, no other bidder still to hear."""
+        p = ts.promise
+        if not p or p["hold"] or not sheets:
+            return False
+        for t in sheets:
+            if not must_haves_ok(self.case, t, ts.est.standard):
+                return False
+            if cost(self.case, t, ts.est, rel=p["rel"]) > p["cap"] or cost(self.case, t, ts.est) > p["rival"] * 1.001:
+                return False
+        return True
+
+    @staticmethod
+    def once(ts, line, key=None):
+        """A standing commitment is said once per thread: the line the first time, else nothing."""
+        if (key or line) in ts.said_once:
+            return []
+        ts.said_once.add(key or line)
+        return [line]
+
     def short_of_must_have(self, threads, s, ts):
         """Another bidder whose standing sheet still misses a must-have (its quoted lead time, say) but is clearly
         cheaper on its own terms: it is negotiating, not out (twin P06: its 167.10 at 70 days read as no offer and we
@@ -756,7 +880,7 @@ class BuyerAgent:
         # after its final offer only its own terms go back (taking an alternative it sent): changed terms after a
         # final offer ended in a walk 3 times in 5 (P08, P10, P18), its own terms were agreed 2 of 2
         final = latest(threads[sid]).get("status") == "final_offer"
-        if final and sheets:
+        if final and sheets and not exact:
             mine = [x.get("terms") or {} for x in latest(threads[sid]).get("term_sheets") or []]
             keep = [t for t in sheets if any(m and all(t.get(f) == v for f, v in m.items()) for m in mine)]
             if keep != sheets:
@@ -806,17 +930,24 @@ class BuyerAgent:
         else:
             claims = ration(allc, self.used_ids, ts.sent, ts.used_kinds)[:cap]
         trades = []
-        if trade and approach and sheets and not final and not hold and ts.asks:
-            trades = ts.plan.trade_sheets(ts.asks, sheets[0], case["buyer"].get("need_per_year"))
+        asks = [a for a in ts.asks if a != "payment" or self.faster_pay_asked(ts)]
+        if trade and approach and sheets and not final and not hold and asks:
+            trades = ts.plan.trade_sheets(asks, sheets[0], case["buyer"].get("need_per_year"))
             trades = [(a, t) for a, t in trades if t not in sheets][:2]
             if trades:
                 sheets = sheets[: max(1, 3 - len(trades))] + [t for _a, t in trades]
                 self.log.append((sid, "trade", [(a, t.get("unit_price")) for a, t in trades]))
-        answered, lever_lines = self.answers(ts, sheets, threads[sid]), self.levers(ts, sheets)
+        files = self.attachments(ts)  # what its last e-mail asked for, by keyword
+        lever_lines, done = self.levers(ts, sheets), []
         if trade and approach and sheets and not final and not hold:  # what it asked for and already has: say so
-            done = [a for a in ts.asks if a not in {x for x, _t in trades} and granted(a, sheets[0], case)]
-            lever_lines = self.granted_lines(done, sheets[0]) + lever_lines
-        lever_lines = self.trade_lines(trades) + lever_lines
+            done = [a for a in asks if a not in {x for x, _t in trades} and granted(a, sheets[0], case)]
+        # B4: every ask gets its answer before anything else, one line each (the trade, what it already has, a number)
+        covered = {x for x, _t in trades} | set(done)
+        answered = (
+            self.trade_lines(trades)
+            + (self.granted_lines(done, sheets[0]) if done else [])
+            + self.answers(ts, sheets, threads[sid], covered=covered, files=files, claims=claims)
+        )
         if (
             approach
             and ts.plan.allows("main_source")
@@ -843,8 +974,8 @@ class BuyerAgent:
             + (["Thank you, we are reviewing all offers and will confirm shortly."] if hold else []),
             tone=self.tone(ts, threads[sid]),
             last_reply=latest(threads[sid]).get("body", ""),
+            answers=answered,
         )
-        files = self.attachments(ts)  # what its last e-mail asked for, by keyword
         if sheets:  # the strategist's options: priced by code, inside our limits
             # after a final offer exactly what we take, no other package (the strategist could pick changed terms)
             only = final or exact or not flags.on("menu")  # exact: these sheets and no other package
@@ -855,7 +986,7 @@ class BuyerAgent:
                 fresh = [c for c in fresh if c.weight >= 0.1]
             plan.menu_claims = fresh[:8]
             # it reads what the supplier asked for itself: every answer and every data file we could give
-            more = [a for a in self.answers(ts, sheets, threads[sid], asked=False) if a not in answered]
+            more = [a for a in self.answers(ts, sheets, threads[sid], asked=False, claims=claims) if a not in answered]
             plan.points = plan.tone + plan.levers + more + plan.questions
             plan.files = self.attachments(ts, asked=False)
             plan.thread = threads[sid]
@@ -1038,11 +1169,11 @@ class BuyerAgent:
             elif d.has("reference_customer"):
                 out.append("We value our cooperation and want to continue it on a sound basis.")
             if d.late_days > 5 or d.has("late_payment_grievance"):
-                out.append("We will pay every invoice on the agreed due date.")
+                out += self.once(ts, PAY_ON_TIME)
         else:
             out.append("Thank you for your reply.")
             if d.has("cash_short", strong=True) or d.has("late_payment_grievance"):
-                out.append("We will pay every invoice on the agreed due date.")
+                out += self.once(ts, PAY_ON_TIME)
         return out
 
     @staticmethod
@@ -1078,7 +1209,8 @@ class BuyerAgent:
             return out
         s = sheets[0]
         if d.has("cash_short") and s.get("payment_days") is not None and s["payment_days"] <= 30:
-            out.append(f"We can pay within {s['payment_days']} days, which should help your cash flow.")
+            line = f"We can pay within {s['payment_days']} days, which should help your cash flow."
+            out += self.once(ts, line, key="cash_flow")
         if d.hedge_until and s.get("effective_date"):
             out.append(
                 f"As your material is covered until {d.hedge_until:%B %Y}, a new price from "
@@ -1117,7 +1249,11 @@ class BuyerAgent:
                 "we hold our offer until its decision."
             )
         if ts.sent >= 2:
-            out.append("If you confirm this package, we accept it in our next message.")
+            out.append(
+                "If you confirm this package, we accept it in our next message."
+                if self.promise_ok(ts, sheets)
+                else "We will give you a clear answer in our next message."
+            )
         return out
 
     def attachments(self, ts, asked=True):
@@ -1126,7 +1262,7 @@ class BuyerAgent:
         file not sent yet, for the strategist to choose from (it reads the request itself)."""
         import base64
 
-        body, out = (ts.last_body or "").lower(), []
+        body, out = requests_of(ts.last_body).lower(), []
         asks_volume = not asked or bool(ASKS_VOLUME.search(body))
         asks_data = not asked or bool(ASKS_DATA.search(body))
         if asks_volume and not ts.sent_schedule and (csv := ts.d.schedule_csv()):
@@ -1149,25 +1285,85 @@ class BuyerAgent:
             )
         return out
 
-    def answers(self, ts, sheets, events, asked=True):
+    def answers(self, ts, sheets, events, asked=True, covered=(), files=(), claims=()):
         """Answer what the supplier asked in its last e-mail (arena: "which volume can you commit to?",
-        "which figures is that based on? please send us the data"). `asked=False`: every answer we could
-        give, for the strategist to choose from."""
-        body, out = (ts.last_body or "").lower(), []
-        need = self.case["buyer"]["need_per_year"]
+        "which figures is that based on? please send us the data"), each with a number, a file or our record (B4:
+        57 of 527 asks went unanswered, data 21, schedule 11, payment 6 of 11, contract length 5). `covered`: asks a
+        trade or a granted line answers already; `files`: what goes with this e-mail. `asked=False`: every answer we
+        could give, for the strategist to choose from."""
+        body, out = requests_of(ts.last_body).lower(), []
+        case = self.case
+        need = case["buyer"]["need_per_year"]
         s = sheets[0] if sheets else {}
-        months = s.get("contract_months") or (self.case.get("fixed_terms") or {}).get("contract_months")
-        vol = s.get("volume_per_year") or (self.case.get("fixed_terms") or {}).get("volume_per_year") or need
-        if not asked or ("volume" in body and ("commit" in body or "which" in body or "release" in body)):
+        fixed = case.get("fixed_terms") or {}
+        months = s.get("contract_months") or fixed.get("contract_months")
+        vol = s.get("volume_per_year") or fixed.get("volume_per_year") or need
+        names = {f["name"] for f in files or ()}
+        if "volume" not in covered and (
+            not asked or ("volume" in body and ("commit" in body or "which" in body or "release" in body))
+        ):
             out.append(
                 f"To your question: we commit to a binding volume of {vol:,} a year"
                 + (f" for {months} months." if months else ".")
             )
-        asks_data = not asked or re.search(r"which figures|send us the data|which data|what data|on which basis", body)
-        if asks_data and ts.sent and ts.sent_claims:  # not "we trust you understand these figures"
-            # the IDs were checked once already: citing them again only takes an argument slot ("duplicate")
-            out.append("To your question on our figures: the data references are in our earlier message.")
+        if not asked or ASKS_SCHEDULE.search(body):
+            where = (
+                " The monthly schedule is attached (volume_schedule.csv)."
+                if "volume_schedule.csv" in names
+                else " The monthly schedule is in volume_schedule.csv, sent with our earlier message."
+                if ts.sent_schedule
+                else ""
+            )
+            out.append(
+                f"To your question on the call-off: we call off about {round(need / 12):,} units a month, "
+                f"{need:,} a year.{where}"
+            )
+        days = s.get("payment_days")
+        if (not asked or ASKS_PAY_TERMS.search(body)) and "payment" not in covered and days is not None:
+            out.append(f"To your question on payment: our proposal pays within {days} days net.")
+        if (not asked or ASKS_TERM.search(body)) and "contract" not in covered and months:
+            out.append(f"To your question on the term: our proposal runs {months} months.")
+        asks_data = not asked or ASKS_FIGURES.search(body) or ASKS_DATA.search(body)
+        if (not asked or ASKS_PAYMENT_PROOF.search(body)) and ts.d.late_days <= 3:
+            # proof of payment: our own record, from the invoices on file
+            late = ts.d.late_days
+            out.append(
+                "To your question on our payment record: we have paid your invoices "
+                + ("on the due date" if late <= 0 else f"on average {late:g} days after the due date")
+                + ", and the payment dates are on file with you."
+            )
+        if asks_data:
+            # the IDs were checked once already: citing them again only takes an argument slot ("duplicate"), so the
+            # answer names the file or the message that carries them
+            if "cost_drivers.csv" in names:
+                out.append("To your question on our figures: the cost-driver indices behind our price are attached "
+                           "(cost_drivers.csv).")  # fmt: skip
+            elif ts.sent_drivers:
+                out.append("To your question on our figures: the cost-driver indices behind our price are in "
+                           "cost_drivers.csv, sent with our earlier message.")  # fmt: skip
+            elif claims:
+                out.append("To your question on our figures: the data references are in this message.")
+            elif ts.sent and ts.sent_claims:  # not "we trust you understand these figures"
+                out.append("To your question on our figures: the data references are in our earlier message.")
+            elif asked:
+                out.append(f"To your question on our figures: our proposal rests on our need of {need:,} a year"
+                           + (f" over {months} months." if months else "."))  # fmt: skip
         return out
+
+    def faster_pay_asked(self, ts):
+        """A2b: it asked for shorter payment itself, in its last sheets (sooner than the soonest we offered) or in its
+        own words, not only in the strategist's reading of them."""
+        ours = [t.get("payment_days") for t in ts.last_sent if t.get("payment_days") is not None]
+        if not ours and ts.est.standard.get("payment_days"):
+            ours = [ts.est.standard["payment_days"]]
+        theirs = [t.get("payment_days") for t in (ts.plan.ask_sheets[-1] if ts.plan.ask_sheets else [])]
+        if ours and any(d is not None and d < min(ours) for d in theirs):
+            return True
+        body = ts.last_body or ""
+        if FASTER_PAY.search(body):
+            return True
+        named = [int(a or b) for a, b in PAY_DAYS.findall(body)]
+        return bool(ours and named and min(named) < min(ours))
 
     def questions(self, ts):
         out, d = [], ts.d

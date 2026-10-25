@@ -2,7 +2,7 @@
  "schema": 1,
  "id": "sup:70740",
  "name": "Blankstahl Werdenfels GmbH",
- "built": "2026-10-24T20:09Z",
+ "built": "2026-10-25T09:37Z",
  "source_hash": "bfd6504eb35d636f",
  "persona_stale": false,
  "problems": [],
@@ -558,15 +558,15 @@
   "cases": [
    "case:P18"
   ],
-  "sessions": 11,
-  "deals": 10,
-  "best_score": 0.5,
-  "walked": 1,
-  "agreed_round1": 1,
+  "sessions": 2,
+  "deals": 2,
+  "best_score": 0.552,
+  "walked": 0,
+  "agreed_round1": 0,
   "fair_point": 0,
-  "no_change": 1,
+  "no_change": 0,
   "duplicate": 0,
-  "first_counter_vs_opening": 0.934,
-  "final_offer_round_median": 4
+  "first_counter_vs_opening": 0.918,
+  "final_offer_round_median": 4.0
  }
 }

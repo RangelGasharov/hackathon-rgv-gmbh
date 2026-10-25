@@ -87,7 +87,9 @@ def facts(world, sid):
             "vda63_grade": i["vda63_grade"],
             "certifications": i["certifications"],
         }
-    spend = {r["fiscal_year"]: r["spend_eur"] for r in world.all("SELECT * FROM spend_cube WHERE supplier_id=?", sid)}
+    spend = {}  # the old record of a renamed supplier adds its spend to the same fiscal year
+    for r in world.all_for("SELECT * FROM spend_cube WHERE supplier_id=?", sid):
+        spend[r["fiscal_year"]] = spend.get(r["fiscal_year"], 0) + r["spend_eur"]
     last = max(spend) if spend else None
     turnover = (i["turnover_eur"] if i else None) or None
     band = re.match(r"([\d.]+)\s*-\s*([\d.]+)\s*M", (i["turnover_band"] or "") if i else "")
@@ -230,7 +232,7 @@ def _contract(world, sid):
 
 
 def _negotiations(world, sid):
-    rows = world.all("SELECT * FROM negotiation_history WHERE supplier_id=? ORDER BY date", sid)
+    rows = world.all_for("SELECT * FROM negotiation_history WHERE supplier_id=? ORDER BY date", sid)
     events = [
         {
             "date": r["date"],
@@ -268,7 +270,7 @@ def _payments(world, sid):
 
 
 def _quality(world, sid):
-    sc = world.all("SELECT * FROM scorecards WHERE supplier_id=? ORDER BY quarter", sid)
+    sc = world.all_for("SELECT * FROM scorecards WHERE supplier_id=? ORDER BY quarter", sid)
     qn = world.one(
         "SELECT count(*) n, sum(cost_recharged_eur) eur, sum(CASE WHEN d8_date IS NULL THEN 1 ELSE 0 END) open8d "
         "FROM quality_notifications WHERE supplier_id=?",

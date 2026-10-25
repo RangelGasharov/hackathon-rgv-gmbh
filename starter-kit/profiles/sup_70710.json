@@ -2,7 +2,7 @@
  "schema": 1,
  "id": "sup:70710",
  "name": "Edelstahl-Service Donautal GmbH",
- "built": "2026-10-24T20:09Z",
+ "built": "2026-10-25T09:37Z",
  "source_hash": "cbc325a1b5388d58",
  "persona_stale": false,
  "problems": [],
@@ -445,15 +445,15 @@
   "cases": [
    "case:P08"
   ],
-  "sessions": 11,
-  "deals": 9,
-  "best_score": 0.581,
-  "walked": 2,
+  "sessions": 1,
+  "deals": 1,
+  "best_score": 0.473,
+  "walked": 0,
   "agreed_round1": 0,
   "fair_point": 0,
-  "no_change": 5,
+  "no_change": 0,
   "duplicate": 0,
   "first_counter_vs_opening": 0.94,
-  "final_offer_round_median": 4
+  "final_offer_round_median": null
  }
 }

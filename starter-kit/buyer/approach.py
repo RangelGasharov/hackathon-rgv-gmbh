@@ -160,6 +160,10 @@ def choose(profile, case, rivals=None, dossier=None, base_gap=0.08, quote=None):
         add(1, f"its quality record is weak ({cards[-1].get('ppm')} ppm)")
     weight = profile.get("our_weight") or {}
     share, trend = _num(weight.get("share_of_its_turnover_pct")), _num(weight.get("spend_trend_pct"))
+    if share is None:  # a small firm files only a turnover band: the middle of our range is the best figure
+        lo_hi = [_num(x) for x in (weight.get("share_of_its_turnover_range_pct") or [])]
+        lo_hi = [x for x in lo_hi if x is not None]
+        share = sum(lo_hi) / len(lo_hi) if lo_hi else None
     if share is not None and share >= 5:
         add(1, f"we are {share:.1f} % of its turnover")
     elif share is not None and share < 1:
@@ -370,15 +374,13 @@ def granted(ask, sheet, case):
 
 
 def free_trade(sheet, case, field_name, need=None):
-    """Binding volume up to our need, or the longest contract up to the horizon: free to us, so the same price."""
+    """Binding volume up to our need, or the longest contract: free to us, so the same price. Months beyond the
+    horizon neither cost nor earn (C counts years = min(M/12, H)), while the supplier values the security."""
     if field_name not in (case.get("negotiable") or []):
         return None
     opts = case.get("term_options", {}).get(field_name) or []
     if field_name == "volume_per_year" and need:
         opts = [o for o in opts if o <= need]
-    if field_name == "contract_months":
-        horizon = (case.get("buyer") or {}).get("horizon_months") or 36
-        opts = [o for o in opts if o <= horizon]
     if not opts or sheet.get(field_name) == max(opts):
         return None
     return {**sheet, field_name: max(opts)}

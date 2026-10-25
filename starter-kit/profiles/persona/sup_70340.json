@@ -1,10 +1,10 @@
 {
   "supplier": "sup:70340",
-  "source_hash": "a0a8565b397bff15",
-  "analysed": "deep read v1",
+  "source_hash": "a2309498b31d1efc",
+  "analysed": "deep read v1 + Sunday release",
   "confidence": "high",
-  "summary": "Owner-run family KG (40 staff, EUR 2-5 M); our EUR 387 k is likely 8-19 % of its turnover. The owner prices from a two-year-old spreadsheet, offered to walk us through his calculation and calls us an important reference customer. Settles below its own ask (asked +0.2 %, gave -1.3 %). Sup:70360 is qualified on the coupling guard and holds 50 % of the motor bracket. Open deep; check current indices against its old spreadsheet, ask for its breakdown.",
-  "notes": "Wants to keep us as reference customer and its 100 % coupling-guard share; fears volume moving to Strasser (70360). No payment complaint although we pay 9.2 days late on average (76 % of invoices over 5 days late). Green scorecard but 34 complaints in 3 years and two open 8D. Do not cite Strasser's bracket price: it is higher (16.11 vs 15.63).",
+  "summary": "Owner-run family KG (40 staff, EUR 2-5 M); our EUR 387 k is likely 8-19 % of its turnover. It has bought its 2027 steel sheet and coil forward at fixed prices (letter Oct 2026): steel moves reach its prices only from 2028. The owner prices from a two-year-old spreadsheet, offered to walk us through his calculation and calls us an important reference customer. Settles below its own ask. Sup:70360 is qualified on the coupling guard and holds 50 % of the motor bracket. Open deep; no steel increase for 2027.",
+  "notes": "Steel fixed for 2027, so no material-cost basis for an increase. Wants to keep us as reference customer and its 100 % coupling-guard share; fears volume moving to Strasser (70360). We pay 9.2 days late on average without complaint. Do not cite Strasser's bracket price: it is higher (16.11 vs 15.63).",
   "traits": {
     "cash_short": "none",
     "approval_ladder": "none",
@@ -16,30 +16,72 @@
     "stale_costing": "strong",
     "reciprocity": "none",
     "below_full_cost": "none",
-    "hedged_material": "none",
+    "hedged_material": "strong",
     "capacity_tight": "none",
     "late_payment_grievance": "weak",
     "wants_clause": "none"
   },
-  "unsure": ["below_full_cost", "hedged_material"],
+  "unsure": [
+    "below_full_cost"
+  ],
   "wants": [],
-  "fears": ["losing coupling-guard volume to sup:70360", "losing a reference customer"],
-  "hedge_until": null,
+  "fears": [
+    "losing coupling-guard volume to sup:70360",
+    "losing a reference customer"
+  ],
+  "hedge_until": "2027-12",
   "evidence": [
-    {"trait": "stale_costing", "doc": "doc:20260728-70340-M1", "quote": "he works from his own spreadsheet, last updated two years ago."},
-    {"trait": "open_book", "doc": "doc:20260721-70340-M2", "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."},
-    {"trait": "reference_customer", "doc": "doc:20260418-70340-M3", "quote": "Metallbau Steinfelder KG said Hollerau is an important reference customer for them."},
-    {"trait": "late_payment_grievance", "doc": "data:payments.share_paid_over_5_days_late_pct", "quote": "75.9 % of invoices paid over 5 days late"}
+    {
+      "trait": "stale_costing",
+      "doc": "doc:20260728-70340-M1",
+      "quote": "he works from his own spreadsheet, last updated two years ago."
+    },
+    {
+      "trait": "open_book",
+      "doc": "doc:20260721-70340-M2",
+      "quote": "he offered to walk us through their calculation (hourly rates and material) if that helps to settle prices."
+    },
+    {
+      "trait": "reference_customer",
+      "doc": "doc:20260418-70340-M3",
+      "quote": "Metallbau Steinfelder KG said Hollerau is an important reference customer for them."
+    },
+    {
+      "trait": "late_payment_grievance",
+      "doc": "data:payments.share_paid_over_5_days_late_pct",
+      "quote": "75.9 % of invoices paid over 5 days late"
+    },
+    {
+      "trait": "hedged_material",
+      "doc": "doc:20261013-70340-S15",
+      "quote": "we have secured our steel sheet and coil for 2027, bought forward at fixed prices with our mill. Whatever the steel market does reaches our prices only from 2028."
+    }
   ],
   "playbook": {
     "opening": "deep",
     "walk_risk": "low",
-    "levers": ["keeping 100 % of the coupling guard", "reference-customer status", "longer contract", "on-time payment"],
-    "arguments": ["material/energy index vs its stale spreadsheet, only if the index fell", "its own cost shares from the offered open-book walk-through", "second source sup:70360 qualified on coupling guard: volume can move", "scorecard: OTD 88.5 % vs 95 % target, 2 open 8D", "notice-period breach for any 2027 increase"],
-    "avoid": ["citing Strasser's bracket price (16.11, higher than its 15.63)", "citing a cost driver that rose", "faster payment as a gift"],
+    "levers": [
+      "keeping 100 % of the coupling guard",
+      "reference-customer status",
+      "longer contract",
+      "on-time payment"
+    ],
+    "arguments": [
+      "its own hedge: steel fixed for 2027, no material basis for an increase",
+      "its own cost shares from the offered open-book walk-through",
+      "second source sup:70360 qualified on coupling guard: volume can move",
+      "scorecard: OTD 88.5 % vs 95 % target, 2 open 8D",
+      "notice-period breach for any 2027 increase"
+    ],
+    "avoid": [
+      "steel-index arguments either way (its steel is fixed for 2027)",
+      "citing Strasser's bracket price (16.11, higher than its 15.63)",
+      "citing a cost driver that rose",
+      "faster payment as a gift"
+    ],
     "mandatory_terms": [],
     "tactics": [
-      "Open deep; if current material and energy indices fell, cite them: its spreadsheet is two years old.",
+      "Open deep; cite its own letter: steel is fixed for 2027, so any increase has no material basis.",
       "Ask it to share the hourly-rate and material breakdown it offered, then argue from its own cost shares.",
       "Point out sup:70360 is qualified on the coupling guard and could take volume.",
       "Offer to keep it as sole source on the coupling guard in exchange for the price step.",

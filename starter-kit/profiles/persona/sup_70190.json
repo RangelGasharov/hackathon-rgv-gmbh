@@ -1,17 +1,17 @@
 {
   "supplier": "sup:70190",
-  "source_hash": "0a46c05273aa11c3",
-  "analysed": "deep read v1",
+  "source_hash": "45e3cc1391eb36a4",
+  "analysed": "deep read v1 + Sunday release",
   "confidence": "medium",
-  "summary": "Family foundry (95 staff, EUR 14.8 M); we are 7.1 % of its turnover, so we matter. Power and material bought forward until December 2028: it will dismiss index arguments and offers prices valid to 2028. Casing cover HB is sole-sourced at cost; Pump housing HB 40 is 35 % dearer than co-source 70150 (32.24 vs 43.39). Qualified but unused on three more parts, a strong volume carrot. 44 complaints in 3 years.",
-  "notes": "Wants price stability matched to its hedge through 2028. Fears losing HB 40 to 70150 and missing new volume. Casing cover has no second source.",
+  "summary": "Family foundry (95 staff, EUR 14.8 M); we are 7.1 % of its turnover, so we matter. A large heating customer cancelled its 2027 orders (Oct 2026) and its bank is watching its liquidity: it asks for 10-day payment and firm Q1 call-offs. Power and material bought forward until December 2028: it will dismiss index arguments. Casing cover HB is sole-sourced at cost; Pump housing HB 40 is 35 % dearer than co-source 70150 (32.24 vs 43.39). Qualified but unused on three more parts, a strong volume carrot.",
+  "notes": "Lost a large heating customer for 2027; bank watching liquidity. Wants 10-day payment, firm call-offs and new volume; hedged to Dec 2028 so it wants price stability. Fears losing HB 40 to 70150. Casing cover has no second source.",
   "traits": {
-    "cash_short": "none",
+    "cash_short": "strong",
     "approval_ladder": "none",
     "price_frozen": "none",
     "small_account": "none",
     "open_book": "none",
-    "free_capacity": "none",
+    "free_capacity": "strong",
     "reference_customer": "none",
     "stale_costing": "none",
     "reciprocity": "none",
@@ -21,28 +21,81 @@
     "late_payment_grievance": "none",
     "wants_clause": "none"
   },
-  "unsure": ["free_capacity"],
-  "wants": ["price_stability", "long_contract"],
-  "fears": ["losing HB 40 share to 70150", "missing award of qualified parts"],
+  "unsure": [],
+  "wants": [
+    "faster_payment",
+    "binding_volume",
+    "price_stability",
+    "long_contract"
+  ],
+  "fears": [
+    "losing HB 40 share to 70150",
+    "missing award of qualified parts",
+    "bank pressure after the lost heating customer"
+  ],
   "hedge_until": "2028-12",
   "evidence": [
-    {"trait": "hedged_material", "doc": "doc:20260623-70190-M1", "quote": "they bought their electricity forward until December 2028 and said the market price is 'not our reality' before then."},
-    {"trait": "hedged_material", "doc": "quote:7300064", "quote": "Material covered until December 2028; price valid accordingly."},
-    {"trait": "below_full_cost", "doc": "data:parts.should_cost", "quote": "part:310040 should-cost 33.93 vs price 33.94 (0.0 %), own plant"}
+    {
+      "trait": "hedged_material",
+      "doc": "doc:20260623-70190-M1",
+      "quote": "they bought their electricity forward until December 2028 and said the market price is 'not our reality' before then."
+    },
+    {
+      "trait": "hedged_material",
+      "doc": "quote:7300064",
+      "quote": "Material covered until December 2028; price valid accordingly."
+    },
+    {
+      "trait": "below_full_cost",
+      "doc": "data:parts.should_cost",
+      "quote": "part:310040 should-cost 33.93 vs price 33.94 (0.0 %), own plant"
+    },
+    {
+      "trait": "cash_short",
+      "doc": "doc:20261019-70190-S13",
+      "quote": "our bank is watching our liquidity closely. We would be very grateful if you could pay our invoices within 10 days"
+    },
+    {
+      "trait": "free_capacity",
+      "doc": "doc:20261019-70190-S13",
+      "quote": "a large customer from the heating industry has cancelled its orders for 2027"
+    },
+    {
+      "trait": "free_capacity",
+      "doc": "news:20261015-S14",
+      "quote": "Heating maker cancels foundry orders at Gießerei Pfaffenreuth GmbH"
+    }
   ],
   "playbook": {
     "opening": "deep",
     "walk_risk": "low",
-    "levers": ["award of qualified parts (HN 65-250, bearing bracket, HN 200)", "HB 40 quota from 70150", "price fixed to Dec 2028 (long contract)"],
-    "arguments": ["rival quote: 70150 HB 40 at 32.24 vs 43.39", "quality record: 44 complaints in 3 years, amber Q3", "binding volume / new part awards", "hedge cuts its cost: fixed inputs mean no increase is justified"],
-    "avoid": ["index or market-price arguments (it is hedged to Dec 2028)", "squeezing casing cover HB (sole source, at cost)", "changing terms after its final offer"],
+    "levers": [
+      "payment within 10 days (its own ask)",
+      "firm Q1 call-offs / binding volume",
+      "award of qualified parts (HN 65-250, bearing bracket, HN 200)",
+      "HB 40 quota from 70150",
+      "price fixed to Dec 2028 (long contract)"
+    ],
+    "arguments": [
+      "rival quote: 70150 HB 40 at 32.24 vs 43.39",
+      "volume to fill the capacity the heating customer left",
+      "quality record: 44 complaints in 3 years, amber Q3",
+      "hedge cuts its cost: fixed inputs mean no increase is justified"
+    ],
+    "avoid": [
+      "index or market-price arguments (it is hedged to Dec 2028)",
+      "squeezing casing cover HB (sole source, at cost)",
+      "faster payment or call-offs without a price step in return",
+      "changing terms after its final offer"
+    ],
     "mandatory_terms": [],
     "tactics": [
       "Open deep on HB 40 with the 70150 price; argue rival quote, not index.",
+      "Offer 10-day payment and firm Q1 call-offs, as its letter asks, only in exchange for a price step.",
+      "Offer award of a qualified part to fill the volume the heating customer cancelled.",
       "Turn the hedge around: inputs fixed to 2028, so any increase has no basis.",
-      "Offer a price fixed until Dec 2028 plus award of a qualified part for a cut.",
       "Leave casing cover HB near its current price; it sells at cost."
     ],
-    "expected_concession": "No arena data; it settles well below its asks (kept 22 %), but a hedged supplier ignores index moves, so volume and rival quotes do the work."
+    "expected_concession": "No arena data; it settles well below its asks (kept 22 %), and the lost customer plus bank pressure make volume and cash terms worth a price step."
   }
 }

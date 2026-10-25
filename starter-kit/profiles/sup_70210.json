@@ -2,7 +2,7 @@
  "schema": 1,
  "id": "sup:70210",
  "name": "Zerspanung Dralveck GmbH",
- "built": "2026-10-24T20:09Z",
+ "built": "2026-10-25T09:37Z",
  "source_hash": "29ee703554f68426",
  "persona_stale": false,
  "problems": [],
@@ -34,7 +34,7 @@
  },
  "our_weight": {
   "spend_eur_by_year": {
-   "FY2024": 292286,
+   "FY2024": 353526,
    "FY2025": 330859,
    "FY2026": 316635
   },
@@ -43,7 +43,7 @@
    6.3,
    15.8
   ],
-  "spend_trend_pct": 8.3
+  "spend_trend_pct": -10.4
  },
  "parts": [
   {
@@ -586,15 +586,15 @@
   "cases": [
    "case:P05"
   ],
-  "sessions": 7,
-  "deals": 5,
-  "best_score": 0.849,
-  "walked": 1,
-  "agreed_round1": 2,
-  "fair_point": 8,
-  "no_change": 1,
+  "sessions": 1,
+  "deals": 0,
+  "best_score": null,
+  "walked": 0,
+  "agreed_round1": 0,
+  "fair_point": 2,
+  "no_change": 0,
   "duplicate": 0,
-  "first_counter_vs_opening": 0.847,
-  "final_offer_round_median": 3
+  "first_counter_vs_opening": 0.889,
+  "final_offer_round_median": 5.5
  }
 }

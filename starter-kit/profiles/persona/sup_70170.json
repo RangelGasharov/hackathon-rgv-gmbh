@@ -1,12 +1,12 @@
 {
   "supplier": "sup:70170",
-  "source_hash": "5a4756e7847d99c3",
-  "analysed": "deep read v1",
+  "source_hash": "78f1a27e7178324e",
+  "analysed": "deep read v1 + Sunday release",
   "confidence": "medium",
-  "summary": "Czech family foundry (150 staff, EUR 8.3 M), we are 2.4 % of its turnover and growing 30 %. It calls Hollerau an important reference customer and opened a new moulding line (Apr 2026), which may mean spare capacity. Holds only 25 % of Volute casing HI 80-250; 70180 has 75 % (at a higher 654.52). Historically gives way fully (kept share below 0). Quality slipping: ppm 5682, red Q3. Push hard with volume as the carrot.",
-  "notes": "New moulding line may mean spare capacity; it values Hollerau as a reference. Fears losing the 25 % share to 70180. Only a generic 10-day payment e-mail; we pay 5.5 days late on average. No should-cost for its part.",
+  "summary": "Czech family foundry (150 staff, EUR 8.3 M), we are 2.4 % of its turnover and growing 30 %. The new moulding line (Apr 2026) tied up more cash than planned: its bank tightened the credit line (Oct 2026) and is watching its figures, and it asks customers to pay within 10 days from November. Calls Hollerau an important reference customer. Holds only 25 % of Volute casing HI 80-250; 70180 has 75 % (at a higher 654.52). Quality slipping: ppm 5682, red Q3, porosity issue admitted. Trade 10-day payment and volume for price.",
+  "notes": "Cash-short after the moulding-line start-up; bank tightened its credit line. Wants 10-day payment and volume for the new line; fears losing the 25 % share to 70180 and its bank. Admits a porosity issue. We pay 5.5 days late on average.",
   "traits": {
-    "cash_short": "weak",
+    "cash_short": "strong",
     "approval_ladder": "none",
     "price_frozen": "none",
     "small_account": "none",
@@ -21,28 +21,69 @@
     "late_payment_grievance": "none",
     "wants_clause": "none"
   },
-  "unsure": ["below_full_cost", "stale_costing"],
-  "wants": [],
-  "fears": ["losing HI 80-250 share to 70180", "losing Hollerau as reference customer"],
+  "unsure": [
+    "below_full_cost",
+    "stale_costing"
+  ],
+  "wants": [
+    "faster_payment",
+    "binding_volume"
+  ],
+  "fears": [
+    "losing HI 80-250 share to 70180",
+    "losing Hollerau as reference customer",
+    "bank pressure on liquidity"
+  ],
   "hedge_until": null,
   "evidence": [
-    {"trait": "reference_customer", "doc": "doc:20260512-70170-M2", "quote": "said Hollerau is an important reference customer for them."},
-    {"trait": "free_capacity", "doc": "news:20260420-09", "quote": "Slévárna Vrbenský s.r.o. opens a new moulding line"},
-    {"trait": "cash_short", "doc": "doc:20260210-70170-M1", "quote": "Could you pay our invoices within 10 days? In return we would grant a cash discount."}
+    {
+      "trait": "reference_customer",
+      "doc": "doc:20260512-70170-M2",
+      "quote": "said Hollerau is an important reference customer for them."
+    },
+    {
+      "trait": "free_capacity",
+      "doc": "news:20260420-09",
+      "quote": "Slévárna Vrbenský s.r.o. opens a new moulding line"
+    },
+    {
+      "trait": "cash_short",
+      "doc": "doc:20261016-70170-S12",
+      "quote": "the start-up of our new moulding line has tied up more cash than we planned, and our bank is watching our figures closely."
+    },
+    {
+      "trait": "cash_short",
+      "doc": "news:20261014-S11",
+      "quote": "Bank tightens credit line for Slévárna Vrbenský s.r.o."
+    }
   ],
   "playbook": {
     "opening": "deep",
     "walk_risk": "low",
-    "levers": ["HI 80-250 quota shift from 70180", "binding volume for the new moulding line", "reference status"],
-    "arguments": ["volume shift from co-source 70180 (70180 is dearer, no rival-price argument)", "quality record: ppm 5682 and red Q3, OTD down to 91.7 %", "binding volume / forecast"],
-    "avoid": ["faster payment as a gift (no distress shown)", "citing cost drivers that rose", "changing terms after its final offer"],
+    "levers": [
+      "payment within 10 days (its own ask)",
+      "HI 80-250 quota shift from 70180",
+      "binding volume for the new moulding line",
+      "reference status"
+    ],
+    "arguments": [
+      "10-day payment worth more to it than price now",
+      "volume shift from co-source 70180 (70180 is dearer, no rival-price argument)",
+      "quality record: ppm 5682, red Q3, porosity issue it admits",
+      "binding volume / forecast"
+    ],
+    "avoid": [
+      "faster payment without a price step in return",
+      "citing cost drivers that rose",
+      "changing terms after its final offer"
+    ],
     "mandatory_terms": [],
     "tactics": [
-      "Open deep: it gave way fully in past renewals and we have 70180 at 75 %.",
+      "Open deep: it gave way fully in past renewals, we have 70180 at 75 %, and it needs cash now.",
+      "Offer payment within 10 days, as its letter asks, only in exchange for a price step.",
       "Offer more quota from 70180 as binding volume for its new line in exchange for price.",
-      "Cite the red Q3 scorecard (5682 ppm) as a separate argument.",
-      "Mention its reference status: a competitive price keeps it on our panel."
+      "Cite the red Q3 scorecard (5682 ppm) and its porosity issue as a separate argument."
     ],
-    "expected_concession": "No arena data; past renewals settled below even its own offers (kept share -0.16), so expect it to move readily."
+    "expected_concession": "No arena data; past renewals settled below even its own offers (kept share -0.16), and bank pressure makes cash terms worth a price step."
   }
 }

@@ -2,7 +2,7 @@
  "schema": 1,
  "id": "sup:70240",
  "name": "Strojírna Hrvelec s.r.o.",
- "built": "2026-10-24T20:09Z",
+ "built": "2026-10-25T09:37Z",
  "source_hash": "e9f99fe749f71248",
  "persona_stale": false,
  "problems": [],
@@ -413,15 +413,15 @@
   "cases": [
    "case:P05"
   ],
-  "sessions": 7,
-  "deals": 0,
-  "best_score": null,
-  "walked": 1,
+  "sessions": 1,
+  "deals": 1,
+  "best_score": 0.433,
+  "walked": 0,
   "agreed_round1": 0,
   "fair_point": 0,
-  "no_change": 3,
-  "duplicate": 1,
+  "no_change": 1,
+  "duplicate": 0,
   "first_counter_vs_opening": 1.016,
-  "final_offer_round_median": 5
+  "final_offer_round_median": 6.5
  }
 }

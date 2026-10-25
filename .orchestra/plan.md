@@ -17,6 +17,29 @@ checklists, runbook. State at handoff:
 - Practice quota ~94 left team-wide at 08:00 CET (resets 15:16 CET). Ask the user before any live session.
 
 
+## M10 Pipeline analysis: inputs -> black box -> outputs (user 09:35 CET; read-only)
+Pulled ddbb10f (other agent: release customer_loss/chip_shortage news, W3b quality like-terms + step floor behind
+switches, framework-agreement status-quo price, RFQ two-step hold). Release downloaded on this checkout (data/release-sunday).
+Team mirror refreshed: runs/team 319 sessions.
+| Task | Tier | Status | Tries | Files | Notes |
+|---|---|---|---|---|---|
+| T-070 inputs audit | sonnet | done | 1 | runs/analysis/inputs.md | $1.10 |
+| T-071 black-box audit (estimates vs truth, money left) | opus | done | 1 | runs/analysis/blackbox.md | $4.33; C exact except relationship; 119 pts vs team |
+| T-072 outputs audit (mails, claim verdicts, asks, leaks) | sonnet | done | 1 | runs/analysis/outputs.md | $0.44; 0 contradicted claims |
+| T-073 synthesis: ranked fixes | manager | done | 1 | ANALYSIS.md (repo root) | waves 1-4 proposed |
+
+## M11 Build ANALYSIS.md waves 1-3 (user 10:10 CET; gate each; ask before live)
+| Task | Tier | Status | Tries | Files | Notes |
+|---|---|---|---|---|---|
+| T-080 wave 1a: B1 promise, B2 holds, B3 boilerplate, A3 earlier sheet, C7 ask regex, C8 floor words | sonnet | done | 1 | agent.py, tests/test_wave1_agent.py | |
+| T-081 wave 1b: C1 units, C2 hedge, C3 alias, C4 horizon, C5 news claims, C11, A5 rel, A6 clause tol, A1 tender f_hat | sonnet | done | 1 | dossier, claims, profiles, approach, strategy, tests/test_wave1_inputs.py | A5 reverted (P01 twin); C4 -> free give = longest contract; gate PASS |
+| wave 3: profiles build (70210 trend -10.4) + T-083 deep reads of 6 release suppliers | opus | done, gate PASS | 1 | profiles/ | $0.63; 46/46 clean; 70340 hedged to 2027-12; 70170/70190/70270 cash_short strong |
+| T-082 wave 2: A2 payment-day rules + B4 answer every ask | opus | running | 1 | strategy, writer, agent | |
+| T-084 levers: volume shift from a rival source + committee business case (records P04/P10) | sonnet | pending (T-082) | 0 | agent, writer, claims, approach, tests/test_levers.py | user 11:00 |
+| live record attempts A (after wave 2 gate): P11 x2 with BUYER_QSTEP=1, P07 x2, P03 x1, P05 x1 defaults | manager | pending | 0 | | user: records P11 0.794, P07 0.769, P03 0.936, P05 0.852 |
+| T-085 Live Final wave rules: every rule checked, gaps fixed, 19-case wave simulated | sonnet | pending (T-082; parallel with T-084) | 0 | runner, llm, client, tests/test_waves.py | user 11:10 |
+| live record attempts B (after T-084 gate): P04 x2, P10 x2 | manager | pending | 0 | | user: records P04 0.860, P10 0.694 |
+
 ## Done
 - M0 Audit of improve/supplier-levers — fixes, trusted-supplier rules, plan from history/news/letters · commit f8169b1
 - M1+M2 Evidence and live A/B — 28 sessions; kept clause-pair fix (P02 0.724 x2) and no 5 % quality/cash-short cap (P11

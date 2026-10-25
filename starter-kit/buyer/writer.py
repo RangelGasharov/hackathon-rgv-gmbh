@@ -103,8 +103,10 @@ def describe(terms):
 class Plan:
     """What one message has to carry."""
 
-    def __init__(self, *, case, dossier, round_no, sheets, claims, questions, levers, tone, last_reply=""):
+    def __init__(self, *, case, dossier, round_no, sheets, claims, questions, levers, tone, last_reply="", answers=()):
         self.case, self.d, self.round_no = case, dossier, round_no
+        # B4: one line per ask of its last e-mail (a number, a file, our record), said before anything else
+        self.answers = list(answers)
         self.sheets, self.claims, self.questions = sheets, claims, questions
         self.levers, self.tone, self.last_reply = levers, tone, last_reply
         # for the strategist: the options code allows, and what it picked by default
@@ -128,9 +130,10 @@ class TemplateWriter:
     def write(self, plan, timeout=None):
         lines = [f"Dear {plan.name},", ""]
         lines += [s for s in plan.tone if s]
+        lines += plan.answers
         for c in plan.claims:
             lines.append(c.sentence + (" " + c.follow if c.follow else ""))
-        lines += plan.levers
+        lines += [x for x in plan.levers if x not in plan.answers]
         if plan.sheets:
             if len(plan.sheets) == 1:
                 lines.append(f"Our proposal: {describe(plan.sheets[0])}.")
@@ -167,7 +170,9 @@ class ClaudeWriter:
             "TONE AND OPENING:\n" + ("\n".join(plan.tone) or "-"),
             "REQUIRED SENTENCES:\n" + ("\n".join(c.sentence for c in plan.claims) or "-"),
             "EXPLANATIONS YOU MAY ADD:\n" + ("\n".join(c.follow for c in plan.claims if c.follow) or "-"),
-            "WHAT WE OFFER THEM (say these):\n" + ("\n".join(plan.levers) or "-"),
+            "ANSWERS TO ITS QUESTIONS (say these first, word for word, one line each):\n"
+            + ("\n".join(plan.answers) or "-"),
+            "WHAT WE OFFER THEM (say these):\n" + ("\n".join(x for x in plan.levers if x not in plan.answers) or "-"),
             "OFFERS:\n"
             + ("\n".join(f"{i}. {describe(t)}" for i, t in enumerate(plan.sheets, 1)) or "no new offer in this e-mail"),
             "QUESTIONS TO ASK:\n" + ("\n".join(plan.questions) or "-"),
@@ -202,6 +207,9 @@ def guard(body, plan):
             if sep
             else body + "\n" + "\n".join(missing)
         )
+    if lost := [a for a in getattr(plan, "answers", ()) if a not in body]:  # B4: its questions answered first
+        head, sep, tail = body.partition("\n")
+        body = head + sep + "\n".join(lost) + "\n" + tail if sep else "\n".join(lost) + "\n" + body
     for t in plan.sheets:  # the prices we state must be the prices we send
         if f"{t['unit_price']:.2f}" not in body:
             return None
@@ -293,6 +301,8 @@ class StrategistWriter(ClaudeWriter):
                 f"KEEPABLE TERMS: {', '.join(keepable) or '-'}. TRAITS: {', '.join(TRAITS)}.",
                 "MENU:\n" + (menu or "-"),
                 "CHECKED ARGUMENTS:\n" + (claims or "-"),
+                "ANSWERS (code's answers to its questions, one per ask: put them first in the e-mail, word for word):\n"
+                + ("\n".join(plan.answers) or "-"),
                 "POINTS:\n" + (points or "-"),
                 "ATTACHMENTS (true data):\n" + (files or "-"),
             ]
@@ -350,6 +360,7 @@ class StrategistWriter(ClaudeWriter):
             levers=[pts[p] for p in choice.get("points") or [] if p in pts],
             tone=[],
             last_reply=plan.last_reply,
+            answers=plan.answers,
         )
         files = {f"A{i}": f for i, f in enumerate(plan.files, 1)}
         attach = [files[a]["name"] for a in choice.get("attach") or [] if a in files]

@@ -2,7 +2,7 @@
  "schema": 1,
  "id": "sup:70510",
  "name": "Antriebstechnik Nordmark AG",
- "built": "2026-10-24T20:09Z",
+ "built": "2026-10-25T09:37Z",
  "source_hash": "f4ce8d9c9838c659",
  "persona_stale": false,
  "problems": [],
@@ -594,15 +594,15 @@
   "cases": [
    "case:P02"
   ],
-  "sessions": 10,
-  "deals": 10,
+  "sessions": 2,
+  "deals": 2,
   "best_score": 0.735,
   "walked": 0,
-  "agreed_round1": 3,
+  "agreed_round1": 2,
   "fair_point": 0,
-  "no_change": 2,
+  "no_change": 0,
   "duplicate": 0,
-  "first_counter_vs_opening": 1.002,
-  "final_offer_round_median": 4
+  "first_counter_vs_opening": 0.974,
+  "final_offer_round_median": null
  }
 }

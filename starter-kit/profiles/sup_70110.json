@@ -2,7 +2,7 @@
  "schema": 1,
  "id": "sup:70110",
  "name": "Gießerei Brandlhuber GmbH & Co. KG",
- "built": "2026-10-24T20:09Z",
+ "built": "2026-10-25T09:37Z",
  "source_hash": "a8b60dfbdc4f45c3",
  "persona_stale": false,
  "problems": [],
@@ -491,15 +491,15 @@
   "cases": [
    "case:P01"
   ],
-  "sessions": 4,
-  "deals": 4,
-  "best_score": 0.928,
+  "sessions": 1,
+  "deals": 1,
+  "best_score": 0.982,
   "walked": 0,
   "agreed_round1": 0,
-  "fair_point": 8,
+  "fair_point": 2,
   "no_change": 0,
-  "duplicate": 1,
-  "first_counter_vs_opening": 0.991,
+  "duplicate": 0,
+  "first_counter_vs_opening": 0.984,
   "final_offer_round_median": null
  }
 }

@@ -2,8 +2,8 @@
  "schema": 1,
  "id": "sup:70560",
  "name": "Kabelwerk Rhönsberg GmbH",
- "built": "2026-10-24T20:09Z",
- "source_hash": "0c6a0dc03eb709b6",
+ "built": "2026-10-25T09:37Z",
+ "source_hash": "044b320c0d5e6efb",
  "persona_stale": false,
  "problems": [],
  "country": "DE",
@@ -217,6 +217,12 @@
  },
  "news": [
   {
+   "id": "news:20261022-S18",
+   "date": "2026-10-22",
+   "topic": "noise",
+   "headline": "Kabelwerk Rhönsberg GmbH opens a cable recycling line"
+  },
+  {
    "id": "news:20260303-02",
    "date": "2026-03-03",
    "topic": "noise",
@@ -267,11 +273,11 @@
  ],
  "persona": {
   "supplier": "sup:70560",
-  "source_hash": "0c6a0dc03eb709b6",
-  "analysed": "deep read v1",
+  "source_hash": "044b320c0d5e6efb",
+  "analysed": "deep read v1 + Sunday release",
   "confidence": "medium",
   "summary": "Kabelwerk Rhönsberg GmbH, group-owned cable maker (400 staff); we are 0.85 % of its turnover; it is our sole source for motor cable. The contract has a CU-NOTATION index clause (55 % share), yet its copper is bought forward until March 2027. Price rose 21.9 % since the start and sits 3.9 % over its should-cost. The contract ends 2026-12-31 with 60-day notice. Push the hedge against index pass-through and use its complaint record.",
-  "notes": "Asked for our expected volumes for the renewal. Contradiction: the index passes market copper to us quarterly while its own copper is fixed until March 2027, so any pass-through before April 2027 is a windfall. Complaint record: 24 in three years, EUR 2,550 recharged) and OTD of 81-89 %.",
+  "notes": "Asked for our expected volumes for the renewal. Contradiction: the index passes market copper to us quarterly while its own copper is fixed until March 2027, so any pass-through before April 2027 is a windfall. Complaint record: 24 in three years, EUR 2,550 recharged) and OTD of 81-89 %. The Oct 2026 cable recycling line news is noise.",
   "traits": {
    "cash_short": "none",
    "approval_ladder": "strong",

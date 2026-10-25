@@ -2,8 +2,8 @@
  "schema": 1,
  "id": "sup:70270",
  "name": "Obrábění Kraslin s.r.o.",
- "built": "2026-10-24T20:09Z",
- "source_hash": "1b35d649bcb5f99f",
+ "built": "2026-10-25T09:37Z",
+ "source_hash": "6b985acaa0c9c213",
  "persona_stale": false,
  "problems": [],
  "country": "CZ",
@@ -218,7 +218,14 @@
   "cost_recharged_eur": 2100,
   "open_8d": 0
  },
- "news": [],
+ "news": [
+  {
+   "id": "news:20261020-S16",
+   "date": "2026-10-20",
+   "topic": "short_time_work",
+   "headline": "Obrábění Kraslin s.r.o. puts its turning shop on short-time work"
+  }
+ ],
  "documents": [
   {
    "id": "doc:20260809-70270-M1",
@@ -256,18 +263,18 @@
  "quote_remarks": [],
  "persona": {
   "supplier": "sup:70270",
-  "source_hash": "1b35d649bcb5f99f",
-  "analysed": "deep read v1",
+  "source_hash": "6b985acaa0c9c213",
+  "analysed": "deep read v1 + Sunday release",
   "confidence": "medium",
-  "summary": "Czech founder-led shop, 30 staff, 2-5 M EUR; our ~EUR 93k is ~2-5 % of its turnover and it says it is reviewing small accounts. Sole source of adapter piece HI (15.88). Owner prices from a two-year-old spreadsheet and asked where our index figures come from; he expects partnership for holding prices in 2022. Open moderately, bring sourced index data and the amber scorecard, offer volume; it may concede on facts it did not know.",
-  "notes": "Needs volume and recognition of the 2022 favour; says it is reviewing small accounts. Its spreadsheet is two years old, so current index data may be news to it. Quality amber all year (OTD 73-85 %, ppm ~1,500-1,900, 21 complaints). We pay 5.4 days late on average without written complaint.",
+  "summary": "Czech founder-led shop, 30 staff, 2-5 M EUR; our ~EUR 93k is ~2-5 % of its turnover and it says it is reviewing small accounts. Its turning shop went on short-time work (Oct 2026): it needs work. Sole source of adapter piece HI (15.88). Owner prices from a two-year-old spreadsheet and expects partnership for holding prices in 2022. Open moderately, bring sourced index data and the amber scorecard, offer binding volume for its idle shop.",
+  "notes": "Turning shop on short-time work, so it needs volume more than margin; also wants recognition of the 2022 favour. Its spreadsheet is two years old. Quality amber all year (OTD 73-85 %, ppm ~1,500-1,900, 21 complaints). We pay 5.4 days late on average.",
   "traits": {
-   "cash_short": "none",
+   "cash_short": "strong",
    "approval_ladder": "none",
    "price_frozen": "none",
    "small_account": "weak",
    "open_book": "none",
-   "free_capacity": "none",
+   "free_capacity": "weak",
    "reference_customer": "none",
    "stale_costing": "strong",
    "reciprocity": "strong",
@@ -279,13 +286,13 @@
   },
   "unsure": [
    "hedged_material",
-   "approval_ladder",
-   "free_capacity"
+   "approval_ladder"
   ],
   "wants": [
    "binding_volume"
   ],
   "fears": [
+   "idle turning shop (short-time work)",
    "being a small account",
    "partnership not returned"
   ],
@@ -310,13 +317,23 @@
     "trait": "late_payment_grievance",
     "doc": "data:payments.avg_days_late",
     "quote": "avg 5.4 days late, 51.5 % of invoices over 5 days late"
+   },
+   {
+    "trait": "cash_short",
+    "doc": "news:20261020-S16",
+    "quote": "Obrábění Kraslin s.r.o. puts its turning shop on short-time work"
+   },
+   {
+    "trait": "free_capacity",
+    "doc": "news:20261020-S16",
+    "quote": "puts its turning shop on short-time work"
    }
   ],
   "playbook": {
    "opening": "moderate",
    "walk_risk": "medium",
    "levers": [
-    "binding volume (spend up 23 %)",
+    "binding volume for its short-time turning shop (spend up 23 %)",
     "on-time payment",
     "standard 42-day lead time"
    ],
@@ -335,10 +352,10 @@
    "tactics": [
     "Acknowledge the 2022 favour, then give index figures with their source; it asked where we get them.",
     "Use the scorecard once as the quality argument.",
-    "Offer a binding volume to counter the small-account review.",
+    "Offer a binding volume that fills its idle turning shop, in exchange for the price step.",
     "Push steadily but stop short of a walk on a sole-source part."
    ],
-   "expected_concession": "History mixed: 2024 asked +5.8 % settled +2.7 %, 2025 asked +2.8 % settled 0 %; average kept share of ask 0.59."
+   "expected_concession": "History mixed: 2024 asked +5.8 % settled +2.7 %, 2025 asked +2.8 % settled 0 %; kept share of ask 0.59. Short-time work makes binding volume worth more now."
   }
  },
  "arena": null

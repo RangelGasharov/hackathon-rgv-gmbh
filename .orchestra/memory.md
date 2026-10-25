@@ -22,6 +22,10 @@ live practice sessions, document what works and what doesn't. Score per case = (
 - Use lean-orchestrator (state files only); debugging via the `investigate` skill (no /debug installed); grilling format for decisions.
 - Commits: commit and push `improve/supplier-levers` at milestone close.
 
+- Done 10:48 CET: live waves 1+3 build: P04 0.860 (=team best; 90 d), P18 0.563, P02 0.735, P10 0.679. Quota showed 263 left.
+- Pending (user 11:05 CET): break records — after wave 2: P11 x2 (BUYER_QSTEP=1) + P07 x2 + P03 x1 + P05 x1 (user 11:20); after T-084: P04 x2 + P10 x2.
+- Push (user 11:12 CET): push at each gated checkpoint — after wave 2's gate, and after the T-084/T-085 gate (fetch
+  and merge the other agent's commits first; no .env/runs/.claude, no keys).
 - **Live sessions (user, 03:55): run only the live tests the user names, nothing extra** (no unrequested A/B).
   Done 08:00: live P02 defaults 0.735 (was 0.724; 361.25/90 d/clause, relationship charge 36.7k vs 66.9k before).
   Done 06:10: live BUYER_STRAT=1 P18 0.552 (Leverage, opened 4.88, deal 5.30/30 d), P10 0.679 (Quick-close, = base).

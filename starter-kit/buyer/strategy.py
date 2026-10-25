@@ -25,8 +25,12 @@ CLAUSE_VALUE = 0.015  # share of the price an index clause is worth to a supplie
 # Our belief about a supplier's full cost, for the relationship charge: one sigma = SIGMA_K x the error band of the
 # estimate (generic should-cost 15 % -> 7.5 %), and SIGMA_OWN for the should-cost of its own plant (the charges of 17
 # real deals in P01, P02 and P03 put the full cost at 0.977-0.979 x it, to 0.1 %). Five equal-weight quintile nodes.
+# (25 Oct: a point estimate for err <= 0.05 matched the arena's charge better but lost P01 on the persona twin, seeds
+# 1-3; the calibrated twin did not move: kept the spread.)
 SIGMA_K = 0.5
 SIGMA_OWN = 0.02
+CLAUSE_ROOM_SHARE = 0.4  # a clause sheet may cost this share of our room more than our best (P02 live: 0.8 % of C = 33 %)
+TENDER_RIVAL_DROP = 0.10  # a tender supplier's round-1 drop this big answers the rival bids
 Z5 = (-1.2816, -0.5244, 0.0, 0.5244, 1.2816)  # medians of the five quintiles of a standard normal
 
 
@@ -38,6 +42,7 @@ class Estimate:
         self.full_cost, self.err = dossier.full_cost
         self.rate = dossier.cash_rate
         self.rate_learnt = None  # its own price gap between two payment terms beats our trait guess (`learn_cash_rate`)
+        self.cash_pairs = {}  # (sooner days, later days) -> the rate its own price gap shows for that band
         self.min_margin = dossier.min_margin
         self.standard = dict(dossier.standard_guess)
         self.set_standard(standard)
@@ -96,7 +101,11 @@ class Estimate:
         base = self.quote_price
         if not (std_lead and std_pay and base):
             return False
-        value = lambda t: t[PRICE] * (1 - self.rate * ((t.get("payment_days") or std_pay) - std_pay) / 360)  # noqa: E731
+
+        def value(t):
+            days = t.get("payment_days") or std_pay
+            return t[PRICE] * (1 - self.rate_at(days) * (days - std_pay) / 360)
+
         found = []
         for a, b in itertools.combinations([t for t in sheets if t.get(PRICE)], 2):
             if any(a.get(f) != b.get(f) for f in a if f not in (PRICE, "payment_days", "lead_time_days")):
@@ -120,8 +129,10 @@ class Estimate:
         """Two sheets of one reply that differ only in payment days and price are worth the same to the supplier:
         the gap is what a day of payment is worth to it (live P03: 432.29 @ 90 days / 430.82 @ 60 = 4 % a year,
         where our trait guess made 14 days look cheap for us and the deal closed at 30 days, EUR 26k dearer in C
-        than its own 90-day sheet). True if the estimate changed."""
-        found = []
+        than its own 90-day sheet). The rate is not one number: P03's 429.36 @ 30 / 427.62 @ 14 showed 9.2 %, and
+        that last pair overwrote the first and made short payment look cheap. Every pair is kept, per day band
+        (`rate_at` interpolates); `rate` is their median. True if the estimate changed."""
+        new = False
         for a, b in itertools.combinations([t for t in sheets if t.get(PRICE)], 2):
             if any(a.get(f) != b.get(f) for f in set(a) | set(b) if f not in (PRICE, "payment_days")):
                 continue
@@ -132,13 +143,35 @@ class Estimate:
                 a, b, da, db = b, a, db, da  # a pays sooner
             gap = (b[PRICE] - a[PRICE]) / a[PRICE]
             if gap > 0:
-                found.append(gap * 360 / (db - da))
-        if not found:
+                r = round(min(0.30, max(0.01, gap * 360 / (db - da))), 4)
+                new |= abs(self.cash_pairs.get((da, db), -1) - r) > 0.0005
+                self.cash_pairs[(da, db)] = r
+        if not new:
             return False
-        rate = round(min(0.30, max(0.01, statistics.median(found))), 4)
-        changed = abs(rate - self.rate) > 0.005
-        self.rate = self.rate_learnt = rate
-        return changed
+        before = {d: self.rate_at(d) for d in (0, 14, 30, 45, 60, 90, 120)}
+        self.rate = self.rate_learnt = round(statistics.median(self.cash_pairs.values()), 4)
+        return any(abs(self.rate_at(d) - r) > 0.005 for d, r in before.items())
+
+    def rate_at(self, days):
+        """What money is worth to it a year when payment moves from its standard to `days`: the learnt rate of the
+        nearest day bands, interpolated linearly at the middle of the move (clamped beyond the bands we saw)."""
+        std = self.standard.get("payment_days")
+        if not self.cash_pairs or days is None or std is None or days == std:
+            return self.rate
+        mid = (days + std) / 2
+        pts = sorted(((da + db) / 2, r) for (da, db), r in self.cash_pairs.items())
+        merged = {}
+        for x, r in pts:
+            merged.setdefault(x, []).append(r)
+        pts = [(x, statistics.median(rs)) for x, rs in sorted(merged.items())]
+        if mid <= pts[0][0]:
+            return pts[0][1]
+        if mid >= pts[-1][0]:
+            return pts[-1][1]
+        for (x0, r0), (x1, r1) in itertools.pairwise(pts):
+            if x0 <= mid <= x1:
+                return r0 + (r1 - r0) * (mid - x0) / (x1 - x0)
+        return self.rate
 
     def tight_capacity_seen(self):
         """Its own e-mail reveals a plant that allocates capacity (the dossier flipped to capacity_tight): the prior
@@ -202,7 +235,7 @@ class Estimate:
 
     def model(self, case, t, cash=False):
         std = {**self.standard, **case.get("fixed_terms", {})}
-        out = {"standard": std, "interest_rate": self.rate, "full_cost": self.full_cost, "extra": self.extra(t, cash)}
+        out = {"standard": std, "interest_rate": self.rate_at(t.get("payment_days")), "full_cost": self.full_cost, "extra": self.extra(t, cash)}
         if ppm := (self.d.scorecard or {}).get("ppm"):
             out["ppm"] = ppm  # it pays chargebacks at the defect rate it really has
         return out
@@ -409,6 +442,7 @@ class Planner:
         self.asks = []  # supplier value of its best standing sheet, one entry per reply
         self.ask_sheets = []  # the sheets behind `asks`, to value them again when our model of it changes
         self.last_sheets = []  # our last sheets, likewise
+        self.sent_before = []  # per reply in `asks`: our sheets it answered (a lock needs its own choice in both)
         self.locked = {}  # terms the supplier keeps insisting on (e.g. a mandatory index clause)
         self.kept = {}  # terms it called mandatory in words (the strategist's reading)
         self.seen_terms = {}  # field -> set of values the supplier has offered
@@ -809,7 +843,7 @@ class Planner:
             diff = {f for f in t if f != PRICE and t.get(f) != best.get(f)}
             return 0 if diff - varied else 1
 
-        rest = [x for x in cand[1:] if x[0] <= c0 * 1.03]
+        rest = [x for x in cand[1:] if x[0] <= c0 * 1.03 and self.pay_ok(x[1], best)]
         if self._clause_trial() and not best.get("index_clause"):
             pair = self._clause_pair(best, c0)
             if pair and not (self.ask_value and self.est.value(self.case, pair) > self.ask_value):
@@ -873,6 +907,15 @@ class Planner:
             and self.locked.get("index_clause") is None
         )
 
+    def _clause_slack(self, c0):
+        """How much dearer than our best sheet the clause sheet may cost us: up to 1.2 % of C, but never more than
+        40 % of the room between the supplier's opening sheet and our best (a clause is worth a trial, not the room;
+        the card's 2 % of the room would be 1.1k of P02's 54k, where the clause path costs ~18k and is the one that scored)."""
+        opened = [cost(self.case, t, self.est) for t in (self.ask_sheets[0] if self.ask_sheets else [])]
+        room = min(opened) - c0 if opened else None
+        slack = 0.012 * c0
+        return slack if room is None else max(0.0, min(slack, CLAUSE_ROOM_SHARE * room))
+
     def _clause_pair(self, best, c0):
         """The best sheet with the clause, at the price where it costs us what the best does; where no price does
         (the best sits low on a relationship charge) the price less the clause's cost share, if that stays close."""
@@ -897,9 +940,23 @@ class Planner:
                 moved = max(0.0, abs(path) - self.pref_clause["deadband_pct"] / 100) * math.copysign(1, path)
                 share = self.pref_clause["material_share"] * (moved + b.get("index_risk_pct", 0) / 100)
                 same = {**t, PRICE: round(best[PRICE] * (1 - share), 2)}
-            if cost(self.case, same, self.est) > c0 * 1.012:
+            if cost(self.case, same, self.est) > c0 + self._clause_slack(c0):
                 return None
         return same if 0.85 * best[PRICE] <= same[PRICE] <= 1.15 * best[PRICE] else None
+
+    def pay_ok(self, t, best):
+        """No sheet of ours pays sooner than our best one, unless the supplier asked for shorter payment in its sheets
+        of its last two replies (then down to the longest it showed there). Live P04/P07: the planner sent
+        [4.36 @ 90 d, 4.30 @ 30 d], the strategist kept only 30 d, the supplier answered on it and 90 d never came
+        back (team: 90-day deals 0.86-0.92 against our 30-day 0.77-0.85)."""
+        d, ref = t.get("payment_days"), best.get("payment_days")
+        if d is None or ref is None or d >= ref:
+            return True
+        shown = self.ask_sheets[-2:]
+        if len(shown) < 2 or any(x.get("payment_days") is None for shs in shown for x in shs):
+            return False
+        insisted = max(x["payment_days"] for shs in shown for x in shs)
+        return insisted < ref and d >= insisted
 
     def menu(self, base, k, rounds_left=10, n=5):
         """The offers the strategist may choose from: our equal-cost sheets (`base`, extra cost 0) plus up to
@@ -934,6 +991,8 @@ class Planner:
                 continue
             if self.ask_value and self.est.value(self.case, t) > self.ask_value:
                 continue
+            if not self.pay_ok(t, base[0]):
+                continue
             pool.append((t, c / c0 - 1, {f for f in rest if rest[f] != seen[0].get(f)}))
         varied = {f for t in base[1:] for f in t if f != PRICE and t.get(f) != base[0].get(f)}
         while pool and len(out) < len(base) + n:  # a different term first, then the cheapest for us
@@ -965,6 +1024,10 @@ class Planner:
         if len(self.asks) < 2:
             return None
         v0, a1 = self.first_move()
+        if self.case.get("type") == "rfq" and v0 - a1 >= TENDER_RIVAL_DROP * v0:
+            # a tender's big round-1 drop answers the rival bids, not its own floor (P05 70250: extrapolated 19.1 for a
+            # supplier that agreed at 31.05); only our own cost estimate says where it can sign
+            return self.est.floor_value if self.est.err <= 0.10 and self.est.floor_value else None
         wide = self.case.get("type") in ("rfq", "raw_material", "bundling", "capacity", "quality")
         k = 0.335 if wide else 0.75
         f = v0 - max(0.0, v0 - a1) / k
@@ -1065,6 +1128,8 @@ class Planner:
         for _c, t in out:
             if len(picked) >= n:
                 break
+            if picked and not self.pay_ok(t, picked[0]):
+                continue
             if all(sum(t[f] != o[f] for f in t if f != PRICE) >= 1 for o in picked):
                 picked.append(t)
         return picked
@@ -1185,9 +1250,11 @@ class Planner:
                 v = next(t.get(f) for t in sheets if f in t)
                 if f == "index_clause" and v is None:
                     continue  # never lock ourselves out of a clause we did not want anyway
-                if self.last_sheets and all(t.get(f) == v for t in self.last_sheets if f in t):
+                ours = [self.last_sheets] + self.sent_before[-1:]  # what it answered now and the reply before
+                if any(shs and all(t.get(f) == v for t in shs if f in t) for shs in ours):
                     # it only kept what we proposed ourselves: no insistence (live P04: our 30-day sheet came back
-                    # twice and locked 30 days, so the 90-day package it gave others at +1.2 % was never offered)
+                    # twice and locked 30 days, so the 90-day package it gave others at +1.2 % was never offered).
+                    # Both replies must be its own choice, not one where our strategist had dropped the alternative
                     continue
                 locked[f] = v
         if locked != self.locked:
@@ -1220,6 +1287,7 @@ class Planner:
             self.clause_seen = True
             self.want_clause()  # it asks for a clause: now it is worth something to it
         values = [self.est.value(self.case, t) for t in sheets]
+        self.sent_before.append([dict(t) for t in self.last_sheets])
         self.asks.append(min(values))
         self.soft.append(self.soft_reply)
         self.ask_sheets.append([dict(t) for t in sheets])
