@@ -122,7 +122,9 @@ Each passes the gate on its own before the next starts.
 - Take the supplier's own alternative sheet when its C is lower (P18 best took 30 days at 5.20 over 90 at 5.30).
 - Check the P16 warning (0.96 → 0.87 since Floor-chase cites facts): allow pacing only when the fact is strong.
 
-**W3b Quality (0.54 calibrated; P11, P12)** — open since T-061.
+**W3b Quality (0.54 calibrated; P11, P12)** — open since T-061. *Status 08:40: root cause confirmed; like-terms
+reading (`BUYER_LIKE`) and quality step floor (`BUYER_QSTEP`) built, both off by default (replay / gate evidence in
+EXPERIMENTS.md 3.2). Needs a 2-session live A/B of `BUYER_QSTEP=1` on P11 to decide.*
 - Root cause found: a ppm change (6400 → 300) was read as a 3.6 % price step, so our floor guess sat too low and our
   steps shrank to 0.13. Fix: compare the supplier's moves **on like terms** (same ppm) when judging its step and its
   floor; T-061's first try lost 0.05–0.09 on the twin, so it was reverted — retry with the like-terms value only for

@@ -334,3 +334,35 @@ def test_every_situation_topic_of_the_data_is_read():
 
     for topic in ("customer_loss", "chip_shortage", "short_time_work", "credit_downgrade", "free_capacity"):
         assert topic in NEWS_SITUATION and topic in NEWS_TRAITS
+
+
+def _p11_after_first_reply(world):
+    agent = BuyerAgent(world, use_profiles=False)
+    agent.start(_case("P11"))
+    p = agent.t["sup:70140"].plan
+    opening = {"unit_price": 47.0, "ppm_commitment": 6400}
+    reply = [{"unit_price": 47.0, "ppm_commitment": 300, "chargeback_eur_per_complaint": 0.0},
+             {"unit_price": 46.5, "ppm_commitment": 1500, "chargeback_eur_per_complaint": 0.0}]  # fmt: skip
+    p.observe_reply([opening], "open")
+    p.observe_reply(reply, "open")
+    return p
+
+
+def test_a_ppm_trade_is_no_price_step_on_like_terms(world, monkeypatch):
+    p = _p11_after_first_reply(world)
+    old = p.first_move()
+    assert old[0] - old[1] > 1.0  # the model reads 47.00 at 300 ppm as 1.18 below 47.00 at 6400 ppm
+    monkeypatch.setenv("BUYER_LIKE", "1")
+    v0, a1 = p.first_move()
+    assert v0 - a1 == pytest.approx(0.5, abs=0.05)  # on like terms it moved only its 1500-ppm sheet, by 0.50
+
+
+def test_quality_steps_keep_it_countering(world, monkeypatch):
+    p = _p11_after_first_reply(world)
+    p.last_value, p.last_sheets = 43.0, []
+    monkeypatch.setenv("BUYER_QSTEP", "0")
+    small = p.target_value(2)
+    monkeypatch.setenv("BUYER_QSTEP", "1")
+    big = p.target_value(2)
+    assert big >= 43.0 + 0.0055 * 47.0 - 1e-9 and big >= small  # at least 0.55 % of its opening while 2 % apart
+    assert p.ask_value - big >= 0.02 * 47.0 - 1e-9  # and never into the last 2 % above its ask

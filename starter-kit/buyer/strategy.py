@@ -750,7 +750,16 @@ class Planner:
             # BUYER_FLOOR: modest counters, at most one of its own last steps below its ask (never a jump that
             # makes it walk), but never more than 1.5 % of its opening above our last offer: the uncapped jump took
             # twin P12 from 91.34 to 98.11 in one round (0.95 -> 0.63) and sent the price up, not the quality term
-            target = max(target, min(ask - (self.asks[-2] - self.asks[-1]), self.last_value + 0.015 * (self.asks[0] or ask)))
+            target = max(
+                target, min(ask - (self.asks[-2] - self.asks[-1]), self.last_value + 0.015 * (self.asks[0] or ask))
+            )
+        if flags.qstep() and self.last_value and self.case.get("type") == "quality" and self.asks:
+            # a quality supplier steps a fixed amount (P11: 0.50) while our step is >= 0.5 % of its opening and its
+            # price stays >= 2 % above ours; our planner thought it was past its limit and crept 0.13 (0.28 %), and
+            # it held (live 0.620 twice). The best run (0.877) stepped 0.28 and kept the gap for five rounds.
+            v0 = self.asks[0]
+            if ask - self.last_value >= 0.02 * v0:
+                target = max(target, min(self.last_value + 0.0055 * v0, ask - 0.02 * v0))
         target = max(target, 0.75 * self.est.floor_value)
         if self.last_value:
             target = max(target, self.last_value * 1.003)  # never a step back
@@ -955,13 +964,30 @@ class Planner:
             return f
         if len(self.asks) < 2:
             return None
-        v0, a1 = self.asks[0], self.asks[1]
+        v0, a1 = self.first_move()
         wide = self.case.get("type") in ("rfq", "raw_material", "bundling", "capacity", "quality")
         k = 0.335 if wide else 0.75
         f = v0 - max(0.0, v0 - a1) / k
         if self.est.err <= 0.10 and self.est.floor_value:  # one tiny first move extrapolates to a "floor" barely
             f = min(f, self.est.floor_value)  # under its ask; our own cost estimate says where it can sign (P07)
         return f
+
+    def first_move(self):
+        """(opening, first counter) for the floor and limit estimates, on like terms: the opening price valued on the
+        terms of the counter's sheet whose price moved most. A reply that only trades a term is no price step: P11
+        answered 47.00 at 6400 ppm with 47.00 at 300 ppm (and 46.50 at 1500), which our supplier model values 1.18
+        lower; read as a 2.5 % step it put the floor near 43.5 and our steps shrank to 0.13, under the 0.5 % that
+        keeps it countering. Pricing still values every sheet on its own terms (BUYER_LIKE=0: the old reading)."""
+        v0, a1 = self.asks[0], self.asks[1]
+        if not flags.like() or len(self.ask_sheets) < 2 or not self.ask_sheets[0]:
+            return v0, a1
+        p0 = self.ask_sheets[0][0].get(PRICE)
+        steps = [
+            self.est.value(self.case, {**t, PRICE: p0}) - self.est.value(self.case, t)
+            for t in self.ask_sheets[1]
+            if p0 is not None and t.get(PRICE) is not None
+        ]
+        return (a1 + max(0.0, max(steps)), a1) if steps else (v0, a1)
 
     def settle_share(self):
         """Share of its asking price this supplier kept in past negotiations (profile: settled vs asked, both
@@ -979,7 +1005,7 @@ class Planner:
         if len(self.asks) < 2:
             return None
         rho = 0.35 if self.est.d.has("cash_short", strong=True) else 0.75
-        v0, a1 = self.asks[0], self.asks[1]
+        v0, a1 = self.first_move()
         # and never above 2 % under its first counter: in 47 real sessions no supplier gave more than 2.6 % of
         # its opening after round 1, and one that barely moved at first (a committee, b4 P02: 0.4 %) still
         # has that room - the 75 % rule alone put its limit at its ask, we offered that, and it agreed at once
@@ -990,7 +1016,7 @@ class Planner:
         f = self.f_hat
         if f is None or not self.asks or not self.ask_value:
             return False
-        v0 = self.asks[0]
+        v0 = self.first_move()[0]
         if len(self.asks) < 3:  # its opening plus two moves: one counter is no trend (P13 took the first)
             return False
         if v0 - f < 0.02 * v0:  # it barely moved in round 1 (a committee, a frozen list): no floor to read

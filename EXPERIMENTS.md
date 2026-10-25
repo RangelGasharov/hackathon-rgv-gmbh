@@ -150,6 +150,22 @@ opening, raw material at 10 % and committee suppliers at 10 %.
 
 Twins: persona +3.4 / +1.3 / +1.6 (P12 0.25 -> 0.55 on every seed), calibrated twin unchanged.
 
+### 3.2 Quality cases (WINNING_PLAN W3b): the ppm trade read as a price step
+
+Root cause confirmed on P11: its first reply kept 47.00 but tightened 6400 -> 300 ppm (chargeback 0). The agent's
+supplier model charges a ppm commitment below its real 2376 ppm as an extra cost (1.18/unit), so the reply read as a
+2.5 % price step; the floor and limit read from it sat at 43.47 / 43.62, the planner thought it was past the limit and
+crept in 0.13 steps (0.28 % of the opening, under the 0.5 % that keeps an arena supplier countering).
+
+| Change (switch, default off) | Offline evidence | Why off |
+|---|---|---|
+| `BUYER_LIKE=1`: first move on like terms (`Planner.first_move`) | replaying the 0.794 session's supplier replies: the higher floor estimate (44.89) accepts its 45.50 in round 4; the old reading went on to 45.00 | the misread helps by accident: the real P11 supplier goes further (44.50-45.00) than the floor model predicts |
+| `BUYER_QSTEP=1`: quality steps >= 0.55 % of its opening while >= 2 % apart | replays: same accept points, late steps 0.26 instead of 0.13 where the 0.620 session held; gate: persona twin P11 -0.05/-0.06, quality 0.80 -> 0.77 (seed 3), calibrated twin unchanged | gate fails; only the live counter/hold rule (back office) speaks for it |
+
+Next: a live A/B of `BUYER_QSTEP=1` on P11 (two sessions) decides it; the twins cannot (their suppliers end at a
+fitted limit, so smaller steps always look better). The best live P11 runs (0.794, 0.877) opened deep and kept
+the gap above 2 % with steps of about 0.28.
+
 ## 4. Bugs found and fixed
 
 ### 4.1 Clause sheet priced below the supplier's healthy margin (P02, `Planner._clause_pair`)
