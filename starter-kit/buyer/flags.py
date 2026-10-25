@@ -2,10 +2,16 @@
 
 BUYER_OFF=probe,match      components to turn off (names below); default: everything on
 BUYER_CLAIMS=1             at most this many new arguments per message (default 3, the arena checks 3)
-BUYER_LEAN=1               small fixed steps that keep a gap, single-supplier cases only (`Planner.target_value`)
 BUYER_CLAUSE0=1            a required index clause: also offer its deadband-0 variant at equal cost (`Planner.sheets`)
-BUYER_DEEP=1               raw material opens 18 % below, without the committee cap (`Planner._anchor_gap`)
-All three lost live (EXPERIMENTS.md) and are off by default; they stay for further A/B tests.
+BUYER_PACE=1               spread verified arguments: 2 in the first message with a sheet, then 1 fresh one (weight
+                           >= 0.2) per message; none in a message without a sheet
+BUYER_FLOOR=1              chase a supplier that still steps to its floor: no early accept or settle while it moves in
+                           steady steps; quality cases offer only the tightest ppm (`Planner.chasing`, `refresh`)
+BUYER_FINALC=1             after its final offer take the sheet (standing or alternative) with the lowest C for us
+                           All but the last lost live (EXPERIMENTS.md) and are off by default; they stay for further A/B tests.
+BUYER_STRAT=1             one approach per supplier thread (Leverage, Floor-chase, Quick-close; `buyer/approach.py`),
+                           chosen at case start: it sets the opening depth, sheets per message, stop rule, tactics and
+                           which of PACE / FLOOR / FINALC apply to that thread (the variables above are then ignored)
 
 profiles   the prebuilt supplier profiles (`profiles/`); off: the live read for every supplier
 persona    the live persona read at case start (Opus); off: regex traits only for suppliers without a profile
@@ -39,13 +45,21 @@ def claims_per_message():
         return 3
 
 
-def lean():
-    return os.environ.get("BUYER_LEAN") == "1"
-
-
 def clause0():
     return os.environ.get("BUYER_CLAUSE0") == "1"
 
 
-def deep():
-    return os.environ.get("BUYER_DEEP") == "1"
+def pace():
+    return os.environ.get("BUYER_PACE") == "1"
+
+
+def floor():
+    return os.environ.get("BUYER_FLOOR") == "1"
+
+
+def finalc():
+    return os.environ.get("BUYER_FINALC") == "1"
+
+
+def strat():
+    return os.environ.get("BUYER_STRAT") == "1"

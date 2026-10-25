@@ -5,10 +5,12 @@ Everything with a number is decided here and in `strategy`; the writer only word
 thread's supplier has answered, under one lock, so RFQ threads can see each other's offers.
 """
 
+import copy
 import logging
 import math
 import os
 import re
+import threading
 import time
 
 from arena_kit.cost import RELATIONSHIP_GOALS, must_haves_ok
@@ -19,12 +21,19 @@ from .claims import candidates, dead_key, kind_key, no_change_kinds, ration
 from .dossier import Dossier
 from .persona import opening_text, read_all
 from .strategy import Estimate, Planner, cost
-from .writer import Plan, TemplateWriter, human_date
+from .approach import LEVERAGE, QUICK_CLOSE, granted
+from .writer import Plan, TemplateWriter, asks_for, human_date
 
 log = logging.getLogger("buyer")
 ENDED = {"walked_away", "no_bid"}
 # arena P08, P18: "we cannot offer fixed prices for extended contract durations", "we cannot fix prices over a 24-month
 # period ..., making the AS-14404 index clause mandatory", "a fixed price over two years is not feasible"; the twin's words
+APPROVAL_WORDS = re.compile(r"pricing committee|management approval|needs? (?:the )?approval", re.I)
+FLOOR_WORDS = re.compile(
+    r"lowest (?:price|we can|possible)|rock[- ]bottom|(?:cannot|can't|can not|unable to) go (?:any )?lower|"
+    r"bottom (?:line|price)|no (?:more|further) room",
+    re.I,
+)
 CLAUSE_MANDATORY = re.compile(
     r"cannot (?:offer|fix|agree) (?:a )?(?:fixed )?prices? (?:over|beyond|for)|"
     r"fixed prices? (?:over|beyond|for) [^.]{0,40}(?:not feasible|not possible)|"
@@ -51,6 +60,10 @@ MAX_ROUNDS = 10  # the arena's round limit: never plan for more messages per thr
 # its news reads as prying. (The delivery record stays: `claims` offers it only to stale-costing owners, the one
 # kind of supplier it moved.)
 RISKY_KINDS = {"po", "news"}
+
+
+HARD_WRITE_S = 20.0  # no e-mail takes longer than this to write: then the template sends the same sheets
+HOLD_AFTER_S = 30.0  # a supplier whose reply nobody has answered for this long gets a note or a close, never silence
 
 
 def round_cap(case):
@@ -131,6 +144,8 @@ class ThreadState:
         self.fallback_seen = -1  # the reply we already answered with a fallback holding note
         self.phrase_dead = set()  # kinds retired only by the "does not change our calculation" phrase
         self.signals = None  # the strategist's reading of its last e-mail, applied at the next `ingest`
+        self.asks = []  # BUYER_STRAT: what its last e-mail asked us for (`writer.asks_for`), each priced as a trade
+        self.said_main_source = False
 
 
 class BuyerAgent:
@@ -180,8 +195,18 @@ class BuyerAgent:
                 before = dict(dossiers[sid].traits)
                 dossiers[sid].apply_read(read)
                 self.log.append((sid, "persona", {**read, "merged": dossiers[sid].traits, "regex": before}))
+        # BUYER_STRAT: each supplier's own quote and the rivals' quotes on the same part choose its approach
+        quotes = {}
+        for sid, events in (threads or {}).items():
+            _, terms = standing(events or [])
+            if terms.get("unit_price"):
+                quotes[sid] = terms["unit_price"]
+        for sid, d in dossiers.items():
+            d.quote_now = quotes.get(sid)
+            d.rival_quotes = {s: q for s, q in quotes.items() if s != sid}
         self.t = {sid: ThreadState(self.world, case, sid, dossiers[sid]) for sid in case["suppliers"]}
         for sid, ts in self.t.items():
+            a = ts.plan.approach
             self.log.append(
                 (
                     sid,
@@ -190,6 +215,11 @@ class BuyerAgent:
                         "primary": ts.plan.primary_strategy,
                         "fallback": ts.plan.fallback_strategy,
                         "reason": ts.plan.strategy_reason,
+                        **(
+                            {"approach": a.name, "gap": a.opening_gap, "tactics": a.tactics, "why": a.reason}
+                            if a
+                            else {}
+                        ),
                     },
                 )
             )
@@ -242,6 +272,9 @@ class BuyerAgent:
             ts.plan.second_step = bool(
                 re.search(r"come back to you on (?:the )?price|clarify (?:this|it) internally", body, re.I)
             )
+            ts.plan.soft_reply = bool(ts.plan.second_step or APPROVAL_WORDS.search(body))
+            if FLOOR_WORDS.search(body):
+                ts.plan.said_floor = True
             if CLAUSE_MANDATORY.search(body):
                 ts.plan.require_clause()
             if ts.d.add_text(body):  # its own words update the profile and the packages
@@ -257,6 +290,7 @@ class BuyerAgent:
                 if change:
                     self.log.append((sid, "strategy_switch", change))
             ts.last_body = m.get("body") or ""
+            ts.asks = asks_for(ts.last_body)
         ts.seen = len(incoming)
         _, terms = standing(events, self._price(sid))
         if terms.get("unit_price") is not None and must_haves_ok(self.case, terms, ts.est.standard):
@@ -280,6 +314,9 @@ class BuyerAgent:
             if kind in ts.phrase_dead:  # "does not change our calculation" was about another argument
                 ts.d.dead_kinds.discard(kind)
         ts.d.dead_kinds.update(s.get("dead") or ())
+        for ask in asks_for(" ".join(s.get("asks_for") or ())):  # what it asked for, in the strategist's words
+            if ask not in ts.asks:
+                ts.asks.append(ask)
         _, terms = standing(events, self._price(ts.sid))
         for field in s.get("keep_terms") or ():
             if field in terms:
@@ -372,9 +409,9 @@ class BuyerAgent:
         status = latest(threads[sid]).get("status")
         time_left = (self.deadline - time.time()) if self.deadline else math.inf
 
-        def accept(s):
-            if self.t[s].in_flight:
-                return None  # its reply is still coming: decide again then
+        def accept(s, force=False):
+            if self.t[s].in_flight and not force:
+                return None  # its reply is still coming: decide again then (never when the clock or messages ran out)
             sheet_id, terms = standing(threads[s], self._price(s))
             main_id, _ = standing(threads[s])  # its standing offer: the first sheet of its last message
             if main_id and sheet_id != main_id:
@@ -394,7 +431,7 @@ class BuyerAgent:
             self.log.append((sid, "walk", None))
             return {"supplier_id": sid, "message": {"action": {"type": "walk_away"}}}
 
-        def settle():
+        def settle(force=False):
             """Out of moves: the best standing sheet, unless the alternative is clearly cheaper. With a
             rough cost estimate the relationship part of C is a guess, so then the alternative must also
             win without it."""
@@ -409,13 +446,13 @@ class BuyerAgent:
                 and (best.plan.confident or c_alt < best.c_norel * band)
             ):
                 return walk()
-            return accept(best_sid)
+            return accept(best_sid, force)
 
         for x in live.values():
             x.plan.cap_c = reservation * slack
         # the wave's cap is near: take the best acceptable sheet, else the alternative
         if time_left < self.close_margin:
-            return settle()
+            return settle(force=True)
         if ts.dead:
             return None
         rounds_left = round_cap(self.case) - ts.sent
@@ -470,6 +507,27 @@ class BuyerAgent:
             ]
             # arena replays P08, P10, P18: any change to a final offer (even "neutral" ones like dropping
             # its index clause or a shorter lead time) made the supplier walk. Its last word is take-or-leave.
+            if ts.plan.sw("finalc") and not ts.in_flight and not pending and not untouched:
+                # BUYER_FINALC: of its sheets (standing or alternatives) the one with the lowest C for us
+                sheets = latest(threads[sid]).get("term_sheets") or []
+                priced = [
+                    (cost(self.case, x["terms"], ts.est, rel=confident), i)
+                    for i, x in enumerate(sheets)
+                    if must_haves_ok(self.case, x["terms"], ts.est.standard)
+                ]
+                priced = [p for p in priced if math.isfinite(p[0]) and p[0] <= reservation * slack]
+                if priced:
+                    _, i = min(priced)
+                    if i == 0:
+                        self.log.append((sid, "accept", round(ts.c_standing)))
+                        return {
+                            "supplier_id": sid,
+                            "message": {"action": {"type": "accept", "term_sheet_id": sheets[0]["term_sheet_id"]}},
+                        }
+                    if not ts.took_alt and round_cap(self.case) - ts.sent > 0 and time_left > self.close_margin:
+                        ts.took_alt = True
+                        self.log.append((sid, "take_alternative", sheets[i]["terms"].get("unit_price")))
+                        return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[dict(sheets[i]["terms"])])}
             if (
                 measure(ts) <= reservation
                 and ts.c_standing <= best.c_standing * 1.001
@@ -490,8 +548,11 @@ class BuyerAgent:
                     return settle()
                 return None  # leave it standing; another bidder is better
             return settle()
+        # BUYER_FLOOR: it still steps (or only said it needs approval): keep countering while a message and time remain
+        chase = ts.plan.chasing() and rounds_left >= 2 and time_left > 120
         if (
-            ts.k >= 1
+            not chase
+            and ts.k >= 1
             and sid == best_sid
             and measure(ts) <= reservation
             and not rival_better
@@ -500,7 +561,8 @@ class BuyerAgent:
         ):
             return accept(sid)  # never the first offer: one exchange first, for its documents and its move
         if (
-            ts.k >= 1
+            not chase
+            and ts.k >= 1
             and sid == best_sid
             and measure(ts) <= reservation
             and not rival_better
@@ -508,6 +570,20 @@ class BuyerAgent:
             and (ts.plan.near_floor() or ts.plan.holding())
         ):
             return accept(sid)  # close to its estimated floor, or it stopped moving
+        if (
+            ts.plan.approach
+            and ts.plan.approach.name == QUICK_CLOSE
+            and ts.k >= 2
+            and ts.plan.ask_value
+            and ts.plan.last_value
+            and ts.plan.ask_value <= ts.plan.last_value * 1.005
+            and sid == best_sid
+            and measure(ts) <= reservation
+            and not rival_better
+            and not ts.in_flight
+        ):
+            self.log.append((sid, "quick_close", ts.k))
+            return accept(sid)  # BUYER_STRAT Quick-close: within 0.5 % of our own offer from round 2, no chasing
         # RFQ: this thread has nothing to offer, but the best bidder's thread has not been negotiated yet. Signing its
         # opening quote now would skip its whole concession path. Which thread decides first depends on timing and on
         # dict order: P06 ended at the cheap bidder's opening quote (score 0) in 6 of 24 identical runs under load,
@@ -522,25 +598,35 @@ class BuyerAgent:
             # no message left: decide. Our last message may still be a counter - the supplier answers it, and after
             # the round limit we may still accept (api.md: 409 "you reached the round limit (you may still accept)")
             return None if wait_best else settle()
-        if rounds_left <= 2 and not ts.matched and flags.on("match") and (m := self.match(threads, sid)):
+        if rounds_left <= 2 and not ts.matched and self._may(ts, "match") and (m := self.match(threads, sid)):
             return m
         sheets = ts.plan.sheets(ts.k, rounds_left=rounds_left)
         if sheets and ts.last_sent and all(t in ts.last_sent for t in sheets):
             sheets = []  # never resend the same sheets: suppliers read that as no move
-        if not sheets and ts.k < 2 and rounds_left > 2 and math.isfinite(reservation) and flags.on("probe"):
+        if not sheets and ts.k < 2 and rounds_left > 2 and math.isfinite(reservation) and self._may(ts, "probe"):
             # every package looks dearer than our walk-away, but that rests on a guess of its floor: put up to two
             # real offers just under the walk-away before settling (accepting still needs a sheet that beats it)
             sheets = [t for t in ts.plan.probe(reservation * 0.97) if not ts.last_sent or t not in ts.last_sent]
+        if status == "agreed" and sheets:
+            # it agreed to our own sheet and that is still over our limit: the concession path would now step UP
+            # (minimum step, "no step back") - P08 went 6.08 -> 6.35 over ten "agreed". Never a sheet dearer than
+            # the one it agreed to; nothing left means we settle (walk, or its sheet if that beats the alternative).
+            sheets = [t for t in sheets if cost(self.case, t, ts.est, rel=confident) <= ts.c_standing * 1.0005]
         if not sheets:  # nothing better left to offer within our limits
-            if not ts.matched and flags.on("match") and (m := self.match(threads, sid)):
+            if not ts.matched and self._may(ts, "match") and (m := self.match(threads, sid)):
                 return m
             if ts.sent == 0:  # first contact: ask our questions before deciding anything
                 return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[])}
             return None if wait_best else settle()
-        msg = self.compose(threads, sid, sheets=sheets)
+        msg = self.compose(threads, sid, sheets=sheets, trade=True)
         if ts.plan.ask_value and ts.plan.last_value and ts.plan.last_value >= ts.plan.ask_value * 0.99:
             ts.matched = True  # the concession path has reached its own offer
         return {"supplier_id": sid, "message": msg}
+
+    @staticmethod
+    def _may(ts, gate):
+        """probe / match: on (BUYER_OFF) and, under BUYER_STRAT, allowed by the thread's approach."""
+        return flags.on(gate) and ts.plan.allows(gate)
 
     @staticmethod
     def heading_below(x, ts):
@@ -569,9 +655,10 @@ class BuyerAgent:
         return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[sheet])}
 
     # -- writing ----------------------------------------------------------------------------------
-    def compose(self, threads, sid, sheets=None, hold=False):
+    def compose(self, threads, sid, sheets=None, hold=False, trade=False):
         """The next message: code's default choice of sheets, arguments and points, plus the menu the
-        strategist (Opus) may choose from instead. State is committed in `write`, once the choice is made."""
+        strategist (Opus) may choose from instead. State is committed in `write`, once the choice is made.
+        `trade` (BUYER_STRAT, our own concession sheets only): each ask of its last e-mail gets a priced sheet."""
         ts, case, d = self.t[sid], self.case, self.t[sid].d
         ts.snap = (ts.k, ts.sent, list(ts.last_sent), list(ts.last_claims), list(ts.sent_claims), ts.sent_schedule,
                    ts.sent_drivers, ts.asked_breakdown, ts.matched, list(ts.plan.last_sheets), ts.plan.last_value,
@@ -599,13 +686,51 @@ class BuyerAgent:
                     and (not own.get("unit_price") or terms["unit_price"] < own["unit_price"])
                 ):
                     rivals[oid] = terms["unit_price"]
-        allc = candidates(self.world, d, case, rivals, own_price=own.get("unit_price"))
+        approach, pace = ts.plan.approach, ts.plan.sw("pace")
+        allc = candidates(
+            self.world, d, case, rivals, own_price=own.get("unit_price"), pace=pace, news_boost=bool(approach)
+        )
+        if approach and not (ts.k >= 1 and ts.plan.stalled()):
+            # rival prices and our alternative count once per supplier: hold them until it starts holding
+            allc = [c for c in allc if c.kind not in ("offer", "quote")]
+        if approach and approach.name == LEVERAGE and not approach.active("paced_facts"):
+            allc = [c for c in allc if c.kind in ("offer", "quote")]  # the fact tactic got no movement: dropped
         if ts.plan.strategy_evidence.get("trusted"):  # no risky arguments to a partner: kinds that never moved a
             allc = [c for c in allc if c.kind not in RISKY_KINDS]  # supplier and only read as nagging
         if final:
             allc = []  # no new arguments after its last word: we only take what it offered
-        claims = ration(allc, self.used_ids, ts.sent, ts.used_kinds)[: flags.claims_per_message()]
+        cap = flags.claims_per_message()
+        if approach and approach.name == QUICK_CLOSE:
+            cap = min(cap, 2 if ts.k == 0 else 1)  # one MESO pair, nothing else: few arguments
+        if pace:  # 2 in the first message with a sheet, then 1 fresh one; a message without a sheet uses none
+            cap = min(cap, 2 if ts.k == 0 else 1)
+            claims = ration(allc, self.used_ids, ts.k, ts.used_kinds, cap, 0.1) if sheets else []
+        else:
+            claims = ration(allc, self.used_ids, ts.sent, ts.used_kinds)[:cap]
+        trades = []
+        if trade and approach and sheets and not final and not hold and ts.asks:
+            trades = ts.plan.trade_sheets(ts.asks, sheets[0], case["buyer"].get("need_per_year"))
+            trades = [(a, t) for a, t in trades if t not in sheets][:2]
+            if trades:
+                sheets = sheets[: max(1, 3 - len(trades))] + [t for _a, t in trades]
+                self.log.append((sid, "trade", [(a, t.get("unit_price")) for a, t in trades]))
         answered, lever_lines = self.answers(ts, sheets, threads[sid]), self.levers(ts, sheets)
+        if trade and approach and sheets and not final and not hold:  # what it asked for and already has: say so
+            done = [a for a in ts.asks if a not in {x for x, _t in trades} and granted(a, sheets[0], case)]
+            lever_lines = self.granted_lines(done, sheets[0]) + lever_lines
+        lever_lines = self.trade_lines(trades) + lever_lines
+        if (
+            approach
+            and ts.plan.allows("main_source")
+            and len(case.get("suppliers") or []) > 1
+            and sheets
+            and ts.k >= 1
+            and not ts.said_main_source
+            and not final
+        ):
+            ts.said_main_source = True  # Leverage in a tender: moving the rivals' volume is a text trade
+            need = case["buyer"].get("need_per_year")
+            lever_lines.append(f"The best package becomes our main source for the full annual volume of {need:,}.")
         if any("binding volume" in a for a in answered):  # one volume sentence a message (arena replays: it was twice)
             lever_lines = [x for x in lever_lines if "binding volume" not in x and "annual volume" not in x]
         plan = Plan(
@@ -626,8 +751,10 @@ class BuyerAgent:
             # after a final offer exactly what we take, no other package (the strategist could pick changed terms)
             only = final or not flags.on("menu")
             plan.menu = [(t, 0.0) for t in sheets] if only else ts.plan.menu(sheets, ts.k)
-            plan.max_claims = flags.claims_per_message()
+            plan.max_claims = cap
             fresh = [c for c in allc if not any(i in self.used_ids for i in c.ids) and kind_key(c) not in ts.used_kinds]
+            if pace and ts.k:  # the same floor as `ration`, or the strategist re-picks a weak claim
+                fresh = [c for c in fresh if c.weight >= 0.1]
             plan.menu_claims = fresh[:8]
             # it reads what the supplier asked for itself: every answer and every data file we could give
             more = [a for a in self.answers(ts, sheets, threads[sid], asked=False) if a not in answered]
@@ -678,10 +805,7 @@ class BuyerAgent:
             if budget is not None and budget < 8:
                 msg["body"] = TemplateWriter().write(plan)
             else:
-                try:
-                    msg["body"] = self.writer.write(plan, timeout=None if budget is None else min(25.0, budget))
-                except TypeError:  # a writer without a timeout parameter
-                    msg["body"] = self.writer.write(plan)
+                msg["body"] = self._write_capped(msg["_sid"], plan, HARD_WRITE_S if budget is None else min(HARD_WRITE_S, budget))
             if (list(plan.sheets), list(plan.claims)) != default:  # the strategist chose differently
                 self._finalize(msg, plan)
                 self.log.append((msg["_sid"], "strategist", [t["unit_price"] for t in plan.sheets]))
@@ -693,6 +817,30 @@ class BuyerAgent:
         for f in msg.get("attachments") or []:
             f.pop("about", None)
         return msg
+
+    def _write_capped(self, sid, plan, cap):
+        """The writer's e-mail, or the template's when it takes longer than `cap` seconds or fails: a slow model
+        (the strategist's call and then the plain writer's, 25 s each) must never cost the 60 s."""
+        work, out = copy.copy(plan), {}
+
+        def run():
+            try:
+                try:
+                    out["body"] = self.writer.write(work, timeout=cap)
+                except TypeError:  # a writer without a timeout parameter
+                    out["body"] = self.writer.write(work)
+            except Exception as e:  # noqa: BLE001 - the template writes it
+                out["err"] = e
+
+        th = threading.Thread(target=run, daemon=True)
+        th.start()
+        th.join(cap)
+        if not out.get("body"):
+            self.log.append((sid, "write_fallback", cap))
+            log.warning("writer gave nothing in %.0fs (%s): template", cap, out.get("err"))
+            return TemplateWriter().write(plan)
+        plan.__dict__.update(work.__dict__)  # the strategist's choices (sheets, claims, reading) come back
+        return out["body"]
 
     def _take_reading(self, msg, plan):
         """What the strategist decided beyond sheets and claims: the files to attach, and its reading of the
@@ -715,10 +863,10 @@ class BuyerAgent:
     def keep_alive(self, threads, sid):
         """A short holding note to a supplier nobody answers for now, before its 60 s run out."""
         ts = self.t[sid]
-        if ts.dead or latest(threads[sid]).get("status") in ENDED or not flags.on("keepalive"):
+        if ts.dead or latest(threads[sid]).get("status") in ENDED:
             return None
         if round_cap(self.case) - ts.sent <= 1:
-            return None  # the last round is for a decision, not for a note
+            return None  # the last round is for a decision, not for a note (`close_now` decides)
         self.log.append((sid, "keep_alive", None))
         return {"supplier_id": sid, "message": self.compose(threads, sid, sheets=[], hold=True)}
 
@@ -751,21 +899,29 @@ class BuyerAgent:
                     "supplier_id": sid,
                     "message": {"subject": "Re: our negotiation", "body": body, "term_sheets": []},
                 }
-            best = None
-            for s, x in self.t.items():
-                if x.dead or latest(threads[s]).get("status") in ENDED:
-                    continue
-                sheet_id, terms = standing(threads[s])
-                if sheet_id and terms.get("unit_price") and must_haves_ok(self.case, terms, x.est.standard):
-                    c = cost(self.case, terms, x.est, rel=False)
-                    best = min(best or (c, s, sheet_id), (c, s, sheet_id))
-            c_alt = min((x.plan.c_alt for x in self.t.values()), default=math.inf)
-            if best and best[0] <= c_alt:
-                return {"supplier_id": best[1], "message": {"action": {"type": "accept", "term_sheet_id": best[2]}}}
-            if math.isfinite(c_alt):
-                return {"supplier_id": sid, "message": {"action": {"type": "walk_away"}}}
+            return self.close_now(threads, sid)
         except Exception:  # noqa: BLE001 - nothing more to do safely
             log.exception("safe fallback failed")
+        return None
+
+    def close_now(self, threads, sid):
+        """No message or no time left for this thread: close the best standing sheet across all live bidders that keeps
+        the must-haves and beats the alternative, else walk to the alternative, else None (never a timeout by choice)."""
+        best = None
+        for s, x in self.t.items():
+            if x.dead or latest(threads[s]).get("status") in ENDED:
+                continue
+            sheet_id, terms = standing(threads[s])
+            if sheet_id and terms.get("unit_price") and must_haves_ok(self.case, terms, x.est.standard):
+                c = cost(self.case, terms, x.est, rel=False)
+                best = min(best or (c, s, sheet_id), (c, s, sheet_id))
+        c_alt = min((x.plan.c_alt for x in self.t.values()), default=math.inf)
+        if best and best[0] <= c_alt:
+            self.log.append((best[1], "close_now", round(best[0])))
+            return {"supplier_id": best[1], "message": {"action": {"type": "accept", "term_sheet_id": best[2]}}}
+        if math.isfinite(c_alt):
+            self.log.append((sid, "close_now", "walk"))
+            return {"supplier_id": sid, "message": {"action": {"type": "walk_away"}}}
         return None
 
     def tone(self, ts, events):
@@ -789,6 +945,33 @@ class BuyerAgent:
             out.append("Thank you for your reply.")
             if d.has("cash_short", strong=True) or d.has("late_payment_grievance"):
                 out.append("We will pay every invoice on the agreed due date.")
+        return out
+
+    @staticmethod
+    def trade_lines(trades):
+        """One sentence per priced trade (BUYER_STRAT): what it asked for and what it costs."""
+        out = []
+        for ask, t in trades:
+            if ask == "payment":
+                out.append(f"On faster payment: we can pay within {t['payment_days']} days at €{t['unit_price']:.2f}.")
+            elif ask == "volume" and t.get("volume_per_year"):
+                out.append(f"On volume: we can make {t['volume_per_year']:,} a year binding at €{t['unit_price']:.2f}.")
+            elif ask == "contract" and t.get("contract_months"):
+                out.append(f"On the term: we can sign for {t['contract_months']} months at €{t['unit_price']:.2f}.")
+        return out
+
+    @staticmethod
+    def granted_lines(asks, t):
+        """One sentence per ask our first sheet already meets (BUYER_STRAT): it is priced in."""
+        out = []
+        for ask in asks:
+            if ask == "payment":
+                out.append(f"On faster payment: our proposal already pays within {t['payment_days']} days, "
+                           f"priced into €{t['unit_price']:.2f}.")  # fmt: skip
+            elif ask == "volume":
+                out.append(f"On volume: our proposal already makes {t['volume_per_year']:,} a year binding.")
+            elif ask == "contract":
+                out.append(f"On the term: our proposal already runs {t['contract_months']} months.")
         return out
 
     def levers(self, ts, sheets):

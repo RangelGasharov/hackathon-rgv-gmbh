@@ -37,6 +37,31 @@ MONTH = {
 }
 
 
+# what a supplier's e-mail asks us for (BUYER_STRAT prices a trade for each): faster payment, binding volume, a longer
+# contract. The strategist's `asks_for` words are read with the same patterns.
+ASKS = {
+    "payment": re.compile(
+        r"(?:faster|earlier|quicker|shorter|prompt)\s+payment|payment\s+(?:terms?\s+)?(?:of|within|in)\s+\d+\s+days|"
+        r"pay(?:ing)?\s+(?:us\s+)?(?:faster|earlier|sooner|within)|cash\s+flow|advance\s+payment",
+        re.I,
+    ),
+    "volume": re.compile(
+        r"binding\s+(?:volume|quantit)|volume\s+commitment|commit(?:ted|ment)?\s+(?:to\s+)?(?:a\s+)?(?:volume|quantit)|"
+        r"guaranteed\s+(?:volume|quantit)|minimum\s+(?:volume|quantit)",
+        re.I,
+    ),
+    "contract": re.compile(
+        r"(?:longer|long-term|multi-year)\s+(?:contract|agreement|term)|\b(?:24|36)[- ]month|\b(?:two|three)[- ]year",
+        re.I,
+    ),
+}
+
+
+def asks_for(text):
+    """The things a supplier's e-mail asks us for, in a fixed order: some of payment, volume, contract."""
+    return [k for k, rx in ASKS.items() if rx.search(text or "")]
+
+
 def human_date(iso):
     return f"{int(iso[8:10])} {MONTH[iso[5:7]]} {iso[:4]}" if iso and len(iso) == 10 else str(iso)
 

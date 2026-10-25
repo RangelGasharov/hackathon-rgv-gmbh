@@ -21,7 +21,7 @@ from arena_kit.client import ArenaClient, ArenaError
 from arena_kit.docs import read_document
 from arena_kit.play import RemoteTable, fetch_documents
 
-from .agent import ENDED, BuyerAgent, latest
+from .agent import ENDED, HOLD_AFTER_S, BuyerAgent, latest, round_cap
 from .dossier import World
 
 log = logging.getLogger("buyer")
@@ -146,9 +146,19 @@ def play(table, case_id, agent_factory, deadline=None, case=None):
                     return
                 # nobody answers this supplier for now: before its 60 s run out, a short holding note (a
                 # timeout repeats our last offer and costs patience; three end the thread - arena b2 P05)
-                if time.monotonic() - reply_at.get(sid, time.monotonic()) > 45 and not agent.t[sid].in_flight:
+                if time.monotonic() - reply_at.get(sid, time.monotonic()) > HOLD_AFTER_S and not agent.t[sid].in_flight:
                     with lock:
                         decision = agent.keep_alive(threads, sid)
+                        if decision is None and round_cap(agent.case) - agent.t[sid].sent <= 1:
+                            # no note left to send and the reply is aging: close the best sheet instead of timing out
+                            decision = agent.close_now(threads, sid)
+                            if decision:
+                                try:
+                                    finish(table.close(decision["supplier_id"], decision["message"]))
+                                    return
+                                except ArenaError as e:
+                                    log.warning("%s: close_now failed (%s)", case_id, e)
+                                    decision = None
                     if decision:
                         agent.t[sid].in_flight = True
                 if decision is None:
@@ -282,10 +292,13 @@ def play_and_record(client, case_id, factory):
                     for att in m.get("attachments") or []:
                         if (data := (table.files or {}).get(att.get("attachment_id"))) is not None:
                             att["text"] = read_document(att["name"], data)
-            try:
-                back = client.backoffice(table.session_id)
-            except ArenaError as e:
-                back = {"error": str(e)}
+            if state.get("set") == "final":  # the back office answers 403 during the Live Final: don't ask
+                back = {"skipped": "final"}
+            else:
+                try:
+                    back = client.backoffice(table.session_id)
+                except ArenaError as e:
+                    back = {"error": str(e)}
             stamp = int(time.time())
             Path(f"runs/arena-{case_id.split(':')[-1]}-{stamp}.json").write_text(
                 json.dumps(
@@ -293,7 +306,8 @@ def play_and_record(client, case_id, factory):
                     default=str,
                     indent=1,
                     ensure_ascii=False,
-                )
+                ),
+                encoding="utf-8",
             )
         except Exception as e:  # noqa: BLE001 - the result counts, the record is a bonus
             log.warning("%s: could not save the record: %s", case_id, e)
@@ -348,7 +362,9 @@ def main(argv=None):
             print(cid, "ERROR", r)
             continue
         print(cid, json.dumps({k: r.get(k) for k in ("deal", "supplier_id", "score", "c_open", "c_deal", "c_best")}))
-    Path(f"runs/{a.cmd}-{int(time.time())}.json").write_text(json.dumps(out, default=str, indent=1))
+    Path(f"runs/{a.cmd}-{int(time.time())}.json").write_text(
+        json.dumps(out, default=str, indent=1), encoding="utf-8"
+    )
 
 
 if __name__ == "__main__":

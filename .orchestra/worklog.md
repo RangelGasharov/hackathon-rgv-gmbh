@@ -1,5 +1,29 @@
 # Worklog
 
+## 2026-10-25 06:10 — M6 (API-key workers)
+- T-043 runner.py: records as UTF-8; backoffice skipped when state set == final.
+- T-040 agent.py: after `agreed`, no dearer sheet (min-step rule pushed the price up); accept or settle. tests/test_agreed.py.
+- T-042: removed dossier.hedge_doc, Estimate._margin_tight, Planner.best_estimate, BUYER_LEAN, BUYER_DEEP (twin identical).
+- T-041: BUYER_STRAT — buyer/approach.py picks Leverage / Floor-chase / Quick-close from the supplier profile (history,
+  news, payments, quality, our weight), pricing room, rivals and our cost drivers; sets opening, tactics (<= 3), switches;
+  one correction after 2 replies; asks -> priced trades. tests/test_approach.py.
+- Live with BUYER_STRAT=1: P18 0.552 (was 0.467), P10 0.679 (same).
+
+## 2026-10-25 04:40 — M4/M5 (Windows checkout, API-key workers)
+- T-020/T-021/T-023: switches BUYER_PACE (2 claims in msg 1, then 1 fresh per msg; weak true claims allowed), BUYER_FLOOR
+  (keep countering a stepping supplier; floor only from its own signals; approval replies not flat), BUYER_FINALC
+  (cheapest final-offer sheet by C). Live P18 with all three: 0.443 (baseline 0.467), before the T-023 pool fix.
+- T-033: timeout guards always on (20 s write cap -> template, holding notes after 30 s, close_now, forced settle).
+- T-030/T-031/T-032: runs/analysis/{strategy,cleanup,strategy_rules}.md + supplier_strategy.json (46 suppliers).
+- Proof: 141 tests pass; persona twin seed 0 HEAD 45.7 -> 46.7.
+
+## 2026-10-25 03:20 — M3 tuning search (Windows checkout)
+- T-010: scripts/pull_team.py mirrors every team practice session to runs/team/ (210, read-only GETs, no quota).
+- T-012: runs/analysis/levers.md maps 8 lever groups with file:line; possible bugs agent.py:607 (claims on hold notes), agent.py:471 (no slack after final offer).
+- T-014: runs/analysis/challenge.md — final format, cost model, rules; contract months beyond horizon are free; open threads at wave cap score the alternative.
+- T-011: runs/analysis/gaps.md — our family A trails teammate family C on P18/P08/P11 by 0.09/0.12/0.12; biggest gap: fresh facts after round 1.
+- T-013: TUNING.md ranks the changes (pace facts, P11 floor, final-offer sheet by C). Nothing implemented.
+
 ## 2026-10-25 — M2 Live A/B (28 sessions)
 - strategy.py: `_clause_pair` prices the fallback clause sheet at the package's relationship-optimal price (P02 0.724 x2).
 - strategy.py: no 5 % opening cap for quality / cash-short suppliers (P11 0.794, 0.620, 0.620).

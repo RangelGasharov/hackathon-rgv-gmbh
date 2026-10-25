@@ -7,6 +7,8 @@ import re
 from dataclasses import dataclass, field
 
 TOL_PP = 0.5
+# news topics that weaken a supplier's hand (BUYER_STRAT cites them): idle capacity, a new plant, distress
+WEAK_NEWS = {"free_capacity", "new_plant", "short_time_work", "restructuring", "credit_watch", "credit_downgrade"}
 
 
 @dataclass
@@ -57,9 +59,12 @@ def check(world, claim, case_facts=None):
     return True
 
 
-def candidates(world, dossier, case, rivals=None, own_price=None):
+def candidates(world, dossier, case, rivals=None, own_price=None, pace=False, news_boost=False):
     """Every claim we could make to this supplier, best first. `rivals`: {offer_id: price} of other
-    suppliers' standing offers in this session (RFQs)."""
+    suppliers' standing offers in this session (RFQs). `pace` (BUYER_PACE) also keeps the weak but true facts
+    (a forecast up 0-3 %, delivery record, order history) so that later messages still have one fresh fact.
+    `news_boost` (BUYER_STRAT): news that weakens the supplier (idle capacity, a new plant, short-time work,
+    restructuring, credit trouble) is a real argument, weight 0.6 instead of 0.1."""
     d, out = dossier, []
     ctype = case["type"]
     asked = None
@@ -163,7 +168,7 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
                 )
     # 4. our volume outlook: what volume-hungry and capacity-rich suppliers want to hear
     for n, (fid, ch) in enumerate(sorted(d.forecasts, key=lambda x: -x[1])):
-        if ch <= 3:
+        if ch <= (0 if pace else 3):
             continue
         w = 0.2 if (d.has("capacity_tight") or d.has("small_account")) else 0.85 if d.has("stale_costing") else 0.8
         what = "this part" if len(d.forecasts) == 1 else f"part {world.facts[fid]['part'].split(':')[1]} of the kit"
@@ -266,14 +271,19 @@ def candidates(world, dossier, case, rivals=None, own_price=None):
             )
         )
     # 8. news about the supplier that speaks for us (free capacity, secured energy, new plant)
-    for nid, _topic, headline in d.news_items[:1]:
-        w = 0.1
+    items = list(d.news_items)
+    if news_boost:  # its weakening news first, the distress kinds included (they are not in `news_items`)
+        seen = {i for i, _t, _h in items}
+        items += [(i, t, h) for i, _day, t, h in getattr(d, "current_news", None) or [] if t in WEAK_NEWS and i not in seen]
+        items.sort(key=lambda x: x[1] not in WEAK_NEWS)
+    for nid, topic, headline in items[:1]:
+        w = 0.6 if news_boost and topic in WEAK_NEWS else 0.1
         out.append(
             Claim("news", [nid], None, f"We read that {headline[0].lower() + headline[1:]} ({nid}).", w, "context")
         )
     dead = getattr(d, "dead_kinds", set())  # what the supplier called contradicted, irrelevant, duplicate, no change
     out = [c for c in out if dead_key(c) not in dead]
-    good = [c for c in out if c.weight >= 0.15 and check(world, c, case.get("facts"))]
+    good = [c for c in out if c.weight >= (0.1 if pace else 0.15) and check(world, c, case.get("facts"))]
     return sorted(good, key=lambda c: -c.weight)
 
 
@@ -319,16 +329,17 @@ def no_change_kinds(body):
     return out
 
 
-def ration(claims, used, round_no, kinds=()):
+def ration(claims, used, round_no, kinds=(), limit=3, floor=0.5):
     """The three strongest fresh claims (the arena checks three arguments per message, each ID once per
     case), at most one of each kind per supplier: `kinds` are the kind keys this supplier has already
-    heard."""
+    heard. After the first message only claims of weight `floor` or more pass (BUYER_PACE lowers it and the
+    limit)."""
     fresh = [c for c in claims if not any(i in used for i in c.ids)]
     picked, ids, seen = [], set(), set(kinds)
     for c in fresh:
-        if len(picked) >= 3:
+        if len(picked) >= limit:
             break
-        if ids & set(c.ids) or kind_key(c) in seen or (round_no and c.weight < 0.5):
+        if ids & set(c.ids) or kind_key(c) in seen or (round_no and c.weight < floor):
             continue
         picked.append(c)
         ids |= set(c.ids)

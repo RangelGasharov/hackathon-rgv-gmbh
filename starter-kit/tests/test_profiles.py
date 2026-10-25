@@ -305,20 +305,6 @@ def test_a_trusted_supplier_hears_no_risky_arguments(world, monkeypatch):
     assert {"po", "news"} <= kinds["P18"]
 
 
-def test_lean_concessions_step_small_and_keep_a_gap(world, monkeypatch):
-    from buyer.strategy import LEAN_GAP, LEAN_STEP
-
-    monkeypatch.setenv("BUYER_LEAN", "1")
-    p = _planner(world, "P18", "sup:70740", None)
-    p.asks, p.ask_value = [6.1, 5.6], 5.6
-    p.last_value, p.last_sheets = 5.27, []
-    t = p.target_value(2)
-    assert t == pytest.approx(5.27 + LEAN_STEP * 6.1)  # one small step, not a run at its limit
-    p.last_value = 5.45
-    assert p.target_value(3) == pytest.approx(5.45 * 1.003)  # the gap binds: only the minimal visible move
-    assert 5.6 - LEAN_GAP * 6.1 < 5.45 * 1.003
-
-
 def test_the_clause_sheet_sits_at_its_cheapest_price_for_us(world):
     from buyer.strategy import cost
 

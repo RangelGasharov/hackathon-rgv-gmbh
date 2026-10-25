@@ -454,16 +454,6 @@ class Dossier:
             out += w * (ch[0] if ch else 0.0)
         return round(out, 1)
 
-    @cached_property
-    def hedge_doc(self):
-        """(doc id, date) of the supplier's own note that its material is covered at fixed prices."""
-        for r in self.w.rows("documents", self.sid):
-            if re.search(
-                r"covered at fixed prices|bought their \w+(?: and \w+)? forward", self.w.doc_text(r["id"]), re.I
-            ):
-                return r["id"], r["date"]
-        return None
-
     def schedule_csv(self):
         """Our latest monthly demand forecast per part, as a CSV a supplier can read (true data, no IDs)."""
         lines = ["part,description,month,forecast_qty"]

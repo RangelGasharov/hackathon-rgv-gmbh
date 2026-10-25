@@ -15,8 +15,38 @@ live practice sessions, document what works and what doesn't. Score per case = (
 - **Usage stop rule (user, 02:00)**: check `get_usage` before each live batch; if "Weekly · all models" >= 35 %,
   stop the other Claude sessions (stop_session) and stop working. 28 % at 02:00.
 - **No subagents from now on (user, 01:55)**: the manager does all work itself; work autonomously, no check-ins.
+  Overridden for M3 on the Windows checkout (user, ~02:45): workers allowed as planned.
+- **Worker billing (user, ~03:05)**: run workers on the user's Anthropic API key, not the desktop subscription:
+  `.claude/api_worker.sh <card> <haiku|sonnet|opus> [usd cap]` (headless `claude -p`, key read from starter-kit/.env,
+  result + cost in .claude/runs/). In-session Agent workers bill the subscription: do not use them.
 - Use lean-orchestrator (state files only); debugging via the `investigate` skill (no /debug installed); grilling format for decisions.
 - Commits: commit and push `improve/supplier-levers` at milestone close.
+
+- **Live sessions (user, 03:55): run only the live tests the user names, nothing extra** (no unrequested A/B).
+  Done 06:10: live BUYER_STRAT=1 P18 0.552 (Leverage, opened 4.88, deal 5.30/30 d), P10 0.679 (Quick-close, = base).
+
+- **Strategy per supplier (user, 03:58/04:05)**: pick ONE fitting strategy per supplier, few tactics per negotiation
+  (a real partner can't be tried with many things). Final (user 04:10): new cases at 08:00 but the SAME 46 suppliers (brief says new
+  suppliers may appear: keep a trait fallback). So: strategy per supplier from its profile and every session it
+  appeared in, never tuned to one practice case's numbers (overfit risk); check rules leave-one-case-out.
+  Strategy inputs (user 04:45), all four: (1) the supplier's OLDER behaviour = profile `negotiations` (events,
+  asked_avg_pct, settled_avg_pct, kept_share_of_ask; all 46 have it) + payments/quality/news; (2) its CURRENT behaviour
+  in this case's replies; (3) pricing room (its quote vs should-cost/index/floor guess/rivals/alternative); (4) OUR
+  interests in the case (what drives C: volume/horizon, must-haves, payment value, quality cost, clause risk).
+  Traits alone are not enough. Runtime only (user 04:50): decide per negotiation from the CURRENT supplier's profile
+  (portfolio/history) and, in a multi-supplier case, the rival suppliers' offers on the same part; no precomputed
+  46-supplier table (runs/analysis/supplier_strategy.json is analysis only, not used by the agent).
+  The profile's negotiation history must drive the choice (never ignored). News counts for MORE leverage (user 04:55):
+  supplier news (weak orders, idle capacity, lost customer, falling inputs, cash trouble) -> deeper opening and cite it;
+  today news weight is 0.1 in claims.py and dropped for trusted suppliers.
+  Leverage from other suppliers (user 05:00): rival offers in a tender, our alternative source / a concurrent
+  negotiation on the same part, and main-source status (moving a rival's volume). Citing a rival reveals it and
+  counts once per supplier: use it where it moves most.
+  The CURRENT incoming mail drives each move (user 05:05): its asks (volume, payment, contract) get a priced trade
+  in the next sheet (today `asks_for` in writer.py is only logged), its arguments get a data rebuttal, its signals
+  (approval, rock bottom, final, hold) update the approach.
+
+- **No timeouts (user, 04:20)**: a thread or case must never end by timeout; guards always on.
 
 ## Decisions
 - 2026-10-25 Rejected live: lean concessions (P05 -0.34), deadband-0 clause trial (P08 -0.02, P18 -0.04). Both stay
@@ -25,6 +55,9 @@ live practice sessions, document what works and what doesn't. Score per case = (
 - 2026-10-25 After a final offer only the supplier's own terms go back (changed: 3 walks/5; own: 2/2 agreed).
 
 ## Constraints & gotchas
+- Suppliers (user, 03:40/03:45): each has a hard minimum price, but we cannot know it (f_hat is a guess; don't stop on
+  it while the supplier still steps; its floor shows as final_offer, "rock bottom" or two flat replies). Big
+  concessions need its manager or pricing committee: an approval/"come back to you" reply is not a refusal or a flat round.
 - Practice quota is team-wide: 400/day, resets 2026-10-25 16:16 CEST; 248 left at 00:20. Check `/v1/me` before a batch.
 - Supplier replies are noisy (LLM suppliers): one session per case is weak evidence; compare on the same cases.
 - Twins: `twin_real` (10 hosted cases, fitted) is insensitive to openings; persona twin (19 cases, seeds) is not the arena.
@@ -38,10 +71,16 @@ live practice sessions, document what works and what doesn't. Score per case = (
 
 - Never run twin benchmarks or tests while live sessions run: round 2's three 0-score sessions (P04, P05 x2) stalled
   after round 1 (sends never landed, all threads timed out) exactly while 6 twin processes + pytest loaded the CPU.
-- Sessions used for this project (budget 40): 28 (rounds 1-3: 22, P11 deep 2, deep+lean 3, final P02 1).
+- Sessions used for this project (budget 40): 34 (+6 on Windows; latest P18 0.443 pace/floor/finalc, P18 0.552 + P10 0.679 STRAT; P07 0.728, P10 0.679, P18 0.467, 02:27) (rounds 1-3: 22, P11 deep 2, deep+lean 3, final P02 1).
   User 02:10: sessions are scarce, ~20 left for me in total -> at most 16 more; spend only on strong candidates.
 
 ## Management rules (learned from retros)
+- Cards with long commands: tell the worker to run them in the foreground with a long timeout (M3: a background job
+  inside T-010 re-woke the worker 3 times after DONE).
 - Subagents cannot write report files (Write refuses 'report' files for subagents): cards ask for findings in the
   NOTES reply, or have the worker's script print them, instead of a report.md.
 - Never edit a shell script while it runs (zsh reads it as it goes: round 1's ab.sh broke).
+- Team practice sessions mirrored read-only in starter-kit/runs/team/ (210 at 02:55, index.tsv; rerun
+  scripts/pull_team.py to add new ones, rate=3, no quota). Findings: runs/analysis/{levers,challenge,gaps}.md.
+- Sandbox cases D01/D02 have no quota (challenge.md): use them for A/B before spending practice sessions.
+
