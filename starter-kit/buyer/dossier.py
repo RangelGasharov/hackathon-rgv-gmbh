@@ -367,7 +367,11 @@ class Dossier:
     def cash_rate(self):
         if self.has("cash_short", strong=True):
             return 0.25
-        if self.has("cash_short") or (self.sup and self.sup["skonto_pct"]):
+        # a weak squeeze prices its money only on evidence: its documents ("pay in 10 days?", skonto, news) or its
+        # e-mails, not the persona read alone. P07: the read called Gazelle weakly cash-short ("finances stable, credit
+        # index 179, unchanged"), its money went to 10 %, our sheets to 14 days (0.727); its pairs price it at 7.7 %
+        evidence = self._regex_traits().get("cash_short") or {**self.reply_traits, **self.reply_hits}.get("cash_short")
+        if evidence or (self.sup and self.sup["skonto_pct"]):
             return 0.10  # a "pay in 10 days?" mail is a weak signal: 17 suppliers sent it
         return 0.07
 

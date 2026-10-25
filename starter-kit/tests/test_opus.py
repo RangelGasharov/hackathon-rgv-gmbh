@@ -422,6 +422,61 @@ def test_the_strategist_sets_the_pace_inside_the_guardrails(world):
     assert all(0.85 * sent[0]["unit_price"] < t["unit_price"] < 1.15 * sent[0]["unit_price"] for t, _dc in menu)
 
 
+def test_a_term_it_took_from_our_own_sheets_is_no_lock(world):
+    # P07 ccc8ec17: we offered 14 and 45 days, it answered at 14 twice, and every later sheet was 14 days (0.727; the
+    # team's 0.769 closed at 60 days). Its money (~7.7 %) is cheaper than ours: our sheets go to 90 days
+    sid = "sup:70610"
+    agent = BuyerAgent(world, read_timeout_s=0)
+    opening = msg(5.74, payment_days=30, contract_months=12)
+    agent.start(case("P07"), {sid: [opening]})
+    plan = agent.t[sid].plan
+    agent.ingest(sid, [opening])
+    ours = [{"unit_price": 5.03, "payment_days": 14, "contract_months": 36},
+            {"unit_price": 5.06, "payment_days": 45, "contract_months": 36}]  # fmt: skip
+    plan.commit(ours)
+    r1, r2 = (msg(p, payment_days=14, contract_months=36) for p in (5.49, 5.44))
+    agent.ingest(sid, [opening, BUYER, r1])
+    plan.commit(ours)
+    agent.ingest(sid, [opening, BUYER, r1, BUYER, r2])
+    assert "payment_days" not in plan.locked
+    assert {t["payment_days"] for t in plan.sheets(2)} == {90}
+    # it insists on a term we did not offer: that one is a given, and stays one while it repeats it
+    plan.commit([{"unit_price": 5.17, "payment_days": 90, "contract_months": 36}])
+    r3 = msg(5.39, payment_days=14, contract_months=36)
+    agent.ingest(sid, [opening, BUYER, r1, BUYER, r2, BUYER, r3])
+    assert plan.locked.get("payment_days") == 14 and plan.sheets(3)  # it beats our 90-day preference
+    plan.commit(plan.sheets(3))
+    agent.ingest(sid, [opening, BUYER, r1, BUYER, r2, BUYER, r3, BUYER, msg(5.35, payment_days=14, contract_months=36)])
+    assert plan.locked.get("payment_days") == 14
+
+
+def test_a_weak_cash_squeeze_read_alone_does_not_price_its_money(world):
+    # P07: the persona read called Gazelle weakly cash-short although its notes said "finances stable"; its money went
+    # to 10 % and our sheets to 14 days. Document evidence (P01's and P05's "pay in 10 days?") still counts
+    weak = {"traits": {"cash_short": "weak"}, "unsure": []}
+    for cid, sid, rate in (("P07", "sup:70610", 0.07), ("P01", "sup:70110", 0.10), ("P05", "sup:70250", 0.10)):
+        d = Dossier(world, case(cid), sid)
+        d.apply_read(weak)
+        assert d.has("cash_short") and d.cash_rate == rate
+
+
+def test_never_above_its_next_counter(world):
+    # P11 3a8baec0: at 45.50 on its 0.50 grid it agreed to our 45.22, where its next counter was 45.00
+    sid = "sup:70140"
+    agent = BuyerAgent(world, read_timeout_s=0)
+    opening = msg(47.0, ppm_commitment=6400)
+    agent.start(case("P11"), {sid: [opening]})
+    plan = agent.t[sid].plan
+    events = [opening]
+    for p in (46.5, 46.0, 45.5):
+        events += [BUYER, msg(p, ppm_commitment=300, chargeback_eur_per_complaint=0)]
+    agent.ingest(sid, events)
+    plan.commit([{"ppm_commitment": 300, "chargeback_eur_per_complaint": 0, "unit_price": 44.9}])
+    assert plan.increment() == pytest.approx(0.5)
+    top = max(t["unit_price"] for t in plan.sheets(4) if t["ppm_commitment"] == 300)
+    assert top <= 45.0
+
+
 def test_quality_case_opens_ten_percent_below_a_cash_short_supplier(world):
     # 5 % put our offers within 2 % of P11's price by round 2, where it holds; our team's 0.794 opened 7.5 % below
     sid = "sup:70140"

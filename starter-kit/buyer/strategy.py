@@ -445,8 +445,12 @@ class Planner:
             self.refresh()
 
     def _in_bounds(self, combo):
-        """A bound applies only where some option of the case meets it (else it would rule out every package)."""
+        """A bound applies only where some option of the case meets it (else it would rule out every package), and not
+        to a term the supplier insists on: our 90-day preference against its 14 days twice left no package, and the
+        agent signed its standing sheet (P07 replay)."""
         for f, (op, v) in self.bounds.items():
+            if f in self.locked or f in self.kept:
+                continue
             x, opts = combo.get(f), self.case.get("term_options", {}).get(f) or []
             if x is None or v is None or not any((o >= v) if op == ">=" else (o <= v) for o in opts):
                 continue
@@ -546,12 +550,26 @@ class Planner:
         target = max(target, 0.75 * self.est.floor_value)
         if self.last_value:
             target = max(target, self.last_value * 1.003)  # never a step back
+        if (inc := self.increment()) and len(self.asks) >= 3 and self.last_value:
+            # never above its next counter: an offer there is agreed at our price (P11 3a8baec0: at 45.50 on a 0.50 grid
+            # it agreed to our 45.22, where its next counter was 45.00; 0.757 against 0.877 at 44.50)
+            target = min(target, max(ask - inc, self.last_value + 0.001 * self.asks[0]))  # its counter is still a move
         return min(target, ask * 0.997)
 
     def increment(self):
         """Its own step between counters after its first one, in supplier value (median), or None: real suppliers
-        counter on a fixed grid (P18 0.10, P11 0.50)."""
-        steps = [a - b for a, b in itertools.pairwise(self.asks[1:]) if a - b > 1e-6]
+        counter on a fixed grid (P18 0.10, P11 0.50). Measured on sheets with the same terms in consecutive replies:
+        its alternatives on other terms (P11: 800, 1500, 2500 ppm) make its best sheet jump by odd amounts."""
+        rest = lambda t: {f: v for f, v in t.items() if f != PRICE}  # noqa: E731
+        steps = [
+            self.est.value(self.case, a) - self.est.value(self.case, b)
+            for prev, now in itertools.pairwise(self.ask_sheets[1:])
+            for a in prev
+            for b in now
+            if rest(a) == rest(b) and a[PRICE] > b[PRICE]
+        ]
+        if not steps:
+            steps = [a - b for a, b in itertools.pairwise(self.asks[1:]) if a - b > 1e-6]
         return statistics.median(steps) if steps else None
 
     def ladder(self, k, rounds_left=10):
@@ -909,6 +927,11 @@ class Planner:
                 v = next(t.get(f) for t in sheets if f in t)
                 if f == "index_clause" and v is None:
                     continue  # never lock ourselves out of a clause we did not want anyway
+                if self.locked.get(f, object()) != v and any(t.get(f) == v for t in self.last_sheets):
+                    # it took one of our own options: a choice, not a condition (P07 ccc8ec17: we offered 14 and 45
+                    # days, it answered at 14 twice, every later sheet was 14 days; 0.727 at 5.35 against 0.769 at
+                    # 5.34 and 60 days). A lock it earned stays while it repeats the value
+                    continue
                 locked[f] = v
         if locked != self.locked:
             self.locked = locked
@@ -932,19 +955,22 @@ class Planner:
         if any(t.get("index_clause") for t in sheets):
             self.clause_seen = True
             self.want_clause()  # it asks for a clause: now it is worth something to it
-        raw = self.case.get("type") == "raw_material"
-        if raw and (r := rate_from_pairs(sheets)) is not None:
+        if (r := rate_from_pairs(sheets)) is not None:
             seen = self.est.rate_seen
             self.est.rate_seen = r if seen is None else round((seen + r) / 2, 4)
         values = [self.est.value(self.case, t) for t in sheets]
         self.asks.append(min(values))
         self.ask_sheets.append([dict(t) for t in sheets])
         pays = self.case.get("term_options", {}).get("payment_days") or []
-        if raw and pays and len(self.asks) >= 2 and self.est.rate_seen is not None:
+        single = len(self.case.get("suppliers") or []) == 1
+        if "payment_days" in self.case["negotiable"] and pays and single and len(self.asks) >= 2:
             # its money is cheaper than ours (P08 ~7 % vs 8 %): at the same value to it, the longest payment term is
             # always our cheapest package, and a shorter sheet only invites its final on worse terms (P08 60a9bbb3:
-            # final at 60 days, signed at 45, 0.523 against 0.570 at 90). Dearer money (P18 ~9 %): shorter sheets stay
-            cheap = self.est.rate_seen < self.case["buyer"].get("interest_rate", 0.08)
+            # final at 60 days, signed at 45, 0.523 against 0.570 at 90). Dearer money (P18 ~9 %): shorter sheets stay.
+            # Every single-supplier case, on its pairs' rate or else our estimate: P07's pairs read 7.6-7.8 %, P04's
+            # 7.4 %, P02's 6.6 %, P03's 4 % (its best deals were at 60-90 days, ours at 14: 0.727 against 0.769)
+            rate = self.est.rate_seen if self.est.rate_seen is not None else self.est.rate
+            cheap = rate < self.case["buyer"].get("interest_rate", 0.08)
             bound = (">=", max(pays)) if cheap else None
             if self.bounds.get("payment_days") != bound:
                 if bound:
