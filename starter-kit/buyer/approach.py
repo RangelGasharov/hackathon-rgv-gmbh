@@ -25,7 +25,7 @@ SHEETS = {LEVERAGE: 2, FLOOR_CHASE: 3, QUICK_CLOSE: 2}  # MESO sheets per messag
 # code-side tactics each approach may use (beyond its 3 named ones): the clause trial is the MESO pair of a copper part
 # (P02's fix, a quick close), so it stays in Leverage and Quick-close; the deadband-0 sheet only in Leverage
 GATES = {
-    LEVERAGE: {"clause_trial", "clause0", "main_source"},
+    LEVERAGE: {"clause_trial", "main_source"},
     FLOOR_CHASE: {"probe", "match"},
     QUICK_CLOSE: {"clause_trial"},
 }
@@ -281,7 +281,7 @@ def choose(profile, case, rivals=None, dossier=None, base_gap=0.08, quote=None):
         name=name,
         opening_gap=round(gap, 4),
         tactics=tactics_for(name, case, term),
-        switches=set(SWITCHES[name]),
+        switches=switches_for(name, case),
         reason="; ".join(why) or "no strong signal in its record, news or the case",
         lead=lead_for(name, case, d, rival, term),
         trade_term=term,
@@ -289,6 +289,13 @@ def choose(profile, case, rivals=None, dossier=None, base_gap=0.08, quote=None):
         leverage_ok=leverage_ok,
     )
     return a
+
+
+def switches_for(name, case):
+    """The approach's switches; in a tender every approach also chases a bidder that still steps and takes the final
+    sheet with the lowest C (live P05 25 Oct: 0.857 with floor + finalc against 0.675 / 0.433 without)."""
+    tender = case.get("type") == "rfq" or len(case.get("suppliers") or []) > 1
+    return set(SWITCHES[name]) | ({"floor", "finalc"} if tender else set())
 
 
 def tactics_for(name, case, term=None):
@@ -332,7 +339,7 @@ def correct(approach, asks, case=None):
         approach,
         name=name,
         tactics=tactics_for(name, case or {}),
-        switches=set(SWITCHES[name]),
+        switches=switches_for(name, case or {}),
         corrected=why,
         dropped=[],
     )

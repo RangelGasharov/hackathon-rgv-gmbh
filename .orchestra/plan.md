@@ -42,6 +42,11 @@ Team mirror refreshed: runs/team 319 sessions.
 | T-087 every news item: market news -> suppliers, owner/succession/rename kinds, bundles, memo | sonnet | done | 1 | dossier, approach, writer, tests/test_news.py | $0.40; sets C/D play on it (fresh processes) |
 | live record attempts B: out-of-the-box config per case (.claude/runs/outofbox.json), all 10 hosted, 2 tries; was: P04 x2, P10 x2 | manager | pending | 0 | | user: records P04 0.860, P10 0.694 |
 
+## M12 Final build (12:15 CET)
+- Record hunt A-D done: new team bests P05 0.857 (STRAT=0+FLOOR+FINALC), P03 0.925 (effort medium), P04 tie 0.860.
+- Removed BUYER_CLAUSE0 (worst live result wherever it ran: P08 0.405, P18 0.473); tenders now use floor+finalc in
+  every approach (approach.switches_for). Gate running; then push, pre-flight, freeze 13:00.
+
 ## Done
 - M0 Audit of improve/supplier-levers — fixes, trusted-supplier rules, plan from history/news/letters · commit f8169b1
 - M1+M2 Evidence and live A/B — 28 sessions; kept clause-pair fix (P02 0.724 x2) and no 5 % quality/cash-short cap (P11

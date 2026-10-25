@@ -2,7 +2,6 @@
 
 BUYER_OFF=probe,match      components to turn off (names below); default: everything on
 BUYER_CLAIMS=1             at most this many new arguments per message (default 3, the arena checks 3)
-BUYER_CLAUSE0=1            a required index clause: also offer its deadband-0 variant at equal cost (`Planner.sheets`)
 BUYER_PACE=1               spread verified arguments: 2 in the first message with a sheet, then 1 fresh one (weight
                            >= 0.2) per message; none in a message without a sheet
 BUYER_FLOOR=1              chase a supplier that still steps to its floor: no early accept or settle while it moves in
@@ -48,9 +47,6 @@ def claims_per_message():
     except ValueError:
         return 3
 
-
-def clause0():
-    return os.environ.get("BUYER_CLAUSE0") == "1"
 
 
 def pace():

@@ -534,7 +534,7 @@ class Planner:
         return name in a.switches if a else getattr(flags, name)()
 
     def allows(self, gate):
-        """A code-side tactic (clause_trial, clause0, probe, match, main_source): under BUYER_STRAT only where the
+        """A code-side tactic (clause_trial, probe, match, main_source): under BUYER_STRAT only where the
         approach allows it."""
         a = getattr(self, "approach", None)
         return a.allows(gate) if a else True
@@ -870,8 +870,6 @@ class Planner:
                 out.append(same)
                 vals.append(v)
                 varied |= {f for f in same if f != PRICE and same.get(f) != best.get(f)}
-        if zero := self._clause0_sheet(best, c0, k):
-            out = out[: n - 1] + [zero]  # in place of the last alternative
         return [self._no_step_back(t) for t in out]
 
     def _clause0_variant(self):
@@ -884,19 +882,9 @@ class Planner:
                 return {**pref, "deadband_pct": 0}
         return None
 
-    def _clause0_sheet(self, best, c0, k):
-        """Our best sheet with the deadband-0 clause, at the price where it costs us the same, in our first two
-        offers. A supplier values full indexation more than it costs us at a small expected move: live P08 (other
-        agent) took deadband 0 at 45 days, countered 5.48 instead of its usual 5.64 and closed at 5.24 (0.614; our
-        deadband-5 deals 5.52-5.55, 0.46). Off unless BUYER_CLAUSE0=1 until live A/B decides."""
-        if not flags.clause0() or not self.allows("clause0") or k > 1 or not (zero := self._clause0_variant()):
-            return None
-        same = self.reprice_to_cost({**best, "index_clause": zero}, c0)
-        if not same or not (0.85 * best[PRICE] <= same[PRICE] <= 1.15 * best[PRICE]):
-            return None
-        if self.ask_value and self.est.value(self.case, same) > self.ask_value:
-            return None
-        return same
+    # Offering the deadband-0 variant ourselves (BUYER_CLAUSE0) was removed on 25 Oct: our worst live result wherever
+    # it ran (P08 0.405 vs 0.484, P18 0.473 vs 0.563; two earlier A/B losses). A supplier's own deadband-0 sheet is
+    # still adopted (`observe`, via `_clause0_variant`).
 
     def _clause_trial(self):
         """An optional clause on a part driven by its series, and no sign yet that this supplier wants one: offer

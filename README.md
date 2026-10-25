@@ -3,11 +3,17 @@
 An AI buyer for the Tacto Negotiation Arena. Code decides every number; Claude only words the e-mail.
 
 ```
-case file + data package
+case file + data package + Sunday release + supplier profiles
    │
    ▼
 dossier.py   persona traits from notes, letters, quote remarks, history, news (strong vs weak),
-             should-cost and margin, notice check, hedges, scorecard, payment record, forecast
+             should-cost and margin, notice check, hedges, scorecard, payment record, forecast;
+             market news mapped to the suppliers it concerns (pump demand, copper, steel, alloy)
+   │
+   ▼
+approach.py  one approach per supplier at case start (Leverage, Floor-chase, Quick-close) from its
+             negotiation history, news, pricing room, rivals and our cost drivers; it sets the opening,
+             at most 3 tactics and one correction after two replies (BUYER_STRAT, on by default)
    │
    ▼
 strategy.py  every combination of term_options priced: lowest price the supplier signs (its cost of
@@ -42,15 +48,52 @@ no risky trades, and after any final offer only the supplier's own terms go back
 supplier thread is capped at 10 messages (after the 10th we may still accept). In a multi-supplier case, closing the
 procurement stops work on sibling threads.
 
+## Approach in brief
+
+- **Prepares** before the first message: loads the supplier's profile (46 suppliers, rebuilt with the Sunday release)
+  and the case, prices every allowed term combination by the arena's total cost C (price over the horizon, payment
+  days, freight, lateness, quality, tooling, index clause, uncovered need, relationship charge).
+- **Reads** the data package and the release: its past negotiations with us, letters, news (its own and the market's),
+  scorecards, payments, contracts, should-cost, rival quotes, and every supplier e-mail (sheets, asks, floor and
+  approval signals, final offers).
+- **Decides what to offer** with one approach per supplier: opening depth from the pricing room and its history,
+  equal-cost packages, verified facts the arena can check, supplier asks answered with a priced trade, the rival
+  quote once where it moves most. Code sets every number; Claude only words the e-mail.
+- **Closes or walks** on total cost: it accepts when the supplier's sheet is the cheapest it can reach and beats the
+  alternative, takes the supplier's own cheaper alternative sheet, never takes a must-have break, walks only when the
+  alternative is clearly cheaper, and always closes before the wave cap (no timeouts).
+
 ## Run
+
+Environment variables (`starter-kit/.env`, never committed; values not shown here): `ARENA_URL`, `ARENA_API_KEY`,
+`ANTHROPIC_API_KEY`, `LLM_PROVIDER`, `LLM_MODEL`, `LLM_EFFORT`, `ARENA_DATA`, `BUYER_WRITER`, `BUYER_BUDGET_USD`
+(40 for the final). Optional switches, all off unless noted: `BUYER_STRAT` (on; `0` turns the per-supplier approach
+off), `BUYER_FLOOR`, `BUYER_FINALC`, `BUYER_PACE` (decided by the approach while `BUYER_STRAT` is on), `BUYER_QSTEP`,
+`BUYER_LIKE`, `BUYER_NIBBLE`, `BUYER_CLAIMS`, `BUYER_OFF`. See `starter-kit/buyer/flags.py`.
 
 ```bash
 cd starter-kit
 uv sync --all-extras
-cp .env.example .env          # ARENA_URL, ARENA_API_KEY, ANTHROPIC_API_KEY, BUYER_BUDGET_USD
-uv run arena data             # download the data package and, once public, the Sunday release into data/
+cp .env.example .env          # fill in the variables above
+uv run arena data             # the data package and, after 08:00 on Sunday, the release next to it
+uv run arena me               # the key works
+uv run python -m buyer.profiles build --data data/package --arena "runs/arena-*.json"
+uv run python -m buyer.profiles check --data data/package      # 46 suppliers clean
 uv run python -m buyer.cases  # local stand-ins for the 19 practice case files (cases/practice)
 ```
+
+Live Final (start before 13:30, leave it running, logs to a file; no human in the loop afterwards):
+
+```bash
+mv runs/spend.json runs/spend-practice.json   # a fresh LLM budget for the final
+uv run python -m buyer.runner run --set final --writer claude > runs/final.log 2>&1
+```
+
+The runner starts each wave's cases most valuable first (at most 10 open), re-reads `seconds_left` on every poll,
+closes every thread before the cap, resumes a crashed session, and refuses the endpoints the agent may not read.
+
+Before every push: `uv run python scripts/gate.py` (tests, six offline benchmarks and per-category means against
+`scripts/gate_baseline.json`; it fails on any step back).
 
 Local benchmark (no arena calls):
 
@@ -111,7 +154,12 @@ in [`EXPERIMENTS.md`](EXPERIMENTS.md)):
 - **Copper clause at its cheapest price for us** (P02): 0.63 -> 0.724, twice.
 - **No 5 % cap on quality-case openings** (P11): best 0.794 (two other sessions 0.620).
 - **Tested live and rejected:** spreading arguments over later rounds, smaller concession steps, deeper raw-material
-  openings, a deadband-0 clause offer.
+  openings, a deadband-0 clause offer (removed from the code on 25 Oct: our worst result wherever it ran).
+- **Record hunt (25 Oct, ~50 sessions, one approach per try):** new team best **P05 0.857** (chase a bidder while it
+  steps, take the final sheet with the lowest C; now the default in every tender), P03 0.925, P04 tied at 0.860.
+- **Pipeline audit** ([`ANALYSIS.md`](ANALYSIS.md)) and the plan for the final ([`WINNING_PLAN.md`](WINNING_PLAN.md)):
+  input bugs fixed (forecast file units, hedged-supplier wording, an old supplier record, ask parsing), payment days
+  kept at their efficient level, every supplier ask answered, the Sunday release in all 46 profiles.
 
 Every change passes `starter-kit/scripts/gate.py`: the tests plus six offline benchmarks (four persona-twin seeds,
 the kit simulator, and a twin calibrated on real sessions), and no case category may drop.
@@ -306,7 +354,7 @@ seen so far. More needs a trigger the suppliers have not shown yet.
 
 - Relationship-goal cases with only a generic cost estimate (e.g. P06): the agent can squeeze below the
   supplier's full cost, which the relationship charge punishes. Not hosted in practice, so not checked live.
-- No Sunday-release handling beyond what `DataPackage` merges automatically.
+- Sunday release: done (profiles rebuilt, six deep reads redone, letters and market news mapped to suppliers).
 - Tenders: no counter step below the supplier's 0.5 % counter threshold once it has "given the rest of the step"
   (live P05 0.484: a 0.2 % step drew a withdrawal). Analysed in `EXPERIMENTS.md`, not built.
 - The runner logs no line for a send that arrives too late (HTTP 409): one P05 holding message never reached the

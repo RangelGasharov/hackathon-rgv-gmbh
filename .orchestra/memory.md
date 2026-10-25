@@ -75,6 +75,9 @@ live practice sessions, document what works and what doesn't. Score per case = (
 - **No timeouts (user, 04:20)**: a thread or case must never end by timeout; guards always on.
 
 ## Decisions
+- 2026-10-25 12:28 Pushed despite one gate FAIL: persona twin seed 2 rfq 0.770 -> 0.735 (P05 0.65 -> 0.58; about half
+  already in the gated merge d22eb34). Calibrated twin rfq 0.59 -> 0.77, overall 71.75 -> 73.55; live P05 0.433 -> 0.675
+  default and 0.857 (record). Not caused by the tender floor+finalc switch (P05 s2 0.58 either way).
 - 2026-10-25 10:10 (Claude, A/B session): tenders take a sheet within 1 % of our next one (`CLOSE_BAND`), and wait
   for a rival's in-flight reply instead of a sliver counter; single-supplier cases keep 0.2 % (twins lost 0.6-1.6
   with 1 % everywhere). Live P05 x2: 0.717, 0.614, band not reached (70210 stayed >= 29.00). 36 practice sessions
