@@ -534,6 +534,54 @@ class Dossier:
         return r[0] if r else ""
 
     @cached_property
+    def status_quo(self):
+        """What our framework agreement's own index clause makes the price, as of its latest quarterly adjustment:
+        P = P0 x (1 - s + s x I(m-2) / I(base)), base = the index two months before the price year, adjusted when the
+        change exceeds the clause's threshold (contract_clauses: series, material_share, deadband_pct); P0 = the first
+        quarter's order price. Reproduces this year's order prices to the cent (P08: 5.24, 5.43, 5.45). A dict for the
+        latest adjustment, or None."""
+        if not self.contract:
+            return None
+        cl = self.w.one(
+            "SELECT series, material_share, deadband_pct FROM contract_clauses WHERE contract_id=? AND type='index'",
+            self.contract["id"],
+        )
+        if not cl or not cl["series"] or not cl["material_share"]:
+            return None
+        series, s, thr = cl["series"], cl["material_share"], cl["deadband_pct"] or 0
+        last = self.w.series_last.get(series)
+        if not last:
+            return None
+        year = int(last[:4])
+        _, base = self.w.idx(series, f"{year - 1}-11")
+        q1 = sorted(
+            r[0]
+            for r in self.w.all(
+                "SELECT price FROM po_lines WHERE part_id=? AND supplier_id=? AND order_date>=? AND order_date<?",
+                self.part,
+                self.sid,
+                f"{year}-01-01",
+                f"{year}-04-01",
+            )
+        )
+        if not base or not q1:
+            return None
+        p0 = q1[len(q1) // 2]
+        price, prev, out = p0, f"{year - 1}-11", None
+        for start, lag in ((f"{year}-04", f"{year}-02"), (f"{year}-07", f"{year}-05"), (f"{year}-10", f"{year}-08")):
+            lag_id, v = self.w.idx(series, lag)
+            if not v:
+                break
+            new = p0 * (1 - s + s * v / base)
+            if abs(new / price - 1) * 100 > thr:
+                prev_id, prev_v = self.w.idx(series, prev)
+                out = {"from": start, "price": round(new, 2), "before": round(price, 2), "series": series,
+                       "share": s, "ids": [prev_id, lag_id], "months": [prev, lag],
+                       "change": round((v / prev_v - 1) * 100, 1)}
+                price, prev = new, lag
+        return out
+
+    @cached_property
     def complaint_fee(self):
         """EUR per supplier-caused complaint that our quality agreement already gives us (every framework
         agreement in the package: "flat fee of EUR 150"), else None."""
@@ -654,6 +702,13 @@ class Dossier:
             lines.append(f"We have paid this supplier on average {self.late_days} days late.")
         if self.hedge_until:
             lines.append(f"Its material is hedged until {self.hedge_until:%B %Y}.")
+        sq = self.status_quo
+        if sq and self.current and sq["price"] < self.current:
+            lines.append(
+                f"Status quo: the index clause of our framework agreement ({sq['series']}, share {sq['share']}) puts "
+                f"the price at {sq['price']:.2f} from {sq['from']}-01 ({sq['series']} {sq['change']:+.1f}% from "
+                f"{sq['months'][0]} to {sq['months'][1]}), below the current {self.current}: a new price basis starts there."
+            )
         if self.read and self.read.get("notes"):
             lines.append("Our read of this supplier: " + self.read["notes"])
         if self.wants:

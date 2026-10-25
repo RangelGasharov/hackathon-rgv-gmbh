@@ -74,6 +74,18 @@ def test_claims_are_true_and_never_support_a_rise(world):
                 assert claim.figure < 0, (c, claim.sentence)
 
 
+def test_status_quo_follows_the_contract_index_clause(world):
+    # P08: AS-14404 clause (share 0.45, any change): the formula gives this year's order prices (5.24, 5.43, 5.45)
+    # and 5.38 from October; P18: PPI-C2431 clause with a 3 % threshold, October's -1.7 % does not move the price
+    p08 = json.loads(Path("cases/practice/P08.json").read_text())
+    sq = Dossier(world, p08, p08["suppliers"][0]).status_quo
+    assert sq and sq["from"].endswith("-10") and sq["price"] == 5.38 and sq["before"] == 5.45 and sq["change"] < 0
+    assert "Status quo" in Dossier(world, p08, p08["suppliers"][0]).brief()
+    p18 = json.loads(Path("cases/practice/P18.json").read_text())
+    sq18 = Dossier(world, p18, p18["suppliers"][0]).status_quo
+    assert sq18 is None or sq18["price"] >= 5.84
+
+
 def test_hedged_supplier_gets_no_index_argument(world):
     case = json.loads(Path("cases/practice/P14.json").read_text())
     d = Dossier(world, case, "sup:70560")
