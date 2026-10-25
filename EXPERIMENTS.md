@@ -35,6 +35,12 @@ sessions per API key (the team shares them).
 6. The other agent's LLM-led negotiator beats this rule agent on P02, P03, P08, P11, P18; worth comparing on the
    final's case types before the 13:00 freeze.
 
+7. The other agent's mechanics with evidence: `/Users/victor/tacto-hackathon/negotiation-lab/PORTING.md`. Among them:
+   verified arguments in round 1 lower the first counter (P07 5.58 -> 5.54, P02 372.65 -> 371.84, P18 5.80 -> 5.60);
+   the supplier's money rate shows in two of its sheets that differ only in payment days (P02 6.6 %, P08 7.5 %,
+   P03 ~4 %); bottleneck suppliers answer a ~15 % opening with an immediate final offer (P10, twice); do not accept
+   open offers while it is still conceding.
+
 Sessions used for this log: 28 of the 40 allowed.
 
 Branch `improve/supplier-levers`. Every claim below names its evidence: real arena transcripts (84 sessions, 100
